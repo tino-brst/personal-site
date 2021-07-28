@@ -5,9 +5,18 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-nav ul {
+ul {
   list-style: none;
   padding: 0;
-  display: flex;
   gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+nav {
+  margin-bottom: 40px;
+}
+
+nav ul {
+  flex-direction: unset;
 }
