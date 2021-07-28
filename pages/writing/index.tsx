@@ -1,11 +1,11 @@
 import { Layout } from '@components/Layout'
 
-function HomePage() {
+function WritingPage() {
   return (
     <Layout>
-      <h1>Tino&apos;s Corner</h1>
+      <h1>Writing</h1>
     </Layout>
   )
 }
 
-export default HomePage
+export default WritingPage
