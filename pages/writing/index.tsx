@@ -31,7 +31,7 @@ const getStaticProps: GetStaticProps<Props> = async () => {
   const articleFileNames = fs
     .readdirSync(articlesDirectoryPath)
     .map(path.parse)
-    .filter((parsedPath) => parsedPath.ext === '.txt')
+    .filter((parsedPath) => parsedPath.ext === '.mdx')
     .map((parsedPath) => parsedPath.name)
 
   return {

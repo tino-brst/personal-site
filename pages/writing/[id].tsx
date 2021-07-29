@@ -1,18 +1,26 @@
+import * as React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
+import { bundleMDX } from 'mdx-bundler'
+import { getMDXComponent } from 'mdx-bundler/client'
 import fs from 'fs'
 import path from 'path'
 
 type Props = {
   id: string
-  content: string
+  code: string
 }
 
 function ArticlePage(props: Props) {
+  const MDXComponent = React.useMemo(
+    () => getMDXComponent(props.code),
+    [props.code]
+  )
+
   return (
     <Layout>
       <h1>{props.id}</h1>
-      <p>{props.content}</p>
+      <MDXComponent />
     </Layout>
   )
 }
@@ -31,7 +39,7 @@ const getStaticPaths: GetStaticPaths<PathParams> = async () => {
   const articleFileNames = fs
     .readdirSync(articlesDirectoryPath)
     .map(path.parse)
-    .filter((parsedPath) => parsedPath.ext === '.txt')
+    .filter((parsedPath) => parsedPath.ext === '.mdx')
     .map((parsedPath) => parsedPath.name)
 
   return {
@@ -45,13 +53,15 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
 
   const projectRoot = process.cwd()
   const articlesDirectoryPath = path.join(projectRoot, 'articles')
-  const articlePath = path.join(articlesDirectoryPath, `${articleFileName}.txt`)
+  const articlePath = path.join(articlesDirectoryPath, `${articleFileName}.mdx`)
   const articleContent = fs.readFileSync(articlePath, 'utf8')
+
+  const { code } = await bundleMDX(articleContent)
 
   return {
     props: {
       id: articleFileName,
-      content: articleContent,
+      code,
     },
   }
 }

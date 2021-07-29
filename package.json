@@ -10,12 +10,14 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "mdx-bundler": "^5.1.2",
     "next": "11.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@types/react": "17.0.15",
+    "esbuild": "^0.12.16",
     "eslint": "7.31.0",
     "eslint-config-next": "11.0.1",
     "prettier": "^2.3.2",
