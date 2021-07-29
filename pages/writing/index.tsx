@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
+import fs from 'fs'
+import path from 'path'
 
 type Props = {
   articleIds: Array<string>
@@ -24,8 +26,16 @@ function WritingPage(props: Props) {
 }
 
 const getStaticProps: GetStaticProps<Props> = async () => {
+  const projectRoot = process.cwd()
+  const articlesDirectoryPath = path.join(projectRoot, 'articles')
+  const articleFileNames = fs
+    .readdirSync(articlesDirectoryPath)
+    .map(path.parse)
+    .filter((parsedPath) => parsedPath.ext === '.txt')
+    .map((parsedPath) => parsedPath.name)
+
   return {
-    props: { articleIds: ['foo', 'bar'] },
+    props: { articleIds: articleFileNames },
   }
 }
 
