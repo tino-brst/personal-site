@@ -9,6 +9,7 @@ import path from 'path'
 type Props = {
   id: string
   code: string
+  frontmatter: Record<string, string>
 }
 
 function ArticlePage(props: Props) {
@@ -19,7 +20,7 @@ function ArticlePage(props: Props) {
 
   return (
     <Layout>
-      <h1>{props.id}</h1>
+      <h1>{props.frontmatter.title}</h1>
       <MDXComponent />
     </Layout>
   )
@@ -56,12 +57,13 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
   const articlePath = path.join(articlesDirectoryPath, `${articleFileName}.mdx`)
   const articleContent = fs.readFileSync(articlePath, 'utf8')
 
-  const { code } = await bundleMDX(articleContent)
+  const { code, frontmatter } = await bundleMDX(articleContent)
 
   return {
     props: {
       id: articleFileName,
       code,
+      frontmatter,
     },
   }
 }
