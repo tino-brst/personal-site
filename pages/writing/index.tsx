@@ -4,7 +4,12 @@ import { Layout } from '@components/Layout'
 import { getArticles } from 'data/articles'
 
 type Props = {
-  articleIds: Array<string>
+  articles: Array<{
+    id: string
+    url: string
+    title: string
+    readingTime: string
+  }>
 }
 
 function WritingPage(props: Props) {
@@ -12,13 +17,14 @@ function WritingPage(props: Props) {
     <Layout>
       <h1>Writing</h1>
       <ul>
-        {/* TODO show more than just the ids */}
-        {props.articleIds.map((id) => (
-          <li key={id}>
-            {/* TODO get current route instead of hard-coding 'writing'? */}
-            <Link href={`/writing/${id}`}>
-              <a>{id}</a>
+        {props.articles.map((article) => (
+          <li key={article.id}>
+            <Link href={article.url}>
+              <a>
+                <h3>{article.title}</h3>
+              </a>
             </Link>
+            <p>{article.readingTime}</p>
           </li>
         ))}
       </ul>
@@ -30,7 +36,14 @@ const getStaticProps: GetStaticProps<Props> = async () => {
   const articles = await getArticles()
 
   return {
-    props: { articleIds: articles.map((article) => article.id) },
+    props: {
+      articles: articles.map((article) => ({
+        id: article.id,
+        url: `/writing/${article.id}`,
+        title: article.title,
+        readingTime: article.readingTime,
+      })),
+    },
   }
 }
 
