@@ -24,7 +24,7 @@ function WritingPage(props: Props) {
                 <h3>{article.title}</h3>
               </a>
             </Link>
-            <p>{article.readingTime}</p>
+            <span>{article.readingTime}</span>
           </li>
         ))}
       </ul>
