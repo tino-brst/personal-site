@@ -6,6 +6,7 @@ import { getArticle, getArticles } from 'data/articles'
 
 type Props = {
   title: string
+  readingTime: string
   code: string
 }
 
@@ -18,7 +19,7 @@ function ArticlePage(props: Props) {
   return (
     <Layout>
       <h1>{props.title}</h1>
-      {/* TODO add reading time */}
+      <h4>{props.readingTime}</h4>
       <MDXComponent />
     </Layout>
   )
@@ -43,6 +44,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
   return {
     props: {
       title: article.title,
+      readingTime: article.readingTime,
       code: article.code,
     },
   }

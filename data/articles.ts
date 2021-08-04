@@ -1,10 +1,12 @@
 import path from 'path'
 import fs from 'fs'
 import { bundleMDX } from 'mdx-bundler'
+import readingTime from 'reading-time'
 
 type Article = {
   id: string,
   title: string,
+  readingTime: string,
   code: string
 }
 
@@ -17,6 +19,7 @@ async function parseArticle(filePath: string): Promise<Article> {
   return {
     id: path.basename(filePath, '.mdx'),
     title: frontmatter.title,
+    readingTime: readingTime(articleContents).text,
     code
   }
 }
