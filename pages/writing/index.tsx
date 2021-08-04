@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import { GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
-import fs from 'fs'
-import path from 'path'
+import { getArticles } from 'data/articles'
 
 type Props = {
   articleIds: Array<string>
@@ -13,8 +12,10 @@ function WritingPage(props: Props) {
     <Layout>
       <h1>Writing</h1>
       <ul>
+        {/* TODO show more than just the ids */}
         {props.articleIds.map((id) => (
           <li key={id}>
+            {/* TODO get current route instead of hard-coding 'writing'? */}
             <Link href={`/writing/${id}`}>
               <a>{id}</a>
             </Link>
@@ -26,16 +27,10 @@ function WritingPage(props: Props) {
 }
 
 const getStaticProps: GetStaticProps<Props> = async () => {
-  const projectRoot = process.cwd()
-  const articlesDirectoryPath = path.join(projectRoot, 'articles')
-  const articleFileNames = fs
-    .readdirSync(articlesDirectoryPath)
-    .map(path.parse)
-    .filter((parsedPath) => parsedPath.ext === '.mdx')
-    .map((parsedPath) => parsedPath.name)
+  const articles = await getArticles()
 
   return {
-    props: { articleIds: articleFileNames },
+    props: { articleIds: articles.map((article) => article.id) },
   }
 }
 

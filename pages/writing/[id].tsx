@@ -1,15 +1,12 @@
 import * as React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
-import { bundleMDX } from 'mdx-bundler'
 import { getMDXComponent } from 'mdx-bundler/client'
-import fs from 'fs'
-import path from 'path'
+import { getArticle, getArticles } from 'data/articles'
 
 type Props = {
-  id: string
+  title: string
   code: string
-  frontmatter: Record<string, string>
 }
 
 function ArticlePage(props: Props) {
@@ -20,7 +17,8 @@ function ArticlePage(props: Props) {
 
   return (
     <Layout>
-      <h1>{props.frontmatter.title}</h1>
+      <h1>{props.title}</h1>
+      {/* TODO add reading time */}
       <MDXComponent />
     </Layout>
   )
@@ -31,39 +29,21 @@ type PathParams = {
 }
 
 const getStaticPaths: GetStaticPaths<PathParams> = async () => {
-  // we want to get a route 'writing/name-of-the-article' for each file we have
-  // in our articles folder. If we return the filename of each article for each
-  // path as its id, we get exactly that.
-
-  const projectRoot = process.cwd()
-  const articlesDirectoryPath = path.join(projectRoot, 'articles')
-  const articleFileNames = fs
-    .readdirSync(articlesDirectoryPath)
-    .map(path.parse)
-    .filter((parsedPath) => parsedPath.ext === '.mdx')
-    .map((parsedPath) => parsedPath.name)
+  const articles = await getArticles()
 
   return {
-    paths: articleFileNames.map((id) => ({ params: { id } })),
+    paths: articles.map((article) => ({ params: { id: article.id } })),
     fallback: false,
   }
 }
 
 const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
-  const articleFileName = context.params!.id
-
-  const projectRoot = process.cwd()
-  const articlesDirectoryPath = path.join(projectRoot, 'articles')
-  const articlePath = path.join(articlesDirectoryPath, `${articleFileName}.mdx`)
-  const articleContent = fs.readFileSync(articlePath, 'utf8')
-
-  const { code, frontmatter } = await bundleMDX(articleContent)
+  const article = await getArticle(context.params!.id)
 
   return {
     props: {
-      id: articleFileName,
-      code,
-      frontmatter,
+      title: article.title,
+      code: article.code,
     },
   }
 }
