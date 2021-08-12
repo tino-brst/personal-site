@@ -26,20 +26,20 @@ function ArticlePage(props: Props) {
 }
 
 type PathParams = {
-  id: string
+  slug: string
 }
 
 const getStaticPaths: GetStaticPaths<PathParams> = async () => {
   const articles = await getArticles()
 
   return {
-    paths: articles.map((article) => ({ params: { id: article.id } })),
+    paths: articles.map((article) => ({ params: { slug: article.slug } })),
     fallback: false,
   }
 }
 
 const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
-  const article = await getArticle(context.params!.id)
+  const article = await getArticle(context.params!.slug)
 
   return {
     props: {

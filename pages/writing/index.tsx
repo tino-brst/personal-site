@@ -5,7 +5,7 @@ import { getArticles } from 'data/articles'
 
 type Props = {
   articles: Array<{
-    id: string
+    slug: string
     url: string
     title: string
     readingTime: string
@@ -18,7 +18,7 @@ function WritingPage(props: Props) {
       <h1>Writing</h1>
       <ul>
         {props.articles.map((article) => (
-          <li key={article.id}>
+          <li key={article.slug}>
             <Link href={article.url}>
               <a>
                 <h3>{article.title}</h3>
@@ -38,8 +38,8 @@ const getStaticProps: GetStaticProps<Props> = async () => {
   return {
     props: {
       articles: articles.map((article) => ({
-        id: article.id,
-        url: `/writing/${article.id}`,
+        slug: article.slug,
+        url: `/writing/${article.slug}`,
         title: article.title,
         readingTime: article.readingTime,
       })),
