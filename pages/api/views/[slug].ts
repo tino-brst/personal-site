@@ -2,7 +2,7 @@ import type { NextApiHandler } from 'next'
 import { prisma } from 'lib/prisma'
 
 type SuccessResponse = {
-  views: number
+  viewCount: number
 }
 
 type ErrorResponse = {
@@ -21,7 +21,7 @@ const handler: NextApiHandler<Response> = async (req, res) => {
     })
 
     if (article) {
-      res.status(200).json({ views: article.views })
+      res.status(200).json({ viewCount: article.viewCount })
     } else {
       res.status(404).json({ message: `Article with slug '${slug}' not found` })
     }
@@ -30,11 +30,11 @@ const handler: NextApiHandler<Response> = async (req, res) => {
   if (method === 'POST') {
     const article = await prisma.article.upsert({
       where: { slug },
-      create: { slug, views: 1 },
-      update: { views: { increment: 1 } },
+      create: { slug, viewCount: 1 },
+      update: { viewCount: { increment: 1 } },
     })
 
-    res.status(200).json({ views: article.views })
+    res.status(200).json({ viewCount: article.viewCount })
   }
 }
 

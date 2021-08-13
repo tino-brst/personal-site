@@ -11,7 +11,7 @@ generator client {
 }
 
 model Article {
-  id    String @id @default(cuid())
-  slug  String @unique
-  views Int    @default(0)
+  id        String @id @default(cuid())
+  slug      String @unique
+  viewCount Int    @default(0)
 }
