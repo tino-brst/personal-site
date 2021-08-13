@@ -3,8 +3,10 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
 import { getMDXComponent } from 'mdx-bundler/client'
 import { getArticle, getArticles } from 'data/articles'
+import { useViewCount } from 'hooks/useViewCount'
 
 type Props = {
+  slug: string
   title: string
   readingTime: string
   code: string
@@ -16,10 +18,15 @@ function ArticlePage(props: Props) {
     [props.code]
   )
 
+  const viewCount = useViewCount(props.slug)
+
   return (
     <Layout>
       <h1>{props.title}</h1>
-      <h4>{props.readingTime}</h4>
+      <h4>
+        {props.readingTime} • {viewCount.isLoading ? '...' : viewCount.value}{' '}
+        views
+      </h4>
       <MDXComponent />
     </Layout>
   )
@@ -43,6 +50,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
 
   return {
     props: {
+      slug: article.slug,
       title: article.title,
       readingTime: article.readingTime,
       code: article.code,
