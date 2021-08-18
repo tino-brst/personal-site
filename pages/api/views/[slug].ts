@@ -39,5 +39,3 @@ const handler: NextApiHandler<Response> = async (req, res) => {
 }
 
 export default handler
-
-// TODO add views total? (via views/index.ts)
