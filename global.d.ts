@@ -13,6 +13,7 @@ declare global {
 
     interface ProcessEnv extends Dict<string> {
       readonly DATABASE_URL: string
+      readonly BCRYPT_IP_SALT: string
     }
   }
 }
