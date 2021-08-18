@@ -65,6 +65,8 @@ const handler: NextApiHandler<Response> = async (req, res) => {
   if (method === 'POST') {
     const isLikeCountValid = !isNaN(likeCount) && likeCount >= 0
 
+    // TODO clamp value to the max number of likes per user
+
     if (isLikeCountValid) {
       // TODO handle scenario where the article slug passed does not exist in
       // the Articles table, violating the foreign key constraint (and throwing

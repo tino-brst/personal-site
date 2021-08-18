@@ -4,6 +4,7 @@ import { Layout } from '@components/Layout'
 import { getMDXComponent } from 'mdx-bundler/client'
 import { getArticle, getArticles } from 'data/articles'
 import { useViewCount } from 'hooks/useViewCount'
+import { useLikeCount } from 'hooks/useLikeCount'
 
 type Props = {
   slug: string
@@ -19,6 +20,7 @@ function ArticlePage(props: Props) {
   )
 
   const viewCount = useViewCount(props.slug)
+  const likeCount = useLikeCount(props.slug)
 
   return (
     <Layout>
@@ -27,6 +29,9 @@ function ArticlePage(props: Props) {
         {props.readingTime} • {viewCount.isLoading ? '...' : viewCount.value}{' '}
         views
       </h4>
+      <button disabled={likeCount.isLoading} onClick={likeCount.increment}>
+        👍 {`${likeCount.user ?? '...'}/MAX • ${likeCount.total ?? '...'}`}
+      </button>
       <MDXComponent />
     </Layout>
   )
