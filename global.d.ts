@@ -10,5 +10,9 @@ declare global {
     interface Global {
       prisma: PrismaClient
     }
+
+    interface ProcessEnv extends Dict<string> {
+      readonly DATABASE_URL: string
+    }
   }
 }
