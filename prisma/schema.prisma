@@ -11,7 +11,20 @@ generator client {
 }
 
 model Article {
-  id        String @id @default(cuid())
-  slug      String @unique
-  viewCount Int    @default(0)
+  id        String                @id @default(cuid())
+  slug      String                @unique
+  viewCount Int                   @default(0)
+  likes     ArticleLikesPerUser[]
+}
+
+// TODO 🚩 enable referential actions (preview feature)
+// TODO 🚩 test default referential actions (delete an Article, update a slug)
+
+model ArticleLikesPerUser {
+  article     Article @relation(fields: [articleSlug], references: [slug])
+  articleSlug String
+  userId      String
+  count       Int
+
+  @@unique([articleSlug, userId])
 }
