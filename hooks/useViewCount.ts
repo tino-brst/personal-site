@@ -17,13 +17,12 @@ function useViewCount(slug: string) {
   )
 
   React.useEffect(() => {
-    const updateViewCount = async () => {
+    mutate(async () => {
       const response = await fetch(`/api/views/${slug}`, { method: 'POST' })
-      const data = await response.json() // TODO set types
-      return data
-    }
-
-    mutate(updateViewCount, false)
+      // TODO set types
+      // TODO error handling
+      return await response.json()
+    }, false)
   }, [slug, mutate])
 
   return {

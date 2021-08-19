@@ -1,5 +1,5 @@
-import * as React from 'react'
 import useSWR from 'swr'
+import { useDebounce } from './useDebounce'
 
 function useLikeCount(slug: string) {
   const { data, error, mutate } = useSWR<{
@@ -7,22 +7,7 @@ function useLikeCount(slug: string) {
     userLikeCount: number
   }>(`/api/likes/${slug}`)
 
-  const updateUserLikeCount = React.useCallback(() => {
-    mutate(async (data) => {
-      const updatedUserLikeCount = data?.userLikeCount ?? 0
-      const response = await fetch(
-        `/api/likes/${slug}?count=${updatedUserLikeCount}`,
-        { method: 'POST' }
-      )
-      const updatedData = await response.json() // TODO set types
-      return updatedData
-    }, false)
-  }, [mutate, slug])
-
-  const debouncedUpdateUserLikeCount = React.useMemo(
-    () => debounce(updateUserLikeCount, 500),
-    [updateUserLikeCount]
-  )
+  const debouncedMutate = useDebounce(mutate, 1000)
 
   const increment = () => {
     mutate(
@@ -33,7 +18,13 @@ function useLikeCount(slug: string) {
       false
     )
 
-    debouncedUpdateUserLikeCount()
+    debouncedMutate(async (data) => {
+      const response = await fetch(
+        `/api/likes/${slug}?count=${data?.userLikeCount ?? 0}`,
+        { method: 'POST' }
+      )
+      return await response.json()
+    }, false)
   }
 
   return {
@@ -43,20 +34,6 @@ function useLikeCount(slug: string) {
     user: data?.userLikeCount,
     isLoading: !data && !error,
     isError: error !== undefined,
-  }
-}
-
-function debounce(fn: any, duration: number) {
-  let timeoutId: NodeJS.Timeout | null = null
-
-  return (...args: any) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId)
-    }
-
-    timeoutId = setTimeout(() => {
-      fn(...args)
-    }, duration)
   }
 }
 
