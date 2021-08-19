@@ -33,7 +33,6 @@ function useLikeCount(slug: string) {
     total: data?.totalLikeCount,
     user: data?.userLikeCount,
     isLoading: !data && !error,
-    isError: error !== undefined,
   }
 }
 

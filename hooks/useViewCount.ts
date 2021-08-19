@@ -28,7 +28,6 @@ function useViewCount(slug: string) {
   return {
     value: data?.viewCount,
     isLoading: !data && !error,
-    isError: error !== undefined,
   }
 }
 
