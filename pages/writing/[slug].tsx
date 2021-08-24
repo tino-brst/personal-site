@@ -5,6 +5,7 @@ import { getMDXComponent } from 'mdx-bundler/client'
 import { getArticle, getArticles } from 'data/articles'
 import { useViewCount } from 'hooks/useViewCount'
 import { useLikeCount } from 'hooks/useLikeCount'
+import { maxUserLikeCount } from 'lib/constants'
 
 type Props = {
   slug: string
@@ -30,7 +31,10 @@ function ArticlePage(props: Props) {
         views
       </h4>
       <button disabled={likeCount.isLoading} onClick={likeCount.increment}>
-        👍 {`${likeCount.user ?? '...'}/MAX • ${likeCount.total ?? '...'}`}
+        👍{' '}
+        {`${likeCount.user ?? '...'}/${maxUserLikeCount} • ${
+          likeCount.total ?? '...'
+        }`}
       </button>
       <MDXComponent />
     </Layout>
