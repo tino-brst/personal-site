@@ -7,7 +7,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 model Article {
@@ -17,11 +18,8 @@ model Article {
   likes     ArticleLikesPerUser[]
 }
 
-// TODO 🚩 enable referential actions (preview feature)
-// TODO 🚩 test default referential actions (delete an Article, update a slug)
-
 model ArticleLikesPerUser {
-  article     Article @relation(fields: [articleSlug], references: [slug])
+  article     Article @relation(fields: [articleSlug], references: [slug], onDelete: Cascade, onUpdate: Cascade)
   articleSlug String
   userId      String
   count       Int
