@@ -2,6 +2,7 @@ import type { NextApiHandler } from 'next'
 import { IncomingHttpHeaders } from 'http'
 import { prisma } from 'lib/prisma'
 import { hash } from 'bcrypt'
+import { maxUserLikeCount } from 'lib/constants'
 
 // TODO define response conventions (check google's)
 
@@ -63,11 +64,10 @@ const handler: NextApiHandler<Response> = async (req, res) => {
   }
 
   if (method === 'POST') {
-    const isLikeCountValid = !isNaN(likeCount) && likeCount >= 0
+    const isValidLikeCount =
+      !isNaN(likeCount) && likeCount >= 0 && likeCount <= maxUserLikeCount
 
-    // TODO clamp value to the max number of likes per user
-
-    if (isLikeCountValid) {
+    if (isValidLikeCount) {
       // TODO handle scenario where the article slug passed does not exist in
       // the Articles table, violating the foreign key constraint (and throwing
       // an error). Rare scenario in practice, due to implying that a user liked
