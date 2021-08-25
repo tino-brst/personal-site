@@ -10,11 +10,16 @@ import useSWR from 'swr'
 // data update via mutate (skipping revalidation once again, since it's an
 // up-to-date value).
 
-function useViewCount(slug: string) {
   const { data, error, mutate } = useSWR<{ viewCount: number }>( // TODO share API types
     `/api/views/${slug}`,
     { revalidateOnMount: false }
   )
+type UseViewCountResult = {
+  value?: number
+  isLoading: boolean
+}
+
+function useViewCount(slug: string): UseViewCountResult {
 
   React.useEffect(() => {
     mutate(async () => {

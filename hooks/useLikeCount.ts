@@ -2,11 +2,18 @@ import useSWR from 'swr'
 import { useDebounce } from './useDebounce'
 import { maxUserLikeCount } from 'lib/constants'
 
-function useLikeCount(slug: string) {
   const { data, error, mutate } = useSWR<{
     totalLikeCount: number
     userLikeCount: number
   }>(`/api/likes/${slug}`)
+type UseLikeCountResult = {
+  increment: () => void
+  total: number | undefined
+  user: number | undefined
+  isLoading: boolean
+}
+
+function useLikeCount(slug: string): UseLikeCountResult {
 
   const debouncedMutate = useDebounce(mutate, 1000)
 
@@ -40,7 +47,6 @@ function useLikeCount(slug: string) {
   }
 
   return {
-    // TODO define return type and add to function definition?
     increment,
     total: data?.totalLikeCount,
     user: data?.userLikeCount,
