@@ -24,8 +24,8 @@ function useLikeCount(slug: string): UseLikeCountResult {
     mutate((data) => {
       if (data && data.userLikeCount < maxUserLikeCount) {
         return {
-          totalLikeCount: (data.totalLikeCount ?? 0) + 1,
-          userLikeCount: (data.userLikeCount ?? 0) + 1,
+          totalLikeCount: data.totalLikeCount + 1,
+          userLikeCount: data.userLikeCount + 1,
         }
       }
     }, false)
