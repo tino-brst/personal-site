@@ -1,17 +1,12 @@
 import type { NextApiHandler } from 'next'
 import { prisma } from 'lib/prisma'
+import { Response } from 'types/response'
 
-type SuccessResponse = {
+type ViewsData = {
   viewCount: number
 }
 
-type ErrorResponse = {
-  message: string
-}
-
-type Response = ErrorResponse | SuccessResponse
-
-const handler: NextApiHandler<Response> = async (req, res) => {
+const handler: NextApiHandler<Response<ViewsData>> = async (req, res) => {
   const slug = req.query.slug as string
   const method = req.method
 
@@ -21,7 +16,9 @@ const handler: NextApiHandler<Response> = async (req, res) => {
     })
 
     if (article) {
-      res.status(200).json({ viewCount: article.viewCount })
+      res.status(200).json({
+        viewCount: article.viewCount,
+      })
     } else {
       res.status(404).json({ message: `Article with slug '${slug}' not found` })
     }
@@ -34,8 +31,11 @@ const handler: NextApiHandler<Response> = async (req, res) => {
       update: { viewCount: { increment: 1 } },
     })
 
-    res.status(200).json({ viewCount: article.viewCount })
+    res.status(200).json({
+      viewCount: article.viewCount,
+    })
   }
 }
 
 export default handler
+export type { ViewsData }

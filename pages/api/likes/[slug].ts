@@ -3,21 +3,14 @@ import { IncomingHttpHeaders } from 'http'
 import { prisma } from 'lib/prisma'
 import { hash } from 'bcrypt'
 import { maxUserLikeCount } from 'lib/constants'
+import { Response } from 'types/response'
 
-// TODO define response conventions (check google's)
-
-type SuccessResponse = {
+type LikesData = {
   totalLikeCount: number
   userLikeCount: number
 }
 
-type ErrorResponse = {
-  message: string
-}
-
-type Response = ErrorResponse | SuccessResponse
-
-const handler: NextApiHandler<Response> = async (req, res) => {
+const handler: NextApiHandler<Response<LikesData>> = async (req, res) => {
   const articleSlug = req.query.slug as string
   const likeCount = parseInt(req.query.count as string)
   const method = req.method
@@ -126,3 +119,4 @@ function getClientIpAddress(headers: IncomingHttpHeaders): string {
 }
 
 export default handler
+export type { LikesData }
