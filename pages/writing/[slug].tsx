@@ -2,10 +2,10 @@ import * as React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
 import { getMDXComponent } from 'mdx-bundler/client'
-import { getArticle, getArticles } from 'lib/articles'
-import { useViewCount } from 'hooks/useViewCount'
-import { useLikeCount } from 'hooks/useLikeCount'
-import { maxUserLikeCount } from 'lib/constants'
+import { getArticle, getArticles } from '@lib/articles'
+import { useViewCount } from '@hooks/useViewCount'
+import { useLikeCount } from '@hooks/useLikeCount'
+import { maxUserLikeCount } from '@lib/constants'
 
 type Props = {
   slug: string

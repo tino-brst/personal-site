@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useDebounce } from './useDebounce'
-import { maxUserLikeCount } from 'lib/constants'
+import { maxUserLikeCount } from '@lib/constants'
 import { LikesData } from 'pages/api/likes/[slug]'
 
 type UseLikeCountResult = {

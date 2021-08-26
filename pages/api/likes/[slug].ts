@@ -1,8 +1,8 @@
 import type { NextApiHandler } from 'next'
 import { IncomingHttpHeaders } from 'http'
-import { prisma } from 'lib/prisma'
+import { prisma } from '@lib/prisma'
 import { hash } from 'bcrypt'
-import { maxUserLikeCount } from 'lib/constants'
+import { maxUserLikeCount } from '@lib/constants'
 import { Response } from 'types/response'
 
 type LikesData = {

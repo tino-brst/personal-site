@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
-import { getArticles } from 'lib/articles'
+import { getArticles } from '@lib/articles'
 
 type Props = {
   articles: Array<{
