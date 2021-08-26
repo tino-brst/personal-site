@@ -6,11 +6,13 @@ import { getArticle, getArticles } from '@lib/articles'
 import { useViewCount } from '@hooks/useViewCount'
 import { useLikeCount } from '@hooks/useLikeCount'
 import { maxUserLikeCount } from '@lib/constants'
+import { formatDate } from '@lib/dates'
 
 type Props = {
   slug: string
   title: string
   readingTime: string
+  publishedOn: number
   code: string
 }
 
@@ -25,6 +27,7 @@ function ArticlePage(props: Props) {
 
   return (
     <Layout>
+      <h5>{formatDate(props.publishedOn)}</h5>
       <h1>{props.title}</h1>
       <h4>
         {props.readingTime} • {viewCount.isLoading ? '...' : viewCount.value}{' '}
@@ -62,6 +65,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
       slug: article.slug,
       title: article.title,
       readingTime: article.readingTime,
+      publishedOn: article.publishedOn.getTime(),
       code: article.code,
     },
   }

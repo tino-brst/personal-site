@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
 import { getArticles } from '@lib/articles'
+import { compareDatesDesc, formatDate } from '@lib/dates'
 
 type Props = {
   articles: Array<{
@@ -9,6 +10,7 @@ type Props = {
     url: string
     title: string
     readingTime: string
+    publishedOn: number
   }>
 }
 
@@ -24,7 +26,9 @@ function WritingPage(props: Props) {
                 <h3>{article.title}</h3>
               </a>
             </Link>
-            <span>{article.readingTime}</span>
+            <span>
+              {article.readingTime} • {formatDate(article.publishedOn)}
+            </span>
           </li>
         ))}
       </ul>
@@ -37,12 +41,15 @@ const getStaticProps: GetStaticProps<Props> = async () => {
 
   return {
     props: {
-      articles: articles.map((article) => ({
-        slug: article.slug,
-        url: `/writing/${article.slug}`,
-        title: article.title,
-        readingTime: article.readingTime,
-      })),
+      articles: articles
+        .map((article) => ({
+          slug: article.slug,
+          url: `/writing/${article.slug}`,
+          title: article.title,
+          readingTime: article.readingTime,
+          publishedOn: article.publishedOn.getTime(),
+        }))
+        .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn)),
     },
   }
 }
