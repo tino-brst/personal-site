@@ -7,6 +7,7 @@ type Article = {
   slug: string
   title: string
   readingTime: string
+  publishedOn: Date
   code: string
 }
 
@@ -20,6 +21,7 @@ async function parseArticle(filePath: string): Promise<Article> {
     slug: path.basename(filePath, '.mdx'),
     title: frontmatter.title,
     readingTime: readingTime(articleContents).text,
+    publishedOn: new Date(frontmatter.publishedOn),
     code,
   }
 }
