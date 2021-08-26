@@ -16,9 +16,9 @@ function useLikeCount(slug: string): UseLikeCountResult {
   const debouncedMutate = useDebounce(mutate, 1000)
 
   const increment = () => {
-    // Update the local data immediately (allows the UI to reflect the change
-    // instantaneously). Revalidation is disabled to avoid an unnecessary fetch,
-    // which we'll handle next.
+    // Update the local data immediately (giving the user instant feedback).
+    // Revalidation is disabled to avoid an unnecessary fetch, which is handled
+    // next.
     mutate((data) => {
       if (data && data.userLikeCount < maxUserLikeCount) {
         return {

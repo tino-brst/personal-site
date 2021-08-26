@@ -2,7 +2,7 @@ import * as React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { Layout } from '@components/Layout'
 import { getMDXComponent } from 'mdx-bundler/client'
-import { getArticle, getArticles } from 'data/articles'
+import { getArticle, getArticles } from 'lib/articles'
 import { useViewCount } from 'hooks/useViewCount'
 import { useLikeCount } from 'hooks/useLikeCount'
 import { maxUserLikeCount } from 'lib/constants'
@@ -49,7 +49,7 @@ const getStaticPaths: GetStaticPaths<PathParams> = async () => {
   const articles = await getArticles()
 
   return {
-    paths: articles.map((article) => ({ params: { slug: article.slug } })),
+    paths: articles.map(({ slug }) => ({ params: { slug } })),
     fallback: false,
   }
 }
