@@ -21,3 +21,7 @@ nav {
 nav ul {
   flex-direction: unset;
 }
+
+div.line.highlight {
+  background: whitesmoke;
+}

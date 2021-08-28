@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import { bundleMDX } from 'mdx-bundler'
 import readingTime from 'reading-time'
+import { rehypePrism } from './rehype-prism'
 
 type Article = {
   slug: string
@@ -15,7 +16,13 @@ const articlesDirectoryPath = path.join(process.cwd(), 'articles')
 
 async function parseArticle(filePath: string): Promise<Article> {
   const articleContents = fs.readFileSync(filePath, 'utf8')
-  const { code, frontmatter } = await bundleMDX(articleContents)
+  // TODO extract bundleMDX?
+  const { code, frontmatter } = await bundleMDX(articleContents, {
+    xdmOptions: (options) => ({
+      ...options,
+      rehypePlugins: [...(options.rehypePlugins ?? []), rehypePrism],
+    }),
+  })
 
   return {
     slug: path.basename(filePath, '.mdx'),
