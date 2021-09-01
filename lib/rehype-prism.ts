@@ -12,9 +12,19 @@ import parseNumericRange from 'parse-numeric-range'
 // TODO ? Support for // @highlight-start/end/line "directives"
 
 type Options = Partial<{
-  // TODO Comments https://github.com/rehypejs/rehype-highlight/blob/3ecd22808c6a73a8aecc7b5fedaf758d721de208/index.js#L8
+  /**
+   * Register more languages. Passed to `refractor.register`.
+   */
   languages: Array<Syntax>
+  /**
+   * Register more aliases. Passed to `refractor.alias`.
+   */
   aliases: Record<string, string | Array<string>>
+  /**
+   * Swallow errors for missing languages. By default, unregistered syntaxes
+   * throw an error when they are used. Pass `true` to swallow those errors and
+   * thus ignore code with unknown code languages.
+   */
   ignoreMissing: boolean
 }>
 
@@ -91,13 +101,11 @@ function getLanguage(className: Array<string | number>): string | undefined {
  * them at the new-line characters.
  *
  * The array:
- *
  * ```ts
  * [{ type: 'text', value: 'foo\n\nbar\n' }]
  * ```
  *
  * Yields:
- *
  * ```ts
  * [
  *   { type: 'text', value: 'foo' },
@@ -155,17 +163,16 @@ function addBetween<T>(array: Array<T>, value: T): Array<T> {
 }
 
 /**
- * Goes through all the elements of the array grouping them "by line". As the
+ * Goes through all the elements of the array grouping them _"by line"_. As the
  * array is traversed, each element is added to an array (group), whenever a node
  * with a new-line character is found, the group accumulated up to that point is
  * considered a line, stored, and onto building the next group.
  *
  * If a new-line character is found and the accumulated group has no elements at
- * that point, it means that we found an empty line, and a `<br>` element is used as
- * that group's content.
+ * that point, it means that an empty line was found, and a `<br>` element is
+ * used as that group's content.
  *
  * The array:
- *
  * ```ts
  * [
  *   { type: 'text', value: 'foo' },
@@ -209,7 +216,7 @@ function groupByLine(
 }
 
 /**
- * Returns a copy of the array, adding the 'highlight' class to all the elements
+ * Returns a copy of the array, adding the `'highlight'` class to all the elements
  * (lines) that have their index (0-based) present in the lineNumbers array
  * (1-based).
  */
@@ -238,13 +245,14 @@ function highlight(
 }
 
 /**
- * Takes a code block's meta string (surfaced by xdm) and turns it into an
- * object (Record) for easier access of its values.
+ * Takes a code block's meta string (surfaced by xdm @ node.data.meta) and turns
+ * it into an object (Record) for easier access of its values.
  *
- * This: 'foo=abc bar'
- * Yields: { foo: 'abc', bar: '' }
+ * This: `foo=abc bar`
  *
- * Yep, it could be fancier and make that 'bar' a boolean set to true, parse
+ * Yields: `{ foo: 'abc', bar: '' }`
+ *
+ * Yep, it could be fancier and make that `bar` a boolean set to true, parse
  * numbers, etc.
  *
  * All thanks to
@@ -265,7 +273,7 @@ function parseMeta(meta: string): Partial<Record<string, string>> {
 }
 
 /**
- * Inspired by the 'h' utility function from 'hastscript' used to create html
+ * Inspired by the `h` utility function from `hastscript` used to create html
  * Element nodes, this one creates Text nodes.
  */
 function t(value: string): Text {
