@@ -70,7 +70,7 @@ const rehypePrism: Plugin<[Options?], Root> = (options) => {
 
       const nodes = splitNewLines(refractorRoot.children)
       const nodeGroups = groupByLine(nodes)
-      let result = nodeGroups.map((group) => h('div.token.line', group))
+      let result = nodeGroups.map((group) => h('div.line', group))
 
       if (node.data && node.data.meta && typeof node.data.meta === 'string') {
         const meta = parseMeta(node.data.meta)
@@ -164,13 +164,10 @@ function addBetween<T>(array: Array<T>, value: T): Array<T> {
 
 /**
  * Goes through all the elements of the array grouping them _"by line"_. As the
- * array is traversed, each element is added to an array (group), whenever a node
- * with a new-line character is found, the group accumulated up to that point is
- * considered a line, stored, and onto building the next group.
- *
- * If a new-line character is found and the accumulated group has no elements at
- * that point, it means that an empty line was found, and a `<br>` element is
- * used as that group's content.
+ * array is traversed, each element is added to an array (group), and whenever a
+ * node with a new-line character is found, the group accumulated up to that
+ * point (and the new-line node) are considered a line, stored, and onto the next
+ * group.
  *
  * The array:
  * ```ts
@@ -186,11 +183,28 @@ function addBetween<T>(array: Array<T>, value: T): Array<T> {
  * Yields:
  * ```ts
  * [
- *   [{ type: 'text', value: 'foo' }],
- *   [{ type: 'element', tagName: 'br' }],
- *   [{ type: 'text', value: 'bar' }],
+ *   [
+ *     { type: 'text', value: 'foo' },
+ *     { type: 'text', value: '\n' },
+ *   ],
+ *   [
+ *     { type: 'text', value: '\n' },
+ *   ],
+ *   [
+ *     { type: 'text', value: 'bar' },
+ *     { type: 'text', value: '\n' },
+ *   ],
  * ]
  * ```
+ *
+ * Considering that each group of nodes is later wrapped with a `div` element,
+ * keeping those new-line ones may seem superfluous, since the div elements
+ * themselves are going to do the work (due to their `display:block` property)
+ * of keeping the lines separate. But keeping them allows us to later easily get
+ * the content of the code snippet via the element's `textContent` property,
+ * with line breaks where they should be (instead of the not so consistent
+ * `innerText`). That content can then be used to implement things like 'Copy'
+ * buttons no code blocks.
  */
 function groupByLine(
   nodes: Array<Text | RefractorElement>
@@ -204,10 +218,7 @@ function groupByLine(
       continue
     }
 
-    if (lastGroup.length === 0) {
-      lastGroup.push(h('br'))
-    }
-
+    lastGroup.push(node)
     result.push(lastGroup)
     lastGroup = []
   }
@@ -246,7 +257,7 @@ function highlight(
 
 /**
  * Takes a code block's meta string (surfaced by xdm @ node.data.meta) and turns
- * it into an object (Record) for easier access of its values.
+ * it into an object (Record) for easier access to its values.
  *
  * This: `foo=abc bar`
  *
