@@ -7,6 +7,7 @@ import { useViewCount } from '@hooks/useViewCount'
 import { useLikeCount } from '@hooks/useLikeCount'
 import { maxUserLikeCount } from '@lib/constants'
 import { formatDate } from '@lib/dates'
+import { CodeBlock } from '@components/markdown/CodeBlock'
 
 type Props = {
   slug: string
@@ -17,10 +18,7 @@ type Props = {
 }
 
 function ArticlePage(props: Props) {
-  const MDXComponent = React.useMemo(
-    () => getMDXComponent(props.code),
-    [props.code]
-  )
+  const Content = React.useMemo(() => getMDXComponent(props.code), [props.code])
 
   const viewCount = useViewCount(props.slug)
   const likeCount = useLikeCount(props.slug)
@@ -39,7 +37,11 @@ function ArticlePage(props: Props) {
           likeCount.total ?? '...'
         }`}
       </button>
-      <MDXComponent />
+      <Content
+        components={{
+          pre: CodeBlock,
+        }}
+      />
     </Layout>
   )
 }
