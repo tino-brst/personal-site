@@ -3,6 +3,8 @@ import fs from 'fs'
 import { bundleMDX } from 'mdx-bundler'
 import readingTime from 'reading-time'
 import { rehypePrism } from './rehype-prism'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutoLinkHeadings from 'rehype-autolink-headings'
 
 type Article = {
   slug: string
@@ -20,7 +22,12 @@ async function parseArticle(filePath: string): Promise<Article> {
   const { code, frontmatter } = await bundleMDX(articleContents, {
     xdmOptions: (options) => ({
       ...options,
-      rehypePlugins: [...(options.rehypePlugins ?? []), rehypePrism],
+      rehypePlugins: [
+        ...(options.rehypePlugins ?? []),
+        rehypeSlug,
+        [rehypeAutoLinkHeadings, { behaviour: 'wrap' }],
+        rehypePrism,
+      ],
     }),
   })
 
