@@ -61,7 +61,7 @@ const handler: NextApiHandler<Response<LikesData>> = async (req, res) => {
       !isNaN(likeCount) && likeCount >= 0 && likeCount <= maxUserLikeCount
 
     if (isValidLikeCount) {
-      // TODO handle scenario where the article slug passed does not exist in
+      // TODO: handle scenario where the article slug passed does not exist in
       // the Articles table, violating the foreign key constraint (and throwing
       // an error). Rare scenario in practice, due to implying that a user liked
       // the article without visiting it (and thus creating its entry in the

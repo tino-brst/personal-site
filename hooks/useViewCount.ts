@@ -29,7 +29,7 @@ function useViewCount(slug: string): UseViewCountResult {
         return await response.json()
       }
 
-      // TODO error handling
+      // TODO: error handling
     }, false)
   }, [slug, mutate])
 
