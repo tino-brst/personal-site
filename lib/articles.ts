@@ -2,10 +2,12 @@ import path from 'path'
 import fs from 'fs'
 import readingTime from 'reading-time'
 import { bundleMDX } from './bundle-mdx'
+import { toc, Result as TableOfContents } from './toc'
 
 type Article = {
   slug: string
   title: string
+  tableOfContents: TableOfContents
   readingTime: string
   publishedOn: Date
   code: string
@@ -19,7 +21,10 @@ async function parseArticle(filePath: string): Promise<Article> {
 
   return {
     slug: path.basename(filePath, '.mdx'),
+    // TODO: extract from contents by looking at the headings?
     title: frontmatter.title,
+    tableOfContents: toc(articleContents),
+    // TODO: use the one by titus?
     readingTime: readingTime(articleContents).text,
     publishedOn: new Date(frontmatter.publishedOn),
     code,

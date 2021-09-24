@@ -8,10 +8,15 @@ import { useLikeCount } from '@hooks/useLikeCount'
 import { maxUserLikeCount } from '@lib/constants'
 import { formatDate } from '@lib/dates'
 import { CodeBlock } from '@components/markdown/CodeBlock'
+import { Heading } from '@components/markdown/Heading'
+import { ArticleTableOfContents } from '@components/ArticleTableOfContents'
+import { TableOfContentsProvider } from 'contexts/table-of-contents'
+import { Result as TableOfContents } from '@lib/toc'
 
 type Props = {
   slug: string
   title: string
+  tableOfContents: TableOfContents
   readingTime: string
   publishedOn: number
   code: string
@@ -25,23 +30,29 @@ function ArticlePage(props: Props) {
 
   return (
     <Layout>
-      <h5>{formatDate(props.publishedOn)}</h5>
-      <h1>{props.title}</h1>
-      <h4>
-        {props.readingTime} • {viewCount.isLoading ? '...' : viewCount.value}{' '}
-        views
-      </h4>
-      <button disabled={likeCount.isLoading} onClick={likeCount.increment}>
-        👍{' '}
-        {`${likeCount.user ?? '...'}/${maxUserLikeCount} • ${
-          likeCount.total ?? '...'
-        }`}
-      </button>
-      <Content
-        components={{
-          pre: CodeBlock,
-        }}
-      />
+      <TableOfContentsProvider tableOfContents={props.tableOfContents}>
+        <ArticleTableOfContents />
+        <h5>{formatDate(props.publishedOn)}</h5>
+        <h1>{props.title}</h1>
+        <h4>
+          {props.readingTime} • {viewCount.isLoading ? '...' : viewCount.value}{' '}
+          views
+        </h4>
+        <button disabled={likeCount.isLoading} onClick={likeCount.increment}>
+          👍{' '}
+          {`${likeCount.user ?? '...'}/${maxUserLikeCount} • ${
+            likeCount.total ?? '...'
+          }`}
+        </button>
+        <Content
+          components={{
+            pre: CodeBlock,
+            h2: (props) => Heading({ ...props, level: 2 }),
+            h3: (props) => Heading({ ...props, level: 3 }),
+            h4: (props) => Heading({ ...props, level: 4 }),
+          }}
+        />
+      </TableOfContentsProvider>
     </Layout>
   )
 }
@@ -69,6 +80,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
       readingTime: article.readingTime,
       publishedOn: article.publishedOn.getTime(),
       code: article.code,
+      tableOfContents: article.tableOfContents,
     },
   }
 }
