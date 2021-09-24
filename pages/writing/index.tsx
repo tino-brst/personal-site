@@ -18,7 +18,7 @@ function WritingPage(props: Props) {
   return (
     <Layout>
       <h1>Writing</h1>
-      <ul>
+      <ul className="articles-list">
         {props.articles.map((article) => (
           <li key={article.slug}>
             <Link href={article.url}>
