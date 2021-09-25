@@ -128,4 +128,26 @@ function isAtOrPastWindowTop(element: HTMLElement) {
   return element.offsetTop <= Math.ceil(window.scrollY)
 }
 
+/**
+ * Visits all nodes in a tree, invoking the passed callback function on each
+ * with the visited node and its ancestors as arguments.
+ */
+function visit<T extends { children: Array<T> }>(
+  tree: T,
+  onVisit: (node: T, ancestors: Array<T>) => void
+) {
+  const visitRecursively = (
+    node: T,
+    onVisit: (node: T, ancestors: Array<T>) => void,
+    ancestors: Array<T> = []
+  ) => {
+    onVisit(node, ancestors)
+    for (const child of node.children) {
+      visitRecursively(child, onVisit, [node, ...ancestors])
+    }
+  }
+
+  visitRecursively(tree, onVisit, [])
+}
+
 export { TableOfContentsProvider, useTableOfContents }
