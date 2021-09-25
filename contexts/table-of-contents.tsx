@@ -4,6 +4,7 @@ import * as React from 'react'
 type ContextValue = {
   value: TableOfContents
   activeSectionId: string | undefined
+  activeSectionAncestorIds: Array<string>
   registerSectionHeading: (heading: HTMLHeadingElement) => void
   unregisterSectionHeading: (heading: HTMLHeadingElement) => void
 }
@@ -18,7 +19,24 @@ Context.displayName = 'TableOfContentsContext'
 
 function TableOfContentsProvider(props: Props) {
   const [activeSectionId, setActiveSectionId] = React.useState<string>('')
+  const [activeSectionAncestorIds, setActiveSectionAncestorIds] =
+    React.useState<Array<string>>([])
   const [headings, setHeadings] = React.useState<Array<HTMLElement>>([])
+
+  const sectionAncestorIdsMap = React.useMemo(() => {
+    const map = new Map<string, Array<string>>()
+
+    for (const section of props.tableOfContents) {
+      visit(section, (section, ancestors) => {
+        map.set(
+          section.id,
+          ancestors.map(({ id }) => id)
+        )
+      })
+    }
+
+    return map
+  }, [props.tableOfContents])
 
   const headingsSortedByOrderOfAppearance = React.useMemo(
     () => [...headings].sort(compareOffsetTop),
@@ -38,11 +56,14 @@ function TableOfContentsProvider(props: Props) {
         isAtOrPastWindowTop
       )
 
-      // If there is no heading at/past the top of the window, the first one
-      // still hasn't crossed the top, and is chosen as the active one.
-      setActiveSectionId(
-        firstHeadingAtOrPastTop ? firstHeadingAtOrPastTop.id : firstHeading.id
-      )
+      // If there is no heading at/past the top of the window, then the first
+      // one still hasn't crossed the top, and is chosen as the active one.
+      const sectionId = firstHeadingAtOrPastTop
+        ? firstHeadingAtOrPastTop.id
+        : firstHeading.id
+
+      setActiveSectionId(sectionId)
+      setActiveSectionAncestorIds(sectionAncestorIdsMap.get(sectionId) ?? [])
     }
 
     // Make a 'manual' first call to compensate that the 'scroll' event is not
@@ -55,7 +76,7 @@ function TableOfContentsProvider(props: Props) {
     window.addEventListener('scroll', handleWindowScroll, { passive: true })
 
     return () => window.removeEventListener('scroll', handleWindowScroll)
-  }, [headingsSortedByOrderOfAppearance])
+  }, [headingsSortedByOrderOfAppearance, sectionAncestorIdsMap])
 
   const registerSectionHeading = (heading: HTMLHeadingElement) => {
     setHeadings((headings) => [...headings, heading])
@@ -69,10 +90,11 @@ function TableOfContentsProvider(props: Props) {
     () => ({
       value: props.tableOfContents,
       activeSectionId,
+      activeSectionAncestorIds,
       registerSectionHeading,
       unregisterSectionHeading,
     }),
-    [activeSectionId, props.tableOfContents]
+    [props.tableOfContents, activeSectionId, activeSectionAncestorIds]
   )
 
   return <Context.Provider value={value} {...props} />
