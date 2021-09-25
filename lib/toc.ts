@@ -12,17 +12,17 @@ const processor = unified().use(remarkParse).use(remarkFrontmatter)
 
 type Root = {
   depth: 0
-  children: Array<Item>
+  children: Array<Section>
 }
 
-type Item = {
+type Section = {
   title: string
-  slug: string
+  id: string
   depth: 1 | 2 | 3 | 4 | 5 | 6
-  children: Array<Item>
+  children: Array<Section>
 }
 
-type Result = Array<Item>
+type Result = Array<Section>
 
 // TODO: but why? (given -> yields)
 function toc(markdown: string): Result {
@@ -31,33 +31,31 @@ function toc(markdown: string): Result {
 
   const headings = root.children.filter(isHeading).map((heading) => {
     const title = toString(heading, { includeImageAlt: false })
-    const slug = slugger.slug(title)
+    const id = slugger.slug(title)
 
     return {
       title,
-      slug,
+      id,
       depth: heading.depth,
     }
   })
 
   // TODO: but why? (algorithm)
   const tocRoot: Root = { depth: 0, children: [] }
-  const stack = new Stack<Item | Root>([tocRoot])
+  const stack = new Stack<Section | Root>([tocRoot])
 
   for (const heading of headings) {
     while (heading.depth <= stack.top.depth) {
       stack.pop()
     }
 
-    const tocItem: Item = {
-      title: heading.title,
-      slug: heading.slug,
-      depth: heading.depth,
+    const section: Section = {
+      ...heading,
       children: [],
     }
 
-    stack.top.children.push(tocItem)
-    stack.push(tocItem)
+    stack.top.children.push(section)
+    stack.push(section)
   }
 
   return tocRoot.children
@@ -94,4 +92,4 @@ class Stack<T> {
 }
 
 export { toc }
-export type { Result, Item }
+export type { Result, Section }

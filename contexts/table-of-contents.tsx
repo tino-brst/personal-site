@@ -2,10 +2,10 @@ import { Result as TableOfContents } from '@lib/toc'
 import * as React from 'react'
 
 type ContextValue = {
-  items: TableOfContents
-  activeSlug: string | undefined
-  registerHeading: (heading: HTMLHeadingElement) => void
-  unregisterHeading: (heading: HTMLHeadingElement) => void
+  value: TableOfContents
+  activeSectionId: string | undefined
+  registerSectionHeading: (heading: HTMLHeadingElement) => void
+  unregisterSectionHeading: (heading: HTMLHeadingElement) => void
 }
 
 type Props = {
@@ -17,7 +17,7 @@ const Context = React.createContext<ContextValue | undefined>(undefined)
 Context.displayName = 'TableOfContentsContext'
 
 function TableOfContentsProvider(props: Props) {
-  const [activeSlug, setActiveSlug] = React.useState<string>('')
+  const [activeSectionId, setActiveSectionId] = React.useState<string>('')
   const [headings, setHeadings] = React.useState<Array<HTMLElement>>([])
 
   const headingsSortedByOrderOfAppearance = React.useMemo(
@@ -40,14 +40,14 @@ function TableOfContentsProvider(props: Props) {
 
       // If there is no heading at/past the top of the window, the first one
       // still hasn't crossed the top, and is chosen as the active one.
-      setActiveSlug(
+      setActiveSectionId(
         firstHeadingAtOrPastTop ? firstHeadingAtOrPastTop.id : firstHeading.id
       )
     }
 
     // Make a 'manual' first call to compensate that the 'scroll' event is not
     // triggered on load, which would cause to maybe be mid-page (e.g. via
-    // opening a ...#some-section link) and have the wrong item as active.
+    // opening a ...#some-section link) and have the wrong section as active.
     handleWindowScroll()
 
     // TODO: handle margins (for nav-bars, etc)
@@ -57,22 +57,22 @@ function TableOfContentsProvider(props: Props) {
     return () => window.removeEventListener('scroll', handleWindowScroll)
   }, [headingsSortedByOrderOfAppearance])
 
-  const registerHeading = (heading: HTMLHeadingElement) => {
+  const registerSectionHeading = (heading: HTMLHeadingElement) => {
     setHeadings((headings) => [...headings, heading])
   }
 
-  const unregisterHeading = (heading: HTMLHeadingElement) => {
+  const unregisterSectionHeading = (heading: HTMLHeadingElement) => {
     setHeadings((headings) => headings.filter((e) => e !== heading))
   }
 
   const value = React.useMemo<ContextValue>(
     () => ({
-      items: props.tableOfContents,
-      activeSlug,
-      registerHeading,
-      unregisterHeading,
+      value: props.tableOfContents,
+      activeSectionId,
+      registerSectionHeading,
+      unregisterSectionHeading,
     }),
-    [activeSlug, props.tableOfContents]
+    [activeSectionId, props.tableOfContents]
   )
 
   return <Context.Provider value={value} {...props} />

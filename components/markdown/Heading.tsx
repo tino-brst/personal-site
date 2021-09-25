@@ -16,9 +16,9 @@ function Heading(props: Props) {
     if (!headingElementRef.current) return
 
     const headingElement = headingElementRef.current
-    tableOfContents.registerHeading(headingElement)
+    tableOfContents.registerSectionHeading(headingElement)
 
-    return () => tableOfContents.unregisterHeading(headingElement)
+    return () => tableOfContents.unregisterSectionHeading(headingElement)
   }, [tableOfContents])
 
   return <Component ref={headingElementRef} {...omit(props, 'level')} />
