@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { Section } from '@lib/toc'
 import { useTableOfContents } from 'contexts/table-of-contents'
 
@@ -17,13 +18,19 @@ function ArticleTableOfContents() {
 function ArticleTableOfContentsItem(props: Section) {
   const tableOfContents = useTableOfContents()
   const isActive = props.id === tableOfContents.activeSectionId
+  const isActiveAncestor =
+    props.children &&
+    tableOfContents.activeSectionAncestorIds.includes(props.id)
 
   return (
     <>
       <li
-        className={isActive ? 'active' : ''}
+        className={clsx(
+          isActive && 'active',
+          isActiveAncestor && 'active-ancestor'
+        )}
         key={props.id}
-        style={{ paddingLeft: 10 * Math.max(props.depth - 2, 0) }}
+        style={{ paddingLeft: 15 * Math.max(props.depth - 2, 0) }}
       >
         <a href={`#${props.id}`}>{props.title}</a>
       </li>
