@@ -65,3 +65,27 @@ div.line.highlight {
   transition: all 0.2s;
   text-decoration: none;
 }
+
+h1 {
+  margin-bottom: 0;
+}
+
+h2 {
+  margin-top: 0;
+  /* Value based on default browser top margins */
+  padding-top: 0.83em;
+}
+
+h3 {
+  margin-top: 0;
+  padding-top: 1em;
+}
+
+h4 {
+  margin-top: 0;
+  padding-top: 1.33em;
+}
+
+p {
+  margin-bottom: 0;
+}
