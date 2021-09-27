@@ -9,9 +9,9 @@ import { maxUserLikeCount } from '@lib/constants'
 import { formatDate } from '@lib/dates'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Heading } from '@components/markdown/Heading'
-import { ArticleTableOfContents } from '@components/ArticleTableOfContents'
+import { TableOfContentsList } from '@components/ArticleTableOfContents'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
-import { Result as TableOfContents } from '@lib/toc'
+import { TableOfContents } from '@lib/mdast-util-toc'
 
 type Props = {
   slug: string
@@ -31,7 +31,7 @@ function ArticlePage(props: Props) {
   return (
     <Layout>
       <TableOfContentsProvider tableOfContents={props.tableOfContents}>
-        <ArticleTableOfContents />
+        <TableOfContentsList />
         <h5>{formatDate(props.publishedOn)}</h5>
         <h1>{props.title}</h1>
         <h4>

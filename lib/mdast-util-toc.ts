@@ -1,16 +1,9 @@
-import { unified } from 'unified'
-import { Heading } from 'mdast'
+import { Content, Heading, Root } from 'mdast'
 import { toString } from 'mdast-util-to-string'
-import { Node } from 'unist'
-import { is } from 'unist-util-is'
-import remarkParse from 'remark-parse'
-import remarkFrontmatter from 'remark-frontmatter'
 import GitHubSlugger from 'github-slugger'
+import { is } from 'unist-util-is'
 
-// TODO: use normalize?
-const processor = unified().use(remarkParse).use(remarkFrontmatter)
-
-type Root = {
+type PlaceholderRoot = {
   depth: 0
   children: Array<Section>
 }
@@ -22,15 +15,14 @@ type Section = {
   children: Array<Section>
 }
 
-type Result = Array<Section>
+type TableOfContents = Array<Section>
 
 // TODO: but why? (given -> yields)
-function toc(markdown: string): Result {
+function getTableOfContents(document: Root): TableOfContents {
   const slugger = new GitHubSlugger()
-  const root = processor.parse(markdown)
 
-  const headings = root.children.filter(isHeading).map((heading) => {
-    const title = toString(heading, { includeImageAlt: false })
+  const headings = document.children.filter(isHeading).map((heading) => {
+    const title = toString(heading)
     const id = slugger.slug(title)
 
     return {
@@ -41,8 +33,10 @@ function toc(markdown: string): Result {
   })
 
   // TODO: but why? (algorithm)
-  const tocRoot: Root = { depth: 0, children: [] }
-  const stack = new Stack<Section | Root>([tocRoot])
+  const root: PlaceholderRoot = { depth: 0, children: [] }
+  const stack = new Stack<PlaceholderRoot | Section>()
+
+  stack.push(root)
 
   for (const heading of headings) {
     while (heading.depth <= stack.top.depth) {
@@ -58,14 +52,17 @@ function toc(markdown: string): Result {
     stack.push(section)
   }
 
-  return tocRoot.children
+  return root.children
 }
 
 /**
- * For some reason, TS doesn't like the inline .map((node) => is<Heading>(node, 'heading')).
+ * The only way I found of making TS properly narrow types when doing array
+ * operations. Beware that (for some reason), it works only when doing
+ * array.filter/find/etc(isHeading) and not
+ * array.filter/find/etc(((content) => isHeading(content)).
  */
-function isHeading(node: Node): node is Heading {
-  return is<Heading>(node, 'heading')
+function isHeading(content: Content): content is Heading {
+  return is<Heading>(content, 'heading')
 }
 
 /**
@@ -74,8 +71,8 @@ function isHeading(node: Node): node is Heading {
 class Stack<T> {
   private array: Array<T>
 
-  constructor(initialValues: Array<T>) {
-    this.array = initialValues
+  constructor() {
+    this.array = []
   }
 
   get top() {
@@ -91,5 +88,5 @@ class Stack<T> {
   }
 }
 
-export { toc }
-export type { Result, Section }
+export { getTableOfContents }
+export type { TableOfContents, Section }

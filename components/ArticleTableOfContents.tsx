@@ -1,21 +1,21 @@
 import clsx from 'clsx'
-import { Section } from '@lib/toc'
+import { Section } from '@lib/mdast-util-toc'
 import { useTableOfContents } from 'contexts/table-of-contents'
 
-function ArticleTableOfContents() {
+function TableOfContentsList() {
   const tableOfContents = useTableOfContents()
 
   return (
     <ul className="toc">
       {/* TODO: title at the top of the list? */}
-      {tableOfContents.value.map((item) => (
-        <ArticleTableOfContentsItem key={item.id} {...item} />
+      {tableOfContents.value.map((section) => (
+        <TableOfContentsListItem key={section.id} {...section} />
       ))}
     </ul>
   )
 }
 
-function ArticleTableOfContentsItem(props: Section) {
+function TableOfContentsListItem(props: Section) {
   const tableOfContents = useTableOfContents()
   const isActive = props.id === tableOfContents.activeSectionId
   const isActiveAncestor =
@@ -34,11 +34,11 @@ function ArticleTableOfContentsItem(props: Section) {
       >
         <a href={`#${props.id}`}>{props.title}</a>
       </li>
-      {props.children.map((item) => (
-        <ArticleTableOfContentsItem key={item.id} {...item} />
+      {props.children.map((subsection) => (
+        <TableOfContentsListItem key={subsection.id} {...subsection} />
       ))}
     </>
   )
 }
 
-export { ArticleTableOfContents }
+export { TableOfContentsList }

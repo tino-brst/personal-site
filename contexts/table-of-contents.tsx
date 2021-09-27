@@ -1,4 +1,4 @@
-import { Result as TableOfContents } from '@lib/toc'
+import { TableOfContents } from '@lib/mdast-util-toc'
 import * as React from 'react'
 
 type ContextValue = {
