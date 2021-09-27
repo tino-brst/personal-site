@@ -12,6 +12,7 @@ import { Heading } from '@components/markdown/Heading'
 import { TableOfContentsList } from '@components/ArticleTableOfContents'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { TableOfContents } from '@lib/mdast-util-toc'
+import { BackToTopButton } from '@components/BackToTopButton'
 
 type Props = {
   slug: string
@@ -31,7 +32,10 @@ function ArticlePage(props: Props) {
   return (
     <Layout>
       <TableOfContentsProvider tableOfContents={props.tableOfContents}>
-        <TableOfContentsList />
+        <div className="floating-stuff">
+          <BackToTopButton>Back to top 🔼</BackToTopButton>
+          <TableOfContentsList />
+        </div>
         <h5>{formatDate(props.publishedOn)}</h5>
         <h1>{props.title}</h1>
         <h4>
