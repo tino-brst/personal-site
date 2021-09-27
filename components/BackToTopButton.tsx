@@ -9,14 +9,12 @@ function BackToTopButton(props: Props) {
 
   React.useEffect(() => {
     const handleScrollOrResize = () => {
-      // "Use a Back to Top button for pages that are longer than 4 screens"
-      // https://www.nngroup.com/articles/back-to-top/
-      const threshold = window.innerHeight * 4
+      const threshold = window.innerHeight
       setIsPastThreshold(window.scrollY > threshold)
     }
 
-    window.addEventListener('resize', handleScrollOrResize, { passive: true })
     window.addEventListener('scroll', handleScrollOrResize, { passive: true })
+    window.addEventListener('resize', handleScrollOrResize, { passive: true })
 
     return () => {
       window.removeEventListener('scroll', handleScrollOrResize)
