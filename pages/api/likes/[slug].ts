@@ -5,6 +5,8 @@ import { hash } from 'bcrypt'
 import { maxUserLikeCount } from '@lib/constants'
 import { Response } from 'types/response'
 
+// TODO: rename -> LikesResponseData? used in the FE in useSWR LikesData is not
+// that obvious that is a response
 type LikesData = {
   totalLikeCount: number
   userLikeCount: number

@@ -13,6 +13,7 @@ type UseLikeCountResult = {
 function useLikeCount(slug: string): UseLikeCountResult {
   const { data, error, mutate } = useSWR<LikesData>(`/api/likes/${slug}`)
 
+  // TODO: probably redundant, SWR already does this?
   const debouncedMutate = useDebounce(mutate, 1000)
 
   const increment = () => {
