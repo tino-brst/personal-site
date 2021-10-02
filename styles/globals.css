@@ -25,6 +25,16 @@ nav ul {
   gap: 20px;
 }
 
+.theme {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.theme-resolved {
+  opacity: 0.5;
+  font-size: 0.8em;
+}
+
 div.line.highlight {
   background: whitesmoke;
 }
