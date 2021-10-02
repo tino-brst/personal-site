@@ -51,6 +51,8 @@ function ArticlePage(props: Props) {
         <Content
           components={{
             pre: CodeBlock,
+            // TODO: make Headings dumber, and create a TableOfContentsHeading
+            // that composes those (and uses the TOC context, etc)
             h2: (props) => Heading({ ...props, level: 2 }),
             h3: (props) => Heading({ ...props, level: 3 }),
             h4: (props) => Heading({ ...props, level: 4 }),
