@@ -97,7 +97,7 @@ function TableOfContentsProvider(props: Props) {
     [props.tableOfContents, activeSectionId, activeSectionAncestorIds]
   )
 
-  return <Context.Provider value={value} {...props} />
+  return <Context.Provider value={value}>{props.children}</Context.Provider>
 }
 
 function useTableOfContents() {
