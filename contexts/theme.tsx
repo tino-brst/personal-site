@@ -33,6 +33,14 @@ function ThemeProvider({
   const resolved =
     active === 'system' ? (isSystemThemeDark ? 'dark' : 'light') : active
 
+  React.useEffect(() => {
+    if (resolved === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [resolved])
+
   const value = React.useMemo<ContextValue>(
     () => ({
       active,
