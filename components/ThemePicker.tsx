@@ -32,7 +32,7 @@ function ThemePicker() {
   //   3. Second render (returns the component).
   //   4. Paint, with the component being shown.
   //
-  // Notice that on the second flow there is no "Paint with now component" step.
+  // Notice that on the second flow there is no "Paint with no component" step.
   // Getting to the first paint takes a bit longer (due to an "unused" render)
   // but goes straight to the component being shown.
   useLayoutEffect(() => {
