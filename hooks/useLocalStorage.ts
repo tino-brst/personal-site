@@ -7,7 +7,7 @@ type Options<T> = Partial<{
 }>
 
 /**
- * Just like useState, but the value is persisted on local storage with the
+ * Just like useState, but the value is persisted to local storage with the
  * given key, and kept up-to-date with changes made from other tabs/windows. The
  * initial value is set to what's already in storage, if anything. Otherwise,
  * it's set to initialValue.
