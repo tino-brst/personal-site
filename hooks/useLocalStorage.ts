@@ -2,22 +2,25 @@ import * as React from 'react'
 import { isServerSide } from '@lib/constants'
 
 type Options<T> = Partial<{
+  /** Function used when saving a value to storage. Defaults to `JSON.stringify` */
   serialize: (value: T) => string
+  /** Function used when retrieving a value from storage. Defaults to `JSON.parse` */
   deserialize: (value: string) => T
 }>
 
 /**
  * Just like useState, but the value is persisted to local storage with the
- * given key, and kept up-to-date with changes made from other tabs/windows. The
- * initial value is set to what's already in storage, if anything. Otherwise,
- * it's set to initialValue.
+ * given key, and kept up-to-date with changes made from other tabs/windows.
+ *
+ * Inspired by https://usehooks.com/useLocalStorage
  */
 function useLocalStorage<T>(
+  /** Storage key */
   key: string,
+  /** Value used when no value is found in storage for the given key. Deleting the storage entry (from another tab/window) sets the returned value to this one */
   initialValue: T,
   { serialize = JSON.stringify, deserialize = JSON.parse }: Options<T> = {}
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const shouldSkipStorageUpdate = React.useRef(false)
   const [value, setValue] = React.useState(() => {
     if (isServerSide) return initialValue
 
@@ -26,13 +29,10 @@ function useLocalStorage<T>(
       ? initialValue
       : deserialize(storageValue)
 
-    // If the returned initial state came from the storage, there is no need to
-    // update the storage with that same value.
-    shouldSkipStorageUpdate.current = !isEmpty(storageValue)
     return value
   })
 
-  // Update the state on key/deserialize/initialValue changes
+  // Handle key (& initialValue/deserialize) changes
   React.useEffect(() => {
     const storageValue = window.localStorage.getItem(key)
     const value = isEmpty(storageValue)
@@ -40,8 +40,7 @@ function useLocalStorage<T>(
       : deserialize(storageValue)
 
     setValue(value)
-    shouldSkipStorageUpdate.current = !isEmpty(storageValue)
-  }, [key, deserialize, initialValue])
+  }, [key, initialValue, deserialize])
 
   // Subscribe to storage changes
   React.useEffect(() => {
@@ -54,19 +53,6 @@ function useLocalStorage<T>(
         : deserialize(storageValue)
 
       setValue(value)
-
-      // Mixed feelings on this one. Skipping the next update when the new state
-      // _came_ from the storage makes sense (no need to write back the same
-      // value), but what should be done when the entry is deleted? (rawValue
-      // === null). The state is set to initialValue (makes sense, I would
-      // expect my "dark" theme to go back to "light" if I deleted the "theme"
-      // entry in storage), but should the storage be updated to reflect that?
-      // (i.e. not skip). Feels weird deleting an entry from the dev tools and
-      // have it instantly reappear set to the initialValue. And even though not
-      // updating it (skipping) may cause the state value to not represent
-      // what's in storage, it's temporary; an update to the state or
-      // page-refresh would get them back in sync. Skipping it is.
-      shouldSkipStorageUpdate.current = true
     }
 
     // Beware that the storage event (in some browsers) only fires when a
@@ -77,21 +63,26 @@ function useLocalStorage<T>(
     window.addEventListener('storage', handleStorage)
 
     return () => window.removeEventListener('storage', handleStorage)
-  }, [key, deserialize, initialValue])
+  }, [key, initialValue, deserialize])
 
-  // On changes to the state, update the corresponding storage value (if
-  // needed). The placement of this effect is intentional, to make sure that any
-  // changes to shouldSkipStorageUpdate happen before it (on a given render).
-  React.useEffect(() => {
-    if (shouldSkipStorageUpdate.current) {
-      shouldSkipStorageUpdate.current = false
-      return
-    }
+  // Just like any setState function (can receive a value or a function that
+  // gets the current value as parameter), but commits each state change to
+  // storage.
+  const customSetValue = React.useCallback<
+    React.Dispatch<React.SetStateAction<T>>
+  >(
+    (value) => {
+      setValue((prevValue) => {
+        const newValue = value instanceof Function ? value(prevValue) : value
+        window.localStorage.setItem(key, serialize(newValue))
 
-    window.localStorage.setItem(key, serialize(value))
-  }, [value, key, serialize])
+        return newValue
+      })
+    },
+    [key, serialize]
+  )
 
-  return [value, setValue]
+  return [value, customSetValue]
 }
 
 function isEmpty(value: unknown): value is null {
