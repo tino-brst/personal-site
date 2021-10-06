@@ -8,14 +8,20 @@ type ActiveTheme = 'light' | 'dark' | 'system'
 type ResolvedTheme = 'light' | 'dark'
 
 type ContextValue = {
+  /** Active theme */
   active: ActiveTheme
+  /** If the active theme is `'system'`, this returns the current system preference (`'light'`/`'dark'`); otherwise, it's the same as `active`. If there are UI elements that change with the theme, this is the value they should follow */
   resolved: ResolvedTheme
+  /** List of available themes */
   values: typeof themes
+  /** Update the active theme */
   setActive: (value: ActiveTheme) => void
 }
 
 type Props = {
+  /** Default active theme, used when no theme could be restored from local storage. Defaults to `'system'`. */
   defaultTheme?: ActiveTheme
+  /** Local storage key. Used to persist theme info across sessions and sync theme changes across tabs/windows. Defaults to `'theme'` */
   storageKey?: string
   children: React.ReactNode
 }
@@ -34,6 +40,7 @@ function ThemeProvider({
     active === 'system' ? (isSystemThemeDark ? 'dark' : 'light') : active
 
   React.useEffect(() => {
+    // TODO: probably should allow customizing these classes
     if (resolved === 'dark') {
       document.documentElement.classList.add('dark')
     } else {
