@@ -1,24 +1,13 @@
-import * as React from 'react'
-
-// Make sure the passed function's identity is stable (e.g. via useCallback) and
-// not defined in-line (i.e. useDebounce(() => {...})); otherwise, on each render a
-// new function will be created and a new debounced function returned from the
-// hook, i.e. it will look like the debouncing didn't do anything (even though it
-// _did_ debounce a bunch of different functions).
-
-// An excellent debouncing (vs throttle) explanation:
-// https://redd.one/blog/debounce-vs-throttle
-
-const useDebounce: typeof debounce = (fn, duration) => {
-  return React.useMemo(() => debounce(fn, duration), [fn, duration])
-}
-
-// An implementation of the classic "debounce" function that allows awaiting the
-// debounced function, and thus, handling any errors that it may throw (via
-// try/catch, etc). A classic case of "this is something that I haven't come
-// across or seen anywhere ... is it genius? Or a magnificently bad idea 🤔"
-// (probably the latter).
-
+/**
+ * An implementation of the classic "debounce" function that returns a promise,
+ * thus allowing to await the debounced function, and handle any errors that it
+ * may throw. A classic case of "this is something that I haven't come across or
+ * seen anywhere ... is it genius? Or a magnificently bad idea 🤔" (probably the
+ * latter).
+ *
+ * An excellent debouncing (vs throttle) explanation:
+ * https://redd.one/blog/debounce-vs-throttle
+ */
 function debounce<T extends (...args: any) => any>(
   fn: T,
   duration: number
@@ -39,15 +28,14 @@ function debounce<T extends (...args: any) => any>(
   return (...args) => {
     clearTimeout(timeoutId)
 
-    // Store the resolution methods corresponding to each function call in the
-    // shared context, to be able to resolve/reject them later, once the timer
-    // goes off
+    // The promise to return. Store its resolution methods to be able to
+    // resolve/reject it later, once the timer goes off
     const promise = new Promise<ReturnType<T>>((resolve, reject) => {
       pendingPromises.push({ resolve, reject })
     })
 
-    // Once the timer goes off, we get the function's return value and resolve
-    // (or reject if it explodes) all pending promises
+    // Once the timer goes off, get the function's return value and resolve
+    // (or reject) all pending promises
     timeoutId = setTimeout(async () => {
       try {
         const result = await fn(...args)
@@ -67,4 +55,4 @@ function debounce<T extends (...args: any) => any>(
   }
 }
 
-export { useDebounce }
+export { debounce }

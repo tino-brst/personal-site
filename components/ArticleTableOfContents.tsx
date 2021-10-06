@@ -9,7 +9,6 @@ function TableOfContentsList() {
 
   return (
     <ul className="toc">
-      {/* TODO: title at the top of the list? */}
       {tableOfContents.value.map((section) => (
         <TableOfContentsListItem key={section.id} {...section} />
       ))}

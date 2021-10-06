@@ -72,7 +72,7 @@ function TableOfContentsProvider(props: Props) {
     handleWindowScroll()
 
     // TODO: handle margins (for nav-bars, etc)
-    // TODO: handle other headings as root
+    // TODO: handle other elements besides the window as root
     window.addEventListener('scroll', handleWindowScroll, { passive: true })
 
     return () => window.removeEventListener('scroll', handleWindowScroll)
