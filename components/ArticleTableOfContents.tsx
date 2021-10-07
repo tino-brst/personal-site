@@ -2,7 +2,8 @@ import clsx from 'clsx'
 import { Section } from '@lib/mdast-util-toc'
 import { useTableOfContents } from 'contexts/table-of-contents'
 
-// TODO: handle an empty table of contents
+// TODO: handle an empty table of contents, add isEmpty to context value?
+// So it's tableOfContents.isEmpty
 
 function TableOfContentsList() {
   const tableOfContents = useTableOfContents()

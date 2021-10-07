@@ -41,6 +41,9 @@ function ThemeProvider({
 
   React.useEffect(() => {
     // TODO: probably should allow customizing these classes
+    // See https://github.com/pacocoursey/next-themes
+    // ThemeProvider 'value' prop
+
     if (resolved === 'dark') {
       document.documentElement.classList.add('dark')
     } else {

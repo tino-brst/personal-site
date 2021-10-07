@@ -61,6 +61,7 @@ async function updateLikeCount(slug: string, value: number) {
     method: 'POST',
   })
 
+  // TODO: error handling
   if (response.ok) {
     return await response.json()
   }
