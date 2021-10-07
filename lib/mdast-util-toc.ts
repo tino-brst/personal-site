@@ -39,7 +39,7 @@ function getTableOfContents(document: Root): TableOfContents {
   stack.push(root)
 
   for (const heading of headings) {
-    while (heading.depth <= stack.top.depth) {
+    while (stack.top && heading.level <= stack.top.level) {
       stack.pop()
     }
 
@@ -48,7 +48,7 @@ function getTableOfContents(document: Root): TableOfContents {
       children: [],
     }
 
-    stack.top.children.push(section)
+    stack.top?.children.push(section)
     stack.push(section)
   }
 
@@ -66,7 +66,7 @@ function isHeading(content: Content): content is Heading {
 }
 
 /**
- * Quick & basic implementation of the Stack data structure.
+ * Basic implementation of the Stack data structure.
  */
 class Stack<T> {
   private array: Array<T>
@@ -75,8 +75,8 @@ class Stack<T> {
     this.array = []
   }
 
-  get top() {
-    return this.array[this.array.length - 1]
+  get top(): T | undefined {
+    return this.array.length ? this.array[this.array.length - 1] : undefined
   }
 
   push(value: T) {
