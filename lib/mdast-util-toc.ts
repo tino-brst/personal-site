@@ -1,24 +1,63 @@
-import { Content, Heading, Root } from 'mdast'
+import * as Mdast from 'mdast'
+import { is } from 'unist-util-is'
 import { toString } from 'mdast-util-to-string'
 import GitHubSlugger from 'github-slugger'
-import { is } from 'unist-util-is'
 
-type PlaceholderRoot = {
-  depth: 0
+type Node = {
+  level: number
   children: Array<Section>
 }
 
-type Section = {
+type PlaceholderRoot = Node & {
+  level: 0
+}
+
+type Section = Node & {
+  level: 1 | 2 | 3 | 4 | 5 | 6
   title: string
   id: string
-  depth: 1 | 2 | 3 | 4 | 5 | 6
-  children: Array<Section>
 }
 
-type TableOfContents = Array<Section>
-
-// TODO: but why? (given -> yields)
-function getTableOfContents(document: Root): TableOfContents {
+/**
+ * Get a table of contents representation of the `document`. Uses
+ * `github-slugger` to create the ids for each heading based on their content.
+ *
+ * Given (showing the source markdown file instead of the actual `mdast` nodes
+ * for simplicity):
+ *
+ * ```markdown
+ * # Foo
+ * ## Bar
+ * # Foobar
+ * ```
+ *
+ * Yields:
+ *
+ * ```ts
+ * [
+ *   {
+ *     title: "Foo",
+ *     id: "foo",
+ *     level: 1,
+ *     children: [
+ *       {
+ *         title: "Bar",
+ *         id: "bar",
+ *         level: 2,
+ *         children: []
+ *       }
+ *     ]
+ *   },
+ *   {
+ *     title: "Foobar",
+ *     id: "foobar",
+ *     level: 1,
+ *     children: []
+ *   }
+ * ]
+ * ```
+ */
+function getTableOfContents(document: Mdast.Root): Array<Section> {
   const slugger = new GitHubSlugger()
 
   const headings = document.children.filter(isHeading).map((heading) => {
@@ -28,12 +67,12 @@ function getTableOfContents(document: Root): TableOfContents {
     return {
       title,
       id,
-      depth: heading.depth,
+      level: heading.depth,
     }
   })
 
-  const root: PlaceholderRoot = { depth: 0, children: [] }
   // TODO: but why? (explain algorithm)
+  const root: PlaceholderRoot = { level: 0, children: [] }
   const stack = new Stack<PlaceholderRoot | Section>()
 
   stack.push(root)
@@ -61,8 +100,8 @@ function getTableOfContents(document: Root): TableOfContents {
  * `array.filter/find/etc(isHeading)` and not
  * `array.filter/find/etc(((content) => isHeading(content))`.
  */
-function isHeading(content: Content): content is Heading {
-  return is<Heading>(content, 'heading')
+function isHeading(content: Mdast.Content): content is Mdast.Heading {
+  return is<Mdast.Heading>(content, 'heading')
 }
 
 /**
@@ -89,4 +128,4 @@ class Stack<T> {
 }
 
 export { getTableOfContents }
-export type { TableOfContents, Section }
+export type { Section }

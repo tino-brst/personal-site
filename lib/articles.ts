@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import readingTime from 'reading-time'
 import { bundleMDX } from './bundle-mdx'
-import { getTableOfContents, TableOfContents } from './mdast-util-toc'
+import { getTableOfContents, Section } from './mdast-util-toc'
 import { unified } from 'unified'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkParse from 'remark-parse'
@@ -10,7 +10,7 @@ import remarkParse from 'remark-parse'
 type Article = {
   slug: string
   title: string
-  tableOfContents: TableOfContents
+  tableOfContents: Array<Section>
   readingTime: string
   publishedOn: Date
   code: string

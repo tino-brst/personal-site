@@ -32,7 +32,7 @@ function TableOfContentsListItem(props: Section) {
           isActiveAncestor && 'active-ancestor'
         )}
         key={props.id}
-        style={{ paddingLeft: 15 * Math.max(props.depth - 2, 0) }}
+        style={{ paddingLeft: 15 * Math.max(props.level - 2, 0) }}
       >
         <a href={`#${props.id}`}>{props.title}</a>
       </li>

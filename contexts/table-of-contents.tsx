@@ -1,8 +1,8 @@
-import { TableOfContents } from '@lib/mdast-util-toc'
+import { Section } from '@lib/mdast-util-toc'
 import * as React from 'react'
 
 type ContextValue = {
-  value: TableOfContents
+  value: Array<Section>
   activeSectionId: string | undefined
   activeSectionAncestorIds: Array<string>
   registerSectionHeading: (heading: HTMLHeadingElement) => void
@@ -10,7 +10,7 @@ type ContextValue = {
 }
 
 type Props = {
-  tableOfContents: TableOfContents
+  tableOfContents: Array<Section>
   children: React.ReactNode
 }
 

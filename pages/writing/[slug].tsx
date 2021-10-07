@@ -9,15 +9,15 @@ import { maxUserLikeCount } from '@lib/constants'
 import { formatDate } from '@lib/dates'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Heading } from '@components/markdown/Heading'
-import { TableOfContentsList } from '@components/ArticleTableOfContents'
+import { TableOfContentsList } from '@components/TableOfContentsList'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
-import { TableOfContents } from '@lib/mdast-util-toc'
+import { Section } from '@lib/mdast-util-toc'
 import { BackToTopButton } from '@components/BackToTopButton'
 
 type Props = {
   slug: string
   title: string
-  tableOfContents: TableOfContents
+  tableOfContents: Array<Section>
   readingTime: string
   publishedOn: number
   code: string
