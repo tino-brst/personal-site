@@ -2,7 +2,7 @@ import * as React from 'react'
 import useSWR from 'swr'
 import { maxUserLikeCount } from '@lib/constants'
 import { debounce } from '@lib/debounce'
-import { LikesData } from 'pages/api/likes/[slug]'
+import { LikesResponseData } from 'pages/api/likes/[slug]'
 
 type UseLikeCountResult = {
   increment: () => void
@@ -12,7 +12,9 @@ type UseLikeCountResult = {
 }
 
 function useLikeCount(slug: string): UseLikeCountResult {
-  const { data, error, mutate } = useSWR<LikesData>(`/api/likes/${slug}`)
+  const { data, error, mutate } = useSWR<LikesResponseData>(
+    `/api/likes/${slug}`
+  )
 
   const increment = React.useCallback(async () => {
     // Update the local data immediately (giving the user instant feedback).

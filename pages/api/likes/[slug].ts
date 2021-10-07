@@ -5,14 +5,12 @@ import { hash } from 'bcrypt'
 import { maxUserLikeCount } from '@lib/constants'
 import { Response } from 'types/response'
 
-// TODO: rename -> LikesResponseData? used in the FE in useSWR LikesData is not
-// that obvious that is a response
-type LikesData = {
+type Data = {
   totalLikeCount: number
   userLikeCount: number
 }
 
-const handler: NextApiHandler<Response<LikesData>> = async (req, res) => {
+const handler: NextApiHandler<Response<Data>> = async (req, res) => {
   const articleSlug = req.query.slug as string
   const likeCount = parseInt(req.query.count as string)
   const method = req.method
@@ -121,4 +119,4 @@ function getClientIpAddress(headers: IncomingHttpHeaders): string {
 }
 
 export default handler
-export type { LikesData }
+export type { Data as LikesResponseData }

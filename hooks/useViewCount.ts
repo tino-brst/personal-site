@@ -1,6 +1,6 @@
 import * as React from 'react'
 import useSWR from 'swr'
-import type { ViewsData } from 'pages/api/views/[slug]'
+import type { ViewsResponseData } from 'pages/api/views/[slug]'
 
 // As soon as we visit a page, we want to register the new view, and get the
 // total (previous visits + ours). By default, useSWR will do a fetch to get the
@@ -17,9 +17,10 @@ type UseViewCountResult = {
 }
 
 function useViewCount(slug: string): UseViewCountResult {
-  const { data, error, mutate } = useSWR<ViewsData>(`/api/views/${slug}`, {
-    revalidateOnMount: false,
-  })
+  const { data, error, mutate } = useSWR<ViewsResponseData>(
+    `/api/views/${slug}`,
+    { revalidateOnMount: false }
+  )
 
   React.useEffect(() => {
     mutate(async () => {

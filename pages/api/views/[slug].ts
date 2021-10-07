@@ -2,11 +2,11 @@ import type { NextApiHandler } from 'next'
 import { prisma } from '@lib/prisma'
 import { Response } from 'types/response'
 
-type ViewsData = {
+type Data = {
   viewCount: number
 }
 
-const handler: NextApiHandler<Response<ViewsData>> = async (req, res) => {
+const handler: NextApiHandler<Response<Data>> = async (req, res) => {
   const slug = req.query.slug as string
   const method = req.method
 
@@ -38,4 +38,4 @@ const handler: NextApiHandler<Response<ViewsData>> = async (req, res) => {
 }
 
 export default handler
-export type { ViewsData }
+export type { Data as ViewsResponseData }
