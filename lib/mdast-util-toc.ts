@@ -60,6 +60,7 @@ type Section = Node & {
 function getTableOfContents(document: Mdast.Root): Array<Section> {
   const slugger = new GitHubSlugger()
 
+  // Get top level document heading nodes
   const headings = document.children.filter(isHeading).map((heading) => {
     const title = toString(heading)
     const id = slugger.slug(title)
@@ -71,6 +72,7 @@ function getTableOfContents(document: Mdast.Root): Array<Section> {
     }
   })
 
+  // Build table of contents tree
   // TODO: but why? (explain algorithm)
   const root: PlaceholderRoot = { level: 0, children: [] }
   const stack = new Stack<PlaceholderRoot | Section>()
@@ -91,6 +93,7 @@ function getTableOfContents(document: Mdast.Root): Array<Section> {
     stack.push(section)
   }
 
+  // Discard the placeholder root and return only its children
   return root.children
 }
 

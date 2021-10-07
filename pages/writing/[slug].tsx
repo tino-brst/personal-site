@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { Layout } from '@components/Layout'
 import { getMDXComponent } from 'mdx-bundler/client'
-import { getArticle, getArticles } from '@lib/articles'
+import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { useViewCount } from '@hooks/useViewCount'
 import { useLikeCount } from '@hooks/useLikeCount'
 import { maxUserLikeCount } from '@lib/constants'
+import { getArticle, getArticles } from '@lib/articles'
 import { formatDate } from '@lib/dates'
-import { CodeBlock } from '@components/markdown/CodeBlock'
-import { Heading } from '@components/markdown/Heading'
-import { TableOfContentsList } from '@components/TableOfContentsList'
-import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { Section } from '@lib/mdast-util-toc'
+import { Layout } from '@components/Layout'
+import { CodeBlock } from '@components/markdown/CodeBlock'
+import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
+import { TableOfContentsHeading } from '@components/TableOfContentsHeading'
 
 type Props = {
   slug: string
@@ -34,6 +34,7 @@ function ArticlePage(props: Props) {
       <TableOfContentsProvider tableOfContents={props.tableOfContents}>
         <div className="floating-stuff">
           <BackToTopButton>Back to top 🔼</BackToTopButton>
+          {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
           <TableOfContentsList />
         </div>
         <h5>{formatDate(props.publishedOn)}</h5>
@@ -50,12 +51,13 @@ function ArticlePage(props: Props) {
         </button>
         <Content
           components={{
+            h2: (props) =>
+              TableOfContentsHeading({ ...(props as any), level: 2 }),
+            h3: (props) =>
+              TableOfContentsHeading({ ...(props as any), level: 3 }),
+            h4: (props) =>
+              TableOfContentsHeading({ ...(props as any), level: 4 }),
             pre: CodeBlock,
-            // TODO: make Headings dumber, and create a TableOfContentsHeading
-            // that composes those (and uses the TOC context, etc)
-            h2: (props) => Heading({ ...props, level: 2 }),
-            h3: (props) => Heading({ ...props, level: 3 }),
-            h4: (props) => Heading({ ...props, level: 4 }),
           }}
         />
       </TableOfContentsProvider>
