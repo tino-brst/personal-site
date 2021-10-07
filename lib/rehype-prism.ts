@@ -62,8 +62,11 @@ const rehypePrism: Plugin<[Options?], Root> = (options) => {
       try {
         refractorRoot = refractor.highlight(toString(node), language)
       } catch (error) {
-        // TODO: add error type guard
-        if (options?.ignoreMissing && /Unknown language/.test(error.message)) {
+        if (
+          options?.ignoreMissing &&
+          error instanceof Error &&
+          /Unknown language/.test(error.message)
+        ) {
           return
         }
 
