@@ -32,8 +32,8 @@ function getTableOfContents(document: Root): TableOfContents {
     }
   })
 
-  // TODO: but why? (algorithm)
   const root: PlaceholderRoot = { depth: 0, children: [] }
+  // TODO: but why? (explain algorithm)
   const stack = new Stack<PlaceholderRoot | Section>()
 
   stack.push(root)
@@ -56,10 +56,10 @@ function getTableOfContents(document: Root): TableOfContents {
 }
 
 /**
- * The only way I found of making TS properly narrow types when doing array
+ * The only way I've found of making TS properly narrow types when doing array
  * operations. Beware that (for some reason), it works only when doing
- * array.filter/find/etc(isHeading) and not
- * array.filter/find/etc(((content) => isHeading(content)).
+ * `array.filter/find/etc(isHeading)` and not
+ * `array.filter/find/etc(((content) => isHeading(content))`.
  */
 function isHeading(content: Content): content is Heading {
   return is<Heading>(content, 'heading')

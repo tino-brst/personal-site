@@ -66,8 +66,8 @@ function TableOfContentsProvider(props: Props) {
       setActiveSectionAncestorIds(sectionAncestorIdsMap.get(sectionId) ?? [])
     }
 
-    // Make a 'manual' first call to compensate that the 'scroll' event is not
-    // triggered on load, which would cause to maybe be mid-page (e.g. via
+    // Make a 'manual' first call to compensate for the 'scroll' event not being
+    // triggered on load, which could cause to maybe be mid-page (e.g. via
     // opening a ...#some-section link) and have the wrong section as active.
     handleWindowScroll()
 
@@ -151,7 +151,7 @@ function isAtOrPastWindowTop(element: HTMLElement) {
 }
 
 /**
- * Visits all nodes in a tree, invoking the passed callback function on each
+ * Visits all nodes in a tree, invoking the passed callback function on each,
  * with the visited node and its ancestors as arguments.
  */
 function visit<T extends { children: Array<T> }>(

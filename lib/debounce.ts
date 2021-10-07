@@ -22,9 +22,9 @@ function debounce<T extends (...args: any) => any>(
     reject: (reason?: any) => void
   }> = []
 
-  // The debounced function, that takes the same arguments as the original one,
-  // but returns a promise that resolves (with the original functions return
-  // value) once the timer goes off
+  // The returned debounced function. Takes the same arguments as the original
+  // one, but returns a promise that resolves (with the original functions
+  // return value) once the timer goes off
   return (...args) => {
     clearTimeout(timeoutId)
 
