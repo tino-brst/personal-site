@@ -10,6 +10,7 @@ import remarkParse from 'remark-parse'
 type Article = {
   slug: string
   title: string
+  tags: Array<string>
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: Date
@@ -27,12 +28,19 @@ async function parseArticle(filePath: string): Promise<Article> {
   return {
     slug: path.basename(filePath, '.mdx'),
     title: frontmatter.title,
+    tags: parseTags(frontmatter.tags),
     tableOfContents: getTableOfContents(document),
-    // TODO: use the one by titus?
     readingTime: readingTime(articleContents).text,
     publishedOn: new Date(frontmatter.publishedOn),
     code,
   }
+}
+
+/**
+ * `'foo, bar'` -> `['foo', 'bar']`
+ */
+function parseTags(value: string | undefined): Array<string> {
+  return value ? value.split(',').map((tag) => tag.trim()) : []
 }
 
 async function getArticles(): Promise<Array<Article>> {
@@ -50,4 +58,19 @@ async function getArticle(slug: string): Promise<Article> {
   return parseArticle(filePath)
 }
 
-export { getArticles, getArticle }
+/**
+ * Returns a set of all article tags.
+ */
+function getTags(articles: Array<Article>): Set<string> {
+  const tags = new Set<string>()
+
+  for (const article of articles) {
+    for (const tag of article.tags) {
+      tags.add(tag)
+    }
+  }
+
+  return tags
+}
+
+export { getArticles, getArticle, getTags }

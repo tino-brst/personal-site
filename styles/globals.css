@@ -77,6 +77,17 @@ div.line.highlight {
   right: 10px;
 }
 
+.tags {
+  margin-left: 16px;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.tags a {
+  font-weight: normal;
+  text-decoration: none;
+}
+
 .toc {
   display: flex;
   flex-direction: column;

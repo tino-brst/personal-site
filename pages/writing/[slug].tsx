@@ -13,10 +13,12 @@ import { CodeBlock } from '@components/markdown/CodeBlock'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
 import { TableOfContentsHeading } from '@components/TableOfContentsHeading'
+import Link from 'next/link'
 
 type Props = {
   slug: string
   title: string
+  tags: Array<string>
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: number
@@ -42,6 +44,15 @@ function ArticlePage(props: Props) {
         <h4>
           {props.readingTime} • {viewCount.isLoading ? '...' : viewCount.value}{' '}
           views
+          {props.tags.length ? (
+            <div className="tags">
+              {props.tags.map((tag) => (
+                <Tag value={tag} key={tag}>
+                  {tag}
+                </Tag>
+              ))}
+            </div>
+          ) : null}
         </h4>
         <button disabled={likeCount.isLoading} onClick={likeCount.increment}>
           👍{' '}
@@ -65,6 +76,19 @@ function ArticlePage(props: Props) {
   )
 }
 
+type TagProps = {
+  value: string
+  children: React.ReactNode
+}
+
+function Tag(props: TagProps) {
+  return (
+    <Link href={`/writing?tags=${props.value}`}>
+      <a>#{props.children}</a>
+    </Link>
+  )
+}
+
 type PathParams = {
   slug: string
 }
@@ -85,6 +109,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
     props: {
       slug: article.slug,
       title: article.title,
+      tags: article.tags,
       readingTime: article.readingTime,
       publishedOn: article.publishedOn.getTime(),
       code: article.code,
