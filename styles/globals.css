@@ -88,9 +88,22 @@ div.line.highlight {
   text-decoration: none;
 }
 
-.tag-filters {
+.filters {
+  margin-top: 20px;
   display: flex;
-  gap: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.filters__search {
+  display: flex;
+  gap: 10px;
+}
+
+.filters__tags {
+  display: flex;
+  gap: 8px;
 }
 
 .toc {

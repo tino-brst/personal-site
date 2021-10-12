@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { GetStaticProps } from 'next'
-import { useRouter } from 'next/dist/client/router'
+import { NextRouter, useRouter } from 'next/dist/client/router'
 import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
@@ -21,31 +21,45 @@ type Props = {
 function WritingPage(props: Props) {
   const router = useRouter()
 
-  const activeTagFilters = React.useMemo<Array<string>>(() => {
-    return typeof router.query.tags === 'string'
-      ? router.query.tags.split(',')
-      : []
-  }, [router.query.tags])
+  const searchTerms = React.useMemo<string>(
+    () => (typeof router.query.search === 'string' ? router.query.search : ''),
+    [router.query.search]
+  )
 
-  // Adds/removes a tag from the active tag filters array and updates the url
-  const toggleTagFilter = (value: string) => {
+  const activeTagFilters = React.useMemo<Array<string>>(
+    () =>
+      typeof router.query.tags === 'string' ? router.query.tags.split(',') : [],
+    [router.query.tags]
+  )
+
+  const handleTagFilterChange = (value: string) => {
+    // Adds/removes (toggles) a tag from the active tag filters array
     const newActiveTagFilters = activeTagFilters.includes(value)
       ? activeTagFilters.filter((tag) => tag !== value)
       : [...activeTagFilters, value]
 
-    const urlParams = new URLSearchParams()
+    shallowReplaceURL(router, '/writing', {
+      tags: newActiveTagFilters.join(','),
+      search: searchTerms,
+    })
+  }
 
-    if (newActiveTagFilters.length) {
-      urlParams.set('tags', newActiveTagFilters.join(','))
-    }
+  const handleSearchTermsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newSearchTerms = event.target.value
 
-    // TODO: if search ...
+    shallowReplaceURL(router, '/writing', {
+      tags: activeTagFilters.join(','),
+      search: newSearchTerms,
+    })
+  }
 
-    const url = isEmpty(urlParams)
-      ? `/writing`
-      : `/writing?${urlParams.toString()}`
-
-    router.replace(url, undefined, { shallow: true })
+  const handleClearButtonClick = () => {
+    shallowReplaceURL(router, '/writing', {
+      tags: activeTagFilters.join(','),
+      search: '',
+    })
   }
 
   const articles = React.useMemo(() => {
@@ -60,26 +74,44 @@ function WritingPage(props: Props) {
       )
     }
 
-    // TODO: filter by search terms
+    // TODO: add fancy fuzzy search
+    if (searchTerms) {
+      articles = articles.filter((article) =>
+        article.title.toLowerCase().includes(searchTerms.toLowerCase())
+      )
+    }
 
     return articles
-  }, [props.articles, activeTagFilters])
+  }, [props.articles, activeTagFilters, searchTerms])
 
   return (
     <Layout>
       <h1>Writing</h1>
-      <p className="tag-filters">
-        {props.tags.map((tag) => (
-          <label key={tag}>
-            <input
-              type="checkbox"
-              checked={activeTagFilters.includes(tag)}
-              onChange={() => toggleTagFilter(tag)}
-            />
-            #{tag}
-          </label>
-        ))}
-      </p>
+      <div className="filters">
+        <div className="filters__search">
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerms}
+            onChange={handleSearchTermsChange}
+          />
+          {searchTerms && (
+            <button onClick={handleClearButtonClick}>clear</button>
+          )}
+        </div>
+        <div className="filters__tags">
+          {props.tags.map((tag) => (
+            <label key={tag}>
+              <input
+                type="checkbox"
+                checked={activeTagFilters.includes(tag)}
+                onChange={() => handleTagFilterChange(tag)}
+              />
+              #{tag}
+            </label>
+          ))}
+        </div>
+      </div>
       <ul className="articles-list">
         {articles.map((article) => (
           <li key={article.slug}>
@@ -106,6 +138,24 @@ function WritingPage(props: Props) {
 
 function isEmpty<T>(iterable: Iterable<T>): boolean {
   return iterable[Symbol.iterator]().next().done ?? true
+}
+
+function shallowReplaceURL<T extends Record<string, string>>(
+  router: NextRouter,
+  base: string,
+  params: T
+) {
+  const urlParams = new URLSearchParams()
+
+  for (const key in params) {
+    if (params[key]) {
+      urlParams.append(key, params[key])
+    }
+  }
+
+  const url = isEmpty(urlParams) ? `${base}` : `${base}?${urlParams.toString()}`
+
+  router.replace(url, undefined, { shallow: true })
 }
 
 const getStaticProps: GetStaticProps<Props> = async () => {
