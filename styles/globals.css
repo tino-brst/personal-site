@@ -88,6 +88,11 @@ div.line.highlight {
   text-decoration: none;
 }
 
+.tag-filters {
+  display: flex;
+  gap: 5px;
+}
+
 .toc {
   display: flex;
   flex-direction: column;
