@@ -5,6 +5,7 @@ import { useRouter } from 'next/dist/client/router'
 import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
+import fuzzy from 'fuzzy'
 
 type Props = {
   articles: Array<{
@@ -44,11 +45,17 @@ function WritingPage(props: Props) {
       )
     }
 
-    // TODO: add fancy fuzzy search
     if (searchTerms) {
-      articles = articles.filter((article) =>
-        article.title.toLowerCase().includes(searchTerms.toLowerCase())
-      )
+      articles = fuzzy
+        .filter(searchTerms, articles, {
+          extract: (article) => article.title,
+          pre: '<strong>',
+          post: '</strong>',
+        })
+        .map((match) => ({
+          ...match.original,
+          title: match.string,
+        }))
     }
 
     return articles
@@ -124,7 +131,7 @@ function WritingPage(props: Props) {
           <li key={article.slug}>
             <Link href={article.url}>
               <a>
-                <h3>{article.title}</h3>
+                <h3 dangerouslySetInnerHTML={{ __html: article.title }} />
               </a>
             </Link>
             <span>

@@ -31,6 +31,7 @@ body {
 }
 
 a {
+  text-decoration: none;
   color: var(--accent);
 }
 
@@ -40,6 +41,15 @@ a {
   gap: 20px;
   display: flex;
   flex-direction: column;
+}
+
+.articles-list h3 {
+  margin-bottom: 10px;
+}
+
+.articles-list a strong {
+  font-weight: inherit;
+  text-decoration: underline;
 }
 
 nav {
@@ -85,7 +95,6 @@ div.line.highlight {
 
 .tags a {
   font-weight: normal;
-  text-decoration: none;
 }
 
 .filters {
@@ -137,7 +146,6 @@ div.line.highlight {
 
 .toc a {
   transition: all 0.2s;
-  text-decoration: none;
 }
 
 h1 {
