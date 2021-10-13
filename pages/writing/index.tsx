@@ -5,7 +5,7 @@ import { useRouter } from 'next/dist/client/router'
 import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
-import fuzzy from 'fuzzy'
+import fuzzy from 'fuzzysort'
 
 type Props = {
   articles: Array<{
@@ -36,26 +36,21 @@ function WritingPage(props: Props) {
   const articles = React.useMemo(() => {
     let articles = props.articles
 
-    // If any tag filters are active, keep only those articles that are tagged
-    // with _all_ of those active filters.
-    // e.g. active: #Foo #Bar -> Show articles tagged with both #Foo _and_ #Bar
     if (activeTagFilters.length) {
       articles = articles.filter((article) =>
-        activeTagFilters.every((tag) => article.tags.includes(tag))
+        includesEvery(article.tags, activeTagFilters)
       )
     }
 
     if (searchTerms) {
-      articles = fuzzy
-        .filter(searchTerms, articles, {
-          extract: (article) => article.title,
-          pre: '<strong>',
-          post: '</strong>',
-        })
-        .map((match) => ({
-          ...match.original,
-          title: match.string,
-        }))
+      const fuzzyResults = fuzzy.go(searchTerms, articles, {
+        key: 'title',
+      })
+
+      articles = fuzzyResults.map((result) => ({
+        ...result.obj,
+        title: fuzzy.highlight(result, '<strong>', '</strong>') as string,
+      }))
     }
 
     return articles
@@ -177,7 +172,7 @@ function isEmpty<T>(iterable: Iterable<T>): boolean {
 }
 
 /**
- * Adds/removes (toggles) a value to/from the array
+ * Adds/removes (toggles) a value to/from an array
  */
 function toggle<T>(array: Array<T>, value: T): Array<T> {
   const valueIndex = array.findIndex((item) => item === value)
@@ -185,6 +180,18 @@ function toggle<T>(array: Array<T>, value: T): Array<T> {
   return valueIndex < 0
     ? [...array, value]
     : [...array.slice(0, valueIndex), ...array.slice(valueIndex + 1)]
+}
+
+/**
+ * Checks if an array contains all given values
+ *
+ * ```ts
+ * includesEvery([1,2,3], [1])   // true
+ * includesEvery([1,2,3], [1,4]) // false
+ * ```
+ */
+function includesEvery<T>(array: Array<T>, values: Array<T>): boolean {
+  return values.every((value) => array.includes(value))
 }
 
 const getStaticProps: GetStaticProps<Props> = async () => {
