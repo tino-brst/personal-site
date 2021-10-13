@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { GetStaticProps } from 'next'
-import { NextRouter, useRouter } from 'next/dist/client/router'
+import { useRouter } from 'next/dist/client/router'
 import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
@@ -32,36 +32,6 @@ function WritingPage(props: Props) {
     [router.query.tags]
   )
 
-  const handleTagFilterChange = (value: string) => {
-    // Adds/removes (toggles) a tag from the active tag filters array
-    const newActiveTagFilters = activeTagFilters.includes(value)
-      ? activeTagFilters.filter((tag) => tag !== value)
-      : [...activeTagFilters, value]
-
-    shallowReplaceURL(router, '/writing', {
-      tags: newActiveTagFilters.join(','),
-      search: searchTerms,
-    })
-  }
-
-  const handleSearchTermsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const newSearchTerms = event.target.value
-
-    shallowReplaceURL(router, '/writing', {
-      tags: activeTagFilters.join(','),
-      search: newSearchTerms,
-    })
-  }
-
-  const handleClearButtonClick = () => {
-    shallowReplaceURL(router, '/writing', {
-      tags: activeTagFilters.join(','),
-      search: '',
-    })
-  }
-
   const articles = React.useMemo(() => {
     let articles = props.articles
 
@@ -83,6 +53,43 @@ function WritingPage(props: Props) {
 
     return articles
   }, [props.articles, activeTagFilters, searchTerms])
+
+  // Updates the URL parameters without triggering a full refresh
+  // https://nextjs.org/docs/routing/shallow-routing
+  const updateRouteParams = (params: { tags: string; search: string }) => {
+    router.replace(getURL('/writing', params), undefined, {
+      shallow: true,
+    })
+  }
+
+  const handleTagFilterChange = (value: string) => {
+    const newActiveTagFilters = toggle(activeTagFilters, value)
+
+    // Update only what has changed, keep the rest as is (kinda like updating
+    // the state in Redux)
+    updateRouteParams({
+      tags: newActiveTagFilters.join(','),
+      search: searchTerms,
+    })
+  }
+
+  const handleSearchTermsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newSearchTerms = event.target.value
+
+    updateRouteParams({
+      tags: activeTagFilters.join(','),
+      search: newSearchTerms,
+    })
+  }
+
+  const handleClearButtonClick = () => {
+    updateRouteParams({
+      tags: activeTagFilters.join(','),
+      search: '',
+    })
+  }
 
   return (
     <Layout>
@@ -136,15 +143,17 @@ function WritingPage(props: Props) {
   )
 }
 
-function isEmpty<T>(iterable: Iterable<T>): boolean {
-  return iterable[Symbol.iterator]().next().done ?? true
-}
-
-function shallowReplaceURL<T extends Record<string, string>>(
-  router: NextRouter,
-  base: string,
+/**
+ * Given:
+ * `getURL('/foo', { count: 42 })`
+ *
+ * Yields:
+ * `'/foo?count=42'`
+ */
+function getURL<T extends Record<string, string>>(
+  pathname: string,
   params: T
-) {
+): string {
   const urlParams = new URLSearchParams()
 
   for (const key in params) {
@@ -153,9 +162,22 @@ function shallowReplaceURL<T extends Record<string, string>>(
     }
   }
 
-  const url = isEmpty(urlParams) ? `${base}` : `${base}?${urlParams.toString()}`
+  return isEmpty(urlParams) ? pathname : `${pathname}?${urlParams}`
+}
 
-  router.replace(url, undefined, { shallow: true })
+function isEmpty<T>(iterable: Iterable<T>): boolean {
+  return iterable[Symbol.iterator]().next().done ?? true
+}
+
+/**
+ * Adds/removes (toggles) a value to/from the array
+ */
+function toggle<T>(array: Array<T>, value: T): Array<T> {
+  const valueIndex = array.findIndex((item) => item === value)
+
+  return valueIndex < 0
+    ? [...array, value]
+    : [...array.slice(0, valueIndex), ...array.slice(valueIndex + 1)]
 }
 
 const getStaticProps: GetStaticProps<Props> = async () => {
