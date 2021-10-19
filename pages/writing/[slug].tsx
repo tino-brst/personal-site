@@ -10,6 +10,7 @@ import { formatDate } from '@lib/dates'
 import { Section } from '@lib/mdast-util-toc'
 import { Layout } from '@components/Layout'
 import { CodeBlock } from '@components/markdown/CodeBlock'
+import { Image } from '@components/markdown/Image'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
 import { TableOfContentsHeading } from '@components/TableOfContentsHeading'
@@ -22,6 +23,7 @@ type Props = {
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: number
+  // TODO: rename to contentCode?
   code: string
 }
 
@@ -69,6 +71,8 @@ function ArticlePage(props: Props) {
             h4: (props) =>
               TableOfContentsHeading({ ...(props as any), level: 4 }),
             pre: CodeBlock,
+            // TODO: open PR with props type as generic?
+            img: (props) => Image({ ...(props as any) }),
           }}
         />
       </TableOfContentsProvider>
