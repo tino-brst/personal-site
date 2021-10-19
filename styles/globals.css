@@ -115,6 +115,15 @@ div.line.highlight {
   gap: 8px;
 }
 
+.image-wrapper {
+  padding-top: 40%;
+  position: relative;
+}
+
+.image {
+  border-radius: 4px;
+}
+
 .toc {
   display: flex;
   flex-direction: column;
