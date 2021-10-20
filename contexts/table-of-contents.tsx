@@ -3,6 +3,7 @@ import * as React from 'react'
 
 type ContextValue = {
   value: Array<Section>
+  isEmpty: boolean
   activeSectionId: string | undefined
   activeSectionAncestorIds: Array<string>
   registerSectionHeading: (heading: HTMLHeadingElement) => void
@@ -89,6 +90,7 @@ function TableOfContentsProvider(props: Props) {
   const value = React.useMemo<ContextValue>(
     () => ({
       value: props.tableOfContents,
+      isEmpty: props.tableOfContents.length === 0,
       activeSectionId,
       activeSectionAncestorIds,
       registerSectionHeading,
