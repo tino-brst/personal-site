@@ -36,11 +36,6 @@ function ArticlePage(props: Props) {
   return (
     <Layout>
       <TableOfContentsProvider tableOfContents={props.tableOfContents}>
-        <div className="floating-stuff">
-          <BackToTopButton>Back to top 🔼</BackToTopButton>
-          {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
-          <TableOfContentsList />
-        </div>
         <h5>{formatDate(props.publishedOn)}</h5>
         <h1>{props.title}</h1>
         <h4>
@@ -75,6 +70,11 @@ function ArticlePage(props: Props) {
             img: (props) => Image({ ...(props as any) }),
           }}
         />
+        <div className="floating-stuff">
+          <BackToTopButton>Back to top 🔼</BackToTopButton>
+          {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
+          <TableOfContentsList />
+        </div>
       </TableOfContentsProvider>
     </Layout>
   )
