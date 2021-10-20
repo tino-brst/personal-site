@@ -33,6 +33,7 @@
     "rehype-slug": "^5.0.0",
     "remark-frontmatter": "^4.0.0",
     "remark-parse": "^10.0.0",
+    "remark-unwrap-images": "^3.0.0",
     "swr": "^1.0.1",
     "unified": "^10.1.0",
     "unist-util-is": "^5.1.1",
