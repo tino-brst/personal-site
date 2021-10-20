@@ -116,8 +116,9 @@ div.line.highlight {
 }
 
 .image-wrapper {
-  padding-top: 40%;
-  position: relative;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-bottom: 0;
 }
 
 .image {
