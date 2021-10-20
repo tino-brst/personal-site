@@ -4,9 +4,11 @@ import { visit } from 'unist-util-visit'
 import { is } from 'unist-util-is'
 import getImageSize from 'image-size'
 
+// TODO: pass root directory as option
+
 const rehypeImageSizes: Plugin<[], Root> = () => {
   return (tree) => {
-    visit(tree, (node, _) => {
+    visit(tree, (node) => {
       if (
         !is<Element>(node, { type: 'element', tagName: 'img' }) ||
         !node.properties ||
