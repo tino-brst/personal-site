@@ -147,11 +147,12 @@ function splitNewLines(
   return result
 }
 
+// TODO: rename fillBetween?
 /**
  * Returns a copy of the array with the passed value inserted between all its items.
  *
  * ```ts
- * addBetween([1, 2, 3], 0) // [1, 0 ,2, 0, 3]
+ * addBetween([1, 2, 3], 0) // [1, 0 , 2, 0, 3]
  * ```
  */
 function addBetween<T>(array: Array<T>, value: T): Array<T> {
