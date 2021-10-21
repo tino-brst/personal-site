@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { getMDXComponent } from 'mdx-bundler/client'
+import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { useViewCount } from '@hooks/useViewCount'
 import { useLikeCount } from '@hooks/useLikeCount'
@@ -57,19 +57,7 @@ function ArticlePage(props: Props) {
             likeCount.total ?? '...'
           }`}
         </button>
-        <Content
-          components={{
-            h2: (props) =>
-              TableOfContentsHeading({ ...(props as any), level: 2 }),
-            h3: (props) =>
-              TableOfContentsHeading({ ...(props as any), level: 3 }),
-            h4: (props) =>
-              TableOfContentsHeading({ ...(props as any), level: 4 }),
-            pre: CodeBlock,
-            // TODO: open PR with props type as generic?
-            img: (props) => Image({ ...(props as any) }),
-          }}
-        />
+        <Content components={components} />
         <div className="floating-stuff">
           <BackToTopButton>Back to top 🔼</BackToTopButton>
           {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
@@ -78,6 +66,15 @@ function ArticlePage(props: Props) {
       </TableOfContentsProvider>
     </Layout>
   )
+}
+
+const components: ComponentMap = {
+  h2: (props) => TableOfContentsHeading({ ...(props as any), level: 2 }),
+  h3: (props) => TableOfContentsHeading({ ...(props as any), level: 3 }),
+  h4: (props) => TableOfContentsHeading({ ...(props as any), level: 4 }),
+  pre: CodeBlock,
+  // TODO: open PR with props type as generic?
+  img: (props) => Image({ ...(props as any) }),
 }
 
 type TagProps = {
