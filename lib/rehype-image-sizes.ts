@@ -4,9 +4,12 @@ import { visit } from 'unist-util-visit'
 import { is } from 'unist-util-is'
 import getImageSize from 'image-size'
 
-// TODO: pass root directory as option
+type Options = Partial<{
+  /** Images root directory. Used to build the path for each image `(path = root + image.src`). */
+  root: string
+}>
 
-const rehypeImageSizes: Plugin<[], Root> = () => {
+const rehypeImageSizes: Plugin<[Options?], Root> = (options) => {
   return (tree) => {
     visit(tree, (node) => {
       if (
@@ -17,11 +20,11 @@ const rehypeImageSizes: Plugin<[], Root> = () => {
         return
       }
 
-      const path = `${process.cwd()}/public${node.properties.src}`
-      const size = getImageSize(path)
+      const imagePath = `${options?.root ?? ''}${node.properties.src}`
+      const imageSize = getImageSize(imagePath)
 
-      node.properties.width = size.width
-      node.properties.height = size.height
+      node.properties.width = imageSize.width
+      node.properties.height = imageSize.height
     })
   }
 }

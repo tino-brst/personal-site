@@ -12,7 +12,7 @@ function customBundleMDX(mdxSource: string) {
       remarkPlugins: [...(options.remarkPlugins ?? []), remarkUnwrapImages],
       rehypePlugins: [
         ...(options.rehypePlugins ?? []),
-        rehypeImageSizes,
+        [rehypeImageSizes, { root: `${process.cwd()}/public` }],
         rehypeSlug,
         [rehypeAutoLinkHeadings, { behaviour: 'wrap' }],
         rehypePrism,
