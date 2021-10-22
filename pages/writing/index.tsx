@@ -59,9 +59,7 @@ function WritingPage(props: Props) {
   // Updates the URL parameters without triggering a full refresh
   // https://nextjs.org/docs/routing/shallow-routing
   const updateRouteParams = (params: { tags: string; search: string }) => {
-    router.replace(getURL('/writing', params), undefined, {
-      shallow: true,
-    })
+    router.replace(getURL('/writing', params), undefined, { shallow: true })
   }
 
   const handleTagFilterChange = (value: string) => {
