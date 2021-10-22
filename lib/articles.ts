@@ -11,6 +11,7 @@ type Article = {
   slug: string
   title: string
   tags: Array<string>
+  headerImage?: string
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: Date
@@ -29,6 +30,7 @@ async function parseArticle(filePath: string): Promise<Article> {
     slug: path.basename(filePath, '.mdx'),
     title: frontmatter.title,
     tags: parseTags(frontmatter.tags),
+    headerImage: frontmatter.headerImage,
     tableOfContents: getTableOfContents(document),
     readingTime: readingTime(articleContents).text,
     publishedOn: new Date(frontmatter.publishedOn),

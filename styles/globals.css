@@ -125,6 +125,17 @@ div.line.highlight {
   border-radius: 4px;
 }
 
+.header-image-wrapper {
+  position: relative;
+  padding-top: 40%;
+  margin-left: -40px;
+  margin-right: -40px;
+}
+
+.header-image {
+  object-fit: cover;
+}
+
 .toc {
   display: flex;
   flex-direction: column;

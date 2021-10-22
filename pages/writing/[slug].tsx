@@ -11,6 +11,7 @@ import { Section } from '@lib/mdast-util-toc'
 import { Layout } from '@components/Layout'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Image } from '@components/markdown/Image'
+import { HeaderImage } from '@components/HeaderImage'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
 import { TableOfContentsHeading } from '@components/TableOfContentsHeading'
@@ -20,6 +21,7 @@ type Props = {
   slug: string
   title: string
   tags: Array<string>
+  headerImage?: string
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: number
@@ -36,6 +38,7 @@ function ArticlePage(props: Props) {
   return (
     <Layout>
       <TableOfContentsProvider tableOfContents={props.tableOfContents}>
+        {props.headerImage && <HeaderImage src={props.headerImage} />}
         <h5>{formatDate(props.publishedOn)}</h5>
         <h1>{props.title}</h1>
         <h4>
@@ -111,6 +114,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
       slug: article.slug,
       title: article.title,
       tags: article.tags,
+      headerImage: article.headerImage,
       readingTime: article.readingTime,
       publishedOn: article.publishedOn.getTime(),
       code: article.code,
