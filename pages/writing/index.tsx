@@ -6,12 +6,14 @@ import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import fuzzy from 'fuzzysort'
+import { ThumbnailImage } from '@components/ThumbnailImage'
 
 type Props = {
   articles: Array<{
     slug: string
     url: string
     title: string
+    thumbnailImageSrc: string | null
     tags: Array<string>
     readingTime: string
     publishedOn: number
@@ -124,6 +126,9 @@ function WritingPage(props: Props) {
           <li key={article.slug}>
             <Link href={article.url}>
               <a>
+                {article.thumbnailImageSrc && (
+                  <ThumbnailImage src={article.thumbnailImageSrc} />
+                )}
                 <h3 dangerouslySetInnerHTML={{ __html: article.title }} />
               </a>
             </Link>
@@ -202,6 +207,7 @@ const getStaticProps: GetStaticProps<Props> = async () => {
           slug: article.slug,
           url: `/writing/${article.slug}`,
           title: article.title,
+          thumbnailImageSrc: article.headerImage ?? null,
           tags: article.tags,
           readingTime: article.readingTime,
           publishedOn: article.publishedOn.getTime(),
