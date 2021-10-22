@@ -39,7 +39,7 @@ async function parseArticle(filePath: string): Promise<Article> {
 }
 
 /**
- * `'foo, bar'` -> `['foo', 'bar']`
+ * `'Foo, Bar'` -> `['Foo', 'Bar']`
  */
 function parseTags(value: string | undefined): Array<string> {
   return value ? value.split(',').map((tag) => tag.trim()) : []

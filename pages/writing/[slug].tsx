@@ -21,7 +21,7 @@ type Props = {
   slug: string
   title: string
   tags: Array<string>
-  headerImage?: string
+  headerImageSrc: string | null
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: number
@@ -38,7 +38,7 @@ function ArticlePage(props: Props) {
   return (
     <Layout>
       <TableOfContentsProvider tableOfContents={props.tableOfContents}>
-        {props.headerImage && <HeaderImage src={props.headerImage} />}
+        {props.headerImageSrc && <HeaderImage src={props.headerImageSrc} />}
         <h5>{formatDate(props.publishedOn)}</h5>
         <h1>{props.title}</h1>
         <h4>
@@ -114,7 +114,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
       slug: article.slug,
       title: article.title,
       tags: article.tags,
-      headerImage: article.headerImage,
+      headerImageSrc: article.headerImage ?? null,
       readingTime: article.readingTime,
       publishedOn: article.publishedOn.getTime(),
       code: article.code,
