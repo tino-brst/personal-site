@@ -147,7 +147,6 @@ function splitNewLines(
   return result
 }
 
-// TODO: rename fillBetween?
 /**
  * Returns a copy of the array with the passed value inserted between all its items.
  *

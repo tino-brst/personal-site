@@ -15,7 +15,7 @@ type Article = {
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: Date
-  code: string
+  contentCode: string
 }
 
 const articlesDirectoryPath = path.join(process.cwd(), 'articles')
@@ -34,7 +34,7 @@ async function parseArticle(filePath: string): Promise<Article> {
     tableOfContents: getTableOfContents(document),
     readingTime: readingTime(articleContents).text,
     publishedOn: new Date(frontmatter.publishedOn),
-    code,
+    contentCode: code,
   }
 }
 

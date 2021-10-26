@@ -24,6 +24,7 @@ type Props = {
 function WritingPage(props: Props) {
   const router = useRouter()
 
+  // TODO: couldn't all this "use the url params as store" thing be extracted to a hook?
   const searchTerms = React.useMemo<string>(
     () => (typeof router.query.search === 'string' ? router.query.search : ''),
     [router.query.search]

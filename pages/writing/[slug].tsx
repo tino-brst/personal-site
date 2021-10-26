@@ -25,12 +25,14 @@ type Props = {
   tableOfContents: Array<Section>
   readingTime: string
   publishedOn: number
-  // TODO: rename to contentCode?
-  code: string
+  contentCode: string
 }
 
 function ArticlePage(props: Props) {
-  const Content = React.useMemo(() => getMDXComponent(props.code), [props.code])
+  const Content = React.useMemo(
+    () => getMDXComponent(props.contentCode),
+    [props.contentCode]
+  )
 
   const viewCount = useViewCount(props.slug)
   const likeCount = useLikeCount(props.slug)
@@ -104,7 +106,7 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
       headerImageSrc: article.headerImage ?? null,
       readingTime: article.readingTime,
       publishedOn: article.publishedOn.getTime(),
-      code: article.code,
+      contentCode: article.contentCode,
       tableOfContents: article.tableOfContents,
     },
   }
