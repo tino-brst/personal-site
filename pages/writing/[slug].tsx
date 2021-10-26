@@ -47,9 +47,9 @@ function ArticlePage(props: Props) {
           {props.tags.length ? (
             <div className="tags">
               {props.tags.map((tag) => (
-                <Tag value={tag} key={tag}>
-                  {tag}
-                </Tag>
+                <Link key={tag} href={`/writing?tags=${tag}`}>
+                  <a>#{tag}</a>
+                </Link>
               ))}
             </div>
           ) : null}
@@ -78,19 +78,6 @@ const components: ComponentMap = {
   pre: CodeBlock,
   // TODO: open PR with props type as generic?
   img: (props) => Image({ ...(props as any) }),
-}
-
-type TagProps = {
-  value: string
-  children: React.ReactNode
-}
-
-function Tag(props: TagProps) {
-  return (
-    <Link href={`/writing?tags=${props.value}`}>
-      <a>#{props.children}</a>
-    </Link>
-  )
 }
 
 type PathParams = {
