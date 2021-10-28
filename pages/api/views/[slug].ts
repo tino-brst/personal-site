@@ -11,13 +11,13 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
   const method = req.method
 
   if (method === 'GET') {
-    const article = await prisma.article.findUnique({
+    const articleViews = await prisma.articleViews.findUnique({
       where: { slug },
     })
 
-    if (article) {
+    if (articleViews) {
       res.status(200).json({
-        viewCount: article.viewCount,
+        viewCount: articleViews.count,
       })
     } else {
       res.status(404).json({ message: `Article with slug '${slug}' not found` })
@@ -25,14 +25,14 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
   }
 
   if (method === 'POST') {
-    const article = await prisma.article.upsert({
+    const articleViews = await prisma.articleViews.upsert({
       where: { slug },
-      create: { slug, viewCount: 1 },
-      update: { viewCount: { increment: 1 } },
+      create: { slug, count: 1 },
+      update: { count: { increment: 1 } },
     })
 
     res.status(200).json({
-      viewCount: article.viewCount,
+      viewCount: articleViews.count,
     })
   }
 }

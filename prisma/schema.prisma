@@ -2,27 +2,28 @@
 // https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions"]
+  previewFeatures = ["referentialIntegrity"]
 }
 
-model Article {
-  id        String                @id @default(cuid())
-  slug      String                @unique
-  viewCount Int                   @default(0)
-  likes     ArticleLikesPerUser[]
+// Schema
+
+model ArticleViews {
+  slug  String @unique
+  count Int
 }
 
-model ArticleLikesPerUser {
-  article     Article @relation(fields: [articleSlug], references: [slug], onDelete: Cascade, onUpdate: Cascade)
-  articleSlug String
-  userId      String
-  count       Int
+model ArticleLikes {
+  slug   String
+  userId String
+  count  Int
 
-  @@unique([articleSlug, userId])
+  @@unique([slug, userId])
 }
