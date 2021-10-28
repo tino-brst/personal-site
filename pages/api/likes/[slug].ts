@@ -11,7 +11,7 @@ type Data = {
 }
 
 const handler: NextApiHandler<Response<Data>> = async (req, res) => {
-  const articleSlug = req.query.slug as string
+  const slug = req.query.slug as string
   const likeCount = parseInt(req.query.count as string)
   const method = req.method
 
@@ -19,9 +19,9 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
   const userId = await hash(ipAddress, process.env.BCRYPT_IP_SALT)
 
   if (method === 'GET') {
-    const likesAggregation = await prisma.articleLikesPerUser.aggregate({
+    const likesAggregation = await prisma.articleLikes.aggregate({
       where: {
-        articleSlug,
+        slug,
       },
       _sum: {
         count: true,
@@ -34,10 +34,10 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
     let userLikeCount = 0
 
     if (shouldLookForUserLikes) {
-      const userLikes = await prisma.articleLikesPerUser.findUnique({
+      const userLikes = await prisma.articleLikes.findUnique({
         where: {
-          articleSlug_userId: {
-            articleSlug,
+          slug_userId: {
+            slug,
             userId,
           },
         },
@@ -67,15 +67,15 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
       // the article without visiting it (and thus creating its entry in the
       // Articles table), but still ...
 
-      const userLikes = await prisma.articleLikesPerUser.upsert({
+      const userLikes = await prisma.articleLikes.upsert({
         where: {
-          articleSlug_userId: {
-            articleSlug,
+          slug_userId: {
+            slug,
             userId,
           },
         },
         create: {
-          articleSlug,
+          slug,
           userId,
           count: likeCount,
         },
@@ -84,9 +84,9 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
         },
       })
 
-      const likesAggregation = await prisma.articleLikesPerUser.aggregate({
+      const likesAggregation = await prisma.articleLikes.aggregate({
         where: {
-          articleSlug,
+          slug,
         },
         _sum: {
           count: true,
