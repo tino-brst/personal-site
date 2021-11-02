@@ -20,9 +20,9 @@ model ArticleViews {
   count Int
 }
 
-model ArticleLikes {
-  slug   String
+model UserArticleLikes {
   userId String
+  slug   String
   count  Int
 
   @@unique([slug, userId])
