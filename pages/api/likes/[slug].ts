@@ -19,7 +19,7 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
   const userId = await hash(ipAddress, process.env.BCRYPT_IP_SALT)
 
   if (method === 'GET') {
-    const likesAggregation = await prisma.articleLikes.aggregate({
+    const likesAggregation = await prisma.userArticleLikes.aggregate({
       where: {
         slug,
       },
@@ -34,7 +34,7 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
     let userLikeCount = 0
 
     if (shouldLookForUserLikes) {
-      const userLikes = await prisma.articleLikes.findUnique({
+      const userLikes = await prisma.userArticleLikes.findUnique({
         where: {
           slug_userId: {
             slug,
@@ -46,9 +46,8 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
       userLikeCount = userLikes?.count ?? 0
     }
 
-    // Both a valid article slug and an invalid one are going to return the same
-    // response, given that there is no check being done against the 'Articles'
-    // table.
+    // TODO: Both a valid article slug and an invalid one return the same
+    // response, not great?
 
     res.status(200).json({
       totalLikeCount,
@@ -61,13 +60,7 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
       !isNaN(likeCount) && likeCount >= 0 && likeCount <= maxUserLikeCount
 
     if (isValidLikeCount) {
-      // TODO: handle scenario where the article slug passed does not exist in
-      // the Articles table, violating the foreign key constraint (and throwing
-      // an error). Rare scenario in practice, due to implying that a user liked
-      // the article without visiting it (and thus creating its entry in the
-      // Articles table), but still ...
-
-      const userLikes = await prisma.articleLikes.upsert({
+      const userLikes = await prisma.userArticleLikes.upsert({
         where: {
           slug_userId: {
             slug,
@@ -84,7 +77,7 @@ const handler: NextApiHandler<Response<Data>> = async (req, res) => {
         },
       })
 
-      const likesAggregation = await prisma.articleLikes.aggregate({
+      const likesAggregation = await prisma.userArticleLikes.aggregate({
         where: {
           slug,
         },
