@@ -6,6 +6,10 @@ type Data = {
   viewCount: number
 }
 
+// TODO: @mauro how do we check for valid slugs? Trying to read the file on each
+// request doesn't sound great, it sounds like something that could be done
+// during build time. An array of all article slugs.
+
 const handler: NextApiHandler<Response<Data>> = async (req, res) => {
   const slug = req.query.slug as string
   const method = req.method
