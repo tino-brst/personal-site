@@ -71,6 +71,19 @@ function ArticlePage(props: Props) {
         </button>
         <Content components={components} />
         <br />
+        <a
+          href={editOnGitHubURL(
+            'tino-brst',
+            'personal-site',
+            `articles/${props.slug}.mdx`
+          )}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Edit on GitHub
+        </a>
+        <br />
+        <br />
         <div className="related-articles">
           {props.newerArticle && (
             <Link href={props.newerArticle.url}>
@@ -108,6 +121,15 @@ const components: ComponentMap = {
   pre: CodeBlock,
   // TODO: open PR with props type as generic?
   img: (props) => Image({ ...(props as any) }),
+}
+
+function editOnGitHubURL(
+  username: string,
+  repo: string,
+  file: string,
+  branch = 'main'
+): string {
+  return `https://github.com/${username}/${repo}/edit/${branch}/${file}`
 }
 
 type PathParams = {
