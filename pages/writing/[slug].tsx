@@ -4,8 +4,7 @@ import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { useViewCount } from '@hooks/useViewCount'
 import { useLikeCount } from '@hooks/useLikeCount'
-import { maxUserLikeCount } from '@lib/constants'
-import { getArticle, getArticles } from '@lib/articles'
+import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { Section } from '@lib/mdast-util-toc'
 import { Layout } from '@components/Layout'
@@ -63,11 +62,12 @@ function ArticlePage(props: Props) {
             </div>
           ) : null}
         </h4>
-        <button disabled={likeCount.isLoading} onClick={likeCount.increment}>
+        <button
+          disabled={likeCount.isLoading}
+          onClick={likeCount.toggleUserLike}
+        >
           👍{' '}
-          {`${likeCount.user ?? '...'}/${maxUserLikeCount} • ${
-            likeCount.total ?? '...'
-          }`}
+          {`${likeCount.value ?? '...'} ${likeCount.hasUserLike ? '✔️' : ''}`}
         </button>
         <Content components={components} />
         <br />

@@ -2,100 +2,113 @@ import type { NextApiHandler } from 'next'
 import { IncomingHttpHeaders } from 'http'
 import { prisma } from '@lib/prisma'
 import { hash } from 'bcrypt'
-import { maxUserLikeCount } from '@lib/constants'
 import { Response } from 'types/response'
+import { Prisma } from '@prisma/client'
 
 type Data = {
-  totalLikeCount: number
-  userLikeCount: number
+  likeCount: number
+  hasUserLike: boolean
 }
 
 const handler: NextApiHandler<Response<Data>> = async (req, res) => {
-  const slug = req.query.slug as string
-  const likeCount = parseInt(req.query.count as string)
   const method = req.method
+  const articleSlug = req.query.slug as string
 
   const ipAddress = getClientIpAddress(req.headers)
   const userId = await hash(ipAddress, process.env.BCRYPT_IP_SALT)
 
   if (method === 'GET') {
-    const likesAggregation = await prisma.userArticleLikes.aggregate({
+    const likeCount = await prisma.like.count({
+      where: { articleSlug: articleSlug },
+    })
+
+    const userLike = await prisma.like.findUnique({
       where: {
-        slug,
-      },
-      _sum: {
-        count: true,
+        articleSlug_userId: {
+          articleSlug,
+          userId,
+        },
       },
     })
 
-    const totalLikeCount = likesAggregation._sum.count ?? 0
-    const shouldLookForUserLikes = totalLikeCount > 0
-
-    let userLikeCount = 0
-
-    if (shouldLookForUserLikes) {
-      const userLikes = await prisma.userArticleLikes.findUnique({
-        where: {
-          slug_userId: {
-            slug,
-            userId,
-          },
-        },
-      })
-
-      userLikeCount = userLikes?.count ?? 0
-    }
-
-    // TODO: Both a valid article slug and an invalid one return the same
-    // response, not great?
-
     res.status(200).json({
-      totalLikeCount,
-      userLikeCount,
+      likeCount,
+      hasUserLike: userLike !== null,
     })
   }
 
-  if (method === 'POST') {
-    const isValidLikeCount =
-      !isNaN(likeCount) && likeCount >= 0 && likeCount <= maxUserLikeCount
+  if (method === 'PUT') {
+    try {
+      await prisma.like.create({
+        data: { articleSlug, userId },
+      })
 
-    if (isValidLikeCount) {
-      const userLikes = await prisma.userArticleLikes.upsert({
+      const likeCount = await prisma.like.count({
+        where: { articleSlug },
+      })
+
+      res.status(200).json({
+        likeCount,
+        hasUserLike: true,
+      })
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        // Couldn't create the user like because it already exists
+
+        const likeCount = await prisma.like.count({
+          where: { articleSlug },
+        })
+
+        res.status(200).json({
+          likeCount,
+          hasUserLike: true,
+        })
+      } else {
+        throw error
+      }
+    }
+  }
+
+  if (method === 'DELETE') {
+    try {
+      await prisma.like.delete({
         where: {
-          slug_userId: {
-            slug,
+          articleSlug_userId: {
+            articleSlug,
             userId,
           },
         },
-        create: {
-          slug,
-          userId,
-          count: likeCount,
-        },
-        update: {
-          count: likeCount,
-        },
       })
 
-      const likesAggregation = await prisma.userArticleLikes.aggregate({
-        where: {
-          slug,
-        },
-        _sum: {
-          count: true,
-        },
+      const likeCount = await prisma.like.count({
+        where: { articleSlug },
       })
-
-      const totalLikeCount = likesAggregation._sum.count ?? 0
 
       res.status(200).json({
-        totalLikeCount,
-        userLikeCount: userLikes.count,
+        likeCount,
+        hasUserLike: false,
       })
-    } else {
-      res.status(400).json({
-        message: `Invalid count`,
-      })
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        // Couldn't delete the user like because it doesn't exist
+
+        const likeCount = await prisma.like.count({
+          where: { articleSlug },
+        })
+
+        res.status(200).json({
+          likeCount,
+          hasUserLike: false,
+        })
+      } else {
+        throw error
+      }
     }
   }
 }

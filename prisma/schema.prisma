@@ -4,7 +4,6 @@
 datasource db {
   provider             = "mysql"
   url                  = env("DATABASE_URL")
-  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
@@ -15,15 +14,17 @@ generator client {
 
 // Schema
 
-model ArticleViews {
-  slug  String @unique
-  count Int
+model Article {
+  slug      String @unique
+  viewCount Int
+  likes     Like[]
 }
 
-model UserArticleLikes {
-  userId String
-  slug   String
-  count  Int
+model Like {
+  article     Article @relation(fields: [articleSlug], references: [slug], onDelete: Cascade, onUpdate: NoAction)
+  articleSlug String
+  userId      String
 
-  @@unique([slug, userId])
+  @@unique([articleSlug, userId])
+  @@index([articleSlug])
 }

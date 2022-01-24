@@ -11,32 +11,34 @@ type Data = {
 // during build time. An array of all article slugs.
 
 const handler: NextApiHandler<Response<Data>> = async (req, res) => {
-  const slug = req.query.slug as string
   const method = req.method
+  const slug = req.query.slug as string
 
   if (method === 'GET') {
-    const articleViews = await prisma.articleViews.findUnique({
+    const article = await prisma.article.findUnique({
       where: { slug },
     })
 
-    if (articleViews) {
+    if (article) {
       res.status(200).json({
-        viewCount: articleViews.count,
+        viewCount: article.viewCount,
       })
     } else {
-      res.status(404).json({ message: `Article with slug '${slug}' not found` })
+      res.status(404).json({
+        message: `Article '${slug}' not found`,
+      })
     }
   }
 
   if (method === 'POST') {
-    const articleViews = await prisma.articleViews.upsert({
+    const article = await prisma.article.upsert({
       where: { slug },
-      create: { slug, count: 1 },
-      update: { count: { increment: 1 } },
+      create: { slug, viewCount: 1 },
+      update: { viewCount: { increment: 1 } },
     })
 
     res.status(200).json({
-      viewCount: articleViews.count,
+      viewCount: article.viewCount,
     })
   }
 }

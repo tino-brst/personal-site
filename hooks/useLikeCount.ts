@@ -1,13 +1,12 @@
 import * as React from 'react'
 import useSWR from 'swr'
-import { maxUserLikeCount } from '@lib/constants'
 import { debounce } from '@lib/debounce'
 import { LikesResponseData } from 'pages/api/likes/[slug]'
 
 type UseLikeCountResult = {
-  increment: () => void
-  total: number | undefined
-  user: number | undefined
+  toggleUserLike: () => void
+  hasUserLike: boolean | undefined
+  value: number | undefined
   isLoading: boolean
 }
 
@@ -16,31 +15,37 @@ function useLikeCount(slug: string): UseLikeCountResult {
     `/api/likes/${slug}`
   )
 
-  const increment = React.useCallback(async () => {
-    // Update the local data immediately (giving the user instant feedback).
-    // Revalidation is disabled to avoid an unnecessary request, which is
-    // handled next.
+  const toggleUserLike = React.useCallback(async () => {
     mutate((data) => {
-      if (data && data.userLikeCount < maxUserLikeCount) {
-        return {
-          totalLikeCount: data.totalLikeCount + 1,
-          userLikeCount: data.userLikeCount + 1,
-        }
-      }
+      if (data === undefined) return
+
+      // Update the local data immediately (giving the user instant feedback).
+      // Revalidation is disabled to avoid an unnecessary request, which is
+      // handled next.
+      return data.hasUserLike
+        ? {
+            hasUserLike: false,
+            likeCount: data.likeCount - 1,
+          }
+        : {
+            hasUserLike: true,
+            likeCount: data.likeCount + 1,
+          }
     }, false)
 
-    // Send the request (debounced) to update the user's like count, and update
+    // Send the request to update the user's like status, and update
     // the local value with the returned (updated) one.
     try {
       await mutate(async (data) => {
-        if (data && data.userLikeCount) {
-          return debouncedUpdateLikeCount(slug, data.userLikeCount)
-        }
+        if (data === undefined) return
+
+        return debouncedUpdateUserLike(slug, data.hasUserLike)
+
+        // 👇 Revalidation is disabled once again, since the request already
+        // returns the updated data.
       }, false)
-      // 👆 Revalidation is disabled once again, since the request already
-      // returns the updated data.
     } catch {
-      // If there was an error while updating the like count, trigger a
+      // If there was an error while updating the user like, trigger a
       // revalidation to set our local data back to the latest valid data (since
       // we updated it locally to give the user feedback, assuming there weren't
       // going to be any errors).
@@ -49,23 +54,23 @@ function useLikeCount(slug: string): UseLikeCountResult {
   }, [mutate, slug])
 
   return {
-    increment,
-    total: data?.totalLikeCount,
-    user: data?.userLikeCount,
+    value: data?.likeCount,
+    hasUserLike: data?.hasUserLike,
+    toggleUserLike,
     isLoading: !data && !error,
   }
 }
 
-const debouncedUpdateLikeCount = debounce(updateLikeCount, 1000)
+const debouncedUpdateUserLike = debounce(updateUserLike, 1000)
 
-async function updateLikeCount(slug: string, value: number) {
-  const response = await fetch(`/api/likes/${slug}?count=${value}`, {
-    method: 'POST',
+async function updateUserLike(slug: string, value: boolean) {
+  const response = await fetch(`/api/likes/${slug}`, {
+    method: value ? 'PUT' : 'DELETE',
   })
 
   // TODO: error handling
   if (response.ok) {
-    return await response.json()
+    return response.json()
   }
 }
 
