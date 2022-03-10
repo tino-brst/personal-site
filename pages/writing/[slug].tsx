@@ -115,12 +115,12 @@ function ArticlePage(props: Props) {
 }
 
 const components: ComponentMap = {
-  h2: (props) => TableOfContentsHeading({ ...(props as any), level: 2 }),
-  h3: (props) => TableOfContentsHeading({ ...(props as any), level: 3 }),
-  h4: (props) => TableOfContentsHeading({ ...(props as any), level: 4 }),
+  h2: (props: any) => TableOfContentsHeading({ ...props, level: 2 }),
+  h3: (props: any) => TableOfContentsHeading({ ...props, level: 3 }),
+  h4: (props: any) => TableOfContentsHeading({ ...props, level: 4 }),
   pre: CodeBlock,
   // TODO: open PR with props type as generic?
-  img: (props) => Image({ ...(props as any) }),
+  img: (props: any) => Image({ ...props }),
 }
 
 function editOnGitHubURL(
