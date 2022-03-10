@@ -1,3 +1,18 @@
+/**
+ * Of all the headings, normalize.css tweaks the h1s specifically, and even
+ * though the normalize import is done _before_ the reset, the normalize h1's
+ * tweaks have higher specificity than the ones in the reset (and thus applied),
+ * leaving all headers properly reset, expect the h1s. Applying the reset rule
+ * to the h1s specifically here, to win over the normalize one.
+ */
+
+h1 {
+  all: unset;
+  display: revert;
+}
+
+/* Themes Custom Props */
+
 :root {
   --color-bg: white;
   --color-fg: black;
@@ -11,6 +26,8 @@
   --color-accent: hsl(225, 80%, 65%);
   --color-border: hsl(0, 0%, 20%);
 }
+
+/* Globals */
 
 :root {
   color-scheme: light;
@@ -31,22 +48,14 @@ body {
 }
 
 a {
-  text-decoration: none;
   color: var(--color-accent);
 }
 
 .articles-list {
-  list-style: none;
-  padding: 0;
-  gap: 30px;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
-}
-
-.articles-list h3 {
-  margin-top: 10px;
-  margin-bottom: 5px;
-  padding-top: 0;
+  gap: 30px;
 }
 
 .articles-list a strong {
@@ -59,20 +68,17 @@ nav {
 }
 
 nav ul {
-  list-style: none;
-  padding: 0;
   display: flex;
   gap: 20px;
 }
 
 .theme {
-  display: inline-flex;
+  display: flex;
   gap: 5px;
 }
 
 .theme-resolved {
   opacity: 0.5;
-  font-size: 0.8em;
 }
 
 div.line.highlight {
@@ -99,14 +105,6 @@ div.line.highlight {
   font-weight: normal;
 }
 
-.filters {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-}
-
 .filters__search {
   display: flex;
   gap: 10px;
@@ -117,21 +115,9 @@ div.line.highlight {
   gap: 8px;
 }
 
-.image-wrapper {
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-bottom: 0;
-}
-
-.image {
-  border-radius: 4px;
-}
-
 .header-image-wrapper {
   position: relative;
-  padding-top: 40%;
-  margin-left: -40px;
-  margin-right: -40px;
+  aspect-ratio: 2 / 1;
 }
 
 .header-image {
@@ -140,12 +126,11 @@ div.line.highlight {
 
 .thumbnail-image-wrapper {
   position: relative;
-  padding-top: 30%;
+  aspect-ratio: 2 / 1;
 }
 
 .thumbnail-image {
   object-fit: cover;
-  border-radius: 4px;
 }
 
 .toc {
@@ -155,9 +140,7 @@ div.line.highlight {
   list-style: none;
   background: var(--color-bg);
   border: 2px solid var(--color-border);
-  border-radius: 5px;
   padding: 10px 15px;
-  margin: 0;
 }
 
 .toc li {
@@ -174,33 +157,6 @@ div.line.highlight {
 
 .toc li.active {
   opacity: 1;
-  font-weight: bold;
-}
-
-.toc a {
-  transition: all 0.2s;
-}
-
-h1 {
-  margin-bottom: 0;
-}
-
-h2 {
-  margin-top: 0;
-  /* Value based on default browser top margins */
-  padding-top: 0.83em;
-}
-
-h3 {
-  margin-top: 0;
-  padding-top: 1em;
-}
-
-h4 {
-  margin-top: 0;
-  padding-top: 1.33em;
-}
-
-p {
-  margin-bottom: 0;
+  text-decoration: underline;
+  text-decoration-style: dotted;
 }
