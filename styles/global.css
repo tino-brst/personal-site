@@ -1,21 +1,21 @@
 :root {
-  --background: white;
-  --foreground: black;
-  --accent: royalblue;
-  --border: whitesmoke;
+  --color-bg: white;
+  --color-fg: black;
+  --color-accent: royalblue;
+  --color-border: whitesmoke;
 }
 
 :root.dark {
-  --background: black;
-  --foreground: white;
-  --accent: hsl(225, 80%, 65%);
-  --border: hsl(0, 0%, 20%);
+  --color-bg: black;
+  --color-fg: white;
+  --color-accent: hsl(225, 80%, 65%);
+  --color-border: hsl(0, 0%, 20%);
 }
 
 :root {
   color-scheme: light;
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-bg);
+  color: var(--color-fg);
 }
 
 :root.dark {
@@ -32,7 +32,7 @@ body {
 
 a {
   text-decoration: none;
-  color: var(--accent);
+  color: var(--color-accent);
 }
 
 .articles-list {
@@ -76,7 +76,7 @@ nav ul {
 }
 
 div.line.highlight {
-  background: var(--border);
+  background: var(--color-border);
 }
 
 .floating-stuff {
@@ -153,8 +153,8 @@ div.line.highlight {
   flex-direction: column;
   gap: 2px;
   list-style: none;
-  background: var(--background);
-  border: 2px solid var(--border);
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
   border-radius: 5px;
   padding: 10px 15px;
   margin: 0;
