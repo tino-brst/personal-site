@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
+import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useTheme, ActiveTheme } from 'contexts/theme'
 
 function ThemePicker() {
@@ -35,7 +35,7 @@ function ThemePicker() {
   // Notice that on the second flow there is no "Paint with no component" step.
   // Getting to the first paint takes a bit longer (due to an "unused" render)
   // but goes straight to the component being shown.
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setIsMounted(true)
   }, [])
 

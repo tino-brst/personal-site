@@ -8,4 +8,4 @@ const useIsomorphicLayoutEffect = isServerSide
   ? React.useEffect
   : React.useLayoutEffect
 
-export { useIsomorphicLayoutEffect as useLayoutEffect }
+export { useIsomorphicLayoutEffect }
