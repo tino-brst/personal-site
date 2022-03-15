@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
 type Size = {
   width: number
@@ -9,7 +10,7 @@ function useSize<T extends HTMLElement>(): [React.RefObject<T>, Size] {
   const ref = React.useRef<T>(null)
   const [size, setSize] = React.useState<Size>({ width: 0, height: 0 })
 
-  React.useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!ref.current) return
 
     const resizeObserver = new ResizeObserver((entries) => {
