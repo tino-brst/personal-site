@@ -65,8 +65,8 @@ function NavBar() {
 
   //#region Tray height
 
-  const { trayMaskHeight } = useSpring({
-    trayMaskHeight: isOpen ? trayHeight : 0,
+  const { height } = useSpring({
+    height: navBarHeight + (isOpen ? trayHeight : 0),
     // TODO: extract
     config: config.wobbly,
   })
@@ -75,16 +75,14 @@ function NavBar() {
 
   return (
     <StickyPlaceholder>
-      <Wrapper>
+      <Wrapper style={{ height }}>
         <Background style={{ opacity: backgroundOpacity }} />
         <Bar>
           <button onClick={() => setIsOpen((value) => !value)}>
             toggle tray
           </button>
         </Bar>
-        <TrayMask style={{ height: trayMaskHeight }}>
-          <Tray ref={trayRef}>{/* Home, Writing, About */}</Tray>
-        </TrayMask>
+        <Tray ref={trayRef}>{/* Home, Writing, About */}</Tray>
       </Wrapper>
     </StickyPlaceholder>
   )
@@ -98,8 +96,9 @@ const StickyPlaceholder = styled.div`
   height: ${navBarHeight}px;
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled(animated.div)`
   position: relative;
+  overflow: hidden;
 `
 
 const Background = styled(animated.div)`
@@ -111,10 +110,6 @@ const Background = styled(animated.div)`
 
 const Bar = styled.div`
   height: ${navBarHeight}px;
-`
-
-const TrayMask = styled(animated.div)`
-  overflow: hidden;
 `
 
 const Tray = styled.div`
