@@ -1,29 +1,31 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { animated, config, SpringValue, useSpring } from 'react-spring'
+import { animated, config, SpringValue, useSpring, to } from 'react-spring'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 
 const navBarHeight = 40
+const navBarThreshold = 20
+
 const scrollY = new SpringValue(0)
+const scrollBasedOpacity = [[0, navBarThreshold], [0, 1], 'clamp'] as const
+const backgroundOpacity = new SpringValue({
+  to: scrollY.to(...scrollBasedOpacity),
+  immediate: true,
+  // TODO: extract
+  config: config.wobbly,
+})
 
 function NavBar() {
   const [isOpen, setIsOpen] = React.useState(false)
 
   //#region useSize
 
-  const [trayElementRef, { height: trayMaxHeight }] = useSize<HTMLDivElement>()
+  const [trayRef, { height: trayMaxHeight }] = useSize<HTMLDivElement>()
 
   //#endregion
 
   //#region Background opacity
-
-  const [{ opacity }, opacityAnimation] = useSpring(() => ({
-    opacity: scrollY.to([0, 20], [0, 1], 'clamp'),
-    immediate: true,
-    config: config.wobbly,
-  }))
-
   useIsomorphicLayoutEffect(() => {
     const handleScroll = () => scrollY.set(window.scrollY)
 
@@ -38,55 +40,54 @@ function NavBar() {
     if (isOpen) {
       // The tray is opening
       // Animate from the current scroll based opacity to fully opaque
-      opacityAnimation.start({ opacity: 1 })
+      backgroundOpacity.start(1)
     } else {
+      // TODO: skip on first render
+
       // The tray is closing
       // Animate from fully opaque to the current scroll based opacity
-      opacityAnimation.start({
-        opacity: scrollY.to([0, 20], [0, 1], 'clamp'),
-        onResolve: (animationResult, controller) => {
+      backgroundOpacity.start({
+        to: scrollY.to(...scrollBasedOpacity),
+        onRest: (animationResult, springValue) => {
           // If the animation's resolution (onResolve call) is premature (i.e.
           // finished === false), due to a reopening of the menu while it was
           // closing, then skip the immediate update, and let the animation
           // towards 'open' that canceled this one take the wheel.
           if (!animationResult.finished) return
 
-          controller.start({
-            opacity: scrollY.to([0, 20], [0, 1], 'clamp'),
+          springValue.start({
+            to: scrollY.to(...scrollBasedOpacity),
             immediate: true,
           })
         },
       })
     }
-  }, [isOpen, opacityAnimation, opacity])
+  }, [isOpen])
 
   //#endregion
 
   //#region Tray height
 
-  const [{ height: trayHeight }, heightAnimation] = useSpring(() => ({
-    height: 0,
+  const { trayMaskHeight } = useSpring({
+    trayMaskHeight: isOpen ? trayMaxHeight : 0,
+    // TODO: extract
     config: config.wobbly,
-  }))
-
-  React.useLayoutEffect(() => {
-    heightAnimation.start({ height: isOpen ? trayMaxHeight : 0 })
-  }, [trayMaxHeight, isOpen, heightAnimation])
+  })
 
   //#endregion
 
   return (
     <StickyPlaceholder>
       <Wrapper>
-        <Background style={{ opacity }} />
+        <Background style={{ opacity: backgroundOpacity }} />
         <Bar>
           <button onClick={() => setIsOpen((value) => !value)}>
             toggle tray
           </button>
         </Bar>
-        <TrayWrapper style={{ height: trayHeight }}>
-          <Tray ref={trayElementRef}>{/* Home, Writing, About */}</Tray>
-        </TrayWrapper>
+        <TrayMask style={{ height: trayMaskHeight }}>
+          <Tray ref={trayRef}>{/* Home, Writing, About */}</Tray>
+        </TrayMask>
       </Wrapper>
     </StickyPlaceholder>
   )
@@ -115,7 +116,7 @@ const Bar = styled.div`
   height: ${navBarHeight}px;
 `
 
-const TrayWrapper = styled(animated.div)`
+const TrayMask = styled(animated.div)`
   overflow: hidden;
 `
 
