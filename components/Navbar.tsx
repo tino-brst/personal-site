@@ -1,6 +1,12 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { animated, config, SpringValue, useSpring } from 'react-spring'
+import {
+  animated,
+  config,
+  SpringConfig,
+  SpringValue,
+  useSpring,
+} from 'react-spring'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 
@@ -9,13 +15,13 @@ import { useSize } from '@hooks/useSize'
 const navBarHeight = 40
 const navBarThreshold = 20
 
+const springConfig: SpringConfig = { mass: 0.5, tension: 300, friction: 16 }
 const scrollY = new SpringValue(0)
 const scrollBasedOpacity = [[0, navBarThreshold], [0, 1], 'clamp'] as const
 const backgroundOpacity = new SpringValue({
   to: scrollY.to(...scrollBasedOpacity),
   immediate: true,
-  // TODO: extract
-  config: config.wobbly,
+  config: springConfig,
 })
 
 function NavBar() {
@@ -67,8 +73,7 @@ function NavBar() {
 
   const { height } = useSpring({
     height: navBarHeight + (isOpen ? trayHeight : 0),
-    // TODO: extract
-    config: config.wobbly,
+    config: springConfig,
   })
 
   //#endregion
