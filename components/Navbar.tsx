@@ -1,8 +1,10 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { animated, config, SpringValue, useSpring, to } from 'react-spring'
+import { animated, config, SpringValue, useSpring } from 'react-spring'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
+
+// TODO: media queries
 
 const navBarHeight = 40
 const navBarThreshold = 20
@@ -18,14 +20,9 @@ const backgroundOpacity = new SpringValue({
 
 function NavBar() {
   const [isOpen, setIsOpen] = React.useState(false)
+  const [trayRef, { height: trayHeight }] = useSize<HTMLDivElement>()
 
-  //#region useSize
-
-  const [trayRef, { height: trayMaxHeight }] = useSize<HTMLDivElement>()
-
-  //#endregion
-
-  //#region Background opacity
+  //TODO: useEvent hook?
   useIsomorphicLayoutEffect(() => {
     const handleScroll = () => scrollY.set(window.scrollY)
 
@@ -69,7 +66,7 @@ function NavBar() {
   //#region Tray height
 
   const { trayMaskHeight } = useSpring({
-    trayMaskHeight: isOpen ? trayMaxHeight : 0,
+    trayMaskHeight: isOpen ? trayHeight : 0,
     // TODO: extract
     config: config.wobbly,
   })
