@@ -1,4 +1,4 @@
-import { Navbar } from './Navbar'
+import { NavBar } from './NavBar'
 
 type Props = {
   children: React.ReactNode
@@ -7,7 +7,7 @@ type Props = {
 function Layout(props: Props) {
   return (
     <>
-      <Navbar />
+      <NavBar />
       {props.children}
     </>
   )
