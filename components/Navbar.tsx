@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { animated, config, SpringValue, useSpring } from 'react-spring'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
+import { useSize } from '@hooks/useSize'
 
 const navBarHeight = 40
 const scrollY = new SpringValue(0)
@@ -11,24 +12,7 @@ function NavBar() {
 
   //#region useSize
 
-  const trayElementRef = React.useRef<HTMLDivElement>(null)
-  const [{ height: trayMaxHeight }, setSize] = React.useState({
-    width: 0,
-    height: 0,
-  })
-
-  React.useLayoutEffect(() => {
-    if (!trayElementRef.current) return
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      const { width, height } = entries[0].contentRect
-      setSize({ width, height })
-    })
-
-    resizeObserver.observe(trayElementRef.current)
-
-    return () => resizeObserver.disconnect()
-  }, [])
+  const [trayElementRef, { height: trayMaxHeight }] = useSize<HTMLDivElement>()
 
   //#endregion
 
