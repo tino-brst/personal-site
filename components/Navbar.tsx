@@ -7,6 +7,8 @@ import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useIsFirstRender } from '@hooks/useIsFirstRender'
 
 // TODO: media queries
+// TODO: close on click outside
+// TODO: lock scroll while open?
 
 const navBarHeight = 40
 const navBarThreshold = 20
@@ -22,26 +24,32 @@ const backgroundOpacity = new SpringValue({
 
 function NavBar() {
   const isFirstRender = useIsFirstRender()
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isTrayOpen, setIsTrayOpen] = React.useState(false)
   const [trayRef, { height: trayHeight }] = useSize<HTMLDivElement>()
 
   useWindowEventListener('scroll', setScrollY)
 
   useIsomorphicLayoutEffect(() => {
-    if (isOpen) {
+    // Skip animations on load. If the page loads scrolled to a #section
+    // mid-document, no need to fade-in the background.
+    if (isFirstRender) return
+
+    if (isTrayOpen) {
       // The tray is opening
       // Animate from the current scroll based opacity to fully opaque
       backgroundOpacity.start(1)
-    } else if (!isFirstRender) {
+    } else {
       // The tray is closing
       // Animate from fully opaque to the current scroll based opacity
       backgroundOpacity.start({
         to: scrollY.to(...scrollBasedOpacity),
         onRest: (animationResult, springValue) => {
-          // If the animation's resolution (onResolve call) is premature (i.e.
-          // finished === false), due to a reopening of the menu while it was
-          // closing, then skip the immediate update, and let the animation
-          // towards 'open' that canceled this one take the wheel.
+          // If the animation didn't get to finish when calling its onRest
+          // callback, it means that something else interrupted it, and we
+          // should let that something take the wheel, aborting whatever the
+          // onRest callback was about to do. That something else is the opening
+          // animation that may trigger mid-closing if we toggle the menu
+          // quickly enough.
           if (!animationResult.finished) return
 
           springValue.start({
@@ -51,10 +59,10 @@ function NavBar() {
         },
       })
     }
-  }, [isOpen])
+  }, [isTrayOpen])
 
   const { height } = useSpring({
-    height: navBarHeight + (isOpen ? trayHeight : 0),
+    height: navBarHeight + (isTrayOpen ? trayHeight : 0),
     config: springConfig,
   })
 
@@ -63,7 +71,7 @@ function NavBar() {
       <Wrapper style={{ height }}>
         <Background style={{ opacity: backgroundOpacity }} />
         <Bar>
-          <button onClick={() => setIsOpen((value) => !value)}>
+          <button onClick={() => setIsTrayOpen((value) => !value)}>
             toggle tray
           </button>
         </Bar>
@@ -74,7 +82,6 @@ function NavBar() {
 }
 
 function setScrollY() {
-  console.log('scroll')
   scrollY.set(window.scrollY)
 }
 
