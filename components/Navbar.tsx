@@ -4,6 +4,7 @@ import { animated, SpringConfig, SpringValue, useSpring } from 'react-spring'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
+import { useIsFirstRender } from '@hooks/useIsFirstRender'
 
 // TODO: media queries
 
@@ -20,6 +21,7 @@ const backgroundOpacity = new SpringValue({
 })
 
 function NavBar() {
+  const isFirstRender = useIsFirstRender()
   const [isOpen, setIsOpen] = React.useState(false)
   const [trayRef, { height: trayHeight }] = useSize<HTMLDivElement>()
 
@@ -30,9 +32,7 @@ function NavBar() {
       // The tray is opening
       // Animate from the current scroll based opacity to fully opaque
       backgroundOpacity.start(1)
-    } else {
-      // TODO: skip on first render
-
+    } else if (!isFirstRender) {
       // The tray is closing
       // Animate from fully opaque to the current scroll based opacity
       backgroundOpacity.start({
