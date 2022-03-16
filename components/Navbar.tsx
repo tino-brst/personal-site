@@ -1,14 +1,9 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import {
-  animated,
-  config,
-  SpringConfig,
-  SpringValue,
-  useSpring,
-} from 'react-spring'
+import { animated, SpringConfig, SpringValue, useSpring } from 'react-spring'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
+import { useWindowEventListener } from '@hooks/useWindowEventListener'
 
 // TODO: media queries
 
@@ -28,16 +23,7 @@ function NavBar() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [trayRef, { height: trayHeight }] = useSize<HTMLDivElement>()
 
-  //TODO: useEvent hook?
-  useIsomorphicLayoutEffect(() => {
-    const handleScroll = () => scrollY.set(window.scrollY)
-
-    document.addEventListener('scroll', handleScroll)
-
-    handleScroll()
-
-    return () => document.removeEventListener('scroll', handleScroll)
-  }, [])
+  useWindowEventListener('scroll', setScrollY)
 
   useIsomorphicLayoutEffect(() => {
     if (isOpen) {
@@ -67,16 +53,10 @@ function NavBar() {
     }
   }, [isOpen])
 
-  //#endregion
-
-  //#region Tray height
-
   const { height } = useSpring({
     height: navBarHeight + (isOpen ? trayHeight : 0),
     config: springConfig,
   })
-
-  //#endregion
 
   return (
     <StickyPlaceholder>
@@ -91,6 +71,11 @@ function NavBar() {
       </Wrapper>
     </StickyPlaceholder>
   )
+}
+
+function setScrollY() {
+  console.log('scroll')
+  scrollY.set(window.scrollY)
 }
 
 const StickyPlaceholder = styled.div`
