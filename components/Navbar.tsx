@@ -7,6 +7,7 @@ import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useIsFirstRender } from '@hooks/useIsFirstRender'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
+import { useMediaQuery } from '@hooks/useMediaQuery'
 import { ThemePicker } from './ThemePicker'
 import { HStack, VStack } from './Stack'
 import { Spacer } from './Spacer'
@@ -25,6 +26,7 @@ const backgroundOpacity = new SpringValue({
 
 function NavBar() {
   const isFirstRender = useIsFirstRender()
+  const isBigScreen = useMediaQuery('(min-width: 640px)')
   const [isTrayOpen, setIsTrayOpen] = React.useState(false)
   const [trayRef, { height: trayHeight }] = useSize<HTMLDivElement>()
   const { height } = useSpring({
@@ -54,9 +56,6 @@ function NavBar() {
   )
 
   // Background opacity animations
-
-  // TODO: being at the top of the page (not scrolled), if you open the menu
-  // (opacity = 1) and then make the screen larger, the opacity remains at 1
 
   useIsomorphicLayoutEffect(() => {
     // Skip animations on load. If the page loads scrolled to a #section
@@ -89,6 +88,18 @@ function NavBar() {
       })
     }
   }, [isFirstRender, isTrayOpen])
+
+  useIsomorphicLayoutEffect(() => {
+    // Fixes the background remaining fully opaque after opening the tray at the
+    // top of the page, and then increasing the screen size.
+
+    if (!isTrayOpen) return
+
+    backgroundOpacity.start({
+      to: isBigScreen ? scrollY.to(...scrollBasedOpacity) : 1,
+      immediate: true,
+    })
+  }, [isBigScreen, isTrayOpen])
 
   return (
     <StickyPlaceholder>
