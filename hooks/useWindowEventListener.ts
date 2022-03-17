@@ -7,13 +7,17 @@ import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
  */
 function useWindowEventListener<T extends keyof WindowEventMap>(
   type: T,
-  handler: (this: Window, ev: WindowEventMap[T]) => any
+  handler: (this: Window, ev: WindowEventMap[T]) => any,
+  /** Useful to add/remove the handler based on some state (e.g. listen for clicks outside of a modal only while its open). */
+  isEnabled = true
 ) {
   useIsomorphicLayoutEffect(() => {
+    if (!isEnabled) return
+
     window.addEventListener(type, handler)
 
     return () => window.removeEventListener(type, handler)
-  }, [type, handler])
+  }, [type, handler, isEnabled])
 }
 
 export { useWindowEventListener }
