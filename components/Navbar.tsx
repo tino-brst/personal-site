@@ -1,13 +1,15 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import Link from 'next/link'
 import { animated, SpringConfig, SpringValue, useSpring } from 'react-spring'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useIsFirstRender } from '@hooks/useIsFirstRender'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
-
-// TODO: media queries
+import { ThemePicker } from './ThemePicker'
+import { HStack, VStack } from './Stack'
+import { Spacer } from './Spacer'
 
 const barHeight = 40
 const scrollThreshold = 20
@@ -53,6 +55,9 @@ function NavBar() {
 
   // Background opacity animations
 
+  // TODO: being at the top of the page (not scrolled), if you open the menu
+  // (opacity = 1) and then make the screen larger, the opacity remains at 1
+
   useIsomorphicLayoutEffect(() => {
     // Skip animations on load. If the page loads scrolled to a #section
     // mid-document, no need to fade-in the background.
@@ -89,12 +94,34 @@ function NavBar() {
     <StickyPlaceholder>
       <Wrapper style={{ height }} ref={wrapperRef}>
         <Background style={{ opacity: backgroundOpacity }} />
-        <Bar>
-          <button onClick={() => setIsTrayOpen((value) => !value)}>
-            toggle tray
-          </button>
-        </Bar>
-        <Tray ref={trayRef}>{/* Home, Writing, About */}</Tray>
+        <BarHStack align="center">
+          <Link href="/">
+            <a>Home</a>
+          </Link>
+          <Spacer />
+          <HStack>
+            <NavHStack>
+              <Link href="/">
+                <a>Home</a>
+              </Link>
+              <Link href="/writing">
+                <a>Writing</a>
+              </Link>
+            </NavHStack>
+            <ThemePicker />
+            <TrayButton onClick={() => setIsTrayOpen((value) => !value)}>
+              🟰
+            </TrayButton>
+          </HStack>
+        </BarHStack>
+        <VStack ref={trayRef}>
+          <Link href="/">
+            <a>Home</a>
+          </Link>
+          <Link href="/writing">
+            <a>Writing</a>
+          </Link>
+        </VStack>
       </Wrapper>
     </StickyPlaceholder>
   )
@@ -111,6 +138,10 @@ const StickyPlaceholder = styled.div`
 const Wrapper = styled(animated.div)`
   position: relative;
   overflow: hidden;
+
+  @media (min-width: 640px) {
+    max-height: ${barHeight}px;
+  }
 `
 
 const Background = styled(animated.div)`
@@ -120,12 +151,22 @@ const Background = styled(animated.div)`
   background: hsla(0 0% 0% / 0.1);
 `
 
-const Bar = styled.div`
+const BarHStack = styled(HStack)`
   height: ${barHeight}px;
 `
 
-const Tray = styled.div`
-  height: 100px;
+const TrayButton = styled.button`
+  @media (min-width: 640px) {
+    display: none;
+  }
+`
+
+const NavHStack = styled(HStack)`
+  display: none;
+
+  @media (min-width: 640px) {
+    display: flex;
+  }
 `
 
 export { NavBar }
