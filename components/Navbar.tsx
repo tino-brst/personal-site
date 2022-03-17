@@ -5,17 +5,16 @@ import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useIsFirstRender } from '@hooks/useIsFirstRender'
+import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 
 // TODO: media queries
-// TODO: close on click outside
-// TODO: lock scroll while open?
 
-const navBarHeight = 40
-const navBarThreshold = 20
+const barHeight = 40
+const scrollThreshold = 20
 
 const springConfig: SpringConfig = { mass: 0.5, tension: 300, friction: 16 }
 const scrollY = new SpringValue(0)
-const scrollBasedOpacity = [[0, navBarThreshold], [0, 1], 'clamp'] as const
+const scrollBasedOpacity = [[0, scrollThreshold], [0, 1], 'clamp'] as const
 const backgroundOpacity = new SpringValue({
   to: scrollY.to(...scrollBasedOpacity),
   immediate: true,
@@ -26,8 +25,33 @@ function NavBar() {
   const isFirstRender = useIsFirstRender()
   const [isTrayOpen, setIsTrayOpen] = React.useState(false)
   const [trayRef, { height: trayHeight }] = useSize<HTMLDivElement>()
+  const { height } = useSpring({
+    height: barHeight + (isTrayOpen ? trayHeight : 0),
+    config: springConfig,
+  })
+
+  // Keep the scrollY spring up-to-date with scroll changes
+
+  const setScrollY = React.useCallback(() => {
+    scrollY.set(window.scrollY)
+  }, [])
 
   useWindowEventListener('scroll', setScrollY)
+
+  // Close the tray when clicking outside of the bar/tray or scrolling the page
+
+  const closeTray = React.useCallback(() => {
+    setIsTrayOpen(false)
+  }, [])
+
+  useWindowEventListener('scroll', closeTray)
+
+  const wrapperRef = useOnInteractionOutside<HTMLDivElement>(
+    closeTray,
+    isTrayOpen
+  )
+
+  // Background opacity animations
 
   useIsomorphicLayoutEffect(() => {
     // Skip animations on load. If the page loads scrolled to a #section
@@ -59,16 +83,11 @@ function NavBar() {
         },
       })
     }
-  }, [isTrayOpen])
-
-  const { height } = useSpring({
-    height: navBarHeight + (isTrayOpen ? trayHeight : 0),
-    config: springConfig,
-  })
+  }, [isFirstRender, isTrayOpen])
 
   return (
     <StickyPlaceholder>
-      <Wrapper style={{ height }}>
+      <Wrapper style={{ height }} ref={wrapperRef}>
         <Background style={{ opacity: backgroundOpacity }} />
         <Bar>
           <button onClick={() => setIsTrayOpen((value) => !value)}>
@@ -81,16 +100,12 @@ function NavBar() {
   )
 }
 
-function setScrollY() {
-  scrollY.set(window.scrollY)
-}
-
 const StickyPlaceholder = styled.div`
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
-  height: ${navBarHeight}px;
+  height: ${barHeight}px;
 `
 
 const Wrapper = styled(animated.div)`
@@ -106,7 +121,7 @@ const Background = styled(animated.div)`
 `
 
 const Bar = styled.div`
-  height: ${navBarHeight}px;
+  height: ${barHeight}px;
 `
 
 const Tray = styled.div`
