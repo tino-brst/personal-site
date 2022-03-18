@@ -12,6 +12,8 @@ import { ThemePicker } from './ThemePicker'
 import { HStack, VStack } from './Stack'
 import { Spacer } from './Spacer'
 
+// TODO: limit bar content width on big screens (aligned with content)
+
 const barHeight = 40
 const scrollThreshold = 20
 

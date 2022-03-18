@@ -7,7 +7,8 @@ const alignValue = {
 }
 
 const Stack = styled('div').withConfig({
-  shouldForwardProp: (prop) => !['spacing'].includes(prop),
+  shouldForwardProp: (prop, defaultValidatorFn) =>
+    !['spacing'].includes(prop) && defaultValidatorFn(prop),
 })<{
   spacing?: number
   align?: keyof typeof alignValue
