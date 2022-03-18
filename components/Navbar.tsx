@@ -9,8 +9,6 @@ import { useIsFirstRender } from '@hooks/useIsFirstRender'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { useMediaQuery } from '@hooks/useMediaQuery'
 import { ThemePicker } from './ThemePicker'
-import { HStack, VStack } from './Stack'
-import { Spacer } from './Spacer'
 
 // TODO: limit bar content width on big screens (aligned with content)
 
@@ -107,34 +105,33 @@ function NavBar() {
     <StickyPlaceholder>
       <Wrapper style={{ height }} ref={wrapperRef}>
         <Background style={{ opacity: backgroundOpacity }} />
-        <BarHStack align="center">
+        <Bar>
           <Link href="/">
             <a>Home</a>
           </Link>
-          <Spacer />
-          <HStack>
-            <NavHStack>
+          <BarEnd>
+            <Nav>
               <Link href="/">
                 <a>Home</a>
               </Link>
               <Link href="/writing">
                 <a>Writing</a>
               </Link>
-            </NavHStack>
+            </Nav>
             <ThemePicker />
             <TrayButton onClick={() => setIsTrayOpen((value) => !value)}>
               🟰
             </TrayButton>
-          </HStack>
-        </BarHStack>
-        <VStack ref={trayRef}>
+          </BarEnd>
+        </Bar>
+        <Tray ref={trayRef}>
           <Link href="/">
             <a>Home</a>
           </Link>
           <Link href="/writing">
             <a>Writing</a>
           </Link>
-        </VStack>
+        </Tray>
       </Wrapper>
     </StickyPlaceholder>
   )
@@ -164,8 +161,25 @@ const Background = styled(animated.div)`
   background: hsla(0 0% 0% / 0.1);
 `
 
-const BarHStack = styled(HStack)`
+const Bar = styled.div`
   height: ${barHeight}px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+`
+
+const BarEnd = styled.div`
+  display: flex;
+  gap: 10px;
+`
+
+const Nav = styled.div`
+  display: none;
+
+  @media (min-width: 640px) {
+    display: flex;
+  }
 `
 
 const TrayButton = styled.button`
@@ -174,12 +188,9 @@ const TrayButton = styled.button`
   }
 `
 
-const NavHStack = styled(HStack)`
-  display: none;
-
-  @media (min-width: 640px) {
-    display: flex;
-  }
+const Tray = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 export { NavBar }
