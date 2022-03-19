@@ -1,13 +1,11 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
-import { animated, SpringConfig, SpringValue, useSpring } from 'react-spring'
+import { map } from '@lib/math'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
-import { useIsFirstRender } from '@hooks/useIsFirstRender'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
-import { useMediaQuery } from '@hooks/useMediaQuery'
 import { ThemePicker } from './ThemePicker'
 
 // TODO: limit bar content width on big screens (aligned with content)
@@ -15,32 +13,70 @@ import { ThemePicker } from './ThemePicker'
 const barHeight = 40
 const scrollThreshold = 20
 
-const springConfig: SpringConfig = { mass: 0.5, tension: 300, friction: 16 }
-const scrollY = new SpringValue(0)
-const scrollBasedOpacity = [[0, scrollThreshold], [0, 1], 'clamp'] as const
-const backgroundOpacity = new SpringValue({
-  to: scrollY.to(...scrollBasedOpacity),
-  immediate: true,
-  config: springConfig,
-})
+const CSSVar = {
+  scrollBasedOpacity: '--scroll-based-opacity',
+  trayHeight: '--tray-height',
+}
 
 function NavBar() {
-  const isFirstRender = useIsFirstRender()
-  const isBigScreen = useMediaQuery('(min-width: 640px)')
+  const wrapperRef = React.useRef<HTMLDivElement>(null)
+  const backgroundRef = React.useRef<HTMLDivElement>(null)
+  const trayRef = React.useRef<HTMLDivElement>(null)
+
   const [isTrayOpen, setIsTrayOpen] = React.useState(false)
-  const [trayRef, { height: trayHeight }] = useSize<HTMLDivElement>()
-  const { height } = useSpring({
-    height: barHeight + (isTrayOpen ? trayHeight : 0),
-    config: springConfig,
-  })
+  const traySize = useSize(trayRef)
 
-  // Keep the scrollY spring up-to-date with scroll changes
+  // Initialize scroll based opacity CSS var & keep up-to-date with scroll
+  // changes (not set in inline styles to avoid re-renders with each scroll
+  // event)
 
-  const setScrollY = React.useCallback(() => {
-    scrollY.set(window.scrollY)
+  useIsomorphicLayoutEffect(() => {
+    backgroundRef.current?.style.setProperty(
+      CSSVar.scrollBasedOpacity,
+      `${map(window.scrollY, [0, scrollThreshold], [0, 1])}`
+    )
   }, [])
 
-  useWindowEventListener('scroll', setScrollY)
+  const setScrollBasedOpacity = React.useCallback(() => {
+    backgroundRef.current?.style.setProperty(
+      CSSVar.scrollBasedOpacity,
+      `${map(window.scrollY, [0, scrollThreshold], [0, 1])}`
+    )
+  }, [])
+
+  useWindowEventListener('scroll', setScrollBasedOpacity)
+
+  // Handle switching the background's opacity changes from instant (while
+  // scrolling) to animated (when opening/closing the tray). Accomplished via
+  // toggling the CSS prop transition-property between 'opacity' and 'none'.
+
+  useIsomorphicLayoutEffect(() => {
+    const background = backgroundRef.current
+
+    if (!background) return
+
+    // By default, the background's opacity has no transitions. Whenever there
+    // is a change due to scrolling, it's applied immediately. But when the tray
+    // is opening/closing, there _should_ be a transition, and thus the
+    // opacity's transition is enabled.
+    if (isTrayOpen) {
+      background.style.transitionProperty = 'opacity'
+    }
+
+    // When the tray is closing, wait for the transition to end, and restore the
+    // opacity to having no animations, and thus apply scroll changes
+    // immediately.
+    if (!isTrayOpen) {
+      const transitionEndHandler = () => {
+        background.style.transitionProperty = 'none'
+      }
+
+      background.addEventListener('transitionend', transitionEndHandler)
+
+      return () =>
+        background.removeEventListener('transitionend', transitionEndHandler)
+    }
+  }, [isTrayOpen])
 
   // Close the tray when clicking outside of the bar/tray or scrolling the page
 
@@ -49,62 +85,12 @@ function NavBar() {
   }, [])
 
   useWindowEventListener('scroll', closeTray)
-
-  const wrapperRef = useOnInteractionOutside<HTMLDivElement>(
-    closeTray,
-    isTrayOpen
-  )
-
-  // Background opacity animations
-
-  useIsomorphicLayoutEffect(() => {
-    // Skip animations on load. If the page loads scrolled to a #section
-    // mid-document, no need to fade-in the background.
-    if (isFirstRender) return
-
-    if (isTrayOpen) {
-      // The tray is opening
-      // Animate from the current scroll based opacity to fully opaque
-      backgroundOpacity.start(1)
-    } else {
-      // The tray is closing
-      // Animate from fully opaque to the current scroll based opacity
-      backgroundOpacity.start({
-        to: scrollY.to(...scrollBasedOpacity),
-        onRest: (animationResult, springValue) => {
-          // If the animation didn't get to finish when calling its onRest
-          // callback, it means that something else interrupted it, and we
-          // should let that something take the wheel, aborting whatever the
-          // onRest callback was about to do. That something else is the opening
-          // animation that may trigger mid-closing if we toggle the menu
-          // quickly enough.
-          if (!animationResult.finished) return
-
-          springValue.start({
-            to: scrollY.to(...scrollBasedOpacity),
-            immediate: true,
-          })
-        },
-      })
-    }
-  }, [isFirstRender, isTrayOpen])
-
-  useIsomorphicLayoutEffect(() => {
-    // Fixes the background remaining fully opaque after opening the tray at the
-    // top of the page, and then increasing the screen size.
-
-    if (!isTrayOpen) return
-
-    backgroundOpacity.start({
-      to: isBigScreen ? scrollY.to(...scrollBasedOpacity) : 1,
-      immediate: true,
-    })
-  }, [isBigScreen, isTrayOpen])
+  useOnInteractionOutside(wrapperRef, closeTray, isTrayOpen)
 
   return (
     <StickyPlaceholder>
-      <Wrapper style={{ height }} ref={wrapperRef}>
-        <Background style={{ opacity: backgroundOpacity }} />
+      <Wrapper ref={wrapperRef}>
+        <Background ref={backgroundRef} isTrayOpen={isTrayOpen} />
         <Bar>
           <Link href="/">
             <a>Home</a>
@@ -124,14 +110,19 @@ function NavBar() {
             </TrayButton>
           </BarEnd>
         </Bar>
-        <Tray ref={trayRef}>
-          <Link href="/">
-            <a>Home</a>
-          </Link>
-          <Link href="/writing">
-            <a>Writing</a>
-          </Link>
-        </Tray>
+        <TrayWrapper
+          isTrayOpen={isTrayOpen}
+          style={{ [CSSVar.trayHeight]: `${traySize.height}px` }}
+        >
+          <Tray ref={trayRef}>
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+            <Link href="/writing">
+              <a>Writing</a>
+            </Link>
+          </Tray>
+        </TrayWrapper>
       </Wrapper>
     </StickyPlaceholder>
   )
@@ -145,20 +136,23 @@ const StickyPlaceholder = styled.div`
   height: ${barHeight}px;
 `
 
-const Wrapper = styled(animated.div)`
+const Wrapper = styled.div`
   position: relative;
-  overflow: hidden;
-
-  @media (min-width: 640px) {
-    max-height: ${barHeight}px;
-  }
 `
 
-const Background = styled(animated.div)`
+const Background = styled.div<{ isTrayOpen: boolean }>`
+  opacity: ${(p) => (p.isTrayOpen ? 1 : `var(${CSSVar.scrollBasedOpacity})`)};
   position: absolute;
   z-index: -1;
   inset: 0;
   background: hsla(0 0% 0% / 0.1);
+  transition-property: none;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+  transition-duration: 0.2s;
+
+  @media (min-width: 640px) {
+    opacity: var(${CSSVar.scrollBasedOpacity});
+  }
 `
 
 const Bar = styled.div`
@@ -185,6 +179,18 @@ const Nav = styled.div`
 const TrayButton = styled.button`
   @media (min-width: 640px) {
     display: none;
+  }
+`
+
+const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
+  overflow: hidden;
+  max-height: ${(p) => (p.isTrayOpen ? `var(${CSSVar.trayHeight})` : 0)};
+  transition-property: max-height;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+  transition-duration: 0.2s;
+
+  @media (min-width: 640px) {
+    max-height: 0;
   }
 `
 
