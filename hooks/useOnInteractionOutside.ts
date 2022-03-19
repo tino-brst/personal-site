@@ -2,11 +2,10 @@ import * as React from 'react'
 import { useWindowEventListener } from './useWindowEventListener'
 
 function useOnInteractionOutside<T extends HTMLElement>(
+  ref: React.RefObject<T>,
   fn: () => void,
   isEnabled = true
-): React.RefObject<T> {
-  const ref = React.useRef<T>(null)
-
+) {
   const pointerDownHandler = React.useCallback(
     (event: MouseEvent) => {
       const element = ref.current
@@ -14,12 +13,10 @@ function useOnInteractionOutside<T extends HTMLElement>(
       if (!element) return
       if (isInteractionOutside(element, event)) fn()
     },
-    [fn]
+    [ref, fn]
   )
 
   useWindowEventListener('pointerdown', pointerDownHandler, isEnabled)
-
-  return ref
 }
 
 function isInteractionOutside(

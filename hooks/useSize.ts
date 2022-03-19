@@ -6,8 +6,7 @@ type Size = {
   height: number
 }
 
-function useSize<T extends HTMLElement>(): [React.RefObject<T>, Size] {
-  const ref = React.useRef<T>(null)
+function useSize<T extends HTMLElement>(ref: React.RefObject<T>): Size {
   const [size, setSize] = React.useState<Size>({ width: 0, height: 0 })
 
   useIsomorphicLayoutEffect(() => {
@@ -23,7 +22,7 @@ function useSize<T extends HTMLElement>(): [React.RefObject<T>, Size] {
     return () => resizeObserver.disconnect()
   }, [])
 
-  return [ref, size]
+  return size
 }
 
 export { useSize }
