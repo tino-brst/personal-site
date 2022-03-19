@@ -17,3 +17,12 @@ declare global {
     }
   }
 }
+
+// Extend the inline styles CSSProperties type with support for custom
+// properties
+
+declare module 'react' {
+  interface CSSProperties {
+    [key: `--${string}`]: string | number
+  }
+}
