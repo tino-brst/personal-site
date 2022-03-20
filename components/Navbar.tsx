@@ -2,12 +2,14 @@ import * as React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { map } from '@lib/math'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { ThemePicker } from './ThemePicker'
+import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import avatarImageSrc from 'public/images/avatar.png'
 
 // TODO: limit bar content width on big screens (aligned with content)
@@ -21,6 +23,8 @@ const CSSVar = {
 }
 
 function NavBar() {
+  const router = useRouter()
+
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
   const trayRef = React.useRef<HTMLDivElement>(null)
@@ -113,10 +117,13 @@ function NavBar() {
               <Link href="/writing">
                 <a>Writing</a>
               </Link>
+              <Link href="/about">
+                <a>About</a>
+              </Link>
             </Nav>
-            <ThemePicker />
+            {/* <ThemePicker /> */}
             <TrayButton onClick={() => setIsTrayOpen((value) => !value)}>
-              🟰
+              <HamburgerMenuIcon width={23} height={23} />
             </TrayButton>
           </BarEnd>
         </Bar>
@@ -125,11 +132,18 @@ function NavBar() {
           style={{ [CSSVar.trayHeight]: `${traySize.height}px` }}
         >
           <Tray ref={trayRef}>
-            <Link href="/">
-              <a>Home</a>
+            <Link href="/" passHref={true}>
+              <TrayLink isActive={router.pathname === '/'}>Home</TrayLink>
             </Link>
-            <Link href="/writing">
-              <a>Writing</a>
+            <Link href="/writing" passHref={true}>
+              <TrayLink isActive={router.pathname.startsWith('/writing')}>
+                Writing
+              </TrayLink>
+            </Link>
+            <Link href="/about" passHref={true}>
+              <TrayLink isActive={router.pathname.startsWith('/about')}>
+                About
+              </TrayLink>
             </Link>
           </Tray>
         </TrayWrapper>
@@ -155,7 +169,7 @@ const Wrapper = styled.div<{ isTrayOpen: boolean }>`
 
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.2s;
+  transition-duration: 0.25s;
 `
 
 const Background = styled.div<{ isTrayOpen: boolean }>`
@@ -169,7 +183,7 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
 
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.2s;
+  transition-duration: 0.25s;
 
   @media (min-width: 640px) {
     opacity: var(${CSSVar.scrollBasedOpacity});
@@ -215,6 +229,26 @@ const Nav = styled.div`
 `
 
 const TrayButton = styled.button`
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+
+  transition-property: background-color, transform;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+
+  &:hover {
+    background-color: hsla(0 0% 0% / 0.05);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
   @media (min-width: 640px) {
     display: none;
   }
@@ -223,9 +257,10 @@ const TrayButton = styled.button`
 const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
   overflow: hidden;
   max-height: ${(p) => (p.isTrayOpen ? `var(${CSSVar.trayHeight})` : 0)};
+
   transition-property: max-height;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.2s;
+  transition-duration: 0.25s;
 
   @media (min-width: 640px) {
     max-height: 0;
@@ -235,6 +270,40 @@ const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
 const Tray = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 6px;
+`
+
+const TrayLink = styled.a<{ isActive: boolean }>`
+  height: 40px;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: ${(p) => (p.isActive ? 'black' : 'hsla(0 0% 0% / 0.4)')};
+
+  transition-property: background-color, transform;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+
+  &:first-child {
+    margin-top: 8px;
+  }
+
+  &:last-child {
+    margin-bottom: 16px;
+  }
+
+  &:hover {
+    background-color: hsla(0 0% 0% / 0.05);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
 `
 
 export { NavBar }
