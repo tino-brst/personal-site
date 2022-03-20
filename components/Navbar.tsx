@@ -170,6 +170,10 @@ const Wrapper = styled.div<{ isTrayOpen: boolean }>`
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
   transition-duration: 0.25s;
+
+  @media (min-width: 640px) {
+    box-shadow: none;
+  }
 `
 
 const Background = styled.div<{ isTrayOpen: boolean }>`
