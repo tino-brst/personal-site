@@ -1,16 +1,18 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+import Image from 'next/image'
 import { map } from '@lib/math'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { ThemePicker } from './ThemePicker'
+import avatarImageSrc from 'public/images/avatar.png'
 
 // TODO: limit bar content width on big screens (aligned with content)
 
-const barHeight = 40
+const barHeight = 70
 const scrollThreshold = 20
 
 const CSSVar = {
@@ -92,8 +94,16 @@ function NavBar() {
       <Wrapper ref={wrapperRef}>
         <Background ref={backgroundRef} isTrayOpen={isTrayOpen} />
         <Bar>
-          <Link href="/">
-            <a>Home</a>
+          <Link href="/" passHref={true}>
+            <HomeLink>
+              <AvatarImage
+                src={avatarImageSrc}
+                height={46}
+                width={46}
+                alt="Tino's Memoji"
+              />
+              Tino&apos;s Corner
+            </HomeLink>
           </Link>
           <BarEnd>
             <Nav>
@@ -161,6 +171,21 @@ const Bar = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+`
+
+const HomeLink = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  line-height: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: black;
+`
+
+const AvatarImage = styled(Image)`
+  border-radius: 50%;
+  background-color: hsla(0 0% 0% / 0.05);
 `
 
 const BarEnd = styled.div`
