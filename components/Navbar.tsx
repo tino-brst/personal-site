@@ -91,7 +91,7 @@ function NavBar() {
 
   return (
     <StickyPlaceholder>
-      <Wrapper ref={wrapperRef}>
+      <Wrapper ref={wrapperRef} isTrayOpen={isTrayOpen}>
         <Background ref={backgroundRef} isTrayOpen={isTrayOpen} />
         <Bar>
           <Link href="/" passHref={true}>
@@ -146,8 +146,16 @@ const StickyPlaceholder = styled.div`
   height: ${barHeight}px;
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isTrayOpen: boolean }>`
   position: relative;
+  box-shadow: ${(p) =>
+    p.isTrayOpen
+      ? '0px 0px 4px rgba(0, 0, 0, 0.01), 0px 4px 60px rgba(0, 0, 0, 0.05)'
+      : null};
+
+  transition-property: box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+  transition-duration: 0.2s;
 `
 
 const Background = styled.div<{ isTrayOpen: boolean }>`
@@ -155,7 +163,10 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: hsla(0 0% 0% / 0.1);
+  background: hsla(0 0% 98% / 0.9);
+  backdrop-filter: saturate(180%) blur(40px);
+  box-shadow: inset 0 -0.5px hsla(0 0% 0% / 0.1);
+
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
   transition-duration: 0.2s;
@@ -170,6 +181,8 @@ const Bar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-right: 16px;
+  margin-left: 16px;
   gap: 20px;
 `
 
@@ -190,7 +203,7 @@ const AvatarImage = styled(Image)`
 
 const BarEnd = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 20px;
 `
 
 const Nav = styled.div`
