@@ -112,7 +112,8 @@ const Highlight = styled.div`
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
-  ${Wrapper}:hover & {
+  ${Wrapper}:hover &,
+  ${Wrapper}:active & {
     opacity: 1;
   }
 

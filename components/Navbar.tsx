@@ -248,7 +248,8 @@ const TrayButton = styled.button`
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: hsla(0 0% 0% / 0.05);
   }
 
@@ -304,7 +305,8 @@ const Link = styled.a<{ isActive: boolean }>`
     margin-bottom: 16px;
   }
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: hsla(0 0% 0% / 0.05);
   }
 
