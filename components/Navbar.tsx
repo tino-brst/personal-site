@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { map } from '@lib/math'
@@ -10,6 +10,7 @@ import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { ThemePicker } from './ThemePicker'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
+import { NavGroup, NavGroupLink } from './NavGroup'
 import avatarImageSrc from 'public/images/avatar.png'
 
 // TODO: limit bar content width on big screens (aligned with content)
@@ -23,8 +24,6 @@ const CSSVar = {
 }
 
 function NavBar() {
-  const router = useRouter()
-
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
   const trayRef = React.useRef<HTMLDivElement>(null)
@@ -72,6 +71,7 @@ function NavBar() {
     // When the tray is closing, wait for the transition to end, and restore the
     // opacity to having no animations, and thus apply scroll changes
     // immediately.
+    // TODO: attach to onTransitionEnd?
     if (!isTrayOpen) {
       const transitionEndHandler = () => {
         background.style.transitionProperty = 'none'
@@ -98,7 +98,7 @@ function NavBar() {
       <Wrapper ref={wrapperRef} isTrayOpen={isTrayOpen}>
         <Background ref={backgroundRef} isTrayOpen={isTrayOpen} />
         <Bar>
-          <Link href="/" passHref={true}>
+          <NextLink href="/" passHref={true}>
             <HomeLink>
               <AvatarImage
                 src={avatarImageSrc}
@@ -108,19 +108,15 @@ function NavBar() {
               />
               Tino&apos;s Corner
             </HomeLink>
-          </Link>
+          </NextLink>
           <BarEnd>
-            <Nav>
-              <Link href="/">
-                <a>Home</a>
-              </Link>
-              <Link href="/writing">
-                <a>Writing</a>
-              </Link>
-              <Link href="/about">
-                <a>About</a>
-              </Link>
-            </Nav>
+            <NavGroup>
+              <NavGroupLink to="/" exact>
+                Home
+              </NavGroupLink>
+              <NavGroupLink to="/writing">Writing</NavGroupLink>
+              <NavGroupLink to="/about">About</NavGroupLink>
+            </NavGroup>
             {/* <ThemePicker /> */}
             <TrayButton onClick={() => setIsTrayOpen((value) => !value)}>
               <HamburgerMenuIcon width={23} height={23} />
@@ -132,23 +128,38 @@ function NavBar() {
           style={{ [CSSVar.trayHeight]: `${traySize.height}px` }}
         >
           <Tray ref={trayRef}>
-            <Link href="/" passHref={true}>
-              <TrayLink isActive={router.pathname === '/'}>Home</TrayLink>
-            </Link>
-            <Link href="/writing" passHref={true}>
-              <TrayLink isActive={router.pathname.startsWith('/writing')}>
-                Writing
-              </TrayLink>
-            </Link>
-            <Link href="/about" passHref={true}>
-              <TrayLink isActive={router.pathname.startsWith('/about')}>
-                About
-              </TrayLink>
-            </Link>
+            <TrayLink to="/" exact>
+              Home
+            </TrayLink>
+            <TrayLink to="/writing">Writing</TrayLink>
+            <TrayLink to="/about">About</TrayLink>
           </Tray>
         </TrayWrapper>
       </Wrapper>
     </StickyPlaceholder>
+  )
+}
+
+function TrayLink(props: {
+  to: string
+  /** When true, the active style will only be applied if the location is matched _exactly_. */
+  exact?: boolean
+  children?: React.ReactNode
+}) {
+  const router = useRouter()
+
+  return (
+    <NextLink href={props.to} passHref={true}>
+      <Link
+        isActive={
+          props.exact
+            ? router.pathname === props.to
+            : router.pathname.startsWith(props.to)
+        }
+      >
+        {props.children}
+      </Link>
+    </NextLink>
   )
 }
 
@@ -224,14 +235,6 @@ const BarEnd = styled.div`
   gap: 20px;
 `
 
-const Nav = styled.div`
-  display: none;
-
-  @media (min-width: 640px) {
-    display: flex;
-  }
-`
-
 const TrayButton = styled.button`
   cursor: pointer;
   width: 40px;
@@ -278,7 +281,7 @@ const Tray = styled.div`
   gap: 6px;
 `
 
-const TrayLink = styled.a<{ isActive: boolean }>`
+const Link = styled.a<{ isActive: boolean }>`
   height: 40px;
   display: flex;
   align-items: center;
