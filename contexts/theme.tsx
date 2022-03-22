@@ -10,12 +10,14 @@ type ResolvedTheme = 'light' | 'dark'
 type ContextValue = {
   /** Active theme */
   active: ActiveTheme
-  /** If the active theme is `'system'`, this returns the current system preference (`'light'`/`'dark'`); otherwise, it's the same as `active`. If there are UI elements that change with the theme, this is the value they should follow */
+  /** If the active theme is `system`, this returns the current system preference (`light`/`dark`); otherwise, it's the same as `active`. If there are UI elements that change with the theme, this is the value they should follow */
   resolved: ResolvedTheme
   /** List of available themes */
   values: typeof themes
   /** Update the active theme */
   setActive: (value: ActiveTheme) => void
+  /** Cycles through the available themes (light → dark → system → 🔁) */
+  toggle: () => void
 }
 
 type Props = {
@@ -51,14 +53,30 @@ function ThemeProvider({
     }
   }, [resolved])
 
+  const toggle = React.useCallback(() => {
+    setActive((value) => {
+      switch (value) {
+        case 'light':
+          return 'dark'
+        case 'dark':
+          return 'system'
+        case 'system':
+          return 'light'
+        default:
+          throw new Error(`Unknown theme '${value}'.`)
+      }
+    })
+  }, [setActive])
+
   const value = React.useMemo<ContextValue>(
     () => ({
       active,
       resolved,
       values: themes,
       setActive,
+      toggle,
     }),
-    [active, resolved, setActive]
+    [active, resolved, setActive, toggle]
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>
