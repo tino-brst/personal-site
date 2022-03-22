@@ -8,7 +8,7 @@ import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
-import { ThemePicker } from './ThemePicker'
+import { ThemeToggle } from './ThemeToggle'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { NavGroup, NavGroupLink } from './NavGroup'
 import avatarImageSrc from 'public/images/avatar.png'
@@ -117,7 +117,7 @@ function NavBar() {
               <NavGroupLink to="/writing">Writing</NavGroupLink>
               <NavGroupLink to="/about">About</NavGroupLink>
             </NavGroup>
-            {/* <ThemePicker /> */}
+            <ThemeToggle />
             <TrayButton onClick={() => setIsTrayOpen((value) => !value)}>
               <HamburgerMenuIcon width={23} height={23} />
             </TrayButton>
@@ -232,7 +232,7 @@ const AvatarImage = styled(Image)`
 
 const BarEnd = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 12px;
 `
 
 const TrayButton = styled.button`

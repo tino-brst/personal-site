@@ -1,14 +1,11 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
-import { useTheme, ActiveTheme } from 'contexts/theme'
+import { useTheme } from 'contexts/theme'
+import { Half2Icon } from '@radix-ui/react-icons'
 
-function ThemePicker() {
+function ThemeToggle() {
   const theme = useTheme()
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as ActiveTheme
-    theme.setActive(value)
-  }
 
   const [isMounted, setIsMounted] = React.useState(false)
 
@@ -42,19 +39,39 @@ function ThemePicker() {
   if (!isMounted) return null
 
   return (
-    <div className="theme">
-      <select value={theme.active} onChange={handleChange}>
-        {theme.values.map((theme) => (
-          <option value={theme} onChange={console.log} key={theme}>
-            {theme}
-          </option>
-        ))}
-      </select>
-      {theme.active !== theme.resolved && (
-        <span className={'theme-resolved'}>({theme.resolved})</span>
-      )}
-    </div>
+    <Button onClick={theme.toggle}>
+      <Half2Icon
+        width={21}
+        height={21}
+        style={{ transform: 'rotate(45deg)' }}
+      />
+    </Button>
   )
 }
 
-export { ThemePicker }
+// TODO: extract styles to shared NavButton component? (both tray and theme buttons look the same)
+
+const Button = styled.button`
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+
+  transition-property: background-color, transform;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.05);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+`
+
+export { ThemeToggle }
