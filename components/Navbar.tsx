@@ -13,8 +13,6 @@ import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { NavGroup, NavGroupLink } from './NavGroup'
 import avatarImageSrc from 'public/images/avatar.png'
 
-// TODO: limit bar content width on big screens (aligned with content)
-
 const barHeight = 70
 const scrollThreshold = 20
 
@@ -169,6 +167,8 @@ const StickyPlaceholder = styled.div`
   left: 0;
   right: 0;
   height: ${barHeight}px;
+  margin-bottom: ${scrollThreshold}px;
+  z-index: 1;
 `
 
 const Wrapper = styled.div<{ isTrayOpen: boolean }>`
@@ -210,8 +210,11 @@ const Bar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-right: 16px;
-  margin-left: 16px;
+  padding-right: 16px;
+  padding-left: 16px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 700px;
   gap: 20px;
 `
 
