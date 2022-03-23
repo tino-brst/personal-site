@@ -1,4 +1,5 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import NextImage from 'next/image'
 
 type Props = {
@@ -9,10 +10,17 @@ type Props = {
 
 function Image(props: Props) {
   return (
-    <div className="image-wrapper">
-      <NextImage className="image" layout="responsive" {...props} />
-    </div>
+    <Wrapper>
+      <NextImage layout="responsive" {...props} />
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: -24px;
+  margin-right: -24px;
+`
 
 export { Image }
