@@ -194,7 +194,8 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
   inset: 0;
   background: hsla(0 0% 98% / 0.9);
   backdrop-filter: saturate(180%) blur(40px);
-  box-shadow: inset 0 -0.5px hsla(0 0% 0% / 0.1);
+  box-shadow: inset 0 -0.5px hsla(0 0% 0% / 0.1),
+    inset 0 0.5px hsla(0 0% 0% / 0.1);
 
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
@@ -214,7 +215,7 @@ const Bar = styled.div`
   padding-left: 16px;
   margin-right: auto;
   margin-left: auto;
-  max-width: 700px;
+  max-width: 768px;
   gap: 20px;
 `
 
