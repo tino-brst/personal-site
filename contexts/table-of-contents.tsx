@@ -114,6 +114,22 @@ function useTableOfContents() {
   return context
 }
 
+function useRegisterSectionHeading(): React.RefObject<HTMLHeadingElement> {
+  const ref = React.useRef<HTMLHeadingElement>(null)
+  const tableOfContents = useTableOfContents()
+
+  React.useEffect(() => {
+    if (!ref.current) return
+
+    const heading = ref.current
+    tableOfContents.registerSectionHeading(heading)
+
+    return () => tableOfContents.unregisterSectionHeading(heading)
+  }, [tableOfContents])
+
+  return ref
+}
+
 /**
  * An element is considered to go before another element, if its top border is
  * higher in the viewport.
@@ -174,4 +190,8 @@ function visit<T extends { children: Array<T> }>(
   visitRecursively(tree, onVisit, [])
 }
 
-export { TableOfContentsProvider, useTableOfContents }
+export {
+  TableOfContentsProvider,
+  useTableOfContents,
+  useRegisterSectionHeading,
+}
