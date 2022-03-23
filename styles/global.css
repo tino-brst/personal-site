@@ -44,10 +44,6 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: var(--color-accent);
-}
-
 .articles-list {
   margin-top: 40px;
   display: flex;
@@ -58,24 +54,6 @@ a {
 .articles-list a strong {
   font-weight: inherit;
   text-decoration: underline;
-}
-
-nav {
-  margin-bottom: 40px;
-}
-
-nav ul {
-  display: flex;
-  gap: 20px;
-}
-
-.theme {
-  display: flex;
-  gap: 5px;
-}
-
-.theme-resolved {
-  opacity: 0.5;
 }
 
 div.line.highlight {
@@ -110,15 +88,6 @@ div.line.highlight {
 .filters__tags {
   display: flex;
   gap: 8px;
-}
-
-.header-image-wrapper {
-  position: relative;
-  aspect-ratio: 2 / 1;
-}
-
-.header-image {
-  object-fit: cover;
 }
 
 .thumbnail-image-wrapper {
