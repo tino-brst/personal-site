@@ -139,8 +139,7 @@ const components: ComponentMap = {
   h3: Heading3,
   p: Paragraph,
   pre: CodeBlock,
-  // TODO: open PR with props type as generic?
-  img: (props: any) => Image({ ...props }),
+  img: Image,
 }
 
 function editOnGitHubURL(
@@ -249,13 +248,31 @@ const Tag = styled.a`
 `
 
 const HeaderImageWrapper = styled.div`
+  --border-radius: 10px;
   position: relative;
   aspect-ratio: 2 / 1;
-  background-color: gainsboro;
-  width: calc(100% + 24px * 2);
   margin-left: -24px;
   margin-right: -24px;
-  margin-top: 28px;
+  margin-top: 32px;
+  margin-bottom: 28px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 -0.5px 0 hsla(0 0% 0% / 0.1),
+      inset 0 0.5px 0 hsla(0 0% 0% / 0.1);
+  }
+
+  @media (min-width: 768px) {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+
+    &::after {
+      border-radius: var(--border-radius);
+      box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.1);
+    }
+  }
 `
 
 export default ArticlePage
