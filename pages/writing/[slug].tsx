@@ -1,4 +1,5 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
@@ -10,12 +11,13 @@ import { Section } from '@lib/mdast-util-toc'
 import { Layout } from '@components/Layout'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Image } from '@components/markdown/Image'
-import { HeaderImage } from '@components/HeaderImage'
 import { Paragraph } from '@components/markdown/Paragraph'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
 import Link from 'next/link'
+import NextImage from 'next/image'
 import { Heading2, Heading3 } from '@components/markdown/Heading'
+import { CalendarIcon, ClockIcon } from '@radix-ui/react-icons'
 
 type RelatedArticle = {
   title: string
@@ -47,69 +49,86 @@ function ArticlePage(props: Props) {
   return (
     <Layout>
       <TableOfContentsProvider tableOfContents={props.tableOfContents}>
-        {props.headerImageSrc && <HeaderImage src={props.headerImageSrc} />}
-        <h5>{formatDate(props.publishedOn)}</h5>
-        <h1>{props.title}</h1>
-        <h4>
-          {props.readingTime} • {viewCount.isLoading ? '...' : viewCount.value}{' '}
-          views
-          {props.tags.length ? (
-            <div className="tags">
-              {props.tags.map((tag) => (
-                <Link key={tag} href={`/writing?tags=${tag}`}>
-                  <a>#{tag}</a>
-                </Link>
-              ))}
-            </div>
-          ) : null}
-        </h4>
-        <button
-          disabled={likeCount.isLoading}
-          onClick={likeCount.toggleUserLike}
-        >
-          👍{' '}
-          {`${likeCount.value ?? '...'} ${likeCount.hasUserLike ? '✔️' : ''}`}
-        </button>
-        <Content components={components} />
-        <br />
-        <a
-          href={editOnGitHubURL(
-            'tino-brst',
-            'personal-site',
-            `articles/${props.slug}.mdx`
-          )}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Edit on GitHub
-        </a>
-        <br />
-        <br />
-        <div className="related-articles">
-          {props.newerArticle && (
-            <Link href={props.newerArticle.url}>
-              <a>
-                <p>
-                  Newer: <b>{props.newerArticle.title}</b>
-                </p>
-              </a>
-            </Link>
-          )}
-          {props.olderArticle && (
-            <Link href={props.olderArticle.url}>
-              <a>
-                <p>
-                  Older: <b>{props.olderArticle.title}</b>
-                </p>
-              </a>
-            </Link>
-          )}
-        </div>
-        <div className="floating-stuff">
-          <BackToTopButton>Back to top 🔼</BackToTopButton>
-          {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
-          <TableOfContentsList />
-        </div>
+        <Wrapper>
+          <Header>
+            <Details>
+              <DetailsItem>
+                <CalendarIcon width={12} height={12} />
+                <span>{formatDate(props.publishedOn)}</span>
+              </DetailsItem>
+              <DetailsItem>
+                <ClockIcon width={12} height={12} />
+                <span>{props.readingTime}</span>
+              </DetailsItem>
+            </Details>
+            <Title>{props.title}</Title>
+            {props.tags.length ? (
+              <Tags>
+                {props.tags.map((tag) => (
+                  <Link key={tag} href={`/writing?tags=${tag}`} passHref={true}>
+                    <Tag># {tag}</Tag>
+                  </Link>
+                ))}
+              </Tags>
+            ) : null}
+            <HeaderImageWrapper>
+              {props.headerImageSrc && (
+                <NextImage
+                  src={props.headerImageSrc}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              )}
+            </HeaderImageWrapper>
+          </Header>
+          {/* <button
+            disabled={likeCount.isLoading}
+            onClick={likeCount.toggleUserLike}
+          >
+            👍{' '}
+            {`${likeCount.value ?? '...'} ${likeCount.hasUserLike ? '✔️' : ''}`}
+          </button> */}
+          <Content components={components} />
+          <br />
+          <a
+            href={editOnGitHubURL(
+              'tino-brst',
+              'personal-site',
+              `articles/${props.slug}.mdx`
+            )}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Edit on GitHub
+          </a>
+          <br />
+          <br />
+          <div className="related-articles">
+            {props.newerArticle && (
+              <Link href={props.newerArticle.url}>
+                <a>
+                  <p>
+                    Newer: <b>{props.newerArticle.title}</b>
+                  </p>
+                </a>
+              </Link>
+            )}
+            {props.olderArticle && (
+              <Link href={props.olderArticle.url}>
+                <a>
+                  <p>
+                    Older: <b>{props.olderArticle.title}</b>
+                  </p>
+                </a>
+              </Link>
+            )}
+          </div>
+          <div className="floating-stuff">
+            {/* <BackToTopButton>Back to top 🔼</BackToTopButton> */}
+            {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
+            {/* <TableOfContentsList /> */}
+          </div>
+        </Wrapper>
       </TableOfContentsProvider>
     </Layout>
   )
@@ -178,6 +197,66 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
     },
   }
 }
+
+const Wrapper = styled.div`
+  padding-right: 24px;
+  padding-left: 24px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 768px;
+  isolation: isolate;
+`
+
+const Header = styled.div`
+  margin-top: 40px;
+`
+
+const Details = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(0 0% 60%);
+`
+
+const DetailsItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
+const Title = styled.h1`
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-top: 18px;
+  margin-bottom: 20px;
+`
+
+// TODO: hover & active states, overflowX (snap?)
+const Tags = styled.div`
+  display: flex;
+  gap: 8px;
+`
+
+const Tag = styled.a`
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(0 0% 50%);
+  background-color: hsla(0 0% 0% / 0.05);
+  border-radius: 6px;
+  padding: 4px 8px;
+`
+
+const HeaderImageWrapper = styled.div`
+  position: relative;
+  aspect-ratio: 2 / 1;
+  background-color: gainsboro;
+  width: calc(100% + 24px * 2);
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-top: 28px;
+`
 
 export default ArticlePage
 export { getStaticPaths, getStaticProps }
