@@ -13,8 +13,8 @@ import { Image } from '@components/markdown/Image'
 import { HeaderImage } from '@components/HeaderImage'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
-import { TableOfContentsHeading } from '@components/TableOfContentsHeading'
 import Link from 'next/link'
+import { Heading2, Heading3 } from '@components/markdown/Heading'
 
 type RelatedArticle = {
   title: string
@@ -115,9 +115,8 @@ function ArticlePage(props: Props) {
 }
 
 const components: ComponentMap = {
-  h2: (props: any) => TableOfContentsHeading({ ...props, level: 2 }),
-  h3: (props: any) => TableOfContentsHeading({ ...props, level: 3 }),
-  h4: (props: any) => TableOfContentsHeading({ ...props, level: 4 }),
+  h2: Heading2,
+  h3: Heading3,
   pre: CodeBlock,
   // TODO: open PR with props type as generic?
   img: (props: any) => Image({ ...props }),
