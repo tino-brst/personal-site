@@ -11,6 +11,7 @@ import { Layout } from '@components/Layout'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Image } from '@components/markdown/Image'
 import { HeaderImage } from '@components/HeaderImage'
+import { Paragraph } from '@components/markdown/Paragraph'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
 import Link from 'next/link'
@@ -117,6 +118,7 @@ function ArticlePage(props: Props) {
 const components: ComponentMap = {
   h2: Heading2,
   h3: Heading3,
+  p: Paragraph,
   pre: CodeBlock,
   // TODO: open PR with props type as generic?
   img: (props: any) => Image({ ...props }),
