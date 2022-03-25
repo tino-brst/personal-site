@@ -126,6 +126,7 @@ function NavBar() {
           style={{ [CSSVar.trayHeight]: `${traySize.height}px` }}
         >
           <Tray ref={trayRef}>
+            {/* TODO: cascade animation for each item? */}
             <TrayLink to="/" exact>
               Home
             </TrayLink>
@@ -269,10 +270,12 @@ const TrayButton = styled.button`
 const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
   overflow: hidden;
   max-height: ${(p) => (p.isTrayOpen ? `var(${CSSVar.trayHeight})` : 0)};
+  opacity: ${(p) => (p.isTrayOpen ? 1 : 0)};
+  transform: ${(p) => (p.isTrayOpen ? null : 'translateY(-8px) scale(0.8)')};
 
-  transition-property: max-height;
+  transition-property: max-height, transform, opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.25s;
+  transition-duration: 0.25s, 0.25s, 0.15s;
 
   @media (min-width: 640px) {
     max-height: 0;
