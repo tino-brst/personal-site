@@ -12,6 +12,7 @@ import { Layout } from '@components/Layout'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Image } from '@components/markdown/Image'
 import { Paragraph } from '@components/markdown/Paragraph'
+import { Link } from '@components/markdown/Link'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
 import NextLink from 'next/link'
@@ -144,6 +145,7 @@ const components: ComponentMap = {
   p: Paragraph,
   pre: CodeBlock,
   img: Image,
+  a: Link,
 }
 
 function editOnGitHubURL(
