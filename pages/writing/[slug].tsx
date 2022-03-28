@@ -12,6 +12,7 @@ import { Layout } from '@components/Layout'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Image } from '@components/markdown/Image'
 import { Paragraph } from '@components/markdown/Paragraph'
+import { Code } from '@components/markdown/Code'
 import { Link } from '@components/markdown/Link'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
@@ -144,6 +145,7 @@ const components: ComponentMap = {
   h3: Heading3,
   p: Paragraph,
   pre: CodeBlock,
+  code: Code,
   img: Image,
   a: Link,
 }
