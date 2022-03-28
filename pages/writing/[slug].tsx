@@ -14,7 +14,7 @@ import { Image } from '@components/markdown/Image'
 import { Paragraph } from '@components/markdown/Paragraph'
 import { TableOfContentsList } from '@components/TableOfContentsList'
 import { BackToTopButton } from '@components/BackToTopButton'
-import Link from 'next/link'
+import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { Heading2, Heading3 } from '@components/markdown/Heading'
 import { CalendarIcon, ClockIcon } from '@radix-ui/react-icons'
@@ -65,9 +65,13 @@ function ArticlePage(props: Props) {
             {props.tags.length ? (
               <Tags>
                 {props.tags.map((tag) => (
-                  <Link key={tag} href={`/writing?tags=${tag}`} passHref={true}>
+                  <NextLink
+                    key={tag}
+                    href={`/writing?tags=${tag}`}
+                    passHref={true}
+                  >
                     <Tag># {tag}</Tag>
-                  </Link>
+                  </NextLink>
                 ))}
               </Tags>
             ) : null}
@@ -105,22 +109,22 @@ function ArticlePage(props: Props) {
           <br />
           <div className="related-articles">
             {props.newerArticle && (
-              <Link href={props.newerArticle.url}>
+              <NextLink href={props.newerArticle.url}>
                 <a>
                   <p>
                     Newer: <b>{props.newerArticle.title}</b>
                   </p>
                 </a>
-              </Link>
+              </NextLink>
             )}
             {props.olderArticle && (
-              <Link href={props.olderArticle.url}>
+              <NextLink href={props.olderArticle.url}>
                 <a>
                   <p>
                     Older: <b>{props.olderArticle.title}</b>
                   </p>
                 </a>
-              </Link>
+              </NextLink>
             )}
           </div>
           <div className="floating-stuff">
