@@ -57,10 +57,6 @@ body {
   text-decoration: underline;
 }
 
-div.line.highlight {
-  background: var(--color-border);
-}
-
 .floating-stuff {
   display: flex;
   flex-direction: column;
