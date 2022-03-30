@@ -1,19 +1,26 @@
 import * as React from 'react'
 import { useWindowEventListener } from './useWindowEventListener'
 
-function useOnInteractionOutside<T extends HTMLElement>(
-  ref: React.RefObject<T>,
+function useOnInteractionOutside(
+  refs: React.RefObject<HTMLElement> | Array<React.RefObject<HTMLElement>>,
   fn: () => void,
   isEnabled = true
 ) {
   const pointerDownHandler = React.useCallback(
     (event: MouseEvent) => {
-      const element = ref.current
+      const elements = (Array.isArray(refs) ? refs : [refs]).map(
+        (ref) => ref.current
+      )
 
-      if (!element) return
-      if (isInteractionOutside(element, event)) fn()
+      if (
+        elements.every(
+          (element) => element && isInteractionOutside(element, event)
+        )
+      ) {
+        fn()
+      }
     },
-    [ref, fn]
+    [refs, fn]
   )
 
   useWindowEventListener('pointerdown', pointerDownHandler, isEnabled)
