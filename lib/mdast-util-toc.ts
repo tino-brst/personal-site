@@ -1,5 +1,5 @@
 import * as Mdast from 'mdast'
-import { is } from 'unist-util-is'
+import * as Unist from 'unist-util-is'
 import { toString } from 'mdast-util-to-string'
 import GitHubSlugger from 'github-slugger'
 
@@ -8,7 +8,7 @@ type Node = {
   children: Array<Section>
 }
 
-type PlaceholderRoot = Node & {
+type Root = Node & {
   level: 0
 }
 
@@ -34,30 +34,33 @@ type Section = Node & {
  * Yields:
  *
  * ```ts
- * [
- *   {
- *     title: "Foo",
- *     id: "foo",
- *     level: 1,
- *     children: [
- *       {
- *         title: "Bar",
- *         id: "bar",
- *         level: 2,
- *         children: []
- *       }
- *     ]
- *   },
- *   {
- *     title: "Foobar",
- *     id: "foobar",
- *     level: 1,
- *     children: []
- *   }
- * ]
+ * {
+ *   level: 0,
+ *   children: [
+ *     {
+ *       title: "Foo",
+ *       id: "foo",
+ *       level: 1,
+ *       children: [
+ *         {
+ *           title: "Bar",
+ *           id: "bar",
+ *           level: 2,
+ *           children: []
+ *         }
+ *       ]
+ *     },
+ *     {
+ *       title: "Foobar",
+ *       id: "foobar",
+ *       level: 1,
+ *       children: []
+ *     }
+ *   ]
+ * }
  * ```
  */
-function getTableOfContents(document: Mdast.Root): Array<Section> {
+function getTableOfContents(document: Mdast.Root): Root {
   const slugger = new GitHubSlugger()
 
   // Get top level document heading nodes
@@ -74,8 +77,8 @@ function getTableOfContents(document: Mdast.Root): Array<Section> {
 
   // Build table of contents tree
   // TODO: but why? (explain algorithm)
-  const root: PlaceholderRoot = { level: 0, children: [] }
-  const stack = new Stack<PlaceholderRoot | Section>()
+  const root: Root = { level: 0, children: [] }
+  const stack = new Stack<Root | Section>()
 
   stack.push(root)
 
@@ -93,8 +96,7 @@ function getTableOfContents(document: Mdast.Root): Array<Section> {
     stack.push(section)
   }
 
-  // Discard the placeholder root and return only its children
-  return root.children
+  return root
 }
 
 /**
@@ -104,11 +106,11 @@ function getTableOfContents(document: Mdast.Root): Array<Section> {
  * `array.filter/find/etc(((content) => isHeading(content))`.
  */
 function isHeading(content: Mdast.Content): content is Mdast.Heading {
-  return is<Mdast.Heading>(content, 'heading')
+  return Unist.is<Mdast.Heading>(content, 'heading')
 }
 
 /**
- * Basic implementation of the Stack data structure.
+ * Basic implementation of the stack data structure.
  */
 class Stack<T> {
   private array: Array<T>
@@ -130,5 +132,38 @@ class Stack<T> {
   }
 }
 
-export { getTableOfContents }
-export type { Section }
+/**
+ * Visit all nodes in a tree, invoking the passed callback function on each,
+ * with the visited node and its ancestors as arguments.
+ */
+function visit(
+  node: Node,
+  onVisit: (node: Node, ancestors: Array<Node>) => void,
+  ancestors: Array<Node> = []
+) {
+  onVisit(node, ancestors)
+
+  for (const child of node.children) {
+    visit(child, onVisit, [node, ...ancestors])
+  }
+}
+
+/**
+ * Flattens a tree doing a depth-first traversal.
+ */
+function flatten(node: Node): Array<Node> {
+  const result = [node]
+
+  for (const child of node.children) {
+    result.push(...flatten(child))
+  }
+
+  return result
+}
+
+function isSection(node: Node): node is Section {
+  return node.level !== 0
+}
+
+export { getTableOfContents, visit, flatten, isSection }
+export type { Node, Root, Section }

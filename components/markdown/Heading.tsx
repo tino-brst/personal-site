@@ -1,17 +1,30 @@
 import * as React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, StyledComponent } from 'styled-components'
 import { useRegisterSectionHeading } from 'contexts/table-of-contents'
 import { Link2Icon } from '@radix-ui/react-icons'
 
 type Props = {
-  level: 2 | 3
+  level: 2 | 3 | 4
   id: string
   children: React.ReactNode
 }
 
 function Heading(props: Props) {
   const ref = useRegisterSectionHeading()
-  const Component = props.level === 2 ? H2 : H3
+
+  let Component: StyledComponent<'h2' | 'h3' | 'h4', any, {}, never>
+
+  switch (props.level) {
+    case 2:
+      Component = H2
+      break
+    case 3:
+      Component = H3
+      break
+    case 4:
+      Component = H4
+      break
+  }
 
   return (
     <Component ref={ref} id={props.id}>
@@ -29,6 +42,10 @@ function Heading2(props: Omit<Props, 'level'>) {
 
 function Heading3(props: Omit<Props, 'level'>) {
   return <Heading {...props} level={3} />
+}
+
+function Heading4(props: Omit<Props, 'level'>) {
+  return <Heading {...props} level={4} />
 }
 
 const Icon = styled(Link2Icon)`
@@ -69,4 +86,10 @@ const H3 = styled.h3`
   margin-top: 32px;
 `
 
-export { Heading2, Heading3 }
+const H4 = styled.h4`
+  ${sharedStyles}
+  font-size: 1.2rem;
+  margin-top: 28px;
+`
+
+export { Heading2, Heading3, Heading4 }
