@@ -38,7 +38,7 @@ const Wrapper = styled.div`
 
     &::after {
       border-radius: var(--border-radius);
-      box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.1);
+      box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
     }
   }
 `

@@ -14,7 +14,7 @@ import { NavGroup, NavGroupLink } from './NavGroup'
 import avatarImageSrc from 'public/images/avatar.png'
 
 const barHeight = 70
-const scrollThreshold = 20
+const scrollThreshold = 60
 
 const CSSVar = {
   scrollBasedOpacity: '--scroll-based-opacity',
@@ -40,14 +40,14 @@ function NavBar() {
     )
   }, [])
 
-  const setScrollBasedOpacity = React.useCallback(() => {
+  const updateScrollBasedOpacity = React.useCallback(() => {
     backgroundRef.current?.style.setProperty(
       CSSVar.scrollBasedOpacity,
       `${map(window.scrollY, [0, scrollThreshold], [0, 1])}`
     )
   }, [])
 
-  useWindowEventListener('scroll', setScrollBasedOpacity)
+  useWindowEventListener('scroll', updateScrollBasedOpacity)
 
   // Handle switching the background's opacity changes from instant (while
   // scrolling) to animated (when opening/closing the tray). Accomplished via
@@ -181,7 +181,7 @@ const Wrapper = styled.div<{ isTrayOpen: boolean }>`
 
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.25s;
+  transition-duration: 0.2s;
 
   @media (min-width: 640px) {
     box-shadow: none;
@@ -193,14 +193,14 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: hsla(0 0% 98% / 0.9);
+  background: hsla(0 0% 100% / 0.9);
   backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: inset 0 -1px hsla(0 0% 0% / 0.05),
-    inset 0 1px hsla(0 0% 0% / 0.05);
+  box-shadow: inset 0 -1px hsla(0 0% 0% / 0.06),
+    inset 0 1px hsla(0 0% 0% / 0.06);
 
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.25s;
+  transition-duration: 0.2s;
 
   @media (min-width: 640px) {
     opacity: var(${CSSVar.scrollBasedOpacity});
@@ -247,7 +247,7 @@ const TrayButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 8px;
 
   transition-property: background-color, transform;
   transition-duration: 0.1s;
@@ -275,7 +275,7 @@ const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
 
   transition-property: max-height, transform, opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.25s, 0.25s, 0.15s;
+  transition-duration: 0.2s, 0.2s, 0.15s;
 
   @media (min-width: 640px) {
     max-height: 0;
@@ -295,7 +295,7 @@ const Link = styled.a<{ isActive: boolean }>`
   align-items: center;
   font-size: 1.2rem;
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 8px;
   padding-left: 20px;
   padding-right: 20px;
   color: ${(p) => (p.isActive ? 'black' : 'hsla(0 0% 0% / 0.4)')};

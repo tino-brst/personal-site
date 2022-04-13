@@ -58,7 +58,7 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 8px;
 
   transition-property: background-color, transform;
   transition-duration: 0.1s;

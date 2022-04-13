@@ -1,17 +1,17 @@
-import { Section } from '@lib/mdast-util-toc'
+import { Root, Section, visit, isSection, flatten } from '@lib/mdast-util-toc'
 import * as React from 'react'
 
 type ContextValue = {
-  value: Array<Section>
+  items: Array<Section>
   isEmpty: boolean
-  activeSectionId: string | undefined
+  activeSectionId: string
   activeSectionAncestorIds: Array<string>
   registerSectionHeading: (heading: HTMLHeadingElement) => void
   unregisterSectionHeading: (heading: HTMLHeadingElement) => void
 }
 
 type Props = {
-  tableOfContents: Array<Section>
+  tableOfContents: Root
   children: React.ReactNode
 }
 
@@ -24,17 +24,22 @@ function TableOfContentsProvider(props: Props) {
     React.useState<Array<string>>([])
   const [headings, setHeadings] = React.useState<Array<HTMLElement>>([])
 
+  const items = React.useMemo(
+    () => flatten(props.tableOfContents).filter(isSection),
+    [props.tableOfContents]
+  )
+
   const sectionAncestorIdsMap = React.useMemo(() => {
     const map = new Map<string, Array<string>>()
 
-    for (const section of props.tableOfContents) {
-      visit(section, (section, ancestors) => {
+    visit(props.tableOfContents, (node, ancestors) => {
+      if (isSection(node)) {
         map.set(
-          section.id,
-          ancestors.map(({ id }) => id)
+          node.id,
+          ancestors.filter(isSection).map(({ id }) => id)
         )
-      })
-    }
+      }
+    })
 
     return map
   }, [props.tableOfContents])
@@ -89,14 +94,19 @@ function TableOfContentsProvider(props: Props) {
 
   const value = React.useMemo<ContextValue>(
     () => ({
-      value: props.tableOfContents,
-      isEmpty: props.tableOfContents.length === 0,
+      items,
+      isEmpty: props.tableOfContents.children.length === 0,
       activeSectionId,
       activeSectionAncestorIds,
       registerSectionHeading,
       unregisterSectionHeading,
     }),
-    [props.tableOfContents, activeSectionId, activeSectionAncestorIds]
+    [
+      items,
+      props.tableOfContents.children.length,
+      activeSectionId,
+      activeSectionAncestorIds,
+    ]
   )
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>
@@ -166,28 +176,6 @@ function findRight<T>(
  */
 function isAtOrPastWindowTop(element: HTMLElement) {
   return element.offsetTop <= Math.ceil(window.scrollY)
-}
-
-/**
- * Visits all nodes in a tree, invoking the passed callback function on each,
- * with the visited node and its ancestors as arguments.
- */
-function visit<T extends { children: Array<T> }>(
-  tree: T,
-  onVisit: (node: T, ancestors: Array<T>) => void
-) {
-  const visitRecursively = (
-    node: T,
-    onVisit: (node: T, ancestors: Array<T>) => void,
-    ancestors: Array<T> = []
-  ) => {
-    onVisit(node, ancestors)
-    for (const child of node.children) {
-      visitRecursively(child, onVisit, [node, ...ancestors])
-    }
-  }
-
-  visitRecursively(tree, onVisit, [])
 }
 
 export {

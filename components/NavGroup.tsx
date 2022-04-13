@@ -106,7 +106,7 @@ const Highlight = styled.div`
   height: 100%;
   z-index: -1;
   opacity: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: hsla(0 0% 0% / 0.05);
 
   transition-duration: 0.1s;
