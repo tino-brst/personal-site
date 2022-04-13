@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import clsx from 'clsx'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
@@ -72,6 +72,10 @@ function ArticlePage(props: Props) {
 
   const closeTableOfContents = React.useCallback(() => {
     setIsTableOfContentsOpen(false)
+  }, [])
+
+  const toggleTableOfContents = React.useCallback(() => {
+    setIsTableOfContentsOpen((value) => !value)
   }, [])
 
   useOnInteractionOutside(
@@ -196,17 +200,21 @@ function ArticlePage(props: Props) {
         </Wrapper>
         <FloatingStuff>
           {/* TODO: add tooltips "Open Table Of Contents", "Back to Top", etc */}
-          <ButtonGroup isExpanded={showBackToTop}>
-            <BackToTopButton onClick={backToTop} isVisible={showBackToTop}>
-              <ChevronUpIcon width={26} height={26} />
-            </BackToTopButton>
-            <ButtonGroupDivider isVisible={showBackToTop} />
-            <TableOfContentsButton
-              ref={tableOfContentsButtonRef}
-              onClick={() => setIsTableOfContentsOpen((value) => !value)}
-            >
-              <ListBulletIcon width={26} height={26} />
-            </TableOfContentsButton>
+          <ButtonGroup className={clsx({ expanded: showBackToTop })}>
+            <ButtonBackground>
+              <BackToTopButton onClick={backToTop}>
+                <BackToTopIcon width={26} height={26} />
+              </BackToTopButton>
+            </ButtonBackground>
+            <ButtonGroupDivider />
+            <ButtonBackground>
+              <TableOfContentsButton
+                ref={tableOfContentsButtonRef}
+                onClick={toggleTableOfContents}
+              >
+                <TableOfContentsIcon width={26} height={26} />
+              </TableOfContentsButton>
+            </ButtonBackground>
           </ButtonGroup>
           {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
           <TableOfContentsWrapper
@@ -476,10 +484,10 @@ const FloatingStuff = styled.div`
   }
 `
 
-// TODO: switch to classes instead of props
-const ButtonGroup = styled.div<{ isExpanded: boolean }>`
-  --control-width: 46px;
+const ButtonGroup = styled.div`
+  --button-width: 46px;
   --divider-width: 1px;
+
   pointer-events: auto;
   z-index: 1;
   overflow: hidden;
@@ -494,51 +502,92 @@ const ButtonGroup = styled.div<{ isExpanded: boolean }>`
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
     0px 0px 0px 0.5px rgba(0, 0, 0, 0.05),
     inset 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05);
-  max-width: ${(p) =>
-    p.isExpanded
-      ? 'calc(var(--control-width) * 2 + var(--divider-width))'
-      : 'var(--control-width)'};
+  max-width: var(--button-width);
 
   transition-property: max-width;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
+
+  &.expanded {
+    max-width: calc(var(--button-width) * 2 + var(--divider-width));
+  }
 `
 
-const ButtonGroupDivider = styled.div<{ isVisible: boolean }>`
+const ButtonGroupDivider = styled.div`
   flex: 0 0 var(--divider-width);
   height: 100%;
   background-color: hsla(0 0% 0% / 0.1);
-  opacity: ${(p) => (p.isVisible ? 1 : 0)};
+  opacity: 0;
 
   transition-property: opacity;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
+
+  ${ButtonGroup}.expanded & {
+    opacity: 1;
+  }
 `
 
-const BackToTopButton = styled.button<{ isVisible: boolean }>`
+const ButtonBackground = styled.div`
   line-height: 0;
   flex-shrink: 0;
-  width: var(--control-width);
+  width: var(--button-width);
+  height: 100%;
+
+  transition-property: background-color;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+
+  &:hover {
+    background-color: hsla(0 0% 0% / 0.03);
+  }
+
+  &:active {
+    background-color: hsla(0 0% 0% / 0.05);
+  }
+`
+
+const Button = styled.button`
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: ${(p) => (p.isVisible ? 1 : 0)};
-  transform: ${(p) => (p.isVisible ? 'scale(1)' : 'scale(0.5)')};
+  cursor: pointer;
+`
+
+const TableOfContentsButton = Button
+
+const BackToTopButton = styled(Button)`
+  opacity: 0;
+  transform: scale(0.5);
 
   transition-property: opacity, transform;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
+
+  ${ButtonGroup}.expanded & {
+    opacity: 1;
+    transform: none;
+  }
 `
 
-const TableOfContentsButton = styled.button`
-  line-height: 0;
-  flex-shrink: 0;
-  width: var(--control-width);
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const sharedIconsStyles = css`
+  transition-property: transform;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+
+  ${Button}:active & {
+    transform: scale(0.94);
+  }
+`
+
+const TableOfContentsIcon = styled(ListBulletIcon)`
+  ${sharedIconsStyles}
+`
+
+const BackToTopIcon = styled(ChevronUpIcon)`
+  ${sharedIconsStyles}
 `
 
 // TODO: iOS like expanding animation? The menu expands vertically, not only scales
