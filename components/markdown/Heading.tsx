@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled, { css, StyledComponent } from 'styled-components'
-import { useRegisterSectionHeading } from 'contexts/table-of-contents'
+import { useTableOfContents } from 'contexts/table-of-contents'
 import { Link2Icon } from '@radix-ui/react-icons'
 
 type Props = {
@@ -10,7 +10,17 @@ type Props = {
 }
 
 function Heading(props: Props) {
-  const ref = useRegisterSectionHeading()
+  const ref = React.useRef<HTMLHeadingElement>(null)
+  const tableOfContents = useTableOfContents()
+
+  React.useEffect(() => {
+    if (!ref.current) return
+
+    const heading = ref.current
+    tableOfContents.registerSectionHeading(heading)
+
+    return () => tableOfContents.unregisterSectionHeading(heading)
+  }, [tableOfContents])
 
   let Component: StyledComponent<'h2' | 'h3' | 'h4', any, {}, never>
 
@@ -54,8 +64,10 @@ const Icon = styled(Link2Icon)`
 `
 
 const sharedStyles = css`
-  margin-bottom: 20px;
   font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: var(--margin-top);
+  scroll-margin-top: var(--margin-top);
 
   @media (hover: hover) {
     & ${Icon} {
@@ -76,20 +88,26 @@ const sharedStyles = css`
 
 const H2 = styled.h2`
   ${sharedStyles}
+
+  --margin-top: 40px;
+
   font-size: 1.8rem;
-  margin-top: 40px;
 `
 
 const H3 = styled.h3`
   ${sharedStyles}
+
+  --margin-top: 32px;
+
   font-size: 1.4rem;
-  margin-top: 32px;
 `
 
 const H4 = styled.h4`
   ${sharedStyles}
+
+  --margin-top: 28px;
+
   font-size: 1.2rem;
-  margin-top: 28px;
 `
 
 export { Heading2, Heading3, Heading4 }

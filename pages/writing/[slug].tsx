@@ -288,7 +288,6 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
 }
 
 const Wrapper = styled.div`
-  position: relative;
   isolation: isolate;
   display: flex;
   align-items: flex-start;
