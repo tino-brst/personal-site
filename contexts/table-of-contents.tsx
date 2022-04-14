@@ -1,5 +1,7 @@
-import { Root, Section, visit, isSection, flatten } from '@lib/mdast-util-toc'
 import * as React from 'react'
+import { Root, Section, visit, isSection, flatten } from '@lib/mdast-util-toc'
+
+const barHeight = 70
 
 type ContextValue = {
   items: Array<Section>
@@ -52,14 +54,14 @@ function TableOfContentsProvider(props: Props) {
   React.useEffect(() => {
     if (!headingsSortedByOrderOfAppearance.length) return
 
-    const handleWindowScroll = () => {
+    function handleWindowScroll() {
       const firstHeading = headingsSortedByOrderOfAppearance[0]
 
       // From the bottom, find the first heading that is at or past the top of
       // the window.
       const firstHeadingAtOrPastTop = findRight(
         headingsSortedByOrderOfAppearance,
-        isAtOrPastWindowTop
+        (heading) => isAtOrPastWindowTop(heading, barHeight)
       )
 
       // If there is no heading at/past the top of the window, then the first
@@ -73,8 +75,9 @@ function TableOfContentsProvider(props: Props) {
     }
 
     // Make a 'manual' first call to compensate for the 'scroll' event not being
-    // triggered on load, which could cause to maybe be mid-page (e.g. via
-    // opening a ...#some-section link) and have the wrong section as active.
+    // triggered on subscription, which could lead to a page scrolled
+    // mid-article (e.g. via opening an #article-section link) and have the
+    // wrong section as active.
     handleWindowScroll()
 
     // TODO: handle margins (for nav-bars, etc)
@@ -124,22 +127,6 @@ function useTableOfContents() {
   return context
 }
 
-function useRegisterSectionHeading(): React.RefObject<HTMLHeadingElement> {
-  const ref = React.useRef<HTMLHeadingElement>(null)
-  const tableOfContents = useTableOfContents()
-
-  React.useEffect(() => {
-    if (!ref.current) return
-
-    const heading = ref.current
-    tableOfContents.registerSectionHeading(heading)
-
-    return () => tableOfContents.unregisterSectionHeading(heading)
-  }, [tableOfContents])
-
-  return ref
-}
-
 /**
  * An element is considered to go before another element, if its top border is
  * higher in the viewport.
@@ -166,20 +153,21 @@ function findRight<T>(
  * Checks if an element's top border is at/past the viewport's top border or
  * not.
  *
- * An element is considered _at the window top_, if its top (`offsetTop`)
- * matches the window vertical scroll (`window.scrollY`), and _past the top_ if
- * its top value is smaller than the window's vertical scroll. Some modern
- * browsers, when scrolling an element into view with a top at (for example) y =
- * 20, may scroll the window to a window.scrollY = 19.5, instead of
- * 20. To still consider that element as 'at the top' (offsetTop = scrollY), a
- * slight bias is added via `Math.ceil`.
+ * An element is considered _at the window top_, if its top matches the window
+ * vertical scroll, and _past the top_ if its top value is smaller than the
+ * window's vertical scroll. Some browsers, when scrolling an element into view
+ * with a top at (for example) `y = 20`, may scroll the window to a `y = 19.5`,
+ * instead of 20 (which is just below the threshold). To still consider that
+ * element as 'at the top', a slight bias is added, rounding the number up.
  */
-function isAtOrPastWindowTop(element: HTMLElement) {
-  return element.offsetTop <= Math.ceil(window.scrollY)
+function isAtOrPastWindowTop(element: HTMLElement, offset = 0) {
+  const elementStyle = window.getComputedStyle(element)
+  const elementMarginTop = elementStyle.marginTop
+    ? parseInt(elementStyle.marginTop)
+    : 0
+  const elementTop = element.offsetTop - elementMarginTop
+
+  return elementTop <= Math.ceil(window.scrollY) + offset
 }
 
-export {
-  TableOfContentsProvider,
-  useTableOfContents,
-  useRegisterSectionHeading,
-}
+export { TableOfContentsProvider, useTableOfContents }

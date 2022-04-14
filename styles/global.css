@@ -33,6 +33,7 @@ h1 {
   color-scheme: light;
   background: var(--color-bg);
   color: var(--color-fg);
+  scroll-padding-top: calc(70px - 1px);
 }
 
 :root.dark {
@@ -44,11 +45,11 @@ body {
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
 
-    /* TODO: investigate */
-    /* -webkit-font-smoothing: antialiased; */
+  /* TODO: investigate */
+  /* -webkit-font-smoothing: antialiased; */
 
-    /* TODO: non-white background? */
-    /* background-color: hsl(0, 0%, 98%); */
+  /* TODO: non-white background? */
+  /* background-color: hsl(0, 0%, 98%); */
 }
 
 .articles-list {
