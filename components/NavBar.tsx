@@ -216,7 +216,7 @@ const Bar = styled.div`
   padding-left: 16px;
   margin-right: auto;
   margin-left: auto;
-  max-width: 768px;
+  max-width: calc(768px + 2 * 16px);
   gap: 20px;
 `
 
