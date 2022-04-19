@@ -73,12 +73,3 @@ body {
   display: flex;
   gap: 8px;
 }
-
-.thumbnail-image-wrapper {
-  position: relative;
-  aspect-ratio: 2 / 1;
-}
-
-.thumbnail-image {
-  object-fit: cover;
-}
