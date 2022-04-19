@@ -17,7 +17,7 @@ function Image(props: Props) {
 }
 
 const Wrapper = styled.div`
-  --border-radius: 10px;
+  --border-radius: 16px;
   position: relative;
   margin-left: -24px;
   margin-right: -24px;

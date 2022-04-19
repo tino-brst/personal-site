@@ -436,7 +436,7 @@ const TagIcon = styled.span`
 `
 
 const HeaderImageWrapper = styled.div`
-  --border-radius: 10px;
+  --border-radius: 16px;
   position: relative;
   aspect-ratio: 2 / 1;
   margin-left: -24px;
