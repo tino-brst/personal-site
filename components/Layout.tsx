@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { NavBar } from './NavBar'
 
 type Props = {
@@ -9,8 +10,13 @@ function Layout(props: Props) {
     <>
       <NavBar />
       {props.children}
+      <Footer />
     </>
   )
 }
+
+const Footer = styled.footer`
+  height: 300px;
+`
 
 export { Layout }
