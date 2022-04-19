@@ -1,13 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import Link from 'next/link'
+import NextLink from 'next/link'
+import NextImage from 'next/image'
 import { GetStaticProps } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import fuzzy from 'fuzzysort'
-import { ThumbnailImage } from '@components/ThumbnailImage'
 
 type Props = {
   articles: Array<{
@@ -21,6 +21,12 @@ type Props = {
   }>
   tags: Array<string>
 }
+
+// TODO: Idea 💡 First, make color-thief work with a next image (access
+// underlying img element). Then try loading a tiny next image, and extract the
+// main colors from that tiny image, maybe even have the image base64?
+
+// TODO: remove unused color deps
 
 function WritingPage(props: Props) {
   const router = useRouter()
@@ -95,48 +101,32 @@ function WritingPage(props: Props) {
     })
   }
 
-  const article = articles[0]
-
   return (
     <Layout>
       <Wrapper>
         <Title>Writing</Title>
         <List>
-          <ListItem>
-            <ItemImage />
-            <ItemDescription>
-              Id commodo magna irure sint ea sunt occaecat sunt qui. Do esse
-              Lorem culpa mollit ad non incididunt ut ullamco cupidatat non
-              anim.
-            </ItemDescription>
-          </ListItem>
-          <ListItem>
-            <ItemImage />
-            <ItemDescription>
-              Laboris sit reprehenderit aliqua officia minim mollit deserunt
-              deserunt. Voluptate eu deserunt consectetur amet aliqua. Ex qui
-              anim sunt culpa nulla magna excepteur sit est aliqua esse cillum.
-              Ad qui ex sit incididunt sit commodo ex aute aliqua amet.
-              Voluptate irure voluptate ex ullamco ad consectetur adipisicing
-              velit ea.
-            </ItemDescription>
-          </ListItem>
-          <ListItem>
-            <ItemImage />
-            <ItemDescription>
-              Id commodo magna irure sint ea sunt occaecat sunt qui. Do esse
-              Lorem culpa mollit ad non incididunt ut ullamco cupidatat non
-              anim.
-            </ItemDescription>
-          </ListItem>
-          <ListItem>
-            <ItemImage />
-            <ItemDescription>
-              Id commodo magna irure sint ea sunt occaecat sunt qui. Do esse
-              Lorem culpa mollit ad non incididunt ut ullamco cupidatat non
-              anim.
-            </ItemDescription>
-          </ListItem>
+          {articles.map((article) => (
+            <ListItem key={article.slug}>
+              <NextLink href={article.url} passHref={true}>
+                <Link>
+                  <ItemImageWrapper>
+                    {article.thumbnailImageSrc && (
+                      <ItemImage
+                        src={article.thumbnailImageSrc}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    )}
+                  </ItemImageWrapper>
+                  <ItemDescription>
+                    <ItemTitle>{article.title}</ItemTitle>
+                    <ItemDate>{formatDate(article.publishedOn)}</ItemDate>
+                  </ItemDescription>
+                </Link>
+              </NextLink>
+            </ListItem>
+          ))}
         </List>
 
         {/* <div className="filters">
@@ -193,11 +183,13 @@ function WritingPage(props: Props) {
 }
 
 const Wrapper = styled.div`
+  --overflow: 24px;
+
   max-width: 768px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: var(--overflow);
+  padding-right: var(--overflow);
 `
 
 // TODO: extract to component shared across pages?
@@ -205,16 +197,21 @@ const Title = styled.h1`
   font-size: 2.2rem;
   font-weight: 600;
   margin-top: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `
 
 const List = styled.ol`
-  margin-left: -8px;
-  margin-right: -8px;
+  --gap: 20px;
+  --padding: 16px;
+
+  margin-left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% + 2 * var(--overflow));
+  max-width: calc(100vw - 2 * var(--padding));
 
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--gap);
 
   @media (min-width: 640px) {
     flex-direction: row;
@@ -223,35 +220,61 @@ const List = styled.ol`
 `
 
 const ListItem = styled.li`
-  flex: 0 1 calc(50% - 16px / 2);
-  padding: 8px;
-  background-color: hsla(40deg 100% 95% / 1);
-
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  flex: 0 1 calc(50% - var(--gap) / 2);
 
   @media (min-width: 640px) {
     &:first-child {
       flex-basis: 100%;
-      flex-direction: row;
     }
   }
 `
 
-const ItemImage = styled.div`
+const Link = styled.a`
+  isolation: isolate;
+  height: 100%;
+  padding: 8px;
+  background-color: hsla(0 0% 0% / 0.04);
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  @media (min-width: 640px) {
+    ${ListItem}:first-child & {
+      flex-direction: row;
+      gap: 6px;
+    }
+  }
+`
+
+const ItemImageWrapper = styled.div`
   aspect-ratio: 2 / 1;
-  background-color: hsla(240deg 100% 50% / 0.1);
+  position: relative;
+  border-radius: 11px 11px 4px 4px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
 
   @media (min-width: 640px) {
     ${ListItem}:first-child & {
       flex: 2 1 0;
+      border-radius: 11px 4px 4px 11px;
     }
   }
 `
 
+const ItemImage = styled(NextImage)`
+  z-index: -1;
+`
+
 const ItemDescription = styled.div`
   flex-grow: 1;
-  background-color: hsla(120deg 100% 50% / 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
 
   padding: 8px;
 
@@ -260,6 +283,19 @@ const ItemDescription = styled.div`
       flex: 1 1 0;
     }
   }
+`
+
+const ItemTitle = styled.h2`
+  font-weight: 550;
+  font-size: 22px;
+  letter-spacing: 0.01em;
+  color: hsla(0 0% 0% / 0.8);
+`
+
+const ItemDate = styled.time`
+  font-weight: 600;
+  font-size: 14px;
+  color: hsla(0 0% 0% / 0.4);
 `
 
 /**
