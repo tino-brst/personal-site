@@ -42,7 +42,7 @@ const Pre = styled.pre`
   }
 
   @media (min-width: 768px) {
-    border-radius: 10px;
+    border-radius: 16px;
   }
 `
 
