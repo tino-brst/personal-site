@@ -138,7 +138,7 @@ function ArticlePage(props: Props) {
               )}
               <HeaderImageWrapper>
                 {props.headerImageSrc && (
-                  <NextImage
+                  <HeaderImage
                     src={props.headerImageSrc}
                     layout="fill"
                     objectFit="cover"
@@ -332,9 +332,14 @@ const AsideSectionHeader = styled.header`
 `
 
 const Main = styled.main`
-  flex: 0 1 768px;
+  flex: 0 1 calc(768px + 2 * 16px);
   padding-right: 24px;
   padding-left: 24px;
+
+  @media (min-width: 640px) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
 `
 
 const Header = styled.header``
@@ -375,20 +380,21 @@ const Tags = styled.div`
   scroll-padding-left: 24px;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  overscroll-behavior: contain;
 
   &::after {
     /* Weird trick to get padding at the end/right of a scroll container (just
     like on the start/left, which works just fine without doing weird tricks)
     */
     content: '';
-    padding-left: 24px;
+    padding-left: 40px;
   }
 
   &::-webkit-scrollbar {
     display: none;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     margin: 0;
     padding: 0;
     max-width: 100%;
@@ -436,31 +442,24 @@ const TagIcon = styled.span`
 `
 
 const HeaderImageWrapper = styled.div`
-  --border-radius: 16px;
   position: relative;
   aspect-ratio: 2 / 1;
   margin-left: -24px;
   margin-right: -24px;
   margin-top: 32px;
   margin-bottom: 28px;
+  box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.1),
+    inset 0 1px 0 hsla(0 0% 0% / 0.1);
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.1),
-      inset 0 1px 0 hsla(0 0% 0% / 0.1);
-  }
-
-  @media (min-width: 768px) {
-    border-radius: var(--border-radius);
+  @media (min-width: 640px) {
+    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
     overflow: hidden;
-
-    &::after {
-      border-radius: var(--border-radius);
-      box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
-    }
+    border-radius: 16px;
   }
+`
+
+const HeaderImage = styled(NextImage)`
+  z-index: -1;
 `
 
 const FloatingStuff = styled.div`
@@ -589,7 +588,6 @@ const BackToTopIcon = styled(ChevronUpIcon)`
   ${sharedIconsStyles}
 `
 
-// TODO: iOS like expanding animation? The menu expands vertically, not only scales
 const TableOfContentsWrapper = styled.div`
   visibility: hidden;
   pointer-events: auto;
