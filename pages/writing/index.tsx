@@ -183,13 +183,16 @@ function WritingPage(props: Props) {
 }
 
 const Wrapper = styled.div`
-  --overflow: 24px;
-
-  max-width: 768px;
+  max-width: calc(768px + 2 * 16px);
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--overflow);
-  padding-right: var(--overflow);
+  padding-left: 24px;
+  padding-right: 24px;
+
+  @media (min-width: 640px) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
 `
 
 // TODO: extract to component shared across pages?
@@ -201,19 +204,19 @@ const Title = styled.h1`
 `
 
 const List = styled.ol`
-  --gap: 20px;
-  --padding: 16px;
+  --gap: 24px;
 
-  margin-left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% + 2 * var(--overflow));
-  max-width: calc(100vw - 2 * var(--padding));
+  margin-left: -8px;
+  margin-right: -8px;
 
   display: flex;
   flex-direction: column;
   gap: var(--gap);
 
   @media (min-width: 640px) {
+    margin-left: -24px;
+    margin-right: -24px;
+
     flex-direction: row;
     flex-wrap: wrap;
   }
@@ -274,7 +277,7 @@ const ItemDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
 
   padding: 8px;
 

@@ -11,7 +11,7 @@ type Props = {
 function Image(props: Props) {
   return (
     <Wrapper>
-      <NextImage layout="responsive" {...props} />
+      <StyledImage layout="responsive" {...props} />
     </Wrapper>
   )
 }
@@ -23,24 +23,18 @@ const Wrapper = styled.div`
   margin-right: -24px;
   margin-top: 24px;
   margin-bottom: 24px;
+  box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
+    inset 0 1px 0 hsla(0 0% 0% / 0.05);
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
-      inset 0 1px 0 hsla(0 0% 0% / 0.05);
-  }
-
-  @media (min-width: 768px) {
-    border-radius: var(--border-radius);
+  @media (min-width: 640px) {
+    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
+    border-radius: 16px;
     overflow: hidden;
-
-    &::after {
-      border-radius: var(--border-radius);
-      box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
-    }
   }
+`
+
+const StyledImage = styled(NextImage)`
+  z-index: -1;
 `
 
 export { Image }

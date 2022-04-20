@@ -41,7 +41,7 @@ const Pre = styled.pre`
     background-color: hsla(0 0% 0% / 0.04);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     border-radius: 16px;
   }
 `
