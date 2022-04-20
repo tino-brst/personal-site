@@ -107,25 +107,23 @@ function WritingPage(props: Props) {
         <Title>Writing</Title>
         <Articles>
           {articles.map((article) => (
-            <Article key={article.slug}>
-              <NextLink href={article.url} passHref={true}>
-                <ArticleLink>
-                  <ArticleImageWrapper>
-                    {article.thumbnailImageSrc && (
-                      <ArticleImage
-                        src={article.thumbnailImageSrc}
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    )}
-                  </ArticleImageWrapper>
-                  <ArticleDescription>
-                    <ArticleTitle>{article.title}</ArticleTitle>
-                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
-                  </ArticleDescription>
-                </ArticleLink>
-              </NextLink>
-            </Article>
+            <NextLink key={article.slug} href={article.url} passHref={true}>
+              <Article>
+                <ArticleImageWrapper>
+                  {article.thumbnailImageSrc && (
+                    <ArticleImage
+                      src={article.thumbnailImageSrc}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  )}
+                </ArticleImageWrapper>
+                <ArticleDescription>
+                  <ArticleTitle>{article.title}</ArticleTitle>
+                  <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
+                </ArticleDescription>
+              </Article>
+            </NextLink>
           ))}
         </Articles>
 
@@ -195,7 +193,8 @@ const Wrapper = styled.div`
   }
 `
 
-// TODO: extract to component shared across pages?
+// TODO: extract to component shared across pages? (moving margin to the
+// articles list like the image in an article)
 const Title = styled.h1`
   font-size: 2.2rem;
   font-weight: 600;
@@ -222,22 +221,11 @@ const Articles = styled.ol`
   }
 `
 
-const Article = styled.li`
-  position: relative;
+const Article = styled.a`
   border-radius: 16px;
-  overflow: hidden;
   flex: 0 1 calc(50% - var(--gap) / 2);
 
-  @media (min-width: 640px) {
-    &:first-child {
-      flex-basis: 100%;
-    }
-  }
-`
-
-const ArticleLink = styled.a`
   isolation: isolate;
-  height: 100%;
   padding: 8px;
   background-color: hsla(0 0% 0% / 0.04);
 
@@ -246,7 +234,8 @@ const ArticleLink = styled.a`
   gap: 4px;
 
   @media (min-width: 640px) {
-    ${Article}:first-child & {
+    &:first-child {
+      flex-basis: 100%;
       flex-direction: row;
       gap: 6px;
     }
