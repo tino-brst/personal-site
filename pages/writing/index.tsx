@@ -105,29 +105,29 @@ function WritingPage(props: Props) {
     <Layout>
       <Wrapper>
         <Title>Writing</Title>
-        <List>
+        <Articles>
           {articles.map((article) => (
-            <ListItem key={article.slug}>
+            <Article key={article.slug}>
               <NextLink href={article.url} passHref={true}>
-                <Link>
-                  <ItemImageWrapper>
+                <ArticleLink>
+                  <ArticleImageWrapper>
                     {article.thumbnailImageSrc && (
-                      <ItemImage
+                      <ArticleImage
                         src={article.thumbnailImageSrc}
                         layout="fill"
                         objectFit="cover"
                       />
                     )}
-                  </ItemImageWrapper>
-                  <ItemDescription>
-                    <ItemTitle>{article.title}</ItemTitle>
-                    <ItemDate>{formatDate(article.publishedOn)}</ItemDate>
-                  </ItemDescription>
-                </Link>
+                  </ArticleImageWrapper>
+                  <ArticleDescription>
+                    <ArticleTitle>{article.title}</ArticleTitle>
+                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
+                  </ArticleDescription>
+                </ArticleLink>
               </NextLink>
-            </ListItem>
+            </Article>
           ))}
-        </List>
+        </Articles>
 
         {/* <div className="filters">
         <div className="filters__search">
@@ -203,7 +203,7 @@ const Title = styled.h1`
   margin-bottom: 24px;
 `
 
-const List = styled.ol`
+const Articles = styled.ol`
   --gap: 24px;
 
   margin-left: -8px;
@@ -222,7 +222,7 @@ const List = styled.ol`
   }
 `
 
-const ListItem = styled.li`
+const Article = styled.li`
   position: relative;
   border-radius: 16px;
   overflow: hidden;
@@ -235,7 +235,7 @@ const ListItem = styled.li`
   }
 `
 
-const Link = styled.a`
+const ArticleLink = styled.a`
   isolation: isolate;
   height: 100%;
   padding: 8px;
@@ -246,14 +246,14 @@ const Link = styled.a`
   gap: 4px;
 
   @media (min-width: 640px) {
-    ${ListItem}:first-child & {
+    ${Article}:first-child & {
       flex-direction: row;
       gap: 6px;
     }
   }
 `
 
-const ItemImageWrapper = styled.div`
+const ArticleImageWrapper = styled.div`
   aspect-ratio: 2 / 1;
   position: relative;
   border-radius: 11px 11px 4px 4px;
@@ -261,18 +261,18 @@ const ItemImageWrapper = styled.div`
   box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
 
   @media (min-width: 640px) {
-    ${ListItem}:first-child & {
+    ${Article}:first-child & {
       flex: 2 1 0;
       border-radius: 11px 4px 4px 11px;
     }
   }
 `
 
-const ItemImage = styled(NextImage)`
+const ArticleImage = styled(NextImage)`
   z-index: -1;
 `
 
-const ItemDescription = styled.div`
+const ArticleDescription = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -282,20 +282,20 @@ const ItemDescription = styled.div`
   padding: 8px;
 
   @media (min-width: 640px) {
-    ${ListItem}:first-child & {
+    ${Article}:first-child & {
       flex: 1 1 0;
     }
   }
 `
 
-const ItemTitle = styled.h2`
+const ArticleTitle = styled.h2`
   font-weight: 550;
   font-size: 22px;
   letter-spacing: 0.01em;
   color: hsla(0 0% 0% / 0.8);
 `
 
-const ItemDate = styled.time`
+const ArticleDate = styled.time`
   font-weight: 600;
   font-size: 14px;
   color: hsla(0 0% 0% / 0.4);
