@@ -50,6 +50,8 @@ body {
 
   /* TODO: non-white background? */
   /* background-color: hsl(0, 0%, 98%); */
+
+  /* TODO: default font color not black on white or the opposite? */
 }
 
 .articles-list {

@@ -233,6 +233,22 @@ const Article = styled.a`
   flex-direction: column;
   gap: 4px;
 
+  transition-property: transform, background-color;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+
+  &:hover {
+    background-color: hsla(0 0% 0% / 0.06);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:first-child:active {
+    transform: scale(0.99);
+  }
+
   @media (min-width: 640px) {
     &:first-child {
       flex-basis: 100%;
@@ -285,7 +301,7 @@ const ArticleTitle = styled.h2`
 `
 
 const ArticleDate = styled.time`
-  font-weight: 600;
+  font-weight: 550;
   font-size: 14px;
   color: hsla(0 0% 0% / 0.4);
 `
