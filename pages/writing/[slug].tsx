@@ -463,6 +463,7 @@ const HeaderImage = styled(NextImage)`
 `
 
 const FloatingStuff = styled.div`
+  z-index: 1;
   position: fixed;
   pointer-events: none;
   // TODO: extract to var
