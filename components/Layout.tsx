@@ -58,8 +58,6 @@ function Link(props: LinkProps) {
   )
 }
 
-// TODO: Fix footer going over floating stuff 🚩
-
 const Footer = styled.footer`
   display: flex;
   gap: 80px;
@@ -72,7 +70,7 @@ const Footer = styled.footer`
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 48px;
-  padding-bottom: 48px;
+  padding-bottom: 64px;
 
   &::before {
     position: absolute;
