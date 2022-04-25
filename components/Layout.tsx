@@ -64,7 +64,7 @@ const Footer = styled.footer`
   position: relative;
 
   max-width: calc(768px + 2 * 16px);
-  margin-top: 64px;
+  margin-top: 48px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 24px;

@@ -337,6 +337,7 @@ const Wrapper = styled.div`
   isolation: isolate;
   display: flex;
   align-items: flex-start;
+  margin-bottom: 48px;
 `
 
 const Aside = styled.aside`
