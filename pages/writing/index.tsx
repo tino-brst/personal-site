@@ -107,6 +107,7 @@ function WritingPage(props: Props) {
         <Title>Writing</Title>
         <Articles>
           {articles.map((article) => (
+            // TODO: add wrapping li
             <NextLink key={article.slug} href={article.url} passHref={true}>
               <Article>
                 <ArticleImageWrapper>
@@ -227,14 +228,14 @@ const Article = styled.a`
 
   isolation: isolate;
   padding: 8px;
-  background-color: hsla(0 0% 0% / 0.04);
+  background-color: hsla(0 0% 0% / 0.03);
 
   display: flex;
   flex-direction: column;
   gap: 4px;
 
   transition-property: transform, background-color;
-  transition-duration: 0.1s;
+  transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   &:hover {
@@ -242,10 +243,6 @@ const Article = styled.a`
   }
 
   &:active {
-    transform: scale(0.98);
-  }
-
-  &:first-child:active {
     transform: scale(0.99);
   }
 
@@ -254,6 +251,10 @@ const Article = styled.a`
       flex-basis: 100%;
       flex-direction: row;
       gap: 6px;
+    }
+
+    &:first-child:active {
+      transform: scale(0.99);
     }
   }
 `
@@ -273,6 +274,7 @@ const ArticleImageWrapper = styled.div`
   }
 `
 
+// TODO: zoom-in on hover? (apply to next/prev articles for consistency)
 const ArticleImage = styled(NextImage)`
   z-index: -1;
 `
