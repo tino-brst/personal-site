@@ -107,24 +107,25 @@ function WritingPage(props: Props) {
         <Title>Writing</Title>
         <Articles>
           {articles.map((article) => (
-            // TODO: add wrapping li
-            <NextLink key={article.slug} href={article.url} passHref={true}>
-              <Article>
-                <ArticleImageWrapper>
-                  {article.thumbnailImageSrc && (
-                    <ArticleImage
-                      src={article.thumbnailImageSrc}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  )}
-                </ArticleImageWrapper>
-                <ArticleDescription>
-                  <ArticleTitle>{article.title}</ArticleTitle>
-                  <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
-                </ArticleDescription>
-              </Article>
-            </NextLink>
+            <ArticleListItem key={article.slug}>
+              <NextLink href={article.url} passHref={true}>
+                <ArticleLink>
+                  <ArticleImageWrapper>
+                    {article.thumbnailImageSrc && (
+                      <ArticleImage
+                        src={article.thumbnailImageSrc}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    )}
+                  </ArticleImageWrapper>
+                  <ArticleDescription>
+                    <ArticleTitle>{article.title}</ArticleTitle>
+                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
+                  </ArticleDescription>
+                </ArticleLink>
+              </NextLink>
+            </ArticleListItem>
           ))}
         </Articles>
 
@@ -222,9 +223,19 @@ const Articles = styled.ol`
   }
 `
 
-const Article = styled.a`
+const ArticleListItem = styled.li`
+  @media (min-width: 640px) {
+    flex: 0 0 calc(50% - var(--gap) / 2);
+
+    &:first-child {
+      flex-basis: 100%;
+    }
+  }
+`
+
+const ArticleLink = styled.a`
   border-radius: 16px;
-  flex: 0 1 calc(50% - var(--gap) / 2);
+  height: 100%;
 
   isolation: isolate;
   padding: 8px;
@@ -247,13 +258,12 @@ const Article = styled.a`
   }
 
   @media (min-width: 640px) {
-    &:first-child {
-      flex-basis: 100%;
+    ${ArticleListItem}:first-child & {
       flex-direction: row;
       gap: 6px;
     }
 
-    &:first-child:active {
+    ${ArticleListItem}:first-child:active & {
       transform: scale(0.99);
     }
   }
@@ -267,7 +277,7 @@ const ArticleImageWrapper = styled.div`
   box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
 
   @media (min-width: 640px) {
-    ${Article}:first-child & {
+    ${ArticleListItem}:first-child & {
       flex: 2 1 0;
       border-radius: 11px 4px 4px 11px;
     }
@@ -289,7 +299,7 @@ const ArticleDescription = styled.div`
   padding: 8px;
 
   @media (min-width: 640px) {
-    ${Article}:first-child & {
+    ${ArticleListItem}:first-child & {
       flex: 1 1 0;
     }
   }

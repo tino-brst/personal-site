@@ -726,7 +726,7 @@ const ArticleList = styled.ol`
 `
 
 const ArticleListItem = styled.li`
-  flex: 0 1 calc(50% - var(--gap) / 2);
+  flex: 0 0 calc(50% - var(--gap) / 2);
 `
 
 const ArticleLink = styled.a`
