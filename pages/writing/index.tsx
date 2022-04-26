@@ -249,8 +249,9 @@ const ArticleLink = styled.a`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:hover {
-    background-color: hsla(0 0% 0% / 0.06);
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.05);
   }
 
   &:active {
@@ -270,23 +271,51 @@ const ArticleLink = styled.a`
 `
 
 const ArticleImageWrapper = styled.div`
+  --border-radius: 11px 11px 4px 4px;
+
   aspect-ratio: 2 / 1;
   position: relative;
-  border-radius: 11px 11px 4px 4px;
+  border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
+
+  /* Fixes corner overflow on image scale transition */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+  &::after {
+    position: absolute;
+    content: '';
+    inset: 0;
+    border-radius: var(--border-radius);
+    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
+
+    transition-property: background-color;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+  }
+
+  ${ArticleLink}:hover &::after,
+  ${ArticleLink}:active &::after {
+    background-color: hsla(0 0% 0% / 0.08);
+  }
 
   @media (min-width: 640px) {
     ${ArticleListItem}:first-child & {
+      --border-radius: 11px 4px 4px 11px;
+
       flex: 2 1 0;
-      border-radius: 11px 4px 4px 11px;
     }
   }
 `
 
-// TODO: zoom-in on hover? (apply to next/prev articles for consistency)
 const ArticleImage = styled(NextImage)`
-  z-index: -1;
+  transition-property: transform;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+
+  ${ArticleLink}:hover &,
+  ${ArticleLink}:active & {
+    transform: scale(1.03);
+  }
 `
 
 const ArticleDescription = styled.div`
