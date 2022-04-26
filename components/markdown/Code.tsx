@@ -9,7 +9,8 @@ const Code = styled.code`
   /* TODO: probably will have to tweak this to keep it working inside asides, etc (everywhere expect code blocks) */
 
   p & {
-    background-color: hsla(0 0% 0% / 0.07);
+    color: hsl(0 0% 25%);
+    background-color: hsla(0 0% 0% / 0.05);
     border-radius: 4px;
     padding: 2px 4px;
   }

@@ -53,6 +53,7 @@ function ThemeToggle() {
 
 const Button = styled.button`
   cursor: pointer;
+  color: black;
   width: 40px;
   height: 40px;
   display: flex;

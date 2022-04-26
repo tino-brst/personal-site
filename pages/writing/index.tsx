@@ -198,6 +198,7 @@ const Wrapper = styled.div`
 // TODO: extract to component shared across pages? (moving margin to the
 // articles list like the image in an article)
 const Title = styled.h1`
+  color: black;
   font-size: 2.2rem;
   font-weight: 600;
   margin-top: 18px;

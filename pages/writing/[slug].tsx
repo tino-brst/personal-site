@@ -16,6 +16,7 @@ import { Paragraph } from '@components/markdown/Paragraph'
 import { Heading2, Heading3, Heading4 } from '@components/markdown/Heading'
 import { Code } from '@components/markdown/Code'
 import { Link } from '@components/markdown/Link'
+import { Strong } from '@components/markdown/Strong'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
@@ -285,6 +286,7 @@ const components: ComponentMap = {
   code: Code,
   img: Image,
   a: Link,
+  strong: Strong,
 }
 
 type PathParams = {
@@ -415,6 +417,7 @@ const InfoItem = styled.div`
 `
 
 const Title = styled.h1`
+  color: black;
   font-size: 2.2rem;
   font-weight: 600;
   margin-top: 18px;
@@ -543,6 +546,7 @@ const ButtonGroup = styled.div`
   --divider-width: 1px;
 
   pointer-events: auto;
+  color: black;
   z-index: 1;
   overflow: hidden;
   flex-shrink: 0;
@@ -878,6 +882,7 @@ const AllArticlesLink = styled.a`
   padding: 12px 14px;
   font-weight: 500;
   background-color: hsla(0 0% 0% / 0.03);
+  color: black;
   border-radius: 16px;
   display: flex;
   align-items: center;

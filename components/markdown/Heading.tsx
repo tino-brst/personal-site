@@ -64,6 +64,7 @@ const Icon = styled(Link2Icon)`
 `
 
 const sharedStyles = css`
+  color: black;
   font-weight: 600;
   margin-bottom: 20px;
   margin-top: var(--margin-top);

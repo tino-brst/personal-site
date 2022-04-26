@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const Link = styled.a`
-  color: hsla(0 0% 0% / 0.7);
+  color: hsl(0 0% 20%);
   font-weight: 500;
   text-decoration-line: underline;
   text-decoration-thickness: 2px;
