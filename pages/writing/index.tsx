@@ -286,7 +286,7 @@ const ArticleImageWrapper = styled.div`
     content: '';
     inset: 0;
     border-radius: var(--border-radius);
-    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
+    box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.1);
 
     transition-property: background-color;
     transition-duration: 0.5s;
