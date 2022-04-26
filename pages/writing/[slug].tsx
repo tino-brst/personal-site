@@ -22,6 +22,8 @@ import {
   ArrowLeftIcon,
   CalendarIcon,
   ChevronUpIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   ClockIcon,
   ListBulletIcon,
 } from '@radix-ui/react-icons'
@@ -186,7 +188,7 @@ function ArticlePage(props: Props) {
                   href={`/writing/${props.newerArticle.slug}`}
                   passHref={true}
                 >
-                  <ArticleLink>
+                  <ArticleLink className="next">
                     <ArticleImageWrapper>
                       {props.newerArticle.thumbnailImageSrc && (
                         <ArticleImage
@@ -198,8 +200,10 @@ function ArticlePage(props: Props) {
                     </ArticleImageWrapper>
                     <ArticleDescription>
                       <ArticleTitle>{props.newerArticle.title}</ArticleTitle>
-                      <ArticleLabel>Next article</ArticleLabel>
-                      {/* TODO: Add Icon */}
+                      <ArticleLabel>
+                        Next article
+                        <NextArticleIcon width={18} height={18} />
+                      </ArticleLabel>
                     </ArticleDescription>
                   </ArticleLink>
                 </NextLink>
@@ -211,7 +215,7 @@ function ArticlePage(props: Props) {
                   href={`/writing/${props.olderArticle.slug}`}
                   passHref={true}
                 >
-                  <ArticleLink>
+                  <ArticleLink className="previous">
                     <ArticleImageWrapper>
                       {props.olderArticle.thumbnailImageSrc && (
                         <ArticleImage
@@ -223,7 +227,10 @@ function ArticlePage(props: Props) {
                     </ArticleImageWrapper>
                     <ArticleDescription>
                       <ArticleTitle>{props.olderArticle.title}</ArticleTitle>
-                      <ArticleLabel>Previous article</ArticleLabel>
+                      <ArticleLabel>
+                        Previous article
+                        <PreviousArticleIcon width={18} height={18} />
+                      </ArticleLabel>
                     </ArticleDescription>
                   </ArticleLink>
                 </NextLink>
@@ -818,8 +825,9 @@ const ArticleDescription = styled.div`
   @media (min-width: 640px) {
     flex: 1 0 auto;
 
-    ${ArticleListItem}:first-child & {
+    ${ArticleLink}.next & {
       align-items: flex-end;
+      text-align: right;
     }
   }
 `
@@ -836,6 +844,33 @@ const ArticleLabel = styled.div`
   font-size: 14px;
   letter-spacing: 0.01em;
   color: hsla(0 0% 0% / 0.4);
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 2px;
+
+  ${ArticleLink}.previous & {
+    flex-direction: row-reverse;
+  }
+`
+
+const NextArticleIcon = styled(ChevronRightIcon)`
+  display: none;
+  margin-right: -2px;
+
+  @media (min-width: 640px) {
+    display: revert;
+  }
+`
+
+const PreviousArticleIcon = styled(ChevronLeftIcon)`
+  display: none;
+  margin-left: -2px;
+
+  @media (min-width: 640px) {
+    display: revert;
+  }
 `
 
 const AllArticlesLink = styled.a`
