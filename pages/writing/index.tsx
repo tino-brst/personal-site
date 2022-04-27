@@ -12,7 +12,6 @@ import fuzzy from 'fuzzysort'
 type Props = {
   articles: Array<{
     slug: string
-    url: string
     title: string
     thumbnailImageSrc: string | null
     tags: Array<string>
@@ -108,7 +107,7 @@ function WritingPage(props: Props) {
         <Articles>
           {articles.map((article) => (
             <ArticleListItem key={article.slug}>
-              <NextLink href={article.url} passHref={true}>
+              <NextLink href={`/writing/${article.slug}`} passHref={true}>
                 <ArticleLink>
                   <ArticleImageWrapper>
                     {article.thumbnailImageSrc && (
@@ -405,7 +404,6 @@ const getStaticProps: GetStaticProps<Props> = async () => {
       articles: articles
         .map((article) => ({
           slug: article.slug,
-          url: `/writing/${article.slug}`,
           title: article.title,
           thumbnailImageSrc: article.headerImage ?? null,
           tags: article.tags,
