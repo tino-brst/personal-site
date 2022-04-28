@@ -58,33 +58,29 @@ function AsideListItem(props: AsideListItemProps) {
 }
 
 const AsideList = styled.ol`
-  --offset-left: 12px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: calc(-1 * var(--offset-left));
 `
 
 const AsideLink = styled.a`
-  --gap: 4px;
-  --icon-size: 14px;
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--gap);
+  gap: 6px;
   color: hsla(0 0% 0% / 0.5);
   font-size: 14px;
   font-weight: 400;
-  margin-left: calc(var(--offset-left) * var(--level));
-  padding: 8px var(--offset-left);
+  margin-left: calc(12px * var(--level));
+  padding-top: 8px;
+  padding-bottom: 8px;
 
-  transition-property: color, transform;
+  transition-property: color;
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
-  &:active {
-    /* TODO: use wrapper li to apply scaling, with it stretching to full width */
-    transform: scale(0.98);
+  &.topLevel {
+    font-weight: 500;
   }
 
   &.active,
@@ -92,45 +88,30 @@ const AsideLink = styled.a`
     color: hsla(0 0% 0% / 0.8);
   }
 
-  &.topLevel {
-    font-weight: 500;
-  }
-
-  &::before {
-    content: '';
-    z-index: -1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: calc(100% - var(--gap) - var(--icon-size));
-    border-radius: 8px;
-
-    transition-property: width, background-color;
-    transition-duration: 0.1s;
-    transition-timing-function: ease-in-out;
-  }
-
-  &:hover::before {
-    background-color: hsla(0 0% 0% / 0.03);
-  }
-
-  &.active::before {
-    width: 100%;
-  }
-
-  &:active::before {
-    background-color: hsla(0 0% 0% / 0.06);
+  &:hover,
+  &:active {
+    color: black;
   }
 `
 
 const AsideActiveLinkIcon = styled(ChevronLeftIcon)`
+  color: black;
   opacity: 0;
-  transform: scale(0.8) translateX(-4px);
+  transform: scale(0.5) translateX(-4px);
 
   transition-property: opacity, transform;
-  transition-duration: 0.1s;
+  transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
+
+  ${AsideLink}:hover &, 
+  ${AsideLink}:active & {
+    opacity: 0.3;
+    transform: none;
+  }
+
+  ${AsideLink}:active & {
+    transform: translateX(-2px);
+  }
 
   ${AsideLink}.active & {
     opacity: 1;
