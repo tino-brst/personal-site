@@ -1,16 +1,3 @@
-/**
- * Of all the headings, normalize.css tweaks the h1s specifically, and even
- * though the normalize import is done _before_ the reset, the normalize h1's
- * tweaks have higher specificity than the ones in the reset (and thus applied),
- * leaving all headers properly reset, expect the h1s. Applying the reset rule
- * to the h1s specifically here, to win over the normalize one.
- */
-
-h1 {
-  all: unset;
-  display: revert;
-}
-
 /* Themes Custom Props */
 
 :root {
@@ -48,29 +35,4 @@ body {
 
   /* TODO: enable on dark theme (white on black) */
   /* -webkit-font-smoothing: antialiased; */
-
-  /* TODO: non-white background? */
-  /* background-color: hsl(0, 0%, 98%); */
-}
-
-.articles-list {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.articles-list a strong {
-  font-weight: inherit;
-  text-decoration: underline;
-}
-
-.filters__search {
-  display: flex;
-  gap: 10px;
-}
-
-.filters__tags {
-  display: flex;
-  gap: 8px;
 }
