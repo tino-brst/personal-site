@@ -14,7 +14,7 @@ import { NavGroup, NavGroupLink } from './NavGroup'
 import avatarImageSrc from 'public/images/avatar.png'
 
 const barHeight = 70
-const scrollThreshold = 60
+const scrollThreshold = 48
 
 const CSSVar = {
   scrollBasedOpacity: '--scroll-based-opacity',
