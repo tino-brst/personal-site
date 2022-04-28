@@ -106,10 +106,11 @@ const Highlight = styled.div`
   height: 100%;
   z-index: -1;
   opacity: 0;
-  border-radius: 8px;
-  background-color: hsla(0 0% 0% / 0.05);
+  border-radius: 12px;
+  background-color: hsla(0 0% 0% / 0.03);
 
-  transition-duration: 0.1s;
+  /* transition-property: opacity, transform OR opacity, transform, left, width */
+  transition-duration: 0.15s, 0.15s, 0.1s, 0.1s;
   transition-timing-function: ease-in-out;
 
   ${Wrapper}:hover &,
@@ -118,27 +119,26 @@ const Highlight = styled.div`
   }
 
   ${Wrapper}:active & {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
 `
 
 const Link = styled.a<{ isActive: boolean }>`
-  height: 40px;
+  height: 44px;
   display: flex;
   align-items: center;
   font-size: 1.1rem;
   font-weight: 500;
-  border-radius: 6px;
-  padding-left: 18px;
-  padding-right: 18px;
+  padding-left: 16px;
+  padding-right: 16px;
   color: ${(p) => (p.isActive ? 'black' : 'hsla(0 0% 0% / 0.4)')};
 
   transition-property: transform;
-  transition-duration: 0.1s;
+  transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
 `
 

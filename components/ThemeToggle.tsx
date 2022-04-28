@@ -54,24 +54,24 @@ function ThemeToggle() {
 const Button = styled.button`
   cursor: pointer;
   color: black;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 12px;
 
   transition-property: background-color, transform;
-  transition-duration: 0.1s;
+  transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.05);
+    background-color: hsla(0 0% 0% / 0.03);
   }
 
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.94);
   }
 `
 

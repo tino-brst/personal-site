@@ -16,7 +16,7 @@ import avatarImageSrc from 'public/images/avatar.png'
 const barHeight = 70
 const scrollThreshold = 48
 
-const CSSVar = {
+const cssVar = {
   scrollBasedOpacity: '--scroll-based-opacity',
   trayHeight: '--tray-height',
 }
@@ -35,14 +35,14 @@ function NavBar() {
 
   useIsomorphicLayoutEffect(() => {
     backgroundRef.current?.style.setProperty(
-      CSSVar.scrollBasedOpacity,
+      cssVar.scrollBasedOpacity,
       `${map(window.scrollY, [0, scrollThreshold], [0, 1])}`
     )
   }, [])
 
   const updateScrollBasedOpacity = React.useCallback(() => {
     backgroundRef.current?.style.setProperty(
-      CSSVar.scrollBasedOpacity,
+      cssVar.scrollBasedOpacity,
       `${map(window.scrollY, [0, scrollThreshold], [0, 1])}`
     )
   }, [])
@@ -123,7 +123,7 @@ function NavBar() {
         </Bar>
         <TrayWrapper
           isTrayOpen={isTrayOpen}
-          style={{ [CSSVar.trayHeight]: `${traySize.height}px` }}
+          style={{ [cssVar.trayHeight]: `${traySize.height}px` }}
         >
           <Tray ref={trayRef}>
             {/* TODO: cascade animation for each item? */}
@@ -189,7 +189,7 @@ const Wrapper = styled.div<{ isTrayOpen: boolean }>`
 `
 
 const Background = styled.div<{ isTrayOpen: boolean }>`
-  opacity: ${(p) => (p.isTrayOpen ? 1 : `var(${CSSVar.scrollBasedOpacity})`)};
+  opacity: ${(p) => (p.isTrayOpen ? 1 : `var(${cssVar.scrollBasedOpacity})`)};
   position: absolute;
   z-index: -1;
   inset: 0;
@@ -203,7 +203,7 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
   transition-duration: 0.2s;
 
   @media (min-width: 640px) {
-    opacity: var(${CSSVar.scrollBasedOpacity});
+    opacity: var(${cssVar.scrollBasedOpacity});
   }
 `
 
@@ -242,24 +242,24 @@ const BarEnd = styled.div`
 
 const TrayButton = styled.button`
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 12px;
 
   transition-property: background-color, transform;
-  transition-duration: 0.1s;
+  transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.05);
+    background-color: hsla(0 0% 0% / 0.03);
   }
 
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.94);
   }
 
   @media (min-width: 640px) {
@@ -269,7 +269,7 @@ const TrayButton = styled.button`
 
 const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
   overflow: hidden;
-  max-height: ${(p) => (p.isTrayOpen ? `var(${CSSVar.trayHeight})` : 0)};
+  max-height: ${(p) => (p.isTrayOpen ? `var(${cssVar.trayHeight})` : 0)};
   opacity: ${(p) => (p.isTrayOpen ? 1 : 0)};
   transform: ${(p) => (p.isTrayOpen ? null : 'translateY(-8px) scale(0.8)')};
 
@@ -290,18 +290,16 @@ const Tray = styled.div`
 `
 
 const Link = styled.a<{ isActive: boolean }>`
-  height: 40px;
   display: flex;
   align-items: center;
   font-size: 1.2rem;
   font-weight: 500;
-  border-radius: 8px;
-  padding-left: 20px;
-  padding-right: 20px;
+  border-radius: 12px;
+  padding: 12px 18px;
   color: ${(p) => (p.isActive ? 'black' : 'hsla(0 0% 0% / 0.4)')};
 
   transition-property: background-color, transform;
-  transition-duration: 0.1s;
+  transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   &:first-child {
@@ -309,16 +307,16 @@ const Link = styled.a<{ isActive: boolean }>`
   }
 
   &:last-child {
-    margin-bottom: 16px;
+    margin-bottom: 24px;
   }
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.05);
+    background-color: hsla(0 0% 0% / 0.03);
   }
 
   &:active {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
 `
 
