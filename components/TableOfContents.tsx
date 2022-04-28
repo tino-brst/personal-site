@@ -202,7 +202,7 @@ const List = styled.ol`
 const Link = styled.a`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   color: hsla(0 0% 0% / 0.5);
   font-size: 16px;
   font-weight: 400;
@@ -214,12 +214,12 @@ const Link = styled.a`
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:active {
     background-color: hsla(0 0% 0% / 0.04);
   }
 
   &:active {
-    background-color: hsla(0 0% 0% / 0.06);
     transform: scale(0.99);
   }
 
@@ -235,10 +235,10 @@ const Link = styled.a`
 
 const ActiveLinkIcon = styled(ChevronLeftIcon)`
   opacity: 0;
-  transform: scale(0.8) translateX(-4px);
+  transform: scale(0.5) translateX(-4px);
 
   transition-property: opacity, transform;
-  transition-duration: 0.1s;
+  transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   ${Link}.active & {
