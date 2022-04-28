@@ -104,6 +104,9 @@ function WritingPage(props: Props) {
     <Layout>
       <Wrapper>
         <Title>Writing</Title>
+        <Description>
+          Thoughts on code, design, lorem ipsum, and more.
+        </Description>
         <Articles>
           {articles.map((article) => (
             <ArticleListItem key={article.slug}>
@@ -204,8 +207,15 @@ const Title = styled.h1`
   margin-bottom: 24px;
 `
 
+const Description = styled.p`
+  font-size: 16px;
+  color: hsl(0 0% 50%);
+  line-height: 1.5;
+  margin-bottom: 32px;
+`
+
 const Articles = styled.ol`
-  --gap: 24px;
+  --gap: 18px;
 
   margin-left: -8px;
   margin-right: -8px;
