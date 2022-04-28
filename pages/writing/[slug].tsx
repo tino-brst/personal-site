@@ -4,8 +4,6 @@ import clsx from 'clsx'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
-import { useViewCount } from '@hooks/useViewCount'
-import { useLikeCount } from '@hooks/useLikeCount'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { Root } from '@lib/mdast-util-toc'
@@ -34,7 +32,6 @@ import {
   AsideTableOfContents,
   TableOfContents,
 } from '@components/TableOfContents'
-import { EditOnGitHubLink } from '@components/EditOnGitHubLink'
 
 const barHeight = 70
 const barBottomMargin = 60
@@ -63,9 +60,6 @@ function ArticlePage(props: Props) {
     () => getMDXComponent(props.contentCode),
     [props.contentCode]
   )
-
-  // const viewCount = useViewCount(props.slug)
-  // const likeCount = useLikeCount(props.slug)
 
   // Table of Contents
 
@@ -151,21 +145,7 @@ function ArticlePage(props: Props) {
                 )}
               </HeaderImageWrapper>
             </Header>
-            {/* <button
-            disabled={likeCount.isLoading}
-            onClick={likeCount.toggleUserLike}
-          >
-            👍{' '}
-            {`${likeCount.value ?? '...'} ${likeCount.hasUserLike ? '✔️' : ''}`}
-          </button> */}
             <Content components={components} />
-            <EditOnGitHubLink
-              username="tino-brst"
-              repo="personal-site"
-              file={`articles/${props.slug}.mdx`}
-            >
-              Edit on GitHub
-            </EditOnGitHubLink>
           </Main>
           <Aside>
             <RightSideContent>
