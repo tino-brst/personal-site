@@ -4,7 +4,7 @@ function compareDatesDesc(a: Date | number, b: Date | number): number {
   return 0
 }
 
-const dateFormatter = new Intl.DateTimeFormat([], {
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
   dateStyle: 'medium',
 })
 
