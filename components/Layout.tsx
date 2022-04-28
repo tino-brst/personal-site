@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import NextLink from 'next/link'
+import NextImage from 'next/image'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import { NavBar } from './NavBar'
 
@@ -13,29 +14,40 @@ function Layout(props: Props) {
       <NavBar />
       {props.children}
       <Footer>
-        <Column>
-          <LinkGroup>
-            <LinkGroupTitle>Site</LinkGroupTitle>
-            <Link href="/">Home</Link>
-            <Link href="/writing">Writing</Link>
-            <Link href="/about">About</Link>
-          </LinkGroup>
-        </Column>
-        <Column>
-          <LinkGroup>
-            <LinkGroupTitle>Contact</LinkGroupTitle>
-            <Link href="https://linkedin.com/in/agustin-burset/" external>
-              LinkedIn
-            </Link>
-            <Link href="https://twitter.com/bursetAgustin" external>
-              Twitter
-            </Link>
-            <Link href="https://github.com/tino-brst" external>
-              GitHub
-            </Link>
-            <Link href="mailto:tinos.corner@icloud.com">Email</Link>
-          </LinkGroup>
-        </Column>
+        <ColumnsWrapper>
+          <Column>
+            <LinkGroup>
+              <LinkGroupTitle>Site</LinkGroupTitle>
+              <Link href="/">Home</Link>
+              <Link href="/writing">Writing</Link>
+              <Link href="/about">About</Link>
+            </LinkGroup>
+          </Column>
+          <Column>
+            <LinkGroup>
+              <LinkGroupTitle>Contact</LinkGroupTitle>
+              <Link href="https://linkedin.com/in/agustin-burset/" external>
+                LinkedIn
+              </Link>
+              <Link href="https://twitter.com/bursetAgustin" external>
+                Twitter
+              </Link>
+              <Link href="https://github.com/tino-brst" external>
+                GitHub
+              </Link>
+              <Link href="mailto:tinos.corner@icloud.com">Email</Link>
+            </LinkGroup>
+          </Column>
+        </ColumnsWrapper>
+
+        <SignatureImageWrapper>
+          <NextImage
+            priority
+            src="/images/signature.svg"
+            layout="fill"
+            objectFit="cover"
+          />
+        </SignatureImageWrapper>
       </Footer>
     </>
   )
@@ -60,7 +72,8 @@ function Link(props: LinkProps) {
 
 const Footer = styled.footer`
   display: flex;
-  gap: 80px;
+  flex-direction: column;
+  gap: 16px;
   position: relative;
 
   max-width: calc(768px + 2 * 16px);
@@ -70,7 +83,7 @@ const Footer = styled.footer`
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 48px;
-  padding-bottom: 64px;
+  padding-bottom: 24px;
 
   &::before {
     position: absolute;
@@ -86,7 +99,15 @@ const Footer = styled.footer`
   @media (min-width: 640px) {
     padding-left: 40px;
     padding-right: 40px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 48px;
   }
+`
+
+const ColumnsWrapper = styled.div`
+  display: flex;
+  gap: 80px;
 `
 
 const Column = styled.div``
@@ -133,6 +154,18 @@ const ExternalLinkIcon = styled(ArrowTopRightIcon)`
 
   ${StyledLink}:hover & {
     color: hsla(0 0% 0% / 0.5);
+  }
+`
+
+const SignatureImageWrapper = styled.div`
+  position: relative;
+  align-self: flex-end;
+  aspect-ratio: 5 / 4;
+  height: 100px;
+  right: -24px;
+
+  @media (min-width: 640px) {
+    align-self: center;
   }
 `
 
