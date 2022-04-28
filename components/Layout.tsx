@@ -4,7 +4,7 @@ import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import { NavBar } from './NavBar'
 
 type Props = {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 function Layout(props: Props) {
