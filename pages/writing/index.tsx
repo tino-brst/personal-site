@@ -8,6 +8,7 @@ import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import fuzzy from 'fuzzysort'
+import { ArrowRightIcon } from '@radix-ui/react-icons'
 
 type Props = {
   articles: Array<{
@@ -123,7 +124,12 @@ function WritingPage(props: Props) {
                   </ArticleImageWrapper>
                   <ArticleDescription>
                     <ArticleTitle>{article.title}</ArticleTitle>
-                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
+                    <ArticleDescriptionBottom>
+                      <ArticleDate>
+                        {formatDate(article.publishedOn)}
+                      </ArticleDate>
+                      <GoToArticleIcon width={18} height={18} />
+                    </ArticleDescriptionBottom>
                   </ArticleDescription>
                 </ArticleLink>
               </NextLink>
@@ -344,6 +350,12 @@ const ArticleDescription = styled.div`
   }
 `
 
+const ArticleDescriptionBottom = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+`
+
 const ArticleTitle = styled.h2`
   font-weight: 550;
   font-size: 22px;
@@ -355,6 +367,19 @@ const ArticleDate = styled.time`
   font-weight: 550;
   font-size: 14px;
   color: hsla(0 0% 0% / 0.4);
+`
+
+const GoToArticleIcon = styled(ArrowRightIcon)`
+  color: hsla(0 0% 0% / 0.15);
+
+  transition-property: color, transform;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+
+  ${ArticleLink}:hover & {
+    color: hsla(0 0% 0% / 0.3);
+    transform: scale(1.1);
+  }
 `
 
 /**
