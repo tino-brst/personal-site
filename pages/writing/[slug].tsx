@@ -534,7 +534,7 @@ const ButtonGroup = styled.div`
   align-self: flex-end;
   display: flex;
   justify-content: right;
-  border-radius: 10px;
+  border-radius: 12px;
   background: hsla(0 0% 99% / 0.9);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
@@ -579,10 +579,6 @@ const ButtonBackground = styled.div`
   &:hover {
     background-color: hsla(0 0% 0% / 0.03);
   }
-
-  &:active {
-    background-color: hsla(0 0% 0% / 0.05);
-  }
 `
 
 const Button = styled.button`
@@ -594,7 +590,7 @@ const Button = styled.button`
   cursor: pointer;
 `
 
-const TableOfContentsButton = Button
+const TableOfContentsButton = styled(Button)``
 
 const BackToTopButton = styled(Button)`
   opacity: 0;
@@ -616,7 +612,7 @@ const sharedIconsStyles = css`
   transition-timing-function: ease-in-out;
 
   ${Button}:active & {
-    transform: scale(0.94);
+    transform: scale(0.92);
   }
 `
 
