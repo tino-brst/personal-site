@@ -1,17 +1,299 @@
-import { Layout } from '@components/Layout'
 import styled from 'styled-components'
-import { theme } from 'styles/theme'
+import NextImage from 'next/image'
+import NextLink from 'next/link'
+import { GetStaticProps } from 'next'
+import { Layout } from '@components/Layout'
+import { getArticles } from '@lib/articles'
+import { compareDatesDesc, formatDate } from '@lib/dates'
+import { ArrowRightIcon } from '@radix-ui/react-icons'
 
-function HomePage() {
+type Props = {
+  latestArticles: Array<{
+    slug: string
+    url: string
+    title: string
+    thumbnailImageSrc: string | null
+    publishedOn: number
+  }>
+}
+
+function HomePage(props: Props) {
   return (
     <Layout>
-      <Heading>Tino&apos;s Corner</Heading>
+      <Wrapper>
+        <Title>Hi! I&apos;m Tino</Title>
+        <Description>
+          And this is my little corner of the internet. I&apos;m a design-minded
+          developer specializing in web technologies. I like to lorem ipsum
+          dolorem potatoes. And some other stuff.
+        </Description>
+        <NextLink href="/about" passHref={true}>
+          <Link>
+            About me
+            <ArrowRightIcon width={20} height={20} />
+          </Link>
+        </NextLink>
+        <Heading>Latest Articles</Heading>
+        <Articles>
+          {props.latestArticles.map((article) => (
+            <ArticleListItem key={article.slug}>
+              <NextLink href={`/writing/${article.slug}`} passHref={true}>
+                <ArticleLink>
+                  <ArticleImageWrapper>
+                    {article.thumbnailImageSrc && (
+                      <ArticleImage
+                        src={article.thumbnailImageSrc}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    )}
+                  </ArticleImageWrapper>
+                  <ArticleDescription>
+                    <ArticleTitle>{article.title}</ArticleTitle>
+                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
+                  </ArticleDescription>
+                </ArticleLink>
+              </NextLink>
+            </ArticleListItem>
+          ))}
+        </Articles>
+        <NextLink href="/writing" passHref={true}>
+          <Link>
+            All Articles
+            <ArrowRightIcon width={20} height={20} />
+          </Link>
+        </NextLink>
+      </Wrapper>
     </Layout>
   )
 }
 
-const Heading = styled.h1`
-  color: var(${theme.color.fg});
+const Wrapper = styled.div`
+  max-width: calc(768px + 2 * 16px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+
+  @media (min-width: 640px) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
 `
 
+const Title = styled.h1`
+  color: black;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-top: 18px;
+  margin-bottom: 24px;
+`
+
+const Description = styled.p`
+  font-size: 16px;
+  color: hsl(0 0% 50%);
+  line-height: 1.5;
+  margin-bottom: 32px;
+`
+
+const Link = styled.a`
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  align-self: center;
+  padding: 12px 14px;
+  font-weight: 500;
+  background-color: hsla(0 0% 0% / 0.03);
+  color: black;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  transition-property: transform, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.06);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+`
+
+const Heading = styled.h2`
+  color: black;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-top: 48px;
+  margin-bottom: 24px;
+`
+
+const Articles = styled.ol`
+  --gap: 18px;
+
+  margin-bottom: 32px;
+  margin-left: -8px;
+  margin-right: -8px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+
+  @media (min-width: 640px) {
+    margin-left: -24px;
+    margin-right: -24px;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+`
+
+const ArticleListItem = styled.li`
+  @media (min-width: 640px) {
+    flex: 0 0 calc(50% - var(--gap) / 2);
+
+    &:first-child {
+      flex-basis: 100%;
+    }
+  }
+`
+
+const ArticleLink = styled.a`
+  border-radius: 16px;
+  height: 100%;
+
+  isolation: isolate;
+  padding: 8px;
+  background-color: hsla(0 0% 0% / 0.03);
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  transition-property: transform, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.05);
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  @media (min-width: 640px) {
+    ${ArticleListItem}:first-child & {
+      flex-direction: row;
+      gap: 6px;
+    }
+
+    ${ArticleListItem}:first-child:active & {
+      transform: scale(0.99);
+    }
+  }
+`
+
+const ArticleImageWrapper = styled.div`
+  --border-radius: 11px 11px 4px 4px;
+
+  aspect-ratio: 2 / 1;
+  position: relative;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  /* Fixes corner overflow on image scale transition */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+  &::after {
+    position: absolute;
+    content: '';
+    inset: 0;
+    border-radius: var(--border-radius);
+    box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.1);
+
+    transition-property: background-color;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+  }
+
+  ${ArticleLink}:hover &::after,
+  ${ArticleLink}:active &::after {
+    background-color: hsla(0 0% 0% / 0.08);
+  }
+
+  @media (min-width: 640px) {
+    ${ArticleListItem}:first-child & {
+      --border-radius: 11px 4px 4px 11px;
+
+      flex: 2 1 0;
+    }
+  }
+`
+
+const ArticleImage = styled(NextImage)`
+  transition-property: transform;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+
+  ${ArticleLink}:hover &,
+  ${ArticleLink}:active & {
+    transform: scale(1.03);
+  }
+`
+
+const ArticleDescription = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+
+  padding: 8px;
+
+  @media (min-width: 640px) {
+    ${ArticleListItem}:first-child & {
+      flex: 1 1 0;
+    }
+  }
+`
+
+const ArticleTitle = styled.h2`
+  font-weight: 550;
+  font-size: 22px;
+  letter-spacing: 0.01em;
+  color: hsla(0 0% 0% / 0.8);
+`
+
+const ArticleDate = styled.time`
+  font-weight: 550;
+  font-size: 14px;
+  color: hsla(0 0% 0% / 0.4);
+`
+
+const getStaticProps: GetStaticProps<Props> = async () => {
+  const articles = await getArticles()
+
+  return {
+    props: {
+      latestArticles: articles
+        .map((article) => ({
+          slug: article.slug,
+          url: `/writing/${article.slug}`,
+          title: article.title,
+          thumbnailImageSrc: article.headerImage ?? null,
+          publishedOn: article.publishedOn.getTime(),
+        }))
+        .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn))
+        .slice(0, 5),
+    },
+  }
+}
+
 export default HomePage
+export { getStaticProps }
