@@ -13,8 +13,12 @@ function useSize<T extends HTMLElement>(ref: React.RefObject<T>): Size {
     if (!ref.current) return
 
     const resizeObserver = new ResizeObserver((entries) => {
-      const { width, height } = entries[0].contentRect
-      setSize({ width, height })
+      const borderBoxSize = entries[0].borderBoxSize[0]
+
+      setSize({
+        width: borderBoxSize.inlineSize,
+        height: borderBoxSize.blockSize,
+      })
     })
 
     resizeObserver.observe(ref.current)
