@@ -126,6 +126,8 @@ function NavBar() {
           style={{ [cssVar.trayHeight]: `${traySize.height}px` }}
         >
           <Tray ref={trayRef}>
+            {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
+            {/* TODO: remove from tab-index, aria hidden, etc */}
             {/* TODO: cascade animation for each item? */}
             <TrayLink to="/" exact>
               Home
@@ -287,6 +289,8 @@ const Tray = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  padding-top: 12px;
+  padding-bottom: 24px;
 `
 
 const Link = styled.a<{ isActive: boolean }>`
@@ -301,14 +305,6 @@ const Link = styled.a<{ isActive: boolean }>`
   transition-property: background-color, transform;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
-
-  &:first-child {
-    margin-top: 8px;
-  }
-
-  &:last-child {
-    margin-bottom: 24px;
-  }
 
   &:hover,
   &:active {
