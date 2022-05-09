@@ -1,5 +1,6 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import clsx from 'clsx'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { GetStaticProps } from 'next'
@@ -8,7 +9,9 @@ import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import fuzzy from 'fuzzysort'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
+import { ArrowRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import { useWindowEventListener } from '@hooks/useWindowEventListener'
+import { useSize } from '@hooks/useSize'
 
 type Props = {
   articles: Array<{
@@ -101,6 +104,43 @@ function WritingPage(props: Props) {
     })
   }
 
+  const [searchInputValue, setSearchInputValue] = React.useState('')
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
+  const searchButtonRef = React.useRef<HTMLButtonElement>(null)
+  const searchPlaceholderRef = React.useRef<HTMLDivElement>(null)
+  const cancelSearchButtonRef = React.useRef<HTMLButtonElement>(null)
+
+  const searchPlaceholderSize = useSize(searchPlaceholderRef)
+  const cancelSearchButtonSize = useSize(cancelSearchButtonRef)
+
+  function cancelSearch() {
+    setIsSearchOpen(false)
+    searchButtonRef.current?.focus()
+  }
+
+  function handleSearchButtonClick() {
+    setIsSearchOpen(true)
+    setSearchInputValue('')
+    searchInputRef.current?.focus()
+  }
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearchInputValue(event.target.value)
+  }
+
+  useWindowEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Escape') {
+        cancelSearch()
+      }
+    },
+    isSearchOpen
+  )
+
+  const searchButtonText = 'Search articles'
+
   return (
     <Layout>
       <Wrapper>
@@ -108,6 +148,43 @@ function WritingPage(props: Props) {
         <Description>
           Thoughts on code, design, lorem ipsum, and more.
         </Description>
+        <Search>
+          <SearchInputButton
+            className={clsx({ open: isSearchOpen })}
+            style={{
+              '--default-width': `${searchPlaceholderSize.width}px`,
+              '--cancel-button-width': `${cancelSearchButtonSize.width}px`,
+            }}
+          >
+            <SearchInputButtonPlaceholder ref={searchPlaceholderRef}>
+              <SearchIcon />
+              {searchButtonText}
+            </SearchInputButtonPlaceholder>
+            <SearchInput
+              value={searchInputValue}
+              onChange={handleInputChange}
+              ref={searchInputRef}
+              placeholder={searchButtonText}
+              tabIndex={isSearchOpen ? undefined : -1}
+            />
+            <CancelSearchButton
+              ref={cancelSearchButtonRef}
+              onClick={cancelSearch}
+              tabIndex={isSearchOpen ? undefined : -1}
+            >
+              Cancel
+            </CancelSearchButton>
+            <SearchButton
+              ref={searchButtonRef}
+              onClick={handleSearchButtonClick}
+              tabIndex={isSearchOpen ? -1 : undefined}
+            >
+              {searchButtonText}
+            </SearchButton>
+          </SearchInputButton>
+          <FiltersToggle>filters</FiltersToggle>
+        </Search>
+
         <Articles>
           {articles.map((article) => (
             <ArticleListItem key={article.slug}>
@@ -218,7 +295,160 @@ const Description = styled.p`
   color: hsl(0 0% 50%);
   line-height: 1.5;
   margin-bottom: 32px;
+
+const Search = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  /* TODO: Above mobile */
+  /* width: min(calc(100% + 2 * 8px),  400px); */
 `
+
+const SearchInputButton = styled.div`
+  --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
+  --border-radius: 16px;
+  --padding-x: 14px;
+  --padding-y: 12px;
+  --padding: var(--padding-y) var(--padding-x);
+  --icon-size: 20px;
+  --starting-font-weight: 500;
+  --gap: 6px;
+
+  position: relative;
+  display: flex;
+  flex: 0 1 var(--default-width);
+  background-color: hsla(0 0% 0% / 0.03);
+  border-radius: var(--border-radius);
+  will-change: flex-grow;
+
+  transition: var(--transition);
+
+  &.open {
+    flex-grow: 1;
+  }
+
+  /* TODO: active/hover transitions should be consistent with other links */
+  /* TODO: transition only whats needed */
+
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.06);
+  }
+
+  &:not(.open):active {
+    transform: scale(0.96);
+  }
+`
+
+const SearchInputButtonPlaceholder = styled.div`
+  color: transparent;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: var(--gap);
+  padding: var(--padding);
+  font-weight: var(--starting-font-weight);
+`
+
+const SearchIcon = styled(MagnifyingGlassIcon)`
+  width: var(--icon-size);
+  height: var(--icon-size);
+  color: black;
+
+  transition: var(--transition);
+
+  ${SearchInputButton}.open & {
+    color: hsla(0 0% 0% / 0.5);
+  }
+`
+
+const CancelSearchButton = styled.button`
+  position: absolute;
+  right: 0;
+  height: 100%;
+  padding-right: var(--padding-x);
+  padding-left: var(--padding-x);
+  transform: translateX(-4px);
+  cursor: pointer;
+  opacity: 0;
+  font-weight: 500;
+  color: black;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+
+  /* TODO: look into animations to postpone its appearing when opening, and make
+  the hiding quicker when closing */
+
+  transition: var(--transition);
+
+  ${SearchInputButton}.open & {
+    transform: none;
+    opacity: 1;
+  }
+`
+
+const sharedInputButtonStyle = css`
+  position: absolute;
+  inset: 0;
+  padding: var(--padding);
+  padding-left: calc(var(--padding-x) + var(--icon-size) + var(--gap));
+  border-radius: var(--border-radius);
+`
+
+const defaultTextStyle = css`
+  color: black;
+  font-weight: var(--starting-font-weight);
+`
+
+const openTextStyle = css`
+  color: hsla(0 0% 0% / 0.3);
+  font-weight: 400;
+`
+
+const SearchInput = styled.input`
+  ${sharedInputButtonStyle}
+  min-width: 0;
+  opacity: 0;
+  color: black;
+
+  transition: var(--transition);
+
+  ${SearchInputButton}.open & {
+    opacity: 1;
+    /* TODO: see if it can be delayed (animation keyframes?) */
+    padding-right: var(--cancel-button-width);
+  }
+
+  /* Placeholder styles */
+
+  &::placeholder {
+    ${defaultTextStyle}
+    transition: var(--transition);
+  }
+
+  ${SearchInputButton}.open &::placeholder {
+    ${openTextStyle}
+  }
+`
+
+const SearchButton = styled.button`
+  ${sharedInputButtonStyle}
+  ${defaultTextStyle}
+  cursor: pointer;
+
+  transition: var(--transition);
+
+  ${SearchInputButton}.open & {
+    ${openTextStyle}
+    opacity: 0;
+    pointer-events: none;
+  }
+`
+
+const FiltersToggle = styled.button``
 
 const Articles = styled.ol`
   --gap: 18px;
