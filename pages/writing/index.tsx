@@ -256,12 +256,8 @@ function WritingPage(props: Props) {
             </li>
           ))}
         </ul> */}
-        {/* TODO: define proper empty states ("no articles found with tags #Foo and #Bar") */}
-        {!articles.length && (
-          <p>
-            <strong>No articles found</strong>
-          </p>
-        )}
+
+        {/* TODO: add empty states */}
       </Wrapper>
     </Layout>
   )
