@@ -13,15 +13,17 @@ import { ArrowRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useSize } from '@hooks/useSize'
 
+type Article = {
+  slug: string
+  title: string
+  thumbnailImageSrc: string | null
+  tags: Array<string>
+  readingTime: string
+  publishedOn: number
+}
+
 type Props = {
-  articles: Array<{
-    slug: string
-    title: string
-    thumbnailImageSrc: string | null
-    tags: Array<string>
-    readingTime: string
-    publishedOn: number
-  }>
+  articles: Array<Article>
   tags: Array<string>
 }
 
@@ -35,7 +37,7 @@ function WritingPage(props: Props) {
   const router = useRouter()
 
   // TODO: couldn't all this "use the url params as store" thing be extracted to a hook?
-  const searchTerms = React.useMemo<string>(
+  const searchInputValue = React.useMemo<string>(
     () => (typeof router.query.search === 'string' ? router.query.search : ''),
     [router.query.search]
   )
@@ -47,7 +49,7 @@ function WritingPage(props: Props) {
   )
 
   const articles = React.useMemo(() => {
-    let articles = props.articles
+    let articles: Array<Article & { titleInnerHtml?: string }> = props.articles
 
     if (activeTagFilters.length) {
       articles = articles.filter((article) =>
@@ -55,19 +57,19 @@ function WritingPage(props: Props) {
       )
     }
 
-    if (searchTerms) {
-      const fuzzyResults = fuzzy.go(searchTerms, articles, {
+    if (searchInputValue) {
+      const fuzzyResults = fuzzy.go(searchInputValue, articles, {
         key: 'title',
       })
 
       articles = fuzzyResults.map((result) => ({
         ...result.obj,
-        title: fuzzy.highlight(result, '<strong>', '</strong>') as string,
+        titleInnerHtml: fuzzy.highlight(result, '<span>', '</span>') as string,
       }))
     }
 
     return articles
-  }, [props.articles, activeTagFilters, searchTerms])
+  }, [props.articles, activeTagFilters, searchInputValue])
 
   // Updates the URL parameters without triggering a full refresh
   // https://nextjs.org/docs/routing/shallow-routing
@@ -82,29 +84,19 @@ function WritingPage(props: Props) {
     // the state in Redux)
     updateRouteParams({
       tags: newActiveTagFilters.join(','),
-      search: searchTerms,
+      search: searchInputValue,
     })
   }
 
-  const handleSearchTermsChange = (
+  const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const newSearchTerms = event.target.value
-
     updateRouteParams({
       tags: activeTagFilters.join(','),
-      search: newSearchTerms,
+      search: event.target.value,
     })
   }
 
-  const handleClearButtonClick = () => {
-    updateRouteParams({
-      tags: activeTagFilters.join(','),
-      search: '',
-    })
-  }
-
-  const [searchInputValue, setSearchInputValue] = React.useState('')
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const searchButtonRef = React.useRef<HTMLButtonElement>(null)
@@ -116,19 +108,24 @@ function WritingPage(props: Props) {
 
   function cancelSearch() {
     setIsSearchOpen(false)
+
+    // Clear search
+    // updateRouteParams({
+    //   tags: activeTagFilters.join(','),
+    //   search: '',
+    // })
+
     searchButtonRef.current?.focus()
   }
 
   function handleSearchButtonClick() {
     setIsSearchOpen(true)
-    setSearchInputValue('')
     searchInputRef.current?.focus()
+    // searchInputRef.current?.select()
   }
 
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchInputValue(event.target.value)
-  }
-
+  // Close on Esc
+  // TODO: extract custom useKeyDown('Escape', ...) hook?
   useWindowEventListener(
     'keydown',
     (event) => {
@@ -162,7 +159,7 @@ function WritingPage(props: Props) {
             </SearchInputButtonPlaceholder>
             <SearchInput
               value={searchInputValue}
-              onChange={handleInputChange}
+              onChange={handleSearchInputChange}
               ref={searchInputRef}
               placeholder={searchButtonText}
               tabIndex={isSearchOpen ? undefined : -1}
@@ -200,7 +197,15 @@ function WritingPage(props: Props) {
                     )}
                   </ArticleImageWrapper>
                   <ArticleDescription>
-                    <ArticleTitle>{article.title}</ArticleTitle>
+                    {article.titleInnerHtml ? (
+                      <ArticleTitle
+                        dangerouslySetInnerHTML={{
+                          __html: article.titleInnerHtml,
+                        }}
+                      />
+                    ) : (
+                      <ArticleTitle>{article.title}</ArticleTitle>
+                    )}
                     <ArticleDescriptionBottom>
                       <ArticleDate>
                         {formatDate(article.publishedOn)}
@@ -239,23 +244,6 @@ function WritingPage(props: Props) {
           ))}
         </div>
       </div> */}
-        {/* <ul className="articles-list">
-          {articles.map((article) => (
-            <li key={article.slug}>
-              <Link href={article.url}>
-                <a>
-                  {article.thumbnailImageSrc && (
-                    <ThumbnailImage src={article.thumbnailImageSrc} />
-                  )}
-                  <h3 dangerouslySetInnerHTML={{ __html: article.title }} />
-                </a>
-              </Link>
-              <span>
-                {article.readingTime} • {formatDate(article.publishedOn)}
-              </span>
-            </li>
-          ))}
-        </ul> */}
 
         {/* TODO: add empty states */}
       </Wrapper>
@@ -465,6 +453,8 @@ const Articles = styled.ol`
   }
 `
 
+// TODO: while a search is active, remove having the first item be bigger than
+// the others
 const ArticleListItem = styled.li`
   @media (min-width: 640px) {
     flex: 0 0 calc(50% - var(--gap) / 2);
@@ -582,11 +572,21 @@ const ArticleDescriptionBottom = styled.div`
   justify-content: space-between;
 `
 
+// TODO: while a search is active, de-emphasize the text, keeping only the
+// matches with full contrast. Fade in underline and contrast changes.
 const ArticleTitle = styled.h2`
   font-weight: 550;
   font-size: 22px;
   letter-spacing: 0.01em;
   color: hsla(0 0% 0% / 0.8);
+
+  & > span {
+    text-underline-offset: 2px;
+    text-decoration-thickness: 2px;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-color: hsla(0 0% 0% / 0.3);
+  }
 `
 
 const ArticleDate = styled.time`
