@@ -16,7 +16,7 @@
     "@radix-ui/react-icons": "^1.1.0",
     "bcrypt": "^5.0.1",
     "clsx": "^1.1.1",
-    "fuzzysort": "^1.1.4",
+    "fuzzysort": "^1.9.0",
     "github-slugger": "^1.4.0",
     "hast-util-to-html": "^8.0.1",
     "hast-util-to-string": "^2.0.0",
