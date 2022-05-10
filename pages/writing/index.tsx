@@ -126,7 +126,7 @@ function WritingPage(props: Props) {
   function handleSearchButtonClick() {
     setIsSearchOpen(true)
     searchInputRef.current?.focus()
-    // searchInputRef.current?.select()
+    searchInputRef.current?.select()
   }
 
   // Close on Esc
