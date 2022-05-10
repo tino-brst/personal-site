@@ -9,7 +9,12 @@ import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import fuzzy from 'fuzzysort'
-import { ArrowRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import {
+  ArrowRightIcon,
+  BorderStyleIcon,
+  CaretDownIcon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useSize } from '@hooks/useSize'
 
@@ -138,6 +143,10 @@ function WritingPage(props: Props) {
 
   const searchButtonText = 'Search articles'
 
+  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false)
+  const filtersRef = React.useRef<HTMLDivElement>(null)
+  const filtersSize = useSize(filtersRef)
+
   return (
     <Layout>
       <Wrapper>
@@ -179,8 +188,37 @@ function WritingPage(props: Props) {
               {searchButtonText}
             </SearchButton>
           </SearchInputButton>
-          <FiltersToggle>filters</FiltersToggle>
+          <FiltersToggleButton
+            onClick={() => setIsFiltersOpen((value) => !value)}
+          >
+            <FiltersIcon />
+            <ExpandIcon />
+          </FiltersToggleButton>
         </Search>
+        <FiltersWrapper
+          className={clsx({ open: isFiltersOpen })}
+          style={{ '--content-height': `${filtersSize.height}px` }}
+        >
+          <Filters ref={filtersRef}>
+            <FiltersTitle>Filter by tags</FiltersTitle>
+            <Tags>
+              {props.tags.map((tag) => (
+                <Tag
+                  key={tag}
+                  className={clsx({ checked: activeTagFilters.includes(tag) })}
+                >
+                  <TagInput
+                    type="checkbox"
+                    checked={activeTagFilters.includes(tag)}
+                    onChange={() => handleTagFilterChange(tag)}
+                  />
+                  <TagIcon>#</TagIcon>
+                  {tag}
+                </Tag>
+              ))}
+            </Tags>
+          </Filters>
+        </FiltersWrapper>
 
         <Articles>
           {articles.map((article) => (
@@ -218,33 +256,6 @@ function WritingPage(props: Props) {
             </ArticleListItem>
           ))}
         </Articles>
-
-        {/* <div className="filters">
-        <div className="filters__search">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchTerms}
-            onChange={handleSearchTermsChange}
-          />
-          {searchTerms && (
-            <button onClick={handleClearButtonClick}>clear</button>
-          )}
-        </div>
-        <div className="filters__tags">
-          {props.tags.map((tag) => (
-            <label key={tag}>
-              <input
-                type="checkbox"
-                checked={activeTagFilters.includes(tag)}
-                onChange={() => handleTagFilterChange(tag)}
-              />
-              #{tag}
-            </label>
-          ))}
-        </div>
-      </div> */}
-
         {/* TODO: add empty states */}
       </Wrapper>
     </Layout>
@@ -278,12 +289,16 @@ const Description = styled.p`
   font-size: 16px;
   color: hsl(0 0% 50%);
   line-height: 1.5;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+`
 
 const Search = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-left: -4px;
+  margin-right: -4px;
+  max-width: 400px;
 
   /* TODO: Above mobile */
   /* width: min(calc(100% + 2 * 8px),  400px); */
@@ -432,13 +447,153 @@ const SearchButton = styled.button`
   }
 `
 
-const FiltersToggle = styled.button``
+const FiltersToggleButton = styled.button`
+  cursor: pointer;
+  padding: 12px 12px 12px 14px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  transition-property: transform, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.03);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+`
+
+const FiltersIcon = styled(BorderStyleIcon)`
+  width: 20px;
+  height: 20px;
+  color: black;
+`
+
+const ExpandIcon = styled(CaretDownIcon)`
+  width: 18px;
+  height: 18px;
+  color: black;
+`
+
+const FiltersWrapper = styled.div`
+  --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
+
+  max-height: 0;
+  transition: var(--transition);
+
+  &.open {
+    max-height: var(--content-height);
+  }
+`
+
+const Filters = styled.div`
+  padding-top: 22px;
+`
+
+const FiltersTitle = styled.h3`
+  font-size: 12px;
+  width: fit-content;
+  color: hsla(0 0% 0% / 0.4);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+
+  opacity: 0;
+  transform: translateY(-2px);
+
+  transition: var(--transition);
+
+  ${FiltersWrapper}.open & {
+    opacity: 1;
+    transform: none;
+  }
+`
+
+const Tags = styled.div`
+  margin-left: -4px;
+  margin-right: -4px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  opacity: 0;
+  transform: translateY(-6px);
+
+  transition: var(--transition);
+
+  ${FiltersWrapper}.open & {
+    opacity: 1;
+    transform: none;
+  }
+`
+
+const Tag = styled.label`
+  --border-radius: 12px;
+  position: relative;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: hsla(0 0% 0% / 0.03);
+  border-radius: var(--border-radius);
+  padding: 8px 10px;
+
+  transition-property: transform, background-color, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.06);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.checked {
+    background-color: hsl(0 0% 10%);
+    color: white;
+  }
+`
+
+const TagInput = styled.input`
+  position: absolute;
+  inset: 0;
+  border-radius: var(--border-radius);
+`
+
+const TagIcon = styled.span`
+  color: hsl(0 0% 0% / 0.3);
+  transform: scale(1.2);
+  font-weight: 400;
+
+  transition-property: color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+
+  ${Tag}.checked & {
+    color: hsl(0 0% 100% / 0.5);
+  }
+`
 
 const Articles = styled.ol`
   --gap: 18px;
 
   margin-left: -8px;
   margin-right: -8px;
+  margin-top: 32px;
 
   display: flex;
   flex-direction: column;
