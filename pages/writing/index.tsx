@@ -199,7 +199,6 @@ function WritingPage(props: Props) {
           className={clsx({ open: isFiltersOpen })}
           style={{ '--content-height': `${filtersSize.height}px` }}
         >
-          {/* TODO remove from accessibility & keyboard */}
           <Filters ref={filtersRef}>
             <FiltersTitle>Filter by tags</FiltersTitle>
             <Tags>
@@ -487,9 +486,12 @@ const FiltersWrapper = styled.div`
   --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
 
   max-height: 0;
+  visibility: hidden;
+
   transition: var(--transition);
 
   &.open {
+    visibility: visible;
     max-height: var(--content-height);
   }
 `
