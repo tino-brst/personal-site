@@ -30,6 +30,7 @@ function HomePage(props: Props) {
         <NextLink href="/about" passHref={true}>
           <Link>
             About me
+            {/* TODO: move icon sizes to css */}
             <ArrowRightIcon width={20} height={20} />
           </Link>
         </NextLink>
@@ -64,7 +65,7 @@ function HomePage(props: Props) {
         </Articles>
         <NextLink href="/writing" passHref={true}>
           <Link>
-            All Articles
+            All articles
             <ArrowRightIcon width={20} height={20} />
           </Link>
         </NextLink>

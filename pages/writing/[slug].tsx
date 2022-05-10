@@ -405,7 +405,6 @@ const Title = styled.h1`
 `
 
 const Tags = styled.div`
-  --border-radius: 8px;
   --gap: 8px;
   margin-left: -24px;
   margin-right: -24px;
@@ -453,7 +452,7 @@ const Tag = styled.a`
   font-weight: 500;
   color: hsl(0 0% 0% / 0.7);
   background-color: hsla(0 0% 0% / 0.03);
-  border-radius: var(--border-radius);
+  border-radius: 8px;
   padding: 6px 10px;
   scroll-snap-align: start;
 
