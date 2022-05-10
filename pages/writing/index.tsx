@@ -53,29 +53,6 @@ function WritingPage(props: Props) {
     [router.query.tags]
   )
 
-  const articles = React.useMemo(() => {
-    let articles: Array<Article & { titleInnerHtml?: string }> = props.articles
-
-    if (activeTagFilters.length) {
-      articles = articles.filter((article) =>
-        includesEvery(article.tags, activeTagFilters)
-      )
-    }
-
-    if (searchInputValue) {
-      const fuzzyResults = fuzzy.go(searchInputValue, articles, {
-        key: 'title',
-      })
-
-      articles = fuzzyResults.map((result) => ({
-        ...result.obj,
-        titleInnerHtml: fuzzy.highlight(result, '<span>', '</span>') as string,
-      }))
-    }
-
-    return articles
-  }, [props.articles, activeTagFilters, searchInputValue])
-
   // Updates the URL parameters without triggering a full refresh
   // https://nextjs.org/docs/routing/shallow-routing
   const updateRouteParams = (params: { tags: string; search: string }) => {
@@ -147,6 +124,29 @@ function WritingPage(props: Props) {
   const filtersRef = React.useRef<HTMLDivElement>(null)
   const filtersSize = useSize(filtersRef)
 
+  const articles = React.useMemo(() => {
+    let articles: Array<Article & { titleInnerHtml?: string }> = props.articles
+
+    if (activeTagFilters.length) {
+      articles = articles.filter((article) =>
+        includesEvery(article.tags, activeTagFilters)
+      )
+    }
+
+    if (isSearchOpen && searchInputValue) {
+      const fuzzyResults = fuzzy.go(searchInputValue, articles, {
+        key: 'title',
+      })
+
+      articles = fuzzyResults.map((result) => ({
+        ...result.obj,
+        titleInnerHtml: fuzzy.highlight(result, '<span>', '</span>') as string,
+      }))
+    }
+
+    return articles
+  }, [props.articles, activeTagFilters, isSearchOpen, searchInputValue])
+
   return (
     <Layout>
       <Wrapper>
@@ -199,6 +199,7 @@ function WritingPage(props: Props) {
           className={clsx({ open: isFiltersOpen })}
           style={{ '--content-height': `${filtersSize.height}px` }}
         >
+          {/* TODO remove from accessibility & keyboard */}
           <Filters ref={filtersRef}>
             <FiltersTitle>Filter by tags</FiltersTitle>
             <Tags>
