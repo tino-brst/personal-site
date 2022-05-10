@@ -210,22 +210,23 @@ function WritingPage(props: Props) {
             <FiltersTitle>Filter by tags</FiltersTitle>
             <Tags>
               {props.tags.map((tag) => (
-                <Tag
-                  key={tag}
-                  className={clsx({
-                    checked: activeTagFilters.includes(tag),
-                    disabled: !availableTags.includes(tag),
-                  })}
-                >
-                  <TagInput
-                    type="checkbox"
-                    checked={activeTagFilters.includes(tag)}
-                    disabled={!availableTags.includes(tag)}
-                    onChange={() => handleTagFilterChange(tag)}
-                  />
-                  <TagIcon>#</TagIcon>
-                  {tag}
-                </Tag>
+                <li key={tag}>
+                  <Tag
+                    className={clsx({
+                      checked: activeTagFilters.includes(tag),
+                      disabled: !availableTags.includes(tag),
+                    })}
+                  >
+                    <TagInput
+                      type="checkbox"
+                      checked={activeTagFilters.includes(tag)}
+                      disabled={!availableTags.includes(tag)}
+                      onChange={() => handleTagFilterChange(tag)}
+                    />
+                    <TagIcon>#</TagIcon>
+                    {tag}
+                  </Tag>
+                </li>
               ))}
             </Tags>
           </Filters>
@@ -531,7 +532,7 @@ const FiltersTitle = styled.h3`
   }
 `
 
-const Tags = styled.div`
+const Tags = styled.ol`
   margin-left: -4px;
   margin-right: -4px;
   display: flex;
@@ -553,7 +554,6 @@ const Tag = styled.label`
   --border-radius: 12px;
   position: relative;
   color: black;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -567,23 +567,27 @@ const Tag = styled.label`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:hover,
-  &:active {
-    background-color: hsla(0 0% 0% / 0.06);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
   &.checked {
     background-color: hsl(0 0% 10%);
-    color: white;
+    color: hsla(0 0% 100% / 0.95);
   }
 
   &.disabled {
     background-color: hsla(0 0% 0% / 0.02);
     color: hsla(0 0% 0% / 0.3);
+  }
+
+  &:not(.disabled) {
+    cursor: pointer;
+  }
+
+  &:not(.checked, .disabled):hover,
+  &:not(.checked, .disabled):active {
+    background-color: hsla(0 0% 0% / 0.06);
+  }
+
+  &:not(.disabled):active {
+    transform: scale(0.95);
   }
 `
 
@@ -597,13 +601,14 @@ const TagIcon = styled.span`
   color: hsl(0 0% 0% / 0.3);
   transform: scale(1.2);
   font-weight: 400;
+  pointer-events: none;
 
   transition-property: color;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   ${Tag}.checked & {
-    color: hsl(0 0% 100% / 0.5);
+    color: hsl(0 0% 100% / 0.4);
   }
 
   ${Tag}.disabled & {
