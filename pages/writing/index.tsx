@@ -80,7 +80,6 @@ function WritingPage(props: Props) {
   }
 
   // TODO: both the search and filters should be open if the page loaded with any
-  // TODO: disable tags not available for the given search
 
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
   const searchInputRef = React.useRef<HTMLInputElement>(null)
@@ -150,6 +149,11 @@ function WritingPage(props: Props) {
     return articles
   }, [props.articles, activeTagFilters, isSearchOpen, searchInputValue])
 
+  const availableTags = React.useMemo(
+    () => Array.from(new Set(articles.map((article) => article.tags).flat())),
+    [articles]
+  )
+
   return (
     <Layout>
       <Wrapper>
@@ -208,11 +212,15 @@ function WritingPage(props: Props) {
               {props.tags.map((tag) => (
                 <Tag
                   key={tag}
-                  className={clsx({ checked: activeTagFilters.includes(tag) })}
+                  className={clsx({
+                    checked: activeTagFilters.includes(tag),
+                    disabled: !availableTags.includes(tag),
+                  })}
                 >
                   <TagInput
                     type="checkbox"
                     checked={activeTagFilters.includes(tag)}
+                    disabled={!availableTags.includes(tag)}
                     onChange={() => handleTagFilterChange(tag)}
                   />
                   <TagIcon>#</TagIcon>
@@ -572,6 +580,11 @@ const Tag = styled.label`
     background-color: hsl(0 0% 10%);
     color: white;
   }
+
+  &.disabled {
+    background-color: hsla(0 0% 0% / 0.02);
+    color: hsla(0 0% 0% / 0.3);
+  }
 `
 
 const TagInput = styled.input`
@@ -591,6 +604,10 @@ const TagIcon = styled.span`
 
   ${Tag}.checked & {
     color: hsl(0 0% 100% / 0.5);
+  }
+
+  ${Tag}.disabled & {
+    color: hsl(0 0% 0% / 0.1);
   }
 `
 
