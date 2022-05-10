@@ -79,6 +79,9 @@ function WritingPage(props: Props) {
     })
   }
 
+  // TODO: both the search and filters should be open if the page loaded with any
+  // TODO: disable tags not available for the given search
+
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const searchButtonRef = React.useRef<HTMLButtonElement>(null)
@@ -510,7 +513,7 @@ const FiltersTitle = styled.h3`
   margin-bottom: 16px;
 
   opacity: 0;
-  transform: translateY(-2px);
+  transform: translateY(2px);
 
   transition: var(--transition);
 
@@ -528,7 +531,7 @@ const Tags = styled.div`
   flex-wrap: wrap;
 
   opacity: 0;
-  transform: translateY(-6px);
+  transform: translateY(6px);
 
   transition: var(--transition);
 
