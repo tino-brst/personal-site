@@ -62,7 +62,7 @@ type LinkProps = {
 function Link(props: LinkProps) {
   return (
     <NextLink href={props.href} passHref={true}>
-      <StyledLink>
+      <StyledLink target={props.external ? '_blank' : undefined}>
         {props.children}
         {props.external && <ExternalLinkIcon height={14} width={14} />}
       </StyledLink>
