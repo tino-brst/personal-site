@@ -627,7 +627,8 @@ const TableOfContentsWrapper = styled.div`
   visibility: hidden;
   pointer-events: auto;
   opacity: 0;
-  transform: translate(16px, 24px) scale(0.9);
+  transform: translateY(8px) scale(0.9);
+  transform-origin: bottom right;
   display: flex;
   flex-direction: column;
   overflow: hidden;
