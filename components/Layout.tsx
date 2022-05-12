@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
@@ -71,6 +71,21 @@ function Link(props: LinkProps) {
   )
 }
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+`
+
+const fadeInAnimation = css`
+  animation: ${fadeIn} 0.2s ease-out;
+`
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -82,10 +97,12 @@ const Wrapper = styled.div`
 `
 
 const Content = styled.div`
+  ${fadeInAnimation}
   flex: 1;
 `
 
 const Footer = styled.footer`
+  ${fadeInAnimation}
   width: 100%;
   display: flex;
   flex-direction: column;
