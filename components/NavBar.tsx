@@ -130,11 +130,15 @@ function NavBar() {
             {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
             {/* TODO: remove from tab-index, aria hidden, etc */}
             {/* TODO: cascade animation for each item? */}
-            <TrayLink to="/" exact>
+            <TrayLink to="/" onClick={closeTray} exact>
               Home
             </TrayLink>
-            <TrayLink to="/writing">Writing</TrayLink>
-            <TrayLink to="/about">About</TrayLink>
+            <TrayLink to="/writing" onClick={closeTray}>
+              Writing
+            </TrayLink>
+            <TrayLink to="/about" onClick={closeTray}>
+              About
+            </TrayLink>
           </Tray>
         </TrayWrapper>
       </Wrapper>
@@ -144,6 +148,7 @@ function NavBar() {
 
 function TrayLink(props: {
   to: string
+  onClick: () => void
   /** When true, the active style will only be applied if the location is matched _exactly_. */
   exact?: boolean
   children?: React.ReactNode
@@ -153,6 +158,7 @@ function TrayLink(props: {
   return (
     <NextLink href={props.to} passHref={true}>
       <Link
+        onClick={props.onClick}
         className={clsx({
           active: props.exact
             ? router.pathname === props.to
