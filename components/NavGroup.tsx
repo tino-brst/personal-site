@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
+import clsx from 'clsx'
 
 type NavGroupContextValue = {
   highlightWidth: number
@@ -78,13 +79,13 @@ function NavGroupLink(props: {
   return (
     <NextLink href={props.to} passHref={true}>
       <Link
-        onMouseLeave={handleMouseLeave}
-        onMouseEnter={handleMouseEnter}
-        isActive={
-          props.exact
+        className={clsx({
+          active: props.exact
             ? router.pathname === props.to
-            : router.pathname.startsWith(props.to)
-        }
+            : router.pathname.startsWith(props.to),
+        })}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {props.children}
       </Link>
@@ -123,7 +124,7 @@ const Highlight = styled.div`
   }
 `
 
-const Link = styled.a<{ isActive: boolean }>`
+const Link = styled.a`
   height: 44px;
   display: flex;
   align-items: center;
@@ -131,14 +132,18 @@ const Link = styled.a<{ isActive: boolean }>`
   font-weight: 500;
   padding-left: 16px;
   padding-right: 16px;
-  color: ${(p) => (p.isActive ? 'black' : 'hsla(0 0% 0% / 0.4)')};
+  color: hsla(0 0% 0% / 0.4);
 
-  transition-property: transform;
+  transition-property: transform, color;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   &:active {
     transform: scale(0.95);
+  }
+
+  &.active {
+    color: black;
   }
 `
 

@@ -12,6 +12,7 @@ import { ThemeToggle } from './ThemeToggle'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { NavGroup, NavGroupLink } from './NavGroup'
 import avatarImageSrc from 'public/images/avatar.png'
+import clsx from 'clsx'
 
 const barHeight = 70
 const scrollThreshold = 48
@@ -152,11 +153,11 @@ function TrayLink(props: {
   return (
     <NextLink href={props.to} passHref={true}>
       <Link
-        isActive={
-          props.exact
+        className={clsx({
+          active: props.exact
             ? router.pathname === props.to
-            : router.pathname.startsWith(props.to)
-        }
+            : router.pathname.startsWith(props.to),
+        })}
       >
         {props.children}
       </Link>
@@ -293,16 +294,16 @@ const Tray = styled.div`
   padding-bottom: 24px;
 `
 
-const Link = styled.a<{ isActive: boolean }>`
+const Link = styled.a`
   display: flex;
   align-items: center;
   font-size: 1.2rem;
   font-weight: 500;
   border-radius: 12px;
   padding: 12px 18px;
-  color: ${(p) => (p.isActive ? 'black' : 'hsla(0 0% 0% / 0.4)')};
+  color: hsla(0 0% 0% / 0.4);
 
-  transition-property: background-color, transform;
+  transition-property: background-color, transform, color;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
@@ -313,6 +314,10 @@ const Link = styled.a<{ isActive: boolean }>`
 
   &:active {
     transform: scale(0.95);
+  }
+
+  &.active {
+    color: black;
   }
 `
 
