@@ -15,8 +15,8 @@ import {
   CaretDownIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons'
-import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { useSize } from '@hooks/useSize'
+import { useOnKeyDown } from '@hooks/useOnKeyDown'
 
 type Article = {
   slug: string
@@ -108,12 +108,12 @@ function WritingPage(props: Props) {
     searchInputRef.current?.select()
   }
 
-  // Close on Esc
-  // TODO: extract custom useKeyDown('Escape', ...) hook?
-  useWindowEventListener(
-    'keydown',
+  useOnKeyDown(
+    'Escape',
     (event) => {
-      if (event.key === 'Escape') {
+      if (isElementInFocus(searchInputRef.current)) {
+        // Prevents the browser exiting full-screen, besides closing the search
+        event.preventDefault()
         cancelSearch()
       }
     },
@@ -838,6 +838,10 @@ function toggle<T>(array: Array<T>, value: T): Array<T> {
  */
 function includesEvery<T>(array: Array<T>, values: Array<T>): boolean {
   return values.every((value) => array.includes(value))
+}
+
+function isElementInFocus(element: HTMLElement | null): boolean {
+  return document.activeElement === element
 }
 
 const getStaticProps: GetStaticProps<Props> = async () => {
