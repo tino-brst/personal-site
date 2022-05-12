@@ -5,7 +5,6 @@ import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { GetStaticProps } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import { Layout } from '@components/Layout'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import fuzzy from 'fuzzysort'
@@ -17,6 +16,7 @@ import {
 } from '@radix-ui/react-icons'
 import { useSize } from '@hooks/useSize'
 import { useOnKeyDown } from '@hooks/useOnKeyDown'
+import { animation } from 'styles/shared'
 
 type Article = {
   slug: string
@@ -155,122 +155,118 @@ function WritingPage(props: Props) {
   )
 
   return (
-    <Layout>
-      <Wrapper>
-        <Title>Writing</Title>
-        <Description>
-          Thoughts on code, design, lorem ipsum, and more.
-        </Description>
-        <Search>
-          <SearchInputButton
-            className={clsx({ open: isSearchOpen })}
-            style={{
-              '--default-width': `${searchPlaceholderSize.width}px`,
-              '--cancel-button-width': `${cancelSearchButtonSize.width}px`,
-            }}
-          >
-            <SearchInputButtonPlaceholder ref={searchPlaceholderRef}>
-              <SearchIcon />
-              {searchButtonText}
-            </SearchInputButtonPlaceholder>
-            <SearchInput
-              value={searchInputValue}
-              onChange={handleSearchInputChange}
-              ref={searchInputRef}
-              placeholder={searchButtonText}
-              tabIndex={isSearchOpen ? undefined : -1}
-            />
-            <CancelSearchButton
-              ref={cancelSearchButtonRef}
-              onClick={cancelSearch}
-              tabIndex={isSearchOpen ? undefined : -1}
-            >
-              Cancel
-            </CancelSearchButton>
-            <SearchButton
-              ref={searchButtonRef}
-              onClick={handleSearchButtonClick}
-              tabIndex={isSearchOpen ? -1 : undefined}
-            >
-              {searchButtonText}
-            </SearchButton>
-          </SearchInputButton>
-          <FiltersToggleButton
-            onClick={() => setIsFiltersOpen((value) => !value)}
-          >
-            <FiltersIcon />
-            <ExpandIcon />
-          </FiltersToggleButton>
-        </Search>
-        <FiltersWrapper
-          className={clsx({ open: isFiltersOpen })}
-          style={{ '--content-height': `${filtersSize.height}px` }}
+    <Wrapper>
+      <Title>Writing</Title>
+      <Description>
+        Thoughts on code, design, lorem ipsum, and more.
+      </Description>
+      <Search>
+        <SearchInputButton
+          className={clsx({ open: isSearchOpen })}
+          style={{
+            '--default-width': `${searchPlaceholderSize.width}px`,
+            '--cancel-button-width': `${cancelSearchButtonSize.width}px`,
+          }}
         >
-          <Filters ref={filtersRef}>
-            <FiltersTitle>Filter by tags</FiltersTitle>
-            <Tags>
-              {props.tags.map((tag) => (
-                <li key={tag}>
-                  <Tag
-                    className={clsx({
-                      checked: activeTagFilters.includes(tag),
-                      disabled: !availableTags.includes(tag),
-                    })}
-                  >
-                    <TagInput
-                      type="checkbox"
-                      checked={activeTagFilters.includes(tag)}
-                      disabled={!availableTags.includes(tag)}
-                      onChange={() => handleTagFilterChange(tag)}
-                    />
-                    <TagIcon>#</TagIcon>
-                    {tag}
-                  </Tag>
-                </li>
-              ))}
-            </Tags>
-          </Filters>
-        </FiltersWrapper>
+          <SearchInputButtonPlaceholder ref={searchPlaceholderRef}>
+            <SearchIcon />
+            {searchButtonText}
+          </SearchInputButtonPlaceholder>
+          <SearchInput
+            value={searchInputValue}
+            onChange={handleSearchInputChange}
+            ref={searchInputRef}
+            placeholder={searchButtonText}
+            tabIndex={isSearchOpen ? undefined : -1}
+          />
+          <CancelSearchButton
+            ref={cancelSearchButtonRef}
+            onClick={cancelSearch}
+            tabIndex={isSearchOpen ? undefined : -1}
+          >
+            Cancel
+          </CancelSearchButton>
+          <SearchButton
+            ref={searchButtonRef}
+            onClick={handleSearchButtonClick}
+            tabIndex={isSearchOpen ? -1 : undefined}
+          >
+            {searchButtonText}
+          </SearchButton>
+        </SearchInputButton>
+        <FiltersToggleButton
+          onClick={() => setIsFiltersOpen((value) => !value)}
+        >
+          <FiltersIcon />
+          <ExpandIcon />
+        </FiltersToggleButton>
+      </Search>
+      <FiltersWrapper
+        className={clsx({ open: isFiltersOpen })}
+        style={{ '--content-height': `${filtersSize.height}px` }}
+      >
+        <Filters ref={filtersRef}>
+          <FiltersTitle>Filter by tags</FiltersTitle>
+          <Tags>
+            {props.tags.map((tag) => (
+              <li key={tag}>
+                <Tag
+                  className={clsx({
+                    checked: activeTagFilters.includes(tag),
+                    disabled: !availableTags.includes(tag),
+                  })}
+                >
+                  <TagInput
+                    type="checkbox"
+                    checked={activeTagFilters.includes(tag)}
+                    disabled={!availableTags.includes(tag)}
+                    onChange={() => handleTagFilterChange(tag)}
+                  />
+                  <TagIcon>#</TagIcon>
+                  {tag}
+                </Tag>
+              </li>
+            ))}
+          </Tags>
+        </Filters>
+      </FiltersWrapper>
 
-        <Articles>
-          {articles.map((article) => (
-            <ArticleListItem key={article.slug}>
-              <NextLink href={`/writing/${article.slug}`} passHref={true}>
-                <ArticleLink>
-                  <ArticleImageWrapper>
-                    {article.thumbnailImageSrc && (
-                      <ArticleImage
-                        src={article.thumbnailImageSrc}
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    )}
-                  </ArticleImageWrapper>
-                  <ArticleDescription>
-                    {article.titleInnerHtml ? (
-                      <ArticleTitle
-                        dangerouslySetInnerHTML={{
-                          __html: article.titleInnerHtml,
-                        }}
-                      />
-                    ) : (
-                      <ArticleTitle>{article.title}</ArticleTitle>
-                    )}
-                    <ArticleDescriptionBottom>
-                      <ArticleDate>
-                        {formatDate(article.publishedOn)}
-                      </ArticleDate>
-                      <GoToArticleIcon width={18} height={18} />
-                    </ArticleDescriptionBottom>
-                  </ArticleDescription>
-                </ArticleLink>
-              </NextLink>
-            </ArticleListItem>
-          ))}
-        </Articles>
-        {/* TODO: add empty states */}
-      </Wrapper>
-    </Layout>
+      <Articles>
+        {articles.map((article) => (
+          <ArticleListItem key={article.slug}>
+            <NextLink href={`/writing/${article.slug}`} passHref={true}>
+              <ArticleLink>
+                <ArticleImageWrapper>
+                  {article.thumbnailImageSrc && (
+                    <ArticleImage
+                      src={article.thumbnailImageSrc}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  )}
+                </ArticleImageWrapper>
+                <ArticleDescription>
+                  {article.titleInnerHtml ? (
+                    <ArticleTitle
+                      dangerouslySetInnerHTML={{
+                        __html: article.titleInnerHtml,
+                      }}
+                    />
+                  ) : (
+                    <ArticleTitle>{article.title}</ArticleTitle>
+                  )}
+                  <ArticleDescriptionBottom>
+                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
+                    <GoToArticleIcon width={18} height={18} />
+                  </ArticleDescriptionBottom>
+                </ArticleDescription>
+              </ArticleLink>
+            </NextLink>
+          </ArticleListItem>
+        ))}
+      </Articles>
+      {/* TODO: add empty states */}
+    </Wrapper>
   )
 }
 
@@ -280,6 +276,8 @@ const Wrapper = styled.div`
   margin-right: auto;
   padding-left: 24px;
   padding-right: 24px;
+
+  ${animation.fadeIn}
 
   @media (min-width: 640px) {
     padding-left: 40px;

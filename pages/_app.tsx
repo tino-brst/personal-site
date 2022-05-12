@@ -6,12 +6,15 @@ import type { AppProps } from 'next/app'
 import { SWRConfig } from 'swr'
 import { fetcher } from '@lib/fetcher'
 import { ThemeProvider } from 'contexts/theme'
+import { Layout } from '@components/Layout'
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig value={{ fetcher }}>
       <ThemeProvider>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
     </SWRConfig>
   )

@@ -1,7 +1,5 @@
-import { Layout } from '@components/Layout'
-
 function AboutPage() {
-  return <Layout></Layout>
+  return null
 }
 
 export default AboutPage

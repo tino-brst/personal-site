@@ -7,7 +7,6 @@ import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { Root } from '@lib/mdast-util-toc'
-import { Layout } from '@components/Layout'
 import { CodeBlock } from '@components/markdown/CodeBlock'
 import { Image } from '@components/markdown/Image'
 import { Paragraph } from '@components/markdown/Paragraph'
@@ -32,6 +31,7 @@ import {
   AsideTableOfContents,
   TableOfContents,
 } from '@components/TableOfContents'
+import { animation } from 'styles/shared'
 
 const barHeight = 70
 const barBottomMargin = 60
@@ -101,159 +101,157 @@ function ArticlePage(props: Props) {
   useWindowEventListener('resize', updateShowBackToTop)
 
   return (
-    <Layout>
-      <TableOfContentsProvider tableOfContents={props.tableOfContents}>
-        <Wrapper>
-          <Aside />
-          <Main>
-            <Header>
-              <Info>
-                <InfoItem>
-                  <CalendarIcon width={12} height={12} />
-                  <span>{formatDate(props.publishedOn)}</span>
-                </InfoItem>
-                <InfoItem>
-                  <ClockIcon width={12} height={12} />
-                  <span>{props.readingTime}</span>
-                </InfoItem>
-              </Info>
-              <Title>{props.title}</Title>
-              {props.tags.length > 0 && (
-                <Tags>
-                  {props.tags.map((tag) => (
-                    <NextLink
-                      key={tag}
-                      href={`/writing?tags=${tag}`}
-                      passHref={true}
-                    >
-                      <Tag>
-                        {/* TODO: use hashtag icon instead of character */}
-                        <TagIcon>#</TagIcon>
-                        {tag}
-                      </Tag>
-                    </NextLink>
-                  ))}
-                </Tags>
+    <TableOfContentsProvider tableOfContents={props.tableOfContents}>
+      <Wrapper>
+        <Aside />
+        <Main>
+          <Header>
+            <Info>
+              <InfoItem>
+                <CalendarIcon width={12} height={12} />
+                <span>{formatDate(props.publishedOn)}</span>
+              </InfoItem>
+              <InfoItem>
+                <ClockIcon width={12} height={12} />
+                <span>{props.readingTime}</span>
+              </InfoItem>
+            </Info>
+            <Title>{props.title}</Title>
+            {props.tags.length > 0 && (
+              <Tags>
+                {props.tags.map((tag) => (
+                  <NextLink
+                    key={tag}
+                    href={`/writing?tags=${tag}`}
+                    passHref={true}
+                  >
+                    <Tag>
+                      {/* TODO: use hashtag icon instead of character */}
+                      <TagIcon>#</TagIcon>
+                      {tag}
+                    </Tag>
+                  </NextLink>
+                ))}
+              </Tags>
+            )}
+            <HeaderImageWrapper>
+              {props.headerImageSrc && (
+                <HeaderImage
+                  src={props.headerImageSrc}
+                  layout="fill"
+                  objectFit="cover"
+                />
               )}
-              <HeaderImageWrapper>
-                {props.headerImageSrc && (
-                  <HeaderImage
-                    src={props.headerImageSrc}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                )}
-              </HeaderImageWrapper>
-            </Header>
-            <Content components={components} />
-          </Main>
-          <Aside>
-            <RightSideContent>
-              {props.tableOfContents.children.length > 0 && (
-                <AsideSection>
-                  <AsideSectionHeader>
-                    In this article
-                    <ListBulletIcon width={18} height={18} />
-                  </AsideSectionHeader>
-                  <AsideTableOfContents />
-                </AsideSection>
-              )}
-            </RightSideContent>
-          </Aside>
-        </Wrapper>
-        <UpNext>
-          <ArticleList>
-            <ArticleListItem>
-              {props.newerArticle && (
-                <NextLink
-                  href={`/writing/${props.newerArticle.slug}`}
-                  passHref={true}
-                >
-                  <ArticleLink className="next">
-                    <ArticleImageWrapper>
-                      {props.newerArticle.thumbnailImageSrc && (
-                        <ArticleImage
-                          src={props.newerArticle.thumbnailImageSrc}
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      )}
-                    </ArticleImageWrapper>
-                    <ArticleDescription>
-                      <ArticleTitle>{props.newerArticle.title}</ArticleTitle>
-                      <ArticleLabel>
-                        Next article
-                        <NextArticleIcon width={18} height={18} />
-                      </ArticleLabel>
-                    </ArticleDescription>
-                  </ArticleLink>
-                </NextLink>
-              )}
-            </ArticleListItem>
-            <ArticleListItem>
-              {props.olderArticle && (
-                <NextLink
-                  href={`/writing/${props.olderArticle.slug}`}
-                  passHref={true}
-                >
-                  <ArticleLink className="previous">
-                    <ArticleImageWrapper>
-                      {props.olderArticle.thumbnailImageSrc && (
-                        <ArticleImage
-                          src={props.olderArticle.thumbnailImageSrc}
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      )}
-                    </ArticleImageWrapper>
-                    <ArticleDescription>
-                      <ArticleTitle>{props.olderArticle.title}</ArticleTitle>
-                      <ArticleLabel>
-                        Previous article
-                        <PreviousArticleIcon width={18} height={18} />
-                      </ArticleLabel>
-                    </ArticleDescription>
-                  </ArticleLink>
-                </NextLink>
-              )}
-            </ArticleListItem>
-          </ArticleList>
-          <NextLink href="/writing" passHref={true}>
-            <AllArticlesLink>
-              <ArrowLeftIcon width={20} height={20} />
-              All Articles
-            </AllArticlesLink>
-          </NextLink>
-        </UpNext>
-        <FloatingStuff>
-          {/* TODO: add tooltips "Open Table Of Contents", "Back to Top", etc */}
-          <ButtonGroup className={clsx({ expanded: showBackToTop })}>
-            <ButtonBackground>
-              <BackToTopButton onClick={backToTop}>
-                <BackToTopIcon width={26} height={26} />
-              </BackToTopButton>
-            </ButtonBackground>
-            <ButtonGroupDivider />
-            <ButtonBackground>
-              <TableOfContentsButton
-                ref={tableOfContentsButtonRef}
-                onClick={toggleTableOfContents}
+            </HeaderImageWrapper>
+          </Header>
+          <Content components={components} />
+        </Main>
+        <Aside>
+          <RightSideContent>
+            {props.tableOfContents.children.length > 0 && (
+              <AsideSection>
+                <AsideSectionHeader>
+                  In this article
+                  <ListBulletIcon width={18} height={18} />
+                </AsideSectionHeader>
+                <AsideTableOfContents />
+              </AsideSection>
+            )}
+          </RightSideContent>
+        </Aside>
+      </Wrapper>
+      <UpNext>
+        <ArticleList>
+          <ArticleListItem>
+            {props.newerArticle && (
+              <NextLink
+                href={`/writing/${props.newerArticle.slug}`}
+                passHref={true}
               >
-                <TableOfContentsIcon width={26} height={26} />
-              </TableOfContentsButton>
-            </ButtonBackground>
-          </ButtonGroup>
-          {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
-          <TableOfContentsWrapper
-            className={clsx({ open: isTableOfContentsOpen })}
-            ref={tableOfContentsRef}
-          >
-            <TableOfContentsHeader>In this article</TableOfContentsHeader>
-            <TableOfContents onSelect={closeTableOfContents} />
-          </TableOfContentsWrapper>
-        </FloatingStuff>
-      </TableOfContentsProvider>
-    </Layout>
+                <ArticleLink className="next">
+                  <ArticleImageWrapper>
+                    {props.newerArticle.thumbnailImageSrc && (
+                      <ArticleImage
+                        src={props.newerArticle.thumbnailImageSrc}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    )}
+                  </ArticleImageWrapper>
+                  <ArticleDescription>
+                    <ArticleTitle>{props.newerArticle.title}</ArticleTitle>
+                    <ArticleLabel>
+                      Next article
+                      <NextArticleIcon width={18} height={18} />
+                    </ArticleLabel>
+                  </ArticleDescription>
+                </ArticleLink>
+              </NextLink>
+            )}
+          </ArticleListItem>
+          <ArticleListItem>
+            {props.olderArticle && (
+              <NextLink
+                href={`/writing/${props.olderArticle.slug}`}
+                passHref={true}
+              >
+                <ArticleLink className="previous">
+                  <ArticleImageWrapper>
+                    {props.olderArticle.thumbnailImageSrc && (
+                      <ArticleImage
+                        src={props.olderArticle.thumbnailImageSrc}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    )}
+                  </ArticleImageWrapper>
+                  <ArticleDescription>
+                    <ArticleTitle>{props.olderArticle.title}</ArticleTitle>
+                    <ArticleLabel>
+                      Previous article
+                      <PreviousArticleIcon width={18} height={18} />
+                    </ArticleLabel>
+                  </ArticleDescription>
+                </ArticleLink>
+              </NextLink>
+            )}
+          </ArticleListItem>
+        </ArticleList>
+        <NextLink href="/writing" passHref={true}>
+          <AllArticlesLink>
+            <ArrowLeftIcon width={20} height={20} />
+            All Articles
+          </AllArticlesLink>
+        </NextLink>
+      </UpNext>
+      <FloatingStuff>
+        {/* TODO: add tooltips "Open Table Of Contents", "Back to Top", etc */}
+        <ButtonGroup className={clsx({ expanded: showBackToTop })}>
+          <ButtonBackground>
+            <BackToTopButton onClick={backToTop}>
+              <BackToTopIcon width={26} height={26} />
+            </BackToTopButton>
+          </ButtonBackground>
+          <ButtonGroupDivider />
+          <ButtonBackground>
+            <TableOfContentsButton
+              ref={tableOfContentsButtonRef}
+              onClick={toggleTableOfContents}
+            >
+              <TableOfContentsIcon width={26} height={26} />
+            </TableOfContentsButton>
+          </ButtonBackground>
+        </ButtonGroup>
+        {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
+        <TableOfContentsWrapper
+          className={clsx({ open: isTableOfContentsOpen })}
+          ref={tableOfContentsRef}
+        >
+          <TableOfContentsHeader>In this article</TableOfContentsHeader>
+          <TableOfContents onSelect={closeTableOfContents} />
+        </TableOfContentsWrapper>
+      </FloatingStuff>
+    </TableOfContentsProvider>
   )
 }
 
@@ -328,6 +326,8 @@ const Wrapper = styled.div`
   display: flex;
   align-items: flex-start;
   margin-bottom: 48px;
+
+  ${animation.fadeIn}
 `
 
 const Aside = styled.aside`

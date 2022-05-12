@@ -2,10 +2,10 @@ import styled from 'styled-components'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { GetStaticProps } from 'next'
-import { Layout } from '@components/Layout'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
+import { animation } from 'styles/shared'
 
 type Props = {
   latestArticles: Array<{
@@ -19,58 +19,54 @@ type Props = {
 
 function HomePage(props: Props) {
   return (
-    <Layout>
-      <Wrapper>
-        <Title>Hi! I&apos;m Tino</Title>
-        <Description>
-          And this is my little corner of the internet. I&apos;m a design-minded
-          developer specializing in web technologies. I like to lorem ipsum
-          dolorem potatoes. And some other stuff.
-        </Description>
-        <NextLink href="/about" passHref={true}>
-          <Link>
-            About me
-            {/* TODO: move icon sizes to css */}
-            <ArrowRightIcon width={20} height={20} />
-          </Link>
-        </NextLink>
-        <Heading>Latest Articles</Heading>
-        <Articles>
-          {props.latestArticles.map((article) => (
-            <ArticleListItem key={article.slug}>
-              <NextLink href={`/writing/${article.slug}`} passHref={true}>
-                <ArticleLink>
-                  <ArticleImageWrapper>
-                    {article.thumbnailImageSrc && (
-                      <ArticleImage
-                        src={article.thumbnailImageSrc}
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    )}
-                  </ArticleImageWrapper>
-                  <ArticleDescription>
-                    <ArticleTitle>{article.title}</ArticleTitle>
-                    <ArticleDescriptionBottom>
-                      <ArticleDate>
-                        {formatDate(article.publishedOn)}
-                      </ArticleDate>
-                      <GoToArticleIcon width={18} height={18} />
-                    </ArticleDescriptionBottom>
-                  </ArticleDescription>
-                </ArticleLink>
-              </NextLink>
-            </ArticleListItem>
-          ))}
-        </Articles>
-        <NextLink href="/writing" passHref={true}>
-          <Link>
-            All articles
-            <ArrowRightIcon width={20} height={20} />
-          </Link>
-        </NextLink>
-      </Wrapper>
-    </Layout>
+    <Wrapper>
+      <Title>Hi! I&apos;m Tino</Title>
+      <Description>
+        And this is my little corner of the internet. I&apos;m a design-minded
+        developer specializing in web technologies. I like to lorem ipsum
+        dolorem potatoes. And some other stuff.
+      </Description>
+      <NextLink href="/about" passHref={true}>
+        <Link>
+          About me
+          {/* TODO: move icon sizes to css */}
+          <ArrowRightIcon width={20} height={20} />
+        </Link>
+      </NextLink>
+      <Heading>Latest Articles</Heading>
+      <Articles>
+        {props.latestArticles.map((article) => (
+          <ArticleListItem key={article.slug}>
+            <NextLink href={`/writing/${article.slug}`} passHref={true}>
+              <ArticleLink>
+                <ArticleImageWrapper>
+                  {article.thumbnailImageSrc && (
+                    <ArticleImage
+                      src={article.thumbnailImageSrc}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  )}
+                </ArticleImageWrapper>
+                <ArticleDescription>
+                  <ArticleTitle>{article.title}</ArticleTitle>
+                  <ArticleDescriptionBottom>
+                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
+                    <GoToArticleIcon width={18} height={18} />
+                  </ArticleDescriptionBottom>
+                </ArticleDescription>
+              </ArticleLink>
+            </NextLink>
+          </ArticleListItem>
+        ))}
+      </Articles>
+      <NextLink href="/writing" passHref={true}>
+        <Link>
+          All articles
+          <ArrowRightIcon width={20} height={20} />
+        </Link>
+      </NextLink>
+    </Wrapper>
   )
 }
 
@@ -80,6 +76,8 @@ const Wrapper = styled.div`
   margin-right: auto;
   padding-left: 24px;
   padding-right: 24px;
+
+  ${animation.fadeIn}
 
   @media (min-width: 640px) {
     padding-left: 40px;
