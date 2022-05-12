@@ -10,11 +10,12 @@ type Props = {
 
 function Layout(props: Props) {
   return (
-    <>
+    <Wrapper>
       <NavBar />
-      {props.children}
+      <Content>{props.children}</Content>
       <Footer>
         <ColumnsWrapper>
+          {/* TODO: the Column element seems kinda redundant */}
           <Column>
             <LinkGroup>
               <LinkGroupTitle>Site</LinkGroupTitle>
@@ -49,7 +50,7 @@ function Layout(props: Props) {
           />
         </SignatureImageWrapper>
       </Footer>
-    </>
+    </Wrapper>
   )
 }
 
@@ -70,7 +71,22 @@ function Link(props: LinkProps) {
   )
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  @supports (min-height: 100dvh) {
+    min-height: 100dvh;
+  }
+`
+
+const Content = styled.div`
+  flex: 1;
+`
+
 const Footer = styled.footer`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
