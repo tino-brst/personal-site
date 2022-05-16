@@ -31,6 +31,7 @@ const Pre = styled.pre`
   margin-bottom: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
+  white-space: pre;
 
   & .line {
     padding-left: 24px;
