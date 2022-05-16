@@ -5,8 +5,9 @@ import rehypeSlug from 'rehype-slug'
 import remarkUnwrapImages from 'remark-unwrap-images'
 
 function customBundleMDX(mdxSource: string) {
-  return bundleMDX(mdxSource, {
-    xdmOptions: (options) => ({
+  return bundleMDX({
+    source: mdxSource,
+    mdxOptions: (options) => ({
       ...options,
       remarkPlugins: [...(options.remarkPlugins ?? []), remarkUnwrapImages],
       rehypePlugins: [

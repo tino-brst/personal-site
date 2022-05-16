@@ -261,7 +261,7 @@ function highlight(
 }
 
 /**
- * Takes a code block's meta string (surfaced by xdm @ node.data.meta) and turns
+ * Takes a code block's meta string (surfaced by mdx @ node.data.meta) and turns
  * it into an object (Record) for easier access to its values.
  *
  * This: `foo=abc bar`
@@ -272,7 +272,7 @@ function highlight(
  * numbers, etc.
  *
  * All thanks to
- * https://github.com/wooorm/xdm#syntax-highlighting-with-the-meta-field
+ * https://mdxjs.com/guides/syntax-highlighting/#syntax-highlighting-with-the-meta-field
  */
 function parseMeta(meta: string): Partial<Record<string, string>> {
   const result: Record<string, string> = {}
