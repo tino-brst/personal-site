@@ -36,6 +36,11 @@ const Wrapper = styled.div`
   margin-right: calc(-1 * var(--margin-x));
   margin-top: 20px;
   margin-bottom: 20px;
+  overflow: hidden;
+
+  @media (min-width: 640px) {
+    border-radius: 16px;
+  }
 `
 
 const Pre = styled.pre`
@@ -58,10 +63,6 @@ const Pre = styled.pre`
 
   & .line.highlight {
     background-color: hsla(0 0% 0% / 0.04);
-  }
-
-  @media (min-width: 640px) {
-    border-radius: 16px;
   }
 `
 
