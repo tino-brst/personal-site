@@ -24,9 +24,9 @@ reprehenderit tempor labore amet culpa proident. Nulla nisi excepteur eu mollit.
 Incididunt anim in sint ut. Amet mollit do proident velit quis minim commodo ex
 eu ipsum officia veniam.
 
-```tsx highlight=2,7-9
+```tsx highlight=4-7
 function CodeBlock(props: Props) {
-  const preElementRef = React.useRef < HTMLPreElement > null
+  const preElementRef = React.useRef<HTMLPreElement>(null)
 
   const handleClick = () => {
     const preTextContent = preElementRef.current?.textContent ?? ''

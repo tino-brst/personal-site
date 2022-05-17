@@ -40,8 +40,16 @@ const Pre = styled.pre`
   padding-top: 20px;
   padding-bottom: 20px;
   white-space: pre;
+  overflow-x: auto;
+  max-width: 100vw;
+
+  & code {
+    display: block;
+    min-width: fit-content;
+  }
 
   & .line {
+    /* TODO: add padding right to account for the floating copy button, to avoid it covering the code */
     padding-left: 24px;
     padding-right: 24px;
   }
@@ -57,13 +65,14 @@ const Pre = styled.pre`
 
 const CopyButton = styled.button`
   position: absolute;
-  top: 16px;
+  bottom: 16px;
   right: 16px;
   padding: 8px;
   cursor: pointer;
-  background-color: hsla(0 0% 100%);
+  background-color: hsla(0 0% 98%);
   border-radius: 8px;
-  box-shadow: 0 0 0 1px hsla(0 0% 0% / 0.05);
+  box-shadow: 0 0 0 1px hsl(0deg 0% 0% / 6%),
+    0 2px 11px 3px hsl(0deg 0% 0% / 2%);
 
   &:hover {
     background-color: hsla(0 0% 98%);
@@ -74,7 +83,7 @@ const CopyButton = styled.button`
 
   @media (hover: hover) {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.9);
 
     ${Wrapper}:hover &, 
     &:focus-visible {
