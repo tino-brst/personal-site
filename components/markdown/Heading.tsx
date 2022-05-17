@@ -61,6 +61,7 @@ function Heading4(props: Omit<Props, 'level'>) {
 const Icon = styled(Link2Icon)`
   margin-left: 0.5ch;
   color: hsla(0 0% 0% / 0.5);
+  will-change: transform;
 `
 
 const sharedStyles = css`
