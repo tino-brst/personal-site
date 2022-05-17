@@ -5,7 +5,7 @@ import { h } from 'hastscript'
 import { toString } from 'hast-util-to-string'
 import { visit } from 'unist-util-visit'
 import { is } from 'unist-util-is'
-import { refractor } from 'refractor'
+import { refractor } from 'refractor/lib/core'
 import parseNumericRange from 'parse-numeric-range'
 
 // TODO: Make line class names passable via options
