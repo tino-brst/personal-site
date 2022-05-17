@@ -18,7 +18,33 @@ const aFunction = () => {
 
 ## Heading 2
 
-Aute aliquip do aute Lorem mollit sunt eu elit. Ea laboris officia Lorem duis veniam tempor laborum magna dolor eiusmod mollit incididunt aute sit. Duis esse reprehenderit tempor labore amet culpa proident. Nulla nisi excepteur eu mollit. Incididunt anim in sint ut. Amet mollit do proident velit quis minim commodo ex eu ipsum officia veniam.
+Aute aliquip do aute Lorem mollit sunt eu elit. Ea laboris officia Lorem duis
+veniam tempor laborum magna dolor eiusmod mollit incididunt aute sit. Duis esse
+reprehenderit tempor labore amet culpa proident. Nulla nisi excepteur eu mollit.
+Incididunt anim in sint ut. Amet mollit do proident velit quis minim commodo ex
+eu ipsum officia veniam.
+
+```tsx highlight=2,7-9
+function CodeBlock(props: Props) {
+  const preElementRef = React.useRef < HTMLPreElement > null
+
+  const handleClick = () => {
+    const preTextContent = preElementRef.current?.textContent ?? ''
+    navigator.clipboard?.writeText(preTextContent)
+  }
+
+  return (
+    <Wrapper>
+      <Pre {...props} ref={preElementRef}>
+        {props.children}
+      </Pre>
+      <CopyButton onClick={handleClick}>
+        <Icon />
+      </CopyButton>
+    </Wrapper>
+  )
+}
+```
 
 ### Heading 3
 
