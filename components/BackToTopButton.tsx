@@ -29,6 +29,8 @@ function BackToTopButton(props: Props) {
           {...props}
           onClick={() => {
             window.scroll({ top: 0, behavior: 'smooth' })
+            // TODO: should also clear the url
+            // some-article#heading-2 → some-article
           }}
         />
       )}
