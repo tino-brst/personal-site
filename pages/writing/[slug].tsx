@@ -140,6 +140,7 @@ function ArticlePage(props: Props) {
                   src={props.headerImageSrc}
                   layout="fill"
                   objectFit="cover"
+                  priority
                 />
               )}
             </HeaderImageWrapper>
