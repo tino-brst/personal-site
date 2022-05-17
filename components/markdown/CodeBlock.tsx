@@ -68,7 +68,7 @@ const Pre = styled.pre`
 
 const CopyButton = styled.button`
   position: absolute;
-  bottom: var(--copy-button-inset);
+  top: var(--copy-button-inset);
   right: var(--copy-button-inset);
   width: var(--copy-button-size);
   height: var(--copy-button-size);
