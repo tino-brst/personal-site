@@ -27,9 +27,13 @@ function CodeBlock(props: Props) {
 }
 
 const Wrapper = styled.div`
+  --margin-x: 24px;
+  --copy-button-size: 36px;
+  --copy-button-inset: 16px;
+
   position: relative;
-  margin-left: -24px;
-  margin-right: -24px;
+  margin-left: calc(-1 * var(--margin-x));
+  margin-right: calc(-1 * var(--margin-x));
   margin-top: 20px;
   margin-bottom: 20px;
 `
@@ -49,9 +53,8 @@ const Pre = styled.pre`
   }
 
   & .line {
-    /* TODO: add padding right to account for the floating copy button, to avoid it covering the code */
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: var(--margin-x);
+    padding-right: calc(2 * var(--copy-button-inset) + var(--copy-button-size));
   }
 
   & .line.highlight {
@@ -65,9 +68,13 @@ const Pre = styled.pre`
 
 const CopyButton = styled.button`
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  padding: 8px;
+  bottom: var(--copy-button-inset);
+  right: var(--copy-button-inset);
+  width: var(--copy-button-size);
+  height: var(--copy-button-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   background-color: hsla(0 0% 98%);
   border-radius: 8px;
