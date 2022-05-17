@@ -373,6 +373,7 @@ const Main = styled.main`
   flex: 0 1 calc(768px + 2 * 16px);
   padding-right: 24px;
   padding-left: 24px;
+  max-width: min(100vw, calc(768px + 2 * 16px));
 
   @media (min-width: 640px) {
     padding-left: 40px;

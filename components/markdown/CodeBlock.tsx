@@ -45,7 +45,6 @@ const Pre = styled.pre`
   padding-bottom: 20px;
   white-space: pre;
   overflow-x: auto;
-  max-width: 100vw;
 
   & code {
     display: block;
