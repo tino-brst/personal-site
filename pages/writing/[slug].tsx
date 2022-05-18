@@ -539,8 +539,7 @@ const ButtonGroup = styled.div`
   background: hsla(0 0% 99% / 0.9);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
-    0px 0px 0px 0.5px rgba(0, 0, 0, 0.05),
-    inset 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05);
+    0px 0px 0px 1px rgba(0, 0, 0, 0.05);
   max-width: var(--button-width);
 
   transition-property: max-width;
@@ -555,7 +554,7 @@ const ButtonGroup = styled.div`
 const ButtonGroupDivider = styled.div`
   flex: 0 0 var(--divider-width);
   height: 100%;
-  background-color: hsla(0 0% 0% / 0.1);
+  background-color: hsla(0 0% 0% / 0.05);
   opacity: 0;
 
   transition-property: opacity;
@@ -598,12 +597,13 @@ const BackToTopButton = styled(Button)`
   transform: scale(0.5);
 
   transition-property: opacity, transform;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
+  transition-duration: 0.15s;
+  transition-delay: 0s;
 
   ${ButtonGroup}.expanded & {
     opacity: 1;
     transform: none;
+    transition-delay: 0.1s;
   }
 `
 
@@ -639,8 +639,7 @@ const TableOfContentsWrapper = styled.div`
   background: hsla(0 0% 98% / 0.9);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
-    0px 0px 0px 0.5px rgba(0, 0, 0, 0.05),
-    inset 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05);
+    0px 0px 0px 1px rgba(0, 0, 0, 0.05);
 
   transition-property: opacity, transform, visibility;
   transition-duration: 0.2s;
@@ -659,7 +658,7 @@ const TableOfContentsHeader = styled.header`
   gap: 10px;
   padding: 12px 16px;
   background: hsla(0 0% 100% / 0.7);
-  box-shadow: inset 0 -1px hsla(0 0% 0% / 0.05);
+  box-shadow: 0 1px hsla(0 0% 0% / 0.05);
   color: hsla(0 0% 0% / 0.3);
   letter-spacing: 0.05em;
   text-transform: uppercase;

@@ -204,8 +204,7 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
   inset: 0;
   background: hsla(0 0% 100% / 0.88);
   backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: inset 0 -1px hsla(0 0% 100% / 0.7), 0 1px hsla(0 0% 0% / 0.05),
-    inset 0 1px hsla(0 0% 94% / 0.8);
+  box-shadow: 0 1px hsla(0 0% 0% / 0.05);
 
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
