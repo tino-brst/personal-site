@@ -28,7 +28,7 @@ function CodeBlock(props: Props) {
 
 const Wrapper = styled.div`
   --margin-x: 24px;
-  --copy-button-size: 36px;
+  --copy-button-size: 32px;
   --copy-button-inset: 16px;
 
   position: relative;
@@ -101,9 +101,11 @@ const CopyButton = styled.button`
 `
 
 const Icon = styled(CopyIcon)`
+  --size: 18px;
+
   display: block;
-  width: 20px;
-  height: 20px;
+  width: var(--size);
+  height: var(--size);
   color: black;
   will-change: transform;
 
