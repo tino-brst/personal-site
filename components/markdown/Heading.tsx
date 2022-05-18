@@ -5,8 +5,8 @@ import { Link2Icon } from '@radix-ui/react-icons'
 
 type Props = {
   level: 2 | 3 | 4
-  id: string
-  children: React.ReactNode
+  id?: string
+  children?: React.ReactNode
 }
 
 function Heading(props: Props) {

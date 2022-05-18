@@ -3,15 +3,22 @@ import styled from 'styled-components'
 import NextImage from 'next/image'
 
 type Props = {
-  src: string
-  width: number
-  height: number
+  src?: string
+  width?: string | number
+  height?: string | number
 }
 
 function Image(props: Props) {
   return (
     <Wrapper>
-      <StyledImage layout="responsive" {...props} />
+      {props.src && (
+        <StyledImage
+          layout="responsive"
+          src={props.src}
+          width={props.width}
+          height={props.height}
+        />
+      )}
     </Wrapper>
   )
 }
