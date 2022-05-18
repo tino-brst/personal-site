@@ -63,13 +63,12 @@ const Pre = styled.pre`
 
   & .line.highlight {
     background-color: hsla(0 0% 0% / 0.04);
-    box-shadow: inset 2px 0 hsla(0 0% 0% / 0.05);
   }
 `
 
 const CopyButton = styled.button`
   position: absolute;
-  top: var(--copy-button-inset);
+  bottom: var(--copy-button-inset);
   right: var(--copy-button-inset);
   width: var(--copy-button-size);
   height: var(--copy-button-size);
