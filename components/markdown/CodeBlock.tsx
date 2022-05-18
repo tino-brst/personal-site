@@ -63,6 +63,8 @@ const Pre = styled.pre`
 
   & .line.highlight {
     background-color: hsla(0 0% 0% / 0.04);
+    box-shadow: inset 2px 0 hsla(0 0% 0% / 0.05),
+      inset -2px 0 hsla(0 0% 0% / 0.05);
   }
 `
 
