@@ -82,7 +82,7 @@ const CopyButton = styled.button`
     0 2px 11px 3px hsl(0deg 0% 0% / 2%);
 
   &:hover {
-    background-color: hsla(0 0% 98%);
+    background-color: hsla(0 0% 96%);
   }
 
   transition-property: background-color, opacity, transform;
