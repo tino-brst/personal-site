@@ -4,6 +4,29 @@ import * as React from 'react'
 
 type QueryParam = ParsedUrlQuery extends Record<string, infer U> ? U : never
 
+// Next.js doesn't export these 😒
+type TransitionOptions = Partial<{
+  /** Update the path of the current page without rerunning `getStaticProps`, `getServerSideProps` or `getInitialProps`. Defaults to `true` */
+  shallow: boolean
+  /** Optional string, indicates locale of the new page */
+  locale: string | false
+  /** Controls scrolling to the top of the page after navigation. Defaults to `true` */
+  scroll: boolean
+}>
+
+type Options = Partial<{
+  /** Used when the parameter with the given name is not available */
+  fallbackValue: string | Array<string>
+  /** Prevents adding a new entry into the history stack when updating the parameter value (i.e. use `router.replace` instead of `router.push`). Defaults to `true` */
+  replace: boolean
+  /** Next.js's `router.push/replace` options */
+  transitionOptions: TransitionOptions
+}>
+
+// To show the function's description for each overload on autocompletion, it
+// looks like it must be specified on each of them, even if it's exactly the
+// same in all 😒
+
 /**
  * Drop-in replacement to accessing Next.js `router.query` URL search
  * parameters, with the possibility of updating their values (just like
@@ -20,20 +43,38 @@ function useQueryParam(
  */
 function useQueryParam(
   name: string,
-  fallbackValue: string | Array<string>
+  options?: Omit<Options, 'fallbackValue'> & {
+    fallbackValue: string | Array<string>
+  }
 ): [
   NonNullable<QueryParam>,
   (value: string | Array<string> | undefined) => void
 ]
 
+/**
+ * Drop-in replacement to accessing Next.js `router.query` URL search
+ * parameters, with the possibility of updating their values (just like
+ * `React.useState`).
+ */
+function useQueryParam(
+  name: string,
+  options?: Options
+): [QueryParam, (value: string | Array<string> | undefined) => void]
+
 function useQueryParam(
   /** Same as used in `URLSearchParams.get(name)` */
   name: string,
-  /** Used when the parameter with the given name is not available, i.e. `router.query.foo ?? fallbackValue` */
-  fallbackValue?: string | Array<string>
+  {
+    fallbackValue,
+    replace = true,
+    transitionOptions = { shallow: true },
+  }: Options = {}
 ):
   | [QueryParam, (value: string | Array<string> | undefined) => void]
-  | [NonNullable<QueryParam>, (value: string | undefined) => void] {
+  | [
+      NonNullable<QueryParam>,
+      (value: string | Array<string> | undefined) => void
+    ] {
   const router = useRouter()
 
   const value = React.useMemo(() => {
@@ -101,9 +142,13 @@ function useQueryParam(
         ? pathname
         : `${pathname}?${searchParams}`
 
-      router.replace(url)
+      if (replace) {
+        router.replace(url, undefined, transitionOptions)
+      } else {
+        router.push(url, undefined, transitionOptions)
+      }
     },
-    [name, router, value]
+    [name, replace, router, transitionOptions, value]
   )
 
   return [value, setValue]
