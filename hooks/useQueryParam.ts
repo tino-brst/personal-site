@@ -1,6 +1,6 @@
-import * as React from 'react'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
+import * as React from 'react'
 
 type QueryParam = ParsedUrlQuery extends Record<string, infer U> ? U : never
 
@@ -41,33 +41,38 @@ function useQueryParam(
       return router.query[name] ?? fallbackValue
     }
 
-    if (typeof window !== 'undefined') {
-      const searchParams = new URLSearchParams(window.location.search)
-      const searchParamValues = searchParams.getAll(name)
-      return searchParamValues.length === 0
-        ? fallbackValue
-        : searchParamValues.length === 1
-        ? searchParamValues[0]
-        : searchParamValues
+    // As soon as the page loads, the router is not ready and hasn't populated
+    // its query object yet (router.query = {}), even though there may be
+    // parameters in the URL readily available at router.asPath
 
-      // 👆 Mimics the behavior of the router.query object
-      //
-      // URL                  router.query.foo
-      // -------------------------------------
-      // '...?'               undefined
-      // '...?foo'            ''
-      // '...?foo='           ''
-      // '...?foo=12'         '12'
-      // '...?foo=12&foo=34'  ['12', '34']
-    }
+    const [_, search] = router.asPath.split('?')
+    const searchParams = new URLSearchParams(search)
+    const searchParamValues = searchParams.getAll(name)
 
-    return fallbackValue
-  }, [router.isReady, router.query, fallbackValue, name])
+    // The returned parameter value mimics the behavior of accessing it from the
+    // router.query object
+
+    // URL                  router.query.foo
+    // -------------------------------------
+    // '...?'               undefined
+    // '...?foo'            ''
+    // '...?foo='           ''
+    // '...?foo=12'         '12'
+    // '...?foo=12&foo=34'  ['12', '34']
+
+    return searchParamValues.length === 0
+      ? fallbackValue
+      : searchParamValues.length === 1
+      ? searchParamValues[0]
+      : searchParamValues
+  }, [router.isReady, router.query, router.asPath, name, fallbackValue])
 
   const setValue = React.useCallback(
     (value: string | Array<string> | undefined) => {
-      // TODO: use split, decode, encode instead of full URLSearchParams object?
-      const searchParams = new URLSearchParams(window.location.search)
+      // TODO: accept function as value ala [_, setState] from React.useState
+
+      const [pathname, search] = router.asPath.split('?')
+      const searchParams = new URLSearchParams(search)
 
       if (value === undefined) {
         searchParams.delete(name)
@@ -87,7 +92,6 @@ function useQueryParam(
         searchParams.set(name, value)
       }
 
-      const pathname = router.asPath.split('?')[0]
       const url = isEmpty(searchParams)
         ? pathname
         : `${pathname}?${searchParams}`
