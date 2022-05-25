@@ -2,7 +2,10 @@ import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import * as React from 'react'
 
-type QueryParam = ParsedUrlQuery extends Record<string, infer U> ? U : never
+type Value = ParsedUrlQuery extends Record<string, infer U> ? U : never
+type SetValue = React.Dispatch<
+  React.SetStateAction<string | Array<string> | undefined>
+>
 
 // Next.js doesn't export these 😒
 type TransitionOptions = Partial<{
@@ -32,9 +35,7 @@ type Options = Partial<{
  * parameters, with the possibility of updating their values (just like
  * `React.useState`).
  */
-function useQueryParam(
-  name: string
-): [QueryParam, (value: string | Array<string> | undefined) => void]
+function useQueryParam(name: string): [Value, SetValue]
 
 /**
  * Drop-in replacement to accessing Next.js `router.query` URL search
@@ -46,20 +47,14 @@ function useQueryParam(
   options?: Omit<Options, 'fallbackValue'> & {
     fallbackValue: string | Array<string>
   }
-): [
-  NonNullable<QueryParam>,
-  (value: string | Array<string> | undefined) => void
-]
+): [NonNullable<Value>, SetValue]
 
 /**
  * Drop-in replacement to accessing Next.js `router.query` URL search
  * parameters, with the possibility of updating their values (just like
  * `React.useState`).
  */
-function useQueryParam(
-  name: string,
-  options?: Options
-): [QueryParam, (value: string | Array<string> | undefined) => void]
+function useQueryParam(name: string, options?: Options): [Value, SetValue]
 
 function useQueryParam(
   /** Same as used in `URLSearchParams.get(name)` */
@@ -69,15 +64,11 @@ function useQueryParam(
     replace = true,
     transitionOptions = { shallow: true },
   }: Options = {}
-):
-  | [QueryParam, (value: string | Array<string> | undefined) => void]
-  | [
-      NonNullable<QueryParam>,
-      (value: string | Array<string> | undefined) => void
-    ] {
+): [Value, SetValue] | [NonNullable<Value>, SetValue] {
   const router = useRouter()
+  const prevValue = React.useRef<Value>()
 
-  const value = React.useMemo(() => {
+  const value = React.useMemo<Value>(() => {
     if (router.isReady) {
       return router.query[name] ?? fallbackValue
     }
@@ -108,17 +99,14 @@ function useQueryParam(
       : searchParamValues
   }, [router.isReady, router.query, router.asPath, name, fallbackValue])
 
-  const setValue = React.useCallback<
-    React.Dispatch<React.SetStateAction<string | Array<string> | undefined>>
-  >(
-    (valueMaybeFunction) => {
+  const setValue = React.useCallback<SetValue>(
+    (value) => {
       const [pathname, search] = router.asPath.split('?')
       const searchParams = new URLSearchParams(search)
 
       const newValue =
-        valueMaybeFunction instanceof Function
-          ? valueMaybeFunction(value)
-          : valueMaybeFunction
+        value instanceof Function ? value(prevValue.current) : value
+      prevValue.current = newValue
 
       if (newValue === undefined) {
         searchParams.delete(name)
@@ -148,8 +136,10 @@ function useQueryParam(
         router.push(url, undefined, transitionOptions)
       }
     },
-    [name, replace, router, transitionOptions, value]
+    [name, replace, router, transitionOptions]
   )
+
+  prevValue.current = value
 
   return [value, setValue]
 }
