@@ -67,29 +67,34 @@ function useQueryParam(
       : searchParamValues
   }, [router.isReady, router.query, router.asPath, name, fallbackValue])
 
-  const setValue = React.useCallback(
-    (value: string | Array<string> | undefined) => {
-      // TODO: accept function as value ala [_, setState] from React.useState
-
+  const setValue = React.useCallback<
+    React.Dispatch<React.SetStateAction<string | Array<string> | undefined>>
+  >(
+    (valueMaybeFunction) => {
       const [pathname, search] = router.asPath.split('?')
       const searchParams = new URLSearchParams(search)
 
-      if (value === undefined) {
+      const newValue =
+        valueMaybeFunction instanceof Function
+          ? valueMaybeFunction(value)
+          : valueMaybeFunction
+
+      if (newValue === undefined) {
         searchParams.delete(name)
       }
 
-      if (value instanceof Array) {
+      if (newValue instanceof Array) {
         searchParams.delete(name)
 
-        for (const item of value) {
+        for (const item of newValue) {
           if (typeof item === 'string') {
             searchParams.append(name, item)
           }
         }
       }
 
-      if (typeof value === 'string') {
-        searchParams.set(name, value)
+      if (typeof newValue === 'string') {
+        searchParams.set(name, newValue)
       }
 
       const url = isEmpty(searchParams)
@@ -98,7 +103,7 @@ function useQueryParam(
 
       router.replace(url)
     },
-    [name, router]
+    [name, router, value]
   )
 
   return [value, setValue]
