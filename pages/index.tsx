@@ -1,11 +1,10 @@
-import styled from 'styled-components'
-import NextImage from 'next/image'
-import NextLink from 'next/link'
-import { GetStaticProps } from 'next'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
-import { animation } from 'styles/shared'
+import { GetStaticProps } from 'next'
+import NextImage from 'next/image'
+import NextLink from 'next/link'
+import styled from 'styled-components'
 
 type Props = {
   latestArticles: Array<{
@@ -76,8 +75,6 @@ const Wrapper = styled.div`
   margin-right: auto;
   padding-left: 24px;
   padding-right: 24px;
-
-  ${animation.fadeIn}
 
   @media (min-width: 640px) {
     padding-left: 40px;

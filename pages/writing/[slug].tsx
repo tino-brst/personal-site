@@ -1,37 +1,36 @@
-import * as React from 'react'
-import styled, { css } from 'styled-components'
-import clsx from 'clsx'
-import { GetStaticPaths, GetStaticProps } from 'next'
-import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
-import { TableOfContentsProvider } from 'contexts/table-of-contents'
-import { getArticles } from '@lib/articles'
-import { compareDatesDesc, formatDate } from '@lib/dates'
-import { Root } from '@lib/mdast-util-toc'
-import { CodeBlock } from '@components/markdown/CodeBlock'
-import { Image } from '@components/markdown/Image'
-import { Paragraph } from '@components/markdown/Paragraph'
-import { Heading2, Heading3, Heading4 } from '@components/markdown/Heading'
 import { Code } from '@components/markdown/Code'
+import { CodeBlock } from '@components/markdown/CodeBlock'
+import { Heading2, Heading3, Heading4 } from '@components/markdown/Heading'
+import { Image } from '@components/markdown/Image'
 import { Link } from '@components/markdown/Link'
+import { Paragraph } from '@components/markdown/Paragraph'
 import { Strong } from '@components/markdown/Strong'
-import NextLink from 'next/link'
-import NextImage from 'next/image'
-import {
-  ArrowLeftIcon,
-  CalendarIcon,
-  ChevronUpIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ClockIcon,
-  ListBulletIcon,
-} from '@radix-ui/react-icons'
-import { useWindowEventListener } from '@hooks/useWindowEventListener'
-import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import {
   AsideTableOfContents,
   TableOfContents,
 } from '@components/TableOfContents'
-import { animation } from 'styles/shared'
+import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
+import { useWindowEventListener } from '@hooks/useWindowEventListener'
+import { getArticles } from '@lib/articles'
+import { compareDatesDesc, formatDate } from '@lib/dates'
+import { Root } from '@lib/mdast-util-toc'
+import {
+  ArrowLeftIcon,
+  CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  ClockIcon,
+  ListBulletIcon,
+} from '@radix-ui/react-icons'
+import clsx from 'clsx'
+import { TableOfContentsProvider } from 'contexts/table-of-contents'
+import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import NextImage from 'next/image'
+import NextLink from 'next/link'
+import * as React from 'react'
+import styled, { css } from 'styled-components'
 
 const barHeight = 70
 const barBottomMargin = 60
@@ -327,8 +326,6 @@ const Wrapper = styled.div`
   display: flex;
   align-items: flex-start;
   margin-bottom: 48px;
-
-  ${animation.fadeIn}
 `
 
 const Aside = styled.aside`

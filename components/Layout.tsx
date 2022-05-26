@@ -1,10 +1,9 @@
+import { ArrowTopRightIcon } from '@radix-ui/react-icons'
+import NextImage from 'next/image'
+import NextLink from 'next/link'
 import * as React from 'react'
 import styled from 'styled-components'
-import NextLink from 'next/link'
-import NextImage from 'next/image'
-import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import { NavBar } from './NavBar'
-import { animation } from 'styles/shared'
 
 type Props = {
   children?: React.ReactNode
@@ -102,8 +101,6 @@ const Footer = styled.footer`
   padding-right: 24px;
   padding-top: 48px;
   padding-bottom: 24px;
-
-  ${animation.fadeIn}
 
   &::before {
     position: absolute;

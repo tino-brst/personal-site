@@ -1,22 +1,21 @@
-import * as React from 'react'
-import styled, { css } from 'styled-components'
-import clsx from 'clsx'
-import NextLink from 'next/link'
-import NextImage from 'next/image'
-import { GetStaticProps } from 'next'
-import { useRouter } from 'next/dist/client/router'
+import { useOnKeyDown } from '@hooks/useOnKeyDown'
+import { useSize } from '@hooks/useSize'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
-import fuzzy from 'fuzzysort'
 import {
   ArrowRightIcon,
   BorderStyleIcon,
   CaretDownIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons'
-import { useSize } from '@hooks/useSize'
-import { useOnKeyDown } from '@hooks/useOnKeyDown'
-import { animation } from 'styles/shared'
+import clsx from 'clsx'
+import fuzzy from 'fuzzysort'
+import { GetStaticProps } from 'next'
+import { useRouter } from 'next/dist/client/router'
+import NextImage from 'next/image'
+import NextLink from 'next/link'
+import * as React from 'react'
+import styled, { css } from 'styled-components'
 
 type Article = {
   slug: string
@@ -276,8 +275,6 @@ const Wrapper = styled.div`
   margin-right: auto;
   padding-left: 24px;
   padding-right: 24px;
-
-  ${animation.fadeIn}
 
   @media (min-width: 640px) {
     padding-left: 40px;
