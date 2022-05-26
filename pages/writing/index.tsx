@@ -1,5 +1,7 @@
 import { useOnKeyDown } from '@hooks/useOnKeyDown'
+import { useQueryParam } from '@hooks/useQueryParam'
 import { useSize } from '@hooks/useSize'
+import { includesEvery, toggle } from '@lib/array'
 import { getArticles, getTags } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import {
@@ -11,7 +13,6 @@ import {
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
-import { useRouter } from 'next/dist/client/router'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import * as React from 'react'
@@ -38,44 +39,22 @@ type Props = {
 // TODO: remove unused color deps
 
 function WritingPage(props: Props) {
-  const router = useRouter()
+  const [searchParam, setSearchParam] = useQueryParam('search')
+  const search = typeof searchParam === 'string' ? searchParam : ''
 
-  // TODO: couldn't all this "use the url params as store" thing be extracted to a hook?
-  const searchInputValue = React.useMemo<string>(
-    () => (typeof router.query.search === 'string' ? router.query.search : ''),
-    [router.query.search]
-  )
+  const [activeTagsParam, setActiveTagsParam] = useQueryParam('tags')
+  const activeTags = React.useMemo(() => {
+    return typeof activeTagsParam === 'string' ? activeTagsParam.split(',') : []
+  }, [activeTagsParam])
 
-  const activeTagFilters = React.useMemo<Array<string>>(
-    () =>
-      typeof router.query.tags === 'string' ? router.query.tags.split(',') : [],
-    [router.query.tags]
-  )
-
-  // Updates the URL parameters without triggering a full refresh
-  // https://nextjs.org/docs/routing/shallow-routing
-  const updateRouteParams = (params: { tags: string; search: string }) => {
-    router.replace(getURL('/writing', params), undefined, { shallow: true })
+  function handleSearchInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value
+    setSearchParam(value === '' ? undefined : value)
   }
 
-  const handleTagFilterChange = (value: string) => {
-    const newActiveTagFilters = toggle(activeTagFilters, value)
-
-    // Update only what has changed, keep the rest as is (kinda like updating
-    // the state in Redux)
-    updateRouteParams({
-      tags: newActiveTagFilters.join(','),
-      search: searchInputValue,
-    })
-  }
-
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    updateRouteParams({
-      tags: activeTagFilters.join(','),
-      search: event.target.value,
-    })
+  const handleActiveTagsChange = (value: string) => {
+    const newActiveTags = toggle(activeTags, value).join(',')
+    setActiveTagsParam(newActiveTags === '' ? undefined : newActiveTags)
   }
 
   // TODO: both the search and filters should be open if the page loaded with any
@@ -91,13 +70,6 @@ function WritingPage(props: Props) {
 
   function cancelSearch() {
     setIsSearchOpen(false)
-
-    // Clear search
-    // updateRouteParams({
-    //   tags: activeTagFilters.join(','),
-    //   search: '',
-    // })
-
     searchButtonRef.current?.focus()
   }
 
@@ -128,14 +100,14 @@ function WritingPage(props: Props) {
   const articles = React.useMemo(() => {
     let articles: Array<Article & { titleInnerHtml?: string }> = props.articles
 
-    if (activeTagFilters.length) {
+    if (activeTags.length) {
       articles = articles.filter((article) =>
-        includesEvery(article.tags, activeTagFilters)
+        includesEvery(article.tags, activeTags)
       )
     }
 
-    if (isSearchOpen && searchInputValue) {
-      const fuzzyResults = fuzzy.go(searchInputValue, articles, {
+    if (isSearchOpen && search) {
+      const fuzzyResults = fuzzy.go(search, articles, {
         key: 'title',
       })
 
@@ -146,7 +118,7 @@ function WritingPage(props: Props) {
     }
 
     return articles
-  }, [props.articles, activeTagFilters, isSearchOpen, searchInputValue])
+  }, [props.articles, activeTags, isSearchOpen, search])
 
   const availableTags = React.useMemo(
     () => Array.from(new Set(articles.map((article) => article.tags).flat())),
@@ -172,7 +144,7 @@ function WritingPage(props: Props) {
             {searchButtonText}
           </SearchInputButtonPlaceholder>
           <SearchInput
-            value={searchInputValue}
+            value={search}
             onChange={handleSearchInputChange}
             ref={searchInputRef}
             placeholder={searchButtonText}
@@ -211,15 +183,15 @@ function WritingPage(props: Props) {
               <li key={tag}>
                 <Tag
                   className={clsx({
-                    checked: activeTagFilters.includes(tag),
+                    checked: activeTags.includes(tag),
                     disabled: !availableTags.includes(tag),
                   })}
                 >
                   <TagInput
                     type="checkbox"
-                    checked={activeTagFilters.includes(tag)}
+                    checked={activeTags.includes(tag)}
                     disabled={!availableTags.includes(tag)}
-                    onChange={() => handleTagFilterChange(tag)}
+                    onChange={() => handleActiveTagsChange(tag)}
                   />
                   <TagIcon>#</TagIcon>
                   {tag}
@@ -785,55 +757,6 @@ const GoToArticleIcon = styled(ArrowRightIcon)`
     transform: scale(1.1);
   }
 `
-
-/**
- * Given:
- * `getURL('/foo', { count: 42 })`
- *
- * Yields:
- * `'/foo?count=42'`
- */
-function getURL<T extends Record<string, string>>(
-  pathname: string,
-  params: T
-): string {
-  const urlParams = new URLSearchParams()
-
-  for (const key in params) {
-    if (params[key]) {
-      urlParams.append(key, params[key])
-    }
-  }
-
-  return isEmpty(urlParams) ? pathname : `${pathname}?${urlParams}`
-}
-
-function isEmpty<T>(iterable: Iterable<T>): boolean {
-  return iterable[Symbol.iterator]().next().done ?? true
-}
-
-/**
- * Adds/removes (toggles) a value to/from an array
- */
-function toggle<T>(array: Array<T>, value: T): Array<T> {
-  const valueIndex = array.findIndex((item) => item === value)
-
-  return valueIndex < 0
-    ? [...array, value]
-    : [...array.slice(0, valueIndex), ...array.slice(valueIndex + 1)]
-}
-
-/**
- * Checks if an array contains all given values
- *
- * ```ts
- * includesEvery([1,2,3], [1])   // true
- * includesEvery([1,2,3], [1,4]) // false
- * ```
- */
-function includesEvery<T>(array: Array<T>, values: Array<T>): boolean {
-  return values.every((value) => array.includes(value))
-}
 
 function isElementInFocus(element: HTMLElement | null): boolean {
   return document.activeElement === element
