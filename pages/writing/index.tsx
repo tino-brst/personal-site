@@ -59,7 +59,7 @@ function WritingPage(props: Props) {
 
   // TODO: both the search and filters should be open if the page loaded with any
 
-  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+  const [isSearchOpen, setIsSearchOpen] = React.useState(search !== '')
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const searchButtonRef = React.useRef<HTMLButtonElement>(null)
   const searchPlaceholderRef = React.useRef<HTMLDivElement>(null)
