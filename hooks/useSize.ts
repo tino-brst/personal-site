@@ -1,32 +1,44 @@
 import * as React from 'react'
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
-type Size = {
+type ReturnValue = {
   width: number
   height: number
+  isReady: boolean
 }
 
-function useSize<T extends HTMLElement>(ref: React.RefObject<T>): Size {
-  const [size, setSize] = React.useState<Size>({ width: 0, height: 0 })
+function useSize<T extends HTMLElement>(ref: React.RefObject<T>): ReturnValue {
+  const [value, setValue] = React.useState<ReturnValue>({
+    width: 0,
+    height: 0,
+    isReady: false,
+  })
 
   useIsomorphicLayoutEffect(() => {
     if (!ref.current) return
 
     const resizeObserver = new ResizeObserver((entries) => {
-      const borderBoxSize = entries[0].borderBoxSize[0]
+      const target = entries[0].target as T
 
-      setSize({
-        width: borderBoxSize.inlineSize,
-        height: borderBoxSize.blockSize,
+      setValue({
+        width: target.offsetWidth,
+        height: target.offsetHeight,
+        isReady: true,
       })
     })
 
     resizeObserver.observe(ref.current)
 
-    return () => resizeObserver.disconnect()
-  }, [])
+    setValue({
+      width: ref.current.offsetWidth,
+      height: ref.current.offsetHeight,
+      isReady: true,
+    })
 
-  return size
+    return () => resizeObserver.disconnect()
+  }, [ref])
+
+  return value
 }
 
 export { useSize }

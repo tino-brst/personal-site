@@ -57,8 +57,6 @@ function WritingPage(props: Props) {
     setActiveTagsParam(newActiveTags === '' ? undefined : newActiveTags)
   }
 
-  // TODO: both the search and filters should be open if the page loaded with any
-
   const [isSearchOpen, setIsSearchOpen] = React.useState(search !== '')
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const searchButtonRef = React.useRef<HTMLButtonElement>(null)
@@ -93,7 +91,9 @@ function WritingPage(props: Props) {
 
   const searchButtonText = 'Search articles'
 
-  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false)
+  const [isFiltersOpen, setIsFiltersOpen] = React.useState(
+    activeTags.length > 0
+  )
   const filtersRef = React.useRef<HTMLDivElement>(null)
   const filtersSize = useSize(filtersRef)
 
@@ -173,7 +173,10 @@ function WritingPage(props: Props) {
         </FiltersToggleButton>
       </Search>
       <FiltersWrapper
-        className={clsx({ open: isFiltersOpen })}
+        className={clsx({
+          ready: filtersSize.isReady,
+          open: isFiltersOpen,
+        })}
         style={{ '--content-height': `${filtersSize.height}px` }}
       >
         <Filters ref={filtersRef}>
@@ -464,19 +467,21 @@ const ExpandIcon = styled(CaretDownIcon)`
 const FiltersWrapper = styled.div`
   --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
 
-  max-height: 0;
   visibility: hidden;
 
-  transition: var(--transition);
+  &.ready {
+    transition: var(--transition);
+    max-height: 0;
+  }
 
-  &.open {
+  &.ready.open {
     visibility: visible;
     max-height: var(--content-height);
   }
 `
 
 const Filters = styled.div`
-  padding-top: 22px;
+  padding-top: 24px;
 `
 
 const FiltersTitle = styled.h3`

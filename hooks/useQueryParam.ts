@@ -7,6 +7,8 @@ type SetValue = React.Dispatch<
   React.SetStateAction<string | Array<string> | undefined>
 >
 
+// TODO: document that setting the value to undefined clears it from the url
+
 // Next.js doesn't export these 😒
 type TransitionOptions = Partial<{
   /** Update the path of the current page without rerunning `getStaticProps`, `getServerSideProps` or `getInitialProps`. Defaults to `true` */
