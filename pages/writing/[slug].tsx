@@ -9,6 +9,7 @@ import {
   AsideTableOfContents,
   TableOfContents,
 } from '@components/TableOfContents'
+import { useLikeCount } from '@hooks/useLikeCount'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { getArticles } from '@lib/articles'
@@ -21,6 +22,7 @@ import {
   ChevronRightIcon,
   ChevronUpIcon,
   ClockIcon,
+  HeartFilledIcon,
   ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
@@ -60,6 +62,8 @@ function ArticlePage(props: Props) {
     [props.contentCode]
   )
 
+  const likeCount = useLikeCount(props.slug)
+
   // Table of Contents
 
   const tableOfContentsRef = React.useRef<HTMLDivElement>(null)
@@ -91,10 +95,6 @@ function ArticlePage(props: Props) {
     // height of the viewport
     setShowBackToTop(window.scrollY > window.innerHeight)
   }, [])
-
-  function backToTop() {
-    window.scroll({ behavior: 'smooth', top: 0 })
-  }
 
   useWindowEventListener('scroll', updateShowBackToTop)
   useWindowEventListener('resize', updateShowBackToTop)
@@ -145,6 +145,21 @@ function ArticlePage(props: Props) {
             </HeaderImageWrapper>
           </Header>
           <Content components={components} />
+          <Thanks>
+            <ThanksTitle>Thanks for reading!</ThanksTitle>
+            <ThanksDescription>
+              I would love to hear your thoughts, all feedback is absolutely
+              welcome. You can find me on{' '}
+              <a href="https://twitter.com/bursetAgustin">Twitter</a> or via{' '}
+              <a href="mailto:tinos.corner@icloud.com">email</a>.
+            </ThanksDescription>
+            <LikeButton onClick={() => likeCount.toggleUserLike()}>
+              <LikeButtonIcon
+                className={clsx({ liked: likeCount.hasUserLike })}
+              />
+              {likeCount.value}
+            </LikeButton>
+          </Thanks>
         </Main>
         <Aside>
           <RightSideContent>
@@ -253,6 +268,10 @@ function ArticlePage(props: Props) {
       </FloatingStuff>
     </TableOfContentsProvider>
   )
+}
+
+function backToTop() {
+  window.scroll({ behavior: 'smooth', top: 0 })
 }
 
 const components: ComponentMap = {
@@ -873,6 +892,88 @@ const AllArticlesLink = styled.a`
 
   &:active {
     transform: scale(0.96);
+  }
+`
+
+const Thanks = styled.div`
+  padding: 24px;
+  padding-top: 28px;
+  border-radius: 16px;
+  background-color: hsla(0 0% 0% / 0.03);
+  margin-top: 48px;
+
+  @media (min-width: 640px) {
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+`
+
+const ThanksTitle = styled.h2`
+  text-align: center;
+  font-size: 20px;
+  font-weight: 550;
+  color: hsla(0 0% 0% / 0.8);
+`
+
+const ThanksDescription = styled.p`
+  margin-top: 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 450;
+  line-height: 1.5;
+  color: hsla(0 0% 0% / 0.5);
+
+  & a {
+    color: hsla(0 0% 0% / 0.6);
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 1px;
+    text-decoration-color: hsla(0 0% 0% / 0.1);
+
+    transition-property: text-decoration-color, color;
+    transition-duration: 0.15s;
+  }
+
+  & a:hover {
+    color: hsla(0 0% 0% / 0.7);
+    text-decoration-color: hsla(0 0% 0% / 0.2);
+  }
+  @media (min-width: 640px) {
+    font-weight: 400;
+
+    & a {
+      font-weight: 450;
+    }
+  }
+`
+
+const LikeButton = styled.button`
+  user-select: none;
+  margin-top: 16px;
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+`
+
+const LikeButtonIcon = styled(HeartFilledIcon)`
+  color: hsla(0 0% 0% / 0.2);
+  width: 24px;
+  height: 24px;
+
+  transition: color 0.15s;
+
+  &.liked {
+    color: hsla(0 0% 0% / 0.8);
   }
 `
 

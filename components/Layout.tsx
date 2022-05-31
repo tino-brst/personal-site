@@ -41,7 +41,6 @@ function Layout(props: Props) {
             </LinkGroup>
           </Column>
         </ColumnsWrapper>
-
         <SignatureImageWrapper>
           <NextImage
             priority
