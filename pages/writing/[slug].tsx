@@ -22,6 +22,7 @@ import {
   ChevronRightIcon,
   ChevronUpIcon,
   ClockIcon,
+  GitHubLogoIcon,
   HeartFilledIcon,
   ListBulletIcon,
 } from '@radix-ui/react-icons'
@@ -160,6 +161,20 @@ function ArticlePage(props: Props) {
               {likeCount.value}
             </LikeButton>
           </Thanks>
+          <EditOnGitHubWrapper>
+            <EditOnGitHubLabel>Found a typo?</EditOnGitHubLabel>
+            <EditOnGitHubLink
+              href={editOnGitHubURL(
+                'tino-brst',
+                'personal-site',
+                `articles/${props.slug}.mdx`
+              )}
+              target="_blank"
+            >
+              <EditOnGitHubIcon />
+              Edit on GitHub
+            </EditOnGitHubLink>
+          </EditOnGitHubWrapper>
         </Main>
         <Aside>
           <RightSideContent>
@@ -272,6 +287,15 @@ function ArticlePage(props: Props) {
 
 function backToTop() {
   window.scroll({ behavior: 'smooth', top: 0 })
+}
+
+function editOnGitHubURL(
+  username: string,
+  repo: string,
+  file: string,
+  branch = 'main'
+): string {
+  return `https://github.com/${username}/${repo}/edit/${branch}/${file}`
 }
 
 const components: ComponentMap = {
@@ -975,6 +999,53 @@ const LikeButtonIcon = styled(HeartFilledIcon)`
   &.liked {
     color: hsla(0 0% 0% / 0.8);
   }
+`
+
+const EditOnGitHubWrapper = styled.div`
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+`
+
+const EditOnGitHubLabel = styled.span`
+  color: hsla(0 0% 0% / 0.4);
+  font-size: 14px;
+  font-weight: 500;
+`
+
+const EditOnGitHubLink = styled.a`
+  align-self: center;
+  height: 44px;
+  line-height: 1;
+  padding: 12px 14px;
+  font-weight: 500;
+  background-color: hsla(0 0% 0% / 0.03);
+  color: black;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  transition-property: transform, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: hsla(0 0% 0% / 0.06);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+`
+
+const EditOnGitHubIcon = styled(GitHubLogoIcon)`
+  width: 18px;
+  height: 18px;
+  margin-right: 2px;
 `
 
 export default ArticlePage
