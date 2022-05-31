@@ -149,7 +149,7 @@ function ArticlePage(props: Props) {
           <Thanks>
             <ThanksTitle>Thanks for reading!</ThanksTitle>
             <ThanksDescription>
-              I would love to hear your thoughts, all feedback is absolutely
+              I would love to hear your thoughts, all feedback is very much
               welcome. You can find me on{' '}
               <a href="https://twitter.com/bursetAgustin">Twitter</a> or via{' '}
               <a href="mailto:tinos.corner@icloud.com">email</a>.
@@ -211,7 +211,7 @@ function ArticlePage(props: Props) {
                   <ArticleDescription>
                     <ArticleTitle>{props.newerArticle.title}</ArticleTitle>
                     <ArticleLabel>
-                      Next article
+                      Next
                       <NextArticleIcon width={18} height={18} />
                     </ArticleLabel>
                   </ArticleDescription>
@@ -238,7 +238,7 @@ function ArticlePage(props: Props) {
                   <ArticleDescription>
                     <ArticleTitle>{props.olderArticle.title}</ArticleTitle>
                     <ArticleLabel>
-                      Previous article
+                      Previously
                       <PreviousArticleIcon width={18} height={18} />
                     </ArticleLabel>
                   </ArticleDescription>
@@ -717,7 +717,7 @@ const UpNext = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 24px;
+  gap: 32px;
 
   &::before {
     position: absolute;
@@ -743,14 +743,13 @@ const ArticleList = styled.ol`
   flex-direction: column;
   gap: var(--gap);
 
-  margin-left: -8px;
-  margin-right: -8px;
+  margin-left: -4px;
+  margin-right: -4px;
 
   @media (min-width: 640px) {
     flex-direction: row-reverse;
-
-    margin-left: -24px;
-    margin-right: -24px;
+    margin-left: -12px;
+    margin-right: -12px;
   }
 `
 
@@ -764,12 +763,8 @@ const ArticleLink = styled.a`
   background-color: hsla(0 0% 0% / 0.03);
 
   display: flex;
-  padding: 8px;
-  gap: 8px;
-
-  @media (min-width: 640px) {
-    flex-direction: column;
-  }
+  padding: 12px;
+  gap: 12px;
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;
@@ -784,13 +779,17 @@ const ArticleLink = styled.a`
   &:active {
     transform: scale(0.99);
   }
+
+  @media (min-width: 640px) {
+    flex-direction: column;
+  }
 `
 
 const ArticleImageWrapper = styled.div`
-  --border-radius: 11px 4px 4px 11px;
+  --border-radius: 8px 4px 4px 8px;
 
   position: relative;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 1;
   flex: 1 1 0;
   border-radius: var(--border-radius);
   overflow: hidden;
@@ -803,7 +802,7 @@ const ArticleImageWrapper = styled.div`
     content: '';
     inset: 0;
     border-radius: var(--border-radius);
-    box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.1);
+    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
 
     transition-property: background-color;
     transition-duration: 0.5s;
@@ -816,7 +815,7 @@ const ArticleImageWrapper = styled.div`
   }
 
   @media (min-width: 640px) {
-    --border-radius: 11px 11px 4px 4px;
+    --border-radius: 8px 8px 4px 4px;
 
     aspect-ratio: 2 / 1;
     flex: 0 0 auto;
@@ -842,9 +841,12 @@ const ArticleDescription = styled.div`
   justify-content: space-between;
   gap: 10px;
   padding: 4px;
+  padding-left: 0;
 
   @media (min-width: 640px) {
     flex: 1 0 auto;
+    padding: 4px;
+    padding-top: 0;
 
     ${ArticleLink}.next & {
       align-items: flex-end;
@@ -865,6 +867,7 @@ const ArticleLabel = styled.div`
   font-size: 14px;
   letter-spacing: 0.01em;
   color: hsla(0 0% 0% / 0.4);
+  line-height: 1;
 
   display: flex;
   justify-content: start;
@@ -925,6 +928,8 @@ const Thanks = styled.div`
   border-radius: 16px;
   background-color: hsla(0 0% 0% / 0.03);
   margin-top: 48px;
+  margin-left: -4px;
+  margin-right: -4px;
 
   @media (min-width: 640px) {
     max-width: 360px;
