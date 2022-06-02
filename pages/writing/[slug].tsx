@@ -11,6 +11,7 @@ import {
 } from '@components/TableOfContents'
 import { useLikeCount } from '@hooks/useLikeCount'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
+import { useViewCount } from '@hooks/useViewCount'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
@@ -62,6 +63,7 @@ function ArticlePage(props: Props) {
   )
 
   const likeCount = useLikeCount(props.slug)
+  const viewCount = useViewCount(props.slug)
 
   // Table of Contents
 
@@ -144,6 +146,7 @@ function ArticlePage(props: Props) {
             </HeaderImageWrapper>
           </Header>
           <Content components={components} />
+          <ViewCount>{viewCount.value} views</ViewCount>
           <Thanks>
             <ThanksTitle>Thanks for reading!</ThanksTitle>
             <ThanksDescription>
@@ -421,7 +424,7 @@ const Info = styled.div`
   gap: 24px;
   font-size: 14px;
   font-weight: 500;
-  color: hsl(0 0% 60%);
+  color: hsla(0 0% 0% / 0.3);
 `
 
 const InfoItem = styled.div`
@@ -913,7 +916,7 @@ const Thanks = styled.div`
   padding-top: 28px;
   border-radius: 16px;
   background-color: hsla(0 0% 0% / 0.03);
-  margin-top: 48px;
+  margin-top: 32px;
 
   @media (min-width: 640px) {
     max-width: 360px;
@@ -1035,6 +1038,17 @@ const EditOnGitHubIcon = styled(GitHubLogoIcon)`
   width: 18px;
   height: 18px;
   margin-right: 2px;
+`
+
+const ViewCount = styled.div`
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 32px;
+  color: hsla(0 0% 0% / 0.2);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
 `
 
 export default ArticlePage
