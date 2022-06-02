@@ -39,9 +39,12 @@ const Wrapper = styled.div`
   overflow: hidden;
 
   @media (min-width: 640px) {
+    --copy-button-inset-x: 20px;
+    --copy-button-inset-y: 18px;
+
     margin-left: 0;
     margin-right: 0;
-    border-radius: 12px;
+    border-radius: 10px;
   }
 `
 
