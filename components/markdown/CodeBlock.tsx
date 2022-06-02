@@ -1,6 +1,6 @@
+import { CopyIcon } from '@radix-ui/react-icons'
 import * as React from 'react'
 import styled from 'styled-components'
-import { CopyIcon } from '@radix-ui/react-icons'
 
 type Props = {
   children?: React.ReactNode
@@ -27,19 +27,21 @@ function CodeBlock(props: Props) {
 }
 
 const Wrapper = styled.div`
-  --margin-x: 24px;
   --copy-button-size: 32px;
-  --copy-button-inset: 16px;
+  --copy-button-inset-x: 24px;
+  --copy-button-inset-y: 20px;
 
   position: relative;
-  margin-left: calc(-1 * var(--margin-x));
-  margin-right: calc(-1 * var(--margin-x));
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-top: 24px;
+  margin-bottom: 24px;
   overflow: hidden;
 
   @media (min-width: 640px) {
-    border-radius: 16px;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 12px;
   }
 `
 
@@ -57,8 +59,10 @@ const Pre = styled.pre`
   }
 
   & .line {
-    padding-left: var(--margin-x);
-    padding-right: calc(2 * var(--copy-button-inset) + var(--copy-button-size));
+    padding-left: 24px;
+    padding-right: calc(
+      2 * var(--copy-button-inset-x) + var(--copy-button-size)
+    );
   }
 
   & .line.highlight {
@@ -68,8 +72,8 @@ const Pre = styled.pre`
 
 const CopyButton = styled.button`
   position: absolute;
-  bottom: var(--copy-button-inset);
-  right: var(--copy-button-inset);
+  bottom: var(--copy-button-inset-y);
+  right: var(--copy-button-inset-x);
   width: var(--copy-button-size);
   height: var(--copy-button-size);
   display: flex;
