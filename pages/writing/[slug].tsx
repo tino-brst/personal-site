@@ -18,8 +18,6 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ArrowLeftIcon,
   CalendarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
   ChevronUpIcon,
   ClockIcon,
   GitHubLogoIcon,
@@ -210,10 +208,7 @@ function ArticlePage(props: Props) {
                   </ArticleImageWrapper>
                   <ArticleDescription>
                     <ArticleTitle>{props.newerArticle.title}</ArticleTitle>
-                    <ArticleLabel>
-                      Next
-                      <NextArticleIcon width={18} height={18} />
-                    </ArticleLabel>
+                    <ArticleLabel>Next</ArticleLabel>
                   </ArticleDescription>
                 </ArticleLink>
               </NextLink>
@@ -237,10 +232,7 @@ function ArticlePage(props: Props) {
                   </ArticleImageWrapper>
                   <ArticleDescription>
                     <ArticleTitle>{props.olderArticle.title}</ArticleTitle>
-                    <ArticleLabel>
-                      Previously
-                      <PreviousArticleIcon width={18} height={18} />
-                    </ArticleLabel>
+                    <ArticleLabel>Previously</ArticleLabel>
                   </ArticleDescription>
                 </ArticleLink>
               </NextLink>
@@ -383,7 +375,7 @@ const Aside = styled.aside`
 `
 
 const RightSideContent = styled.div`
-  margin-left: 48px;
+  margin-left: 24px;
   margin-right: 16px;
   display: none;
 
@@ -527,11 +519,11 @@ const HeaderImageWrapper = styled.div`
   margin-right: -24px;
   margin-top: 32px;
   margin-bottom: 28px;
-  box-shadow: inset 0 -0.5px 0 hsla(0 0% 0% / 0.1),
-    inset 0 0.5px 0 hsla(0 0% 0% / 0.1);
+  box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
+    inset 0 1px 0 hsla(0 0% 0% / 0.05);
 
   @media (min-width: 640px) {
-    box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.1);
+    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
     overflow: hidden;
     border-radius: 16px;
   }
@@ -542,20 +534,24 @@ const HeaderImage = styled(NextImage)`
 `
 
 const FloatingStuff = styled.div`
+  --inset: 16px;
+
   z-index: 1;
   position: fixed;
   pointer-events: none;
-  // TODO: extract to var
-  right: 16px;
-  bottom: 16px;
+  right: var(--inset);
+  bottom: var(--inset);
   display: flex;
   flex-direction: column-reverse;
   align-items: stretch;
   gap: 12px;
-  // TODO: same for these 16px
-  width: calc(100vw - 2 * 16px);
+  width: calc(100vw - 2 * var(--inset));
   max-width: 380px;
-  max-height: calc(100vh - 16px * 2 - ${barHeight}px);
+  max-height: calc(100vh - var(--inset) * 2 - ${barHeight}px);
+
+  @media (min-width: 640px) {
+    --inset: 24px;
+  }
 
   @media (min-width: calc(768px + 300px * 2)) {
     display: none;
@@ -743,13 +739,8 @@ const ArticleList = styled.ol`
   flex-direction: column;
   gap: var(--gap);
 
-  margin-left: -4px;
-  margin-right: -4px;
-
   @media (min-width: 640px) {
     flex-direction: row-reverse;
-    margin-left: -12px;
-    margin-right: -12px;
   }
 `
 
@@ -758,13 +749,15 @@ const ArticleListItem = styled.li`
 `
 
 const ArticleLink = styled.a`
+  --padding: 12px;
+
   height: 100%;
   border-radius: 16px;
   background-color: hsla(0 0% 0% / 0.03);
 
   display: flex;
-  padding: 12px;
-  gap: 12px;
+  padding: var(--padding);
+  gap: var(--padding);
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;
@@ -786,10 +779,10 @@ const ArticleLink = styled.a`
 `
 
 const ArticleImageWrapper = styled.div`
-  --border-radius: 8px 4px 4px 8px;
+  --border-radius: 6px;
 
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 3;
   flex: 1 1 0;
   border-radius: var(--border-radius);
   overflow: hidden;
@@ -815,7 +808,7 @@ const ArticleImageWrapper = styled.div`
   }
 
   @media (min-width: 640px) {
-    --border-radius: 8px 8px 4px 4px;
+    --border-radius: 6px;
 
     aspect-ratio: 2 / 1;
     flex: 0 0 auto;
@@ -839,14 +832,15 @@ const ArticleDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 10px;
-  padding: 4px;
+  gap: 8px;
+  padding: 2px;
   padding-left: 0;
 
   @media (min-width: 640px) {
     flex: 1 0 auto;
     padding: 4px;
     padding-top: 0;
+    margin-top: -2px;
 
     ${ArticleLink}.next & {
       align-items: flex-end;
@@ -857,9 +851,14 @@ const ArticleDescription = styled.div`
 
 const ArticleTitle = styled.h2`
   font-weight: 550;
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0.01em;
+  line-height: 1.3em;
   color: hsla(0 0% 0% / 0.8);
+
+  @media (min-width: 640px) {
+    font-size: 18px;
+  }
 `
 
 const ArticleLabel = styled.div`
@@ -876,24 +875,6 @@ const ArticleLabel = styled.div`
 
   ${ArticleLink}.previous & {
     flex-direction: row-reverse;
-  }
-`
-
-const NextArticleIcon = styled(ChevronRightIcon)`
-  display: none;
-  margin-right: -2px;
-
-  @media (min-width: 640px) {
-    display: revert;
-  }
-`
-
-const PreviousArticleIcon = styled(ChevronLeftIcon)`
-  display: none;
-  margin-left: -2px;
-
-  @media (min-width: 640px) {
-    display: revert;
   }
 `
 
@@ -928,8 +909,6 @@ const Thanks = styled.div`
   border-radius: 16px;
   background-color: hsla(0 0% 0% / 0.03);
   margin-top: 48px;
-  margin-left: -4px;
-  margin-right: -4px;
 
   @media (min-width: 640px) {
     max-width: 360px;
