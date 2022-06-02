@@ -137,17 +137,12 @@ const Articles = styled.ol`
   --gap: 18px;
 
   margin-bottom: 32px;
-  margin-left: -8px;
-  margin-right: -8px;
 
   display: flex;
   flex-direction: column;
   gap: var(--gap);
 
   @media (min-width: 640px) {
-    margin-left: -24px;
-    margin-right: -24px;
-
     flex-direction: row;
     flex-wrap: wrap;
   }
@@ -168,12 +163,12 @@ const ArticleLink = styled.a`
   height: 100%;
 
   isolation: isolate;
-  padding: 8px;
+  padding: 12px;
   background-color: hsla(0 0% 0% / 0.03);
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;
@@ -191,7 +186,7 @@ const ArticleLink = styled.a`
   @media (min-width: 640px) {
     ${ArticleListItem}:first-child & {
       flex-direction: row;
-      gap: 6px;
+      gap: 14px;
     }
 
     ${ArticleListItem}:first-child:active & {
@@ -201,7 +196,7 @@ const ArticleLink = styled.a`
 `
 
 const ArticleImageWrapper = styled.div`
-  --border-radius: 11px 11px 4px 4px;
+  --border-radius: 6px;
 
   aspect-ratio: 2 / 1;
   position: relative;
@@ -216,7 +211,7 @@ const ArticleImageWrapper = styled.div`
     content: '';
     inset: 0;
     border-radius: var(--border-radius);
-    box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.1);
+    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
 
     transition-property: background-color;
     transition-duration: 0.5s;
@@ -230,8 +225,6 @@ const ArticleImageWrapper = styled.div`
 
   @media (min-width: 640px) {
     ${ArticleListItem}:first-child & {
-      --border-radius: 11px 4px 4px 11px;
-
       flex: 2 1 0;
     }
   }
@@ -255,11 +248,15 @@ const ArticleDescription = styled.div`
   justify-content: space-between;
   gap: 8px;
 
-  padding: 8px;
+  padding: 4px;
+  padding-top: 0;
 
   @media (min-width: 640px) {
     ${ArticleListItem}:first-child & {
       flex: 1 1 0;
+
+      padding: 4px;
+      padding-left: 0;
     }
   }
 `

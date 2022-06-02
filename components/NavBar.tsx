@@ -1,18 +1,18 @@
-import * as React from 'react'
-import styled from 'styled-components'
-import NextLink from 'next/link'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
-import { map } from '@lib/math'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
+import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { useSize } from '@hooks/useSize'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
-import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
-import { ThemeToggle } from './ThemeToggle'
+import { map } from '@lib/math'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import { NavGroup, NavGroupLink } from './NavGroup'
-import avatarImageSrc from 'public/images/avatar.png'
 import clsx from 'clsx'
+import Image from 'next/image'
+import NextLink from 'next/link'
+import { useRouter } from 'next/router'
+import avatarImageSrc from 'public/images/avatar.png'
+import * as React from 'react'
+import styled from 'styled-components'
+import { NavGroup, NavGroupLink } from './NavGroup'
+import { ThemeToggle } from './ThemeToggle'
 
 const barHeight = 70
 const scrollThreshold = 48
@@ -226,6 +226,11 @@ const Bar = styled.div`
   margin-left: auto;
   max-width: calc(768px + 2 * 16px);
   gap: 20px;
+
+  @media (min-width: 640px) {
+    padding-right: 32px;
+    padding-left: 32px;
+  }
 `
 
 const HomeLink = styled.a`

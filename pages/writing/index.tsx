@@ -618,7 +618,7 @@ const ArticleLink = styled.a`
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;

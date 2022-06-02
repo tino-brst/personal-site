@@ -118,6 +118,11 @@ const Footer = styled.footer`
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 48px;
+
+    &::before {
+      left: 32px;
+      right: 32px;
+    }
   }
 `
 

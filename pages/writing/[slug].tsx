@@ -525,7 +525,7 @@ const HeaderImageWrapper = styled.div`
   @media (min-width: 640px) {
     box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: 12px;
   }
 `
 
@@ -729,6 +729,11 @@ const UpNext = styled.div`
   @media (min-width: 640px) {
     padding-left: 40px;
     padding-right: 40px;
+
+    &::before {
+      left: 32px;
+      right: 32px;
+    }
   }
 `
 
