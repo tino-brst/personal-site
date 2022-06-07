@@ -1,3 +1,4 @@
+import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -9,7 +10,7 @@ type Props = {
 function Parallax(props: React.PropsWithChildren<Props>) {
   const ref = React.useRef<HTMLDivElement>(null)
 
-  React.useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!ref.current) return
 
     const element = ref.current
@@ -23,7 +24,7 @@ function Parallax(props: React.PropsWithChildren<Props>) {
     handleScroll()
 
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [ref])
 
   return (
     <Wrapper

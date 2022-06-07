@@ -5,6 +5,7 @@ import { Image } from '@components/markdown/Image'
 import { Link } from '@components/markdown/Link'
 import { Paragraph } from '@components/markdown/Paragraph'
 import { Strong } from '@components/markdown/Strong'
+import { Parallax } from '@components/Parallax'
 import {
   AsideTableOfContents,
   TableOfContents,
@@ -135,14 +136,16 @@ function ArticlePage(props: Props) {
               </Tags>
             )}
             <HeaderImageWrapper>
-              {props.headerImageSrc && (
-                <HeaderImage
-                  src={props.headerImageSrc}
-                  layout="fill"
-                  objectFit="cover"
-                  priority
-                />
-              )}
+              <StyledParallax multiplier={-0.02}>
+                {props.headerImageSrc && (
+                  <NextImage
+                    src={props.headerImageSrc}
+                    layout="fill"
+                    objectFit="cover"
+                    priority
+                  />
+                )}
+              </StyledParallax>
             </HeaderImageWrapper>
           </Header>
           <Content components={components} />
@@ -522,18 +525,20 @@ const HeaderImageWrapper = styled.div`
   margin-right: -24px;
   margin-top: 32px;
   margin-bottom: 28px;
+  overflow: hidden;
   box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
     inset 0 1px 0 hsla(0 0% 0% / 0.05);
 
   @media (min-width: 640px) {
     box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
-    overflow: hidden;
     border-radius: 12px;
   }
 `
 
-const HeaderImage = styled(NextImage)`
+const StyledParallax = styled(Parallax)`
+  position: absolute;
   z-index: -1;
+  inset: -10px;
 `
 
 const FloatingStuff = styled.div`
