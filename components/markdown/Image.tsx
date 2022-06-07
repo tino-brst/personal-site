@@ -12,7 +12,7 @@ type Props = {
 function Image(props: Props) {
   return (
     <Wrapper>
-      <StyledParallax multiplier={-0.02}>
+      <StyledParallax multiplier={-0.025}>
         {props.src && (
           <NextImage
             layout="responsive"

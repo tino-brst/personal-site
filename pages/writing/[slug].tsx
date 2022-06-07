@@ -136,7 +136,7 @@ function ArticlePage(props: Props) {
               </Tags>
             )}
             <HeaderImageWrapper>
-              <StyledParallax multiplier={-0.02}>
+              <StyledParallax multiplier={-0.025}>
                 {props.headerImageSrc && (
                   <NextImage
                     src={props.headerImageSrc}
@@ -538,7 +538,10 @@ const HeaderImageWrapper = styled.div`
 const StyledParallax = styled(Parallax)`
   position: absolute;
   z-index: -1;
-  inset: -10px;
+  top: -10px;
+  bottom: -10px;
+  left: 0;
+  right: 0;
 `
 
 const FloatingStuff = styled.div`
