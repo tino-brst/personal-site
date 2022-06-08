@@ -136,7 +136,7 @@ function ArticlePage(props: Props) {
               </Tags>
             )}
             <HeaderImageWrapper>
-              <StyledParallax multiplier={-0.025}>
+              <StyledParallax multiplier={-0.025} clampTo={10}>
                 {props.headerImageSrc && (
                   <NextImage
                     src={props.headerImageSrc}

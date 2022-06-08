@@ -12,7 +12,7 @@ type Props = {
 function Image(props: Props) {
   return (
     <Wrapper>
-      <StyledParallax multiplier={-0.025}>
+      <StyledParallax multiplier={-0.025} clampTo={10}>
         {props.src && (
           <NextImage
             layout="responsive"
@@ -48,7 +48,6 @@ const Wrapper = styled.div`
 const StyledParallax = styled(Parallax)`
   position: relative;
   z-index: -1;
-  /* TODO: limit parallax translation to these values */
   margin-top: -10px;
   margin-bottom: -10px;
 `

@@ -1,9 +1,16 @@
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
+import clsx from 'clsx'
 import React from 'react'
 import styled from 'styled-components'
 
+// TODO enable only while visible? (using intersection observer)
+
 type Props = {
+  /** translationY = offset * multiplier */
   multiplier?: number
+  /** Limit translation values to the range [-clampTo, clampTo] (in pixels) */
+  clampTo?: number
+  /** For styled-components compatibility */
   className?: string
 }
 
@@ -15,22 +22,29 @@ function Parallax(props: React.PropsWithChildren<Props>) {
 
     const element = ref.current
 
-    function handleScroll() {
+    function updateOffset() {
       element.style.setProperty('--offset', `${getCenterOffsetY(element)}px`)
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', updateOffset, { passive: true })
+    window.addEventListener('resize', updateOffset, { passive: true })
 
-    handleScroll()
+    updateOffset()
 
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [ref])
+    return () => {
+      window.removeEventListener('scroll', updateOffset)
+      window.removeEventListener('resize', updateOffset)
+    }
+  }, [])
 
   return (
     <Wrapper
-      className={props.className}
+      className={clsx(props.className, { clamped: props.clampTo })}
       ref={ref}
-      style={{ '--multiplier': props.multiplier ?? 0 }}
+      style={{
+        '--multiplier': props.multiplier ?? 0,
+        '--translate-limit': props.clampTo ? `${props.clampTo}px` : 0,
+      }}
     >
       {props.children}
     </Wrapper>
@@ -40,17 +54,21 @@ function Parallax(props: React.PropsWithChildren<Props>) {
 const Wrapper = styled.div`
   --offset: 0;
   --multiplier: 0;
-  /* TODO should get these via props */
-  --translate-min: -10px;
-  --translate-max: 10px;
+  --translate-limit: 0;
+  --translate-min: calc(-1 * var(--translate-limit));
+  --translate-max: var(--translate-limit);
 
-  transform: translateY(
-    clamp(
-      var(--translate-min),
-      calc(var(--offset) * var(--multiplier)),
-      var(--translate-max)
-    )
-  );
+  transform: translateY(calc(var(--offset) * var(--multiplier)));
+
+  &.clamped {
+    transform: translateY(
+      clamp(
+        var(--translate-min),
+        calc(var(--offset) * var(--multiplier)),
+        var(--translate-max)
+      )
+    );
+  }
 `
 
 function getCenterOffsetY(element: HTMLElement): number {
