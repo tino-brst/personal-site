@@ -37,6 +37,8 @@ const Wrapper = styled.div`
   margin-top: 24px;
   margin-bottom: 24px;
   overflow: hidden;
+  box-shadow: inset 0 -0.5px 0 hsla(0 0% 0% / 0.03),
+    inset 0 0.5px 0 hsla(0 0% 0% / 0.03);
 
   @media (min-width: 640px) {
     --copy-button-inset-x: 20px;
@@ -45,12 +47,13 @@ const Wrapper = styled.div`
     margin-left: 0;
     margin-right: 0;
     border-radius: 10px;
+    box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.03);
   }
 `
 
 const Pre = styled.pre`
-  line-height: 1.4;
-  background-color: hsla(0 0% 0% / 0.03);
+  line-height: 1.5;
+  background-color: hsla(0 0% 0% / 0.02);
   padding-top: 20px;
   padding-bottom: 20px;
   white-space: pre;
@@ -69,7 +72,7 @@ const Pre = styled.pre`
   }
 
   & .line.highlight {
-    background-color: hsla(0 0% 0% / 0.04);
+    background-color: hsla(0 0% 0% / 0.03);
   }
 `
 

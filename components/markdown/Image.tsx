@@ -35,7 +35,7 @@ const Wrapper = styled.div`
   margin-bottom: 24px;
   overflow: hidden;
   box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
-    inset 0 1px 0 hsla(0 0% 0% / 0.1);
+    inset 0 1px 0 hsla(0 0% 0% / 0.05);
 
   @media (min-width: 640px) {
     margin-left: 0;
