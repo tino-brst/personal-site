@@ -1,6 +1,7 @@
 import '@fontsource/inter/variable.css'
 import 'normalize.css'
 import 'the-new-css-reset/css/reset.css'
+import '@wooorm/starry-night/style/core.css'
 import '../styles/global.css'
 import type { AppProps } from 'next/app'
 import { SWRConfig } from 'swr'
