@@ -37,6 +37,7 @@ import styled, { css } from 'styled-components'
 
 const barHeight = 70
 const barBottomMargin = 60
+const asideWidth = 240
 
 type RelatedArticle = {
   title: string
@@ -374,12 +375,12 @@ const Aside = styled.aside`
   position: sticky;
   top: ${barHeight + barBottomMargin}px;
 
-  margin-left: 20px;
-  margin-right: 16px;
+  padding-left: 20px;
+  padding-right: 24px;
   display: none;
 
   /* TODO: clean-up magic numbers */
-  @media (min-width: calc(768px + 300px * 2)) {
+  @media (min-width: calc(768px + 2 * 16px + ${asideWidth}px * 2)) {
     display: revert;
   }
 `
@@ -563,7 +564,7 @@ const FloatingStuff = styled.div`
     --inset: 24px;
   }
 
-  @media (min-width: calc(768px + 300px * 2)) {
+  @media (min-width: calc(768px + 2 * 16px + ${asideWidth}px * 2)) {
     display: none;
   }
 `

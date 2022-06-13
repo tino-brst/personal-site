@@ -1,9 +1,9 @@
+import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
+import { ChevronLeftIcon } from '@radix-ui/react-icons'
+import clsx from 'clsx'
+import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
 import styled from 'styled-components'
-import clsx from 'clsx'
-import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
-import { useTableOfContents } from 'contexts/table-of-contents'
-import { ChevronLeftIcon } from '@radix-ui/react-icons'
 
 // Larger Screens Table Of Contents
 
@@ -71,9 +71,10 @@ const AsideLink = styled.a`
   color: hsla(0 0% 0% / 0.5);
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.6;
   margin-left: calc(12px * var(--level));
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 
   transition-property: color;
   transition-duration: 0.1s;
