@@ -104,50 +104,58 @@ function ArticlePage(props: Props) {
   return (
     <TableOfContentsProvider tableOfContents={props.tableOfContents}>
       <Wrapper>
-        <Aside />
+        {props.tableOfContents.children.length > 0 && (
+          <Aside>
+            <AsideHeader>
+              In this article
+              <ListBulletIcon width={18} height={18} />
+            </AsideHeader>
+            <AsideTableOfContents />
+          </Aside>
+        )}
+        <Header>
+          <Info>
+            <InfoItem>
+              <CalendarIcon width={12} height={12} />
+              <span>{formatDate(props.publishedOn)}</span>
+            </InfoItem>
+            <InfoItem>
+              <ClockIcon width={12} height={12} />
+              <span>{props.readingTime}</span>
+            </InfoItem>
+          </Info>
+          <Title>{props.title}</Title>
+          {props.tags.length > 0 && (
+            <Tags>
+              {props.tags.map((tag) => (
+                <NextLink
+                  key={tag}
+                  href={`/writing?tags=${tag}`}
+                  passHref={true}
+                >
+                  <Tag>
+                    {/* TODO: use hashtag icon instead of character */}
+                    <TagIcon>#</TagIcon>
+                    {tag}
+                  </Tag>
+                </NextLink>
+              ))}
+            </Tags>
+          )}
+        </Header>
         <Main>
-          <Header>
-            <Info>
-              <InfoItem>
-                <CalendarIcon width={12} height={12} />
-                <span>{formatDate(props.publishedOn)}</span>
-              </InfoItem>
-              <InfoItem>
-                <ClockIcon width={12} height={12} />
-                <span>{props.readingTime}</span>
-              </InfoItem>
-            </Info>
-            <Title>{props.title}</Title>
-            {props.tags.length > 0 && (
-              <Tags>
-                {props.tags.map((tag) => (
-                  <NextLink
-                    key={tag}
-                    href={`/writing?tags=${tag}`}
-                    passHref={true}
-                  >
-                    <Tag>
-                      {/* TODO: use hashtag icon instead of character */}
-                      <TagIcon>#</TagIcon>
-                      {tag}
-                    </Tag>
-                  </NextLink>
-                ))}
-              </Tags>
-            )}
-            <HeaderImageWrapper>
-              <StyledParallax multiplier={-0.025} clampTo={10}>
-                {props.headerImageSrc && (
-                  <NextImage
-                    src={props.headerImageSrc}
-                    layout="fill"
-                    objectFit="cover"
-                    priority
-                  />
-                )}
-              </StyledParallax>
-            </HeaderImageWrapper>
-          </Header>
+          <HeaderImageWrapper>
+            <StyledParallax multiplier={-0.025} clampTo={10}>
+              {props.headerImageSrc && (
+                <NextImage
+                  src={props.headerImageSrc}
+                  layout="fill"
+                  objectFit="cover"
+                  priority
+                />
+              )}
+            </StyledParallax>
+          </HeaderImageWrapper>
           <Content components={components} />
           <ViewCount>{viewCount.value} views</ViewCount>
           <Thanks>
@@ -180,19 +188,6 @@ function ArticlePage(props: Props) {
             </EditOnGitHubLink>
           </EditOnGitHubWrapper>
         </Main>
-        <Aside>
-          <RightSideContent>
-            {props.tableOfContents.children.length > 0 && (
-              <AsideSection>
-                <AsideSectionHeader>
-                  In this article
-                  <ListBulletIcon width={18} height={18} />
-                </AsideSectionHeader>
-                <AsideTableOfContents />
-              </AsideSection>
-            )}
-          </RightSideContent>
-        </Aside>
       </Wrapper>
       <UpNext>
         <ArticleList>
@@ -364,38 +359,32 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
 
 const Wrapper = styled.div`
   isolation: isolate;
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr min(100vw, calc(768px + 2 * 16px)) 1fr;
+  grid-template-areas:
+    '... header ...'
+    '... main aside';
+  grid-row-gap: 32px;
   margin-bottom: 48px;
 `
 
 const Aside = styled.aside`
-  flex: 1;
-  display: none;
+  grid-area: aside;
+  align-self: start;
   position: sticky;
   top: ${barHeight + barBottomMargin}px;
 
-  @media (min-width: 768px) {
-    display: revert;
-  }
-`
-
-const RightSideContent = styled.div`
-  margin-left: 24px;
+  margin-left: 20px;
   margin-right: 16px;
   display: none;
 
   /* TODO: clean-up magic numbers */
   @media (min-width: calc(768px + 300px * 2)) {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
+    display: revert;
   }
 `
 
-const AsideSection = styled.section``
-
-const AsideSectionHeader = styled.header`
+const AsideHeader = styled.header`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -404,14 +393,14 @@ const AsideSectionHeader = styled.header`
   font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  margin-top: -4px;
 `
 
 const Main = styled.main`
-  flex: 0 1 calc(768px + 2 * 16px);
+  grid-area: main;
   padding-right: 24px;
   padding-left: 24px;
-  max-width: min(100vw, calc(768px + 2 * 16px));
 
   @media (min-width: 640px) {
     padding-left: 40px;
@@ -419,7 +408,16 @@ const Main = styled.main`
   }
 `
 
-const Header = styled.header``
+const Header = styled.header`
+  grid-area: header;
+  padding-right: 24px;
+  padding-left: 24px;
+
+  @media (min-width: 640px) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+`
 
 const Info = styled.div`
   display: flex;
@@ -441,11 +439,12 @@ const Title = styled.h1`
   font-size: 2.2rem;
   font-weight: 600;
   margin-top: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 `
 
 const Tags = styled.div`
   --gap: 8px;
+  margin-top: 20px;
   margin-left: -24px;
   margin-right: -24px;
   padding-left: 24px;
@@ -472,7 +471,8 @@ const Tags = styled.div`
   }
 
   @media (min-width: 640px) {
-    margin: 0;
+    margin-left: 0;
+    margin-right: 0;
     padding: 0;
     max-width: 100%;
     flex-wrap: wrap;
@@ -523,7 +523,6 @@ const HeaderImageWrapper = styled.div`
   aspect-ratio: 2 / 1;
   margin-left: -24px;
   margin-right: -24px;
-  margin-top: 32px;
   margin-bottom: 28px;
   overflow: hidden;
   box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
