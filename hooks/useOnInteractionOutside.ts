@@ -23,7 +23,7 @@ function useOnInteractionOutside(
     [refs, fn]
   )
 
-  useWindowEventListener('pointerdown', pointerDownHandler, isEnabled)
+  useWindowEventListener('pointerdown', pointerDownHandler, { isEnabled })
 }
 
 function isInteractionOutside(

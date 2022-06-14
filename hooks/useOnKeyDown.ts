@@ -16,7 +16,7 @@ function useOnKeyDown(
     [key, fn]
   )
 
-  useWindowEventListener('keydown', keyDownHandler, isEnabled)
+  useWindowEventListener('keydown', keyDownHandler, { isEnabled })
 }
 
 export { useOnKeyDown }
