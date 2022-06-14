@@ -1,7 +1,7 @@
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
+import { useOnWindowScroll } from '@hooks/useOnWindowScroll'
 import { useSize } from '@hooks/useSize'
-import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { map } from '@lib/math'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
@@ -48,7 +48,7 @@ function NavBar() {
     )
   }, [])
 
-  useWindowEventListener('scroll', updateScrollBasedOpacity)
+  useOnWindowScroll(updateScrollBasedOpacity)
 
   // Handle switching the background's opacity changes from instant (while
   // scrolling) to animated (when opening/closing the tray). Accomplished via
@@ -89,7 +89,7 @@ function NavBar() {
     setIsTrayOpen(false)
   }, [])
 
-  useWindowEventListener('scroll', closeTray)
+  useOnWindowScroll(closeTray)
   useOnInteractionOutside(wrapperRef, closeTray, isTrayOpen)
 
   return (
