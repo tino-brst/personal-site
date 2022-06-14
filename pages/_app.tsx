@@ -8,14 +8,17 @@ import { SWRConfig } from 'swr'
 import { fetcher } from '@lib/fetcher'
 import { ThemeProvider } from 'contexts/theme'
 import { Layout } from '@components/Layout'
+import { NavBarProvider } from 'contexts/nav-bar'
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig value={{ fetcher }}>
       <ThemeProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <NavBarProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </NavBarProvider>
       </ThemeProvider>
     </SWRConfig>
   )
