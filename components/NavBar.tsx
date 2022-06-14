@@ -22,7 +22,11 @@ const cssVar = {
   trayHeight: '--tray-height',
 }
 
-function NavBar() {
+type Props = Partial<{
+  isProgressShown: boolean
+}>
+
+function NavBar(props: Props) {
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
   const trayRef = React.useRef<HTMLDivElement>(null)
@@ -92,10 +96,34 @@ function NavBar() {
   useOnWindowScroll(closeTray)
   useOnInteractionOutside(wrapperRef, closeTray, isTrayOpen)
 
+  // Progress Bar
+
+  const progressBarRef = React.useRef<HTMLDivElement>(null)
+
+  const updateScrollProgress = React.useCallback(() => {
+    if (!progressBarRef.current) return
+
+    const { documentElement } = document
+
+    const progress = map(
+      documentElement.scrollTop,
+      [0, documentElement.scrollHeight - window.innerHeight],
+      [0, 1]
+    )
+
+    progressBarRef.current.style.setProperty('--progress', `${progress}`)
+  }, [])
+
+  useOnWindowScroll(updateScrollProgress)
+
   return (
     <StickyPlaceholder>
       <Wrapper ref={wrapperRef} isTrayOpen={isTrayOpen}>
         <Background ref={backgroundRef} isTrayOpen={isTrayOpen} />
+        <ProgressBar
+          ref={progressBarRef}
+          className={clsx({ visible: props.isProgressShown })}
+        />
         <Bar>
           <NextLink href="/" passHref={true}>
             <HomeLink>
@@ -212,6 +240,24 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
 
   @media (min-width: 640px) {
     opacity: var(${cssVar.scrollBasedOpacity});
+  }
+`
+
+const ProgressBar = styled.div`
+  --progress: 0;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: hsla(0deg 0% 0% / 0.1);
+  transform: scaleX(var(--progress));
+  transform-origin: left;
+  display: none;
+
+  &.visible {
+    display: revert;
   }
 `
 

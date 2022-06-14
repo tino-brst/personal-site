@@ -1,6 +1,7 @@
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 import styled from 'styled-components'
 import { NavBar } from './NavBar'
@@ -10,9 +11,12 @@ type Props = {
 }
 
 function Layout(props: Props) {
+  const router = useRouter()
+  const isProgressShown = router.pathname.startsWith('/writing/')
+
   return (
     <Wrapper>
-      <NavBar />
+      <NavBar isProgressShown={isProgressShown} />
       <Content>{props.children}</Content>
       <Footer>
         <ColumnsWrapper>
