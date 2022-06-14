@@ -230,9 +230,9 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: hsla(0 0% 100% / 0.88);
+  background: hsla(0 0% 100% / 0.9);
   backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: 0 1px hsla(0 0% 0% / 0.05);
+  box-shadow: 0 1px hsla(0 0% 0% / 0.05), inset 0 0.5px 0 hsla(0 0% 0% / 0.08);
 
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
