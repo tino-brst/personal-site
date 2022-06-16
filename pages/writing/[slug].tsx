@@ -5,7 +5,6 @@ import { Image } from '@components/markdown/Image'
 import { Link } from '@components/markdown/Link'
 import { Paragraph } from '@components/markdown/Paragraph'
 import { Strong } from '@components/markdown/Strong'
-import { Parallax } from '@components/Parallax'
 import {
   AsideTableOfContents,
   TableOfContents,
@@ -37,7 +36,7 @@ import * as React from 'react'
 import styled, { css } from 'styled-components'
 
 const barHeight = 70
-const barBottomMargin = 60
+const barBottomMargin = 48
 const asideWidth = 240
 
 type RelatedArticle = {
@@ -130,6 +129,17 @@ function ArticlePage(props: Props) {
   return (
     <TableOfContentsProvider tableOfContents={props.tableOfContents}>
       <Wrapper>
+        <HeaderImageWrapper>
+          {props.headerImageSrc && (
+            <NextImage
+              src={props.headerImageSrc}
+              layout="fill"
+              objectFit="cover"
+              priority
+            />
+          )}
+          <HeaderImageOverlay />
+        </HeaderImageWrapper>
         {props.tableOfContents.children.length > 0 && (
           <Aside>
             <AsideHeader>
@@ -170,18 +180,6 @@ function ArticlePage(props: Props) {
           )}
         </Header>
         <Main>
-          <HeaderImageWrapper>
-            <StyledParallax multiplier={-0.025} clampTo={10}>
-              {props.headerImageSrc && (
-                <NextImage
-                  src={props.headerImageSrc}
-                  layout="fill"
-                  objectFit="cover"
-                  priority
-                />
-              )}
-            </StyledParallax>
-          </HeaderImageWrapper>
           <Content components={components} />
           <ContentEndMarker ref={contentEndMarkerRef} />
           <ViewCount>{viewCount.value} views</ViewCount>
@@ -385,21 +383,48 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
 }
 
 const Wrapper = styled.div`
+  --gap: 40px;
+
   isolation: isolate;
+  margin-bottom: 48px;
+  margin-top: -${barHeight + barBottomMargin}px;
   display: grid;
   grid-template-columns: 1fr min(100vw, calc(768px + 2 * 16px)) 1fr;
   grid-template-areas:
     '... header ...'
     '... main aside';
-  grid-row-gap: 32px;
-  margin-bottom: 48px;
+  grid-row-gap: var(--gap);
+`
+
+const HeaderImageWrapper = styled.div`
+  position: relative;
+  background: black;
+  grid-row: 1;
+  grid-column: 1 / -1;
+  margin-bottom: -20px;
+`
+
+const HeaderImageOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.48) 40%,
+    rgba(255, 255, 255, 0.7) 60%,
+    rgba(255, 255, 255, 0.78) 70%,
+    rgba(255, 255, 255, 0.83) 75%,
+    rgba(255, 255, 255, 0.88) 80%,
+    rgba(255, 255, 255, 0.95) 90%,
+    rgba(255, 255, 255, 1) 100%
+  );
 `
 
 const Aside = styled.aside`
   grid-area: aside;
   align-self: start;
   position: sticky;
-  top: ${barHeight + barBottomMargin}px;
+  top: calc(${barHeight}px + var(--gap));
 
   padding-left: 20px;
   padding-right: 24px;
@@ -421,13 +446,16 @@ const AsideHeader = styled.header`
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 12px;
-  margin-top: -4px;
 `
 
 const Main = styled.main`
   grid-area: main;
   padding-right: 24px;
   padding-left: 24px;
+
+  & > *:first-child {
+    margin-top: 0;
+  }
 
   @media (min-width: 640px) {
     padding-left: 40px;
@@ -436,13 +464,34 @@ const Main = styled.main`
 `
 
 const Header = styled.header`
+  position: relative;
   grid-area: header;
+  align-self: end;
   padding-right: 24px;
   padding-left: 24px;
+  padding-bottom: 48px;
+  margin-top: 45vh;
+
+  &::before {
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    right: 16px;
+    display: block;
+    content: '';
+    height: 1px;
+    background-color: hsla(0 0% 0% / 0.05);
+  }
 
   @media (min-width: 640px) {
     padding-left: 40px;
     padding-right: 40px;
+    margin-top: 40vh;
+
+    &::before {
+      left: 32px;
+      right: 32px;
+    }
   }
 `
 
@@ -451,8 +500,8 @@ const Info = styled.div`
   align-items: center;
   gap: 24px;
   font-size: 14px;
-  font-weight: 500;
-  color: hsla(0 0% 0% / 0.3);
+  font-weight: 550;
+  color: hsla(0 0% 40% / 0.9);
 `
 
 const InfoItem = styled.div`
@@ -519,6 +568,7 @@ const Tag = styled.a`
   font-weight: 500;
   color: hsl(0 0% 0% / 0.7);
   background-color: hsla(0 0% 0% / 0.03);
+  backdrop-filter: saturate(180%) blur(10px);
   border-radius: 8px;
   padding: 6px 10px;
   scroll-snap-align: start;
@@ -543,31 +593,6 @@ const Tag = styled.a`
 
 const TagIcon = styled.span`
   color: hsl(0 0% 0% / 0.3);
-`
-
-const HeaderImageWrapper = styled.div`
-  position: relative;
-  aspect-ratio: 2 / 1;
-  margin-left: -24px;
-  margin-right: -24px;
-  margin-bottom: 28px;
-  overflow: hidden;
-  box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
-    inset 0 1px 0 hsla(0 0% 0% / 0.05);
-
-  @media (min-width: 640px) {
-    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
-    border-radius: 12px;
-  }
-`
-
-const StyledParallax = styled(Parallax)`
-  position: absolute;
-  z-index: -1;
-  top: -10px;
-  bottom: -10px;
-  left: 0;
-  right: 0;
 `
 
 const FloatingStuff = styled.div`
