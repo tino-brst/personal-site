@@ -16,8 +16,12 @@ function Layout(props: Props) {
   const router = useRouter()
   const navBar = useNavBar()
 
+  // TODO: I think it makes more sense to have each page state its preference?
   useIsomorphicLayoutEffect(() => {
-    navBar.setIsProgressShown(router.pathname.startsWith('/writing/'))
+    const isArticlePage = router.pathname.startsWith('/writing/')
+
+    navBar.setIsProgressShown(isArticlePage)
+    navBar.setIsAlwaysOpaque(isArticlePage)
   }, [navBar, router.pathname])
 
   return (

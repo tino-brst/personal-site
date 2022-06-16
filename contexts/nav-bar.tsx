@@ -5,6 +5,8 @@ type ContextValue = {
   setIsProgressShown: (value: boolean) => void
   progressCompleteThreshold: number
   setProgressCompleteThreshold: (value: number) => void
+  isAlwaysOpaque: boolean
+  setIsAlwaysOpaque: (value: boolean) => void
 }
 
 const Context = React.createContext<ContextValue | undefined>(undefined)
@@ -12,6 +14,7 @@ Context.displayName = 'NavBarContext'
 
 function NavBarProvider({ children }: React.PropsWithChildren<{}>) {
   const [isProgressShown, setIsProgressShown] = React.useState(false)
+  const [isAlwaysOpaque, setIsAlwaysOpaque] = React.useState(false)
   const [progressCompleteThreshold, setProgressCompleteThreshold] =
     React.useState(Infinity)
 
@@ -21,8 +24,10 @@ function NavBarProvider({ children }: React.PropsWithChildren<{}>) {
       setIsProgressShown,
       progressCompleteThreshold,
       setProgressCompleteThreshold,
+      isAlwaysOpaque,
+      setIsAlwaysOpaque,
     }),
-    [isProgressShown, progressCompleteThreshold]
+    [isAlwaysOpaque, isProgressShown, progressCompleteThreshold]
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>

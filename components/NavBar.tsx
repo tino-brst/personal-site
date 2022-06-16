@@ -24,7 +24,8 @@ const cssVar = {
 }
 
 function NavBar() {
-  const { isProgressShown, progressCompleteThreshold } = useNavBar()
+  const { isProgressShown, isAlwaysOpaque, progressCompleteThreshold } =
+    useNavBar()
 
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
@@ -120,7 +121,11 @@ function NavBar() {
   return (
     <StickyPlaceholder>
       <Wrapper ref={wrapperRef} isTrayOpen={isTrayOpen}>
-        <Background ref={backgroundRef} isTrayOpen={isTrayOpen} />
+        <Background
+          ref={backgroundRef}
+          isTrayOpen={isTrayOpen}
+          className={clsx({ opaque: isAlwaysOpaque })}
+        />
         <ProgressBar
           ref={progressBarRef}
           className={clsx({
@@ -242,8 +247,16 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
   transition-duration: 0.2s;
 
+  &.opaque {
+    opacity: 1;
+  }
+
   @media (min-width: 640px) {
     opacity: var(${cssVar.scrollBasedOpacity});
+
+    &.opaque {
+      opacity: 1;
+    }
   }
 `
 
