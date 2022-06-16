@@ -15,8 +15,6 @@ function NavBarProvider({ children }: React.PropsWithChildren<{}>) {
   const [progressCompleteThreshold, setProgressCompleteThreshold] =
     React.useState(Infinity)
 
-  console.log(progressCompleteThreshold, '--')
-
   const value = React.useMemo<ContextValue>(
     () => ({
       isProgressShown,

@@ -27,6 +27,7 @@ import {
   ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
+import { useNavBar } from 'contexts/nav-bar'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
 import { GetStaticPaths, GetStaticProps } from 'next'
@@ -102,6 +103,30 @@ function ArticlePage(props: Props) {
   useWindowEventListener('scroll', updateShowBackToTop)
   useWindowEventListener('resize', updateShowBackToTop)
 
+  // Using a marker (just a hidden element), set the scrollY value that should
+  // be considered the end of the article. Whenever there is a document size
+  // change, that value is updated using the new position of the marker.
+
+  const navBar = useNavBar()
+  const contentEndMarkerRef = React.useRef<HTMLDivElement>(null)
+
+  React.useLayoutEffect(() => {
+    const contentEndMarker = contentEndMarkerRef.current
+
+    if (!contentEndMarker) return
+
+    const resizeObserver = new ResizeObserver(() => {
+      const markerTop = contentEndMarker.getBoundingClientRect().top
+      const markerTopRelativeToDocument = markerTop + window.scrollY
+
+      navBar.setProgressCompleteThreshold(markerTopRelativeToDocument)
+    })
+
+    resizeObserver.observe(document.documentElement)
+
+    return () => resizeObserver.disconnect()
+  }, [navBar])
+
   return (
     <TableOfContentsProvider tableOfContents={props.tableOfContents}>
       <Wrapper>
@@ -158,6 +183,7 @@ function ArticlePage(props: Props) {
             </StyledParallax>
           </HeaderImageWrapper>
           <Content components={components} />
+          <ContentEndMarker ref={contentEndMarkerRef} />
           <ViewCount>{viewCount.value} views</ViewCount>
           <Thanks>
             <ThanksTitle>Thanks for reading!</ThanksTitle>
@@ -1057,6 +1083,10 @@ const ViewCount = styled.div`
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
+`
+
+const ContentEndMarker = styled.div`
+  visibility: hidden;
 `
 
 export default ArticlePage

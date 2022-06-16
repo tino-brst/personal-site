@@ -5,6 +5,7 @@ import { useSize } from '@hooks/useSize'
 import { map } from '@lib/math'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
+import { useNavBar } from 'contexts/nav-bar'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -22,11 +23,9 @@ const cssVar = {
   trayHeight: '--tray-height',
 }
 
-type Props = Partial<{
-  isProgressShown: boolean
-}>
+function NavBar() {
+  const { isProgressShown, progressCompleteThreshold } = useNavBar()
 
-function NavBar(props: Props) {
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
   const trayRef = React.useRef<HTMLDivElement>(null)
@@ -99,22 +98,24 @@ function NavBar(props: Props) {
   // Progress Bar
 
   const progressBarRef = React.useRef<HTMLDivElement>(null)
+  const [isProgressComplete, setIsProgressComplete] = React.useState(false)
 
-  const updateScrollProgress = React.useCallback(() => {
+  const updateProgress = React.useCallback(() => {
     if (!progressBarRef.current) return
 
-    const { documentElement } = document
-
-    const progress = map(
-      documentElement.scrollTop,
-      [0, documentElement.scrollHeight - window.innerHeight],
-      [0, 1]
+    const threshold = Math.min(
+      document.documentElement.scrollHeight - window.innerHeight,
+      progressCompleteThreshold - barHeight
     )
 
-    progressBarRef.current.style.setProperty('--progress', `${progress}`)
-  }, [])
+    const progress = map(window.scrollY, [0, threshold], [0, 1])
 
-  useOnWindowScroll(updateScrollProgress)
+    progressBarRef.current.style.setProperty('--progress', `${progress}`)
+
+    setIsProgressComplete(progress === 1)
+  }, [progressCompleteThreshold])
+
+  useOnWindowScroll(updateProgress)
 
   return (
     <StickyPlaceholder>
@@ -122,7 +123,10 @@ function NavBar(props: Props) {
         <Background ref={backgroundRef} isTrayOpen={isTrayOpen} />
         <ProgressBar
           ref={progressBarRef}
-          className={clsx({ visible: props.isProgressShown })}
+          className={clsx({
+            visible: isProgressShown,
+            complete: isProgressComplete,
+          })}
         />
         <Bar>
           <NextLink href="/" passHref={true}>
@@ -244,20 +248,29 @@ const Background = styled.div<{ isTrayOpen: boolean }>`
 `
 
 const ProgressBar = styled.div`
+  --height: 3px;
   --progress: 0;
 
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: var(--height);
   background: hsla(0deg 0% 0% / 0.1);
   transform: scaleX(var(--progress));
   transform-origin: left;
   display: none;
 
+  transition-property: opacity, top;
+  transition-duration: 0.4s;
+
   &.visible {
     display: revert;
+  }
+
+  &.complete {
+    top: calc(-1 * var(--height));
+    opacity: 0;
   }
 `
 

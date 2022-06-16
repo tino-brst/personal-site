@@ -1,4 +1,6 @@
+import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
+import { useNavBar } from 'contexts/nav-bar'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -12,11 +14,15 @@ type Props = {
 
 function Layout(props: Props) {
   const router = useRouter()
-  const isProgressShown = router.pathname.startsWith('/writing/')
+  const navBar = useNavBar()
+
+  useIsomorphicLayoutEffect(() => {
+    navBar.setIsProgressShown(router.pathname.startsWith('/writing/'))
+  }, [navBar, router.pathname])
 
   return (
     <Wrapper>
-      <NavBar isProgressShown={isProgressShown} />
+      <NavBar />
       <Content>{props.children}</Content>
       <Footer>
         <ColumnsWrapper>
