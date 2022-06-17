@@ -151,7 +151,6 @@ function ArticlePage(props: Props) {
                 layout="fill"
                 objectFit="cover"
                 priority
-                style={{ filter: 'brightness(80%)' }}
               />
             )}
           </StyledParallax>
