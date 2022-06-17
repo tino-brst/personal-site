@@ -10,11 +10,19 @@ type Props = {
   multiplier?: number
   /** Limit translation values to the range [-clampTo, clampTo] (in pixels) */
   clampTo?: number
+  /** Customize the function used to compute the vertical offset (in pixels). Defaults to using the element and window centers as reference points */
+  getOffset?: (element: HTMLElement) => number
   /** For styled-components compatibility */
   className?: string
 }
 
-function Parallax(props: React.PropsWithChildren<Props>) {
+function Parallax({
+  multiplier = 0,
+  clampTo,
+  getOffset = defaultGetOffset,
+  className,
+  children,
+}: React.PropsWithChildren<Props> = {}) {
   const ref = React.useRef<HTMLDivElement>(null)
 
   useIsomorphicLayoutEffect(() => {
@@ -23,7 +31,7 @@ function Parallax(props: React.PropsWithChildren<Props>) {
     const element = ref.current
 
     function updateOffset() {
-      element.style.setProperty('--offset', `${getCenterOffsetY(element)}px`)
+      element.style.setProperty('--offset', `${getOffset(element)}px`)
     }
 
     window.addEventListener('scroll', updateOffset, { passive: true })
@@ -39,14 +47,14 @@ function Parallax(props: React.PropsWithChildren<Props>) {
 
   return (
     <Wrapper
-      className={clsx(props.className, { clamped: props.clampTo })}
+      className={clsx(className, { clamped: clampTo })}
       ref={ref}
       style={{
-        '--multiplier': props.multiplier ?? 0,
-        '--translate-limit': props.clampTo ? `${props.clampTo}px` : 0,
+        '--multiplier': multiplier,
+        '--translate-limit': clampTo ? `${clampTo}px` : 0,
       }}
     >
-      {props.children}
+      {children}
     </Wrapper>
   )
 }
@@ -71,13 +79,13 @@ const Wrapper = styled.div`
   }
 `
 
-function getCenterOffsetY(element: HTMLElement): number {
-  const { y, height } = element.getBoundingClientRect()
+function defaultGetOffset(element: HTMLElement): number {
+  const { top, height } = element.getBoundingClientRect()
 
-  const elementCenterY = y + height / 2
-  const windowCenterY = window.innerHeight / 2
+  const elementCenterY = top + height / 2
+  const viewportCenterY = window.innerHeight / 2
 
-  return elementCenterY - windowCenterY
+  return elementCenterY - viewportCenterY
 }
 
 export { Parallax }
