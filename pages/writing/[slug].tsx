@@ -5,6 +5,7 @@ import { Image } from '@components/markdown/Image'
 import { Link } from '@components/markdown/Link'
 import { Paragraph } from '@components/markdown/Paragraph'
 import { Strong } from '@components/markdown/Strong'
+import { Parallax } from '@components/Parallax'
 import {
   AsideTableOfContents,
   TableOfContents,
@@ -32,6 +33,7 @@ import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -59,6 +61,8 @@ type Props = {
 }
 
 function ArticlePage(props: Props) {
+  const router = useRouter()
+
   const Content = React.useMemo(
     () => getMDXComponent(props.contentCode),
     [props.contentCode]
@@ -130,14 +134,27 @@ function ArticlePage(props: Props) {
     <TableOfContentsProvider tableOfContents={props.tableOfContents}>
       <Wrapper>
         <HeaderImageWrapper>
-          {props.headerImageSrc && (
-            <NextImage
-              src={props.headerImageSrc}
-              layout="fill"
-              objectFit="cover"
-              priority
-            />
-          )}
+          <StyledParallax
+            multiplier={-0.1}
+            getOffset={getOffset}
+            // Rerender the component on path changes to avoid keeping its state
+            // (i.e. its parallax effect) when going back and forth between
+            // articles. Comment this line and, after scrolling to the bottom
+            // and select the previous/next article, pay close attention to the
+            // header image, it keeps the parallax accumulated from
+            // scrolling on the previous article.
+            key={router.asPath}
+          >
+            {props.headerImageSrc && (
+              <NextImage
+                src={props.headerImageSrc}
+                layout="fill"
+                objectFit="cover"
+                priority
+                style={{ filter: 'brightness(80%)' }}
+              />
+            )}
+          </StyledParallax>
           <HeaderImageOverlay />
         </HeaderImageWrapper>
         {props.tableOfContents.children.length > 0 && (
@@ -303,6 +320,15 @@ function ArticlePage(props: Props) {
   )
 }
 
+function getOffset(element: HTMLElement): number {
+  const { top } = element.getBoundingClientRect()
+
+  const elementReferenceY = top
+  const viewportReferenceY = 0
+
+  return elementReferenceY - viewportReferenceY
+}
+
 function backToTop() {
   window.scroll({ behavior: 'smooth', top: 0 })
 }
@@ -398,15 +424,22 @@ const Wrapper = styled.div`
 
 const HeaderImageWrapper = styled.div`
   position: relative;
-  background: black;
   grid-row: 1;
   grid-column: 1 / -1;
   margin-bottom: -20px;
+  overflow: hidden;
+`
+
+const StyledParallax = styled(Parallax)`
+  position: absolute;
+  inset: 0;
+  z-index: -1;
 `
 
 const HeaderImageOverlay = styled.div`
   position: absolute;
   inset: 0;
+  top: ${barHeight}px;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0) 0%,
