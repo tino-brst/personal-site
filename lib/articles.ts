@@ -1,11 +1,11 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 import readingTime from 'reading-time'
-import { bundleMDX } from './bundle-mdx'
-import { getTableOfContents, Root } from './mdast-util-toc'
-import { unified } from 'unified'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkParse from 'remark-parse'
+import { unified } from 'unified'
+import { bundleMDX } from './bundle-mdx'
+import { getTableOfContents, Root } from './mdast-util-toc'
 
 type Article = {
   slug: string
@@ -60,19 +60,4 @@ async function getArticle(slug: string): Promise<Article> {
   return parseArticle(filePath)
 }
 
-/**
- * Returns a set of all article tags.
- */
-function getTags(articles: Array<Article>): Set<string> {
-  const tags = new Set<string>()
-
-  for (const article of articles) {
-    for (const tag of article.tags) {
-      tags.add(tag)
-    }
-  }
-
-  return tags
-}
-
-export { getArticles, getArticle, getTags }
+export { getArticles, getArticle }

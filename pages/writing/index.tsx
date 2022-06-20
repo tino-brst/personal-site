@@ -2,7 +2,7 @@ import { useOnKeyDown } from '@hooks/useOnKeyDown'
 import { useQueryParam } from '@hooks/useQueryParam'
 import { useSize } from '@hooks/useSize'
 import { includesEvery, toggle } from '@lib/array'
-import { getArticles, getTags } from '@lib/articles'
+import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import {
   ArrowRightIcon,
@@ -773,7 +773,7 @@ const getStaticProps: GetStaticProps<Props> = async () => {
         }))
         .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn)),
       // TODO: define sorting criteria for the tags (most articles? alphabetical?)
-      tags: Array.from(getTags(articles)),
+      tags: Array.from(new Set(articles.flatMap((article) => article.tags))),
     },
   }
 }
