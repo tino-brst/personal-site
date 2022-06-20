@@ -8,8 +8,9 @@ import { Strong } from '@components/markdown/Strong'
 import { Parallax } from '@components/Parallax'
 import {
   AsideTableOfContents,
-  TableOfContents,
+  TableOfContents
 } from '@components/TableOfContents'
+import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useLikeCount } from '@hooks/useLikeCount'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { useViewCount } from '@hooks/useViewCount'
@@ -24,7 +25,7 @@ import {
   ClockIcon,
   GitHubLogoIcon,
   HeartFilledIcon,
-  ListBulletIcon,
+  ListBulletIcon
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -113,7 +114,7 @@ function ArticlePage(props: Props) {
   const navBar = useNavBar()
   const contentEndMarkerRef = React.useRef<HTMLDivElement>(null)
 
-  React.useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const contentEndMarker = contentEndMarkerRef.current
 
     if (!contentEndMarker) return
