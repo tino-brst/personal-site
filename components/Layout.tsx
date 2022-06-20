@@ -41,6 +41,7 @@ function Layout(props: Props) {
           </Link>
           <Link href="mailto:tinos.corner@icloud.com">Email</Link>
         </LinksWrapper>
+        <SignatureLabel>made with care by</SignatureLabel>
         <SignatureImageWrapper>
           <NextImage
             priority
@@ -49,7 +50,6 @@ function Layout(props: Props) {
             objectFit="cover"
           />
         </SignatureImageWrapper>
-        <SignatureLabel>made with care by</SignatureLabel>
       </Footer>
     </Wrapper>
   )
@@ -129,7 +129,7 @@ const LinksWrapper = styled.div`
   flex-wrap: wrap;
   gap: 16px;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 48px;
 `
 
 const StyledLink = styled.a`
@@ -163,16 +163,16 @@ const ExternalLinkIcon = styled(ArrowTopRightIcon)`
 `
 
 const SignatureLabel = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   color: hsla(0 0% 0% / 0.2);
-  font-weight: 400;
-  margin-top: 8px;
+  font-weight: 500;
+  margin-bottom: 12px;
 `
 
 const SignatureImageWrapper = styled.div`
   position: relative;
   aspect-ratio: 5 / 4;
-  height: 100px;
+  height: 90px;
 `
 
 export { Layout }
