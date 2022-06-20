@@ -29,32 +29,18 @@ function Layout(props: Props) {
       <NavBar />
       <Content>{props.children}</Content>
       <Footer>
-        <ColumnsWrapper>
-          {/* TODO: the Column element seems kinda redundant */}
-          <Column>
-            <LinkGroup>
-              <LinkGroupTitle>Site</LinkGroupTitle>
-              <Link href="/">Home</Link>
-              <Link href="/writing">Writing</Link>
-              <Link href="/about">About</Link>
-            </LinkGroup>
-          </Column>
-          <Column>
-            <LinkGroup>
-              <LinkGroupTitle>Contact</LinkGroupTitle>
-              <Link href="https://linkedin.com/in/agustin-burset/" external>
-                LinkedIn
-              </Link>
-              <Link href="https://twitter.com/bursetAgustin" external>
-                Twitter
-              </Link>
-              <Link href="https://github.com/tino-brst" external>
-                GitHub
-              </Link>
-              <Link href="mailto:tinos.corner@icloud.com">Email</Link>
-            </LinkGroup>
-          </Column>
-        </ColumnsWrapper>
+        <LinksWrapper>
+          <Link href="https://linkedin.com/in/agustin-burset/" external>
+            LinkedIn
+          </Link>
+          <Link href="https://twitter.com/bursetAgustin" external>
+            Twitter
+          </Link>
+          <Link href="https://github.com/tino-brst" external>
+            GitHub
+          </Link>
+          <Link href="mailto:tinos.corner@icloud.com">Email</Link>
+        </LinksWrapper>
         <SignatureImageWrapper>
           <NextImage
             priority
@@ -63,6 +49,7 @@ function Layout(props: Props) {
             objectFit="cover"
           />
         </SignatureImageWrapper>
+        <SignatureLabel>made with care by</SignatureLabel>
       </Footer>
     </Wrapper>
   )
@@ -103,7 +90,7 @@ const Footer = styled.footer`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  align-items: center;
   position: relative;
 
   max-width: calc(768px + 2 * 16px);
@@ -113,7 +100,7 @@ const Footer = styled.footer`
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 48px;
-  padding-bottom: 24px;
+  padding-bottom: 48px;
 
   &::before {
     position: absolute;
@@ -129,9 +116,6 @@ const Footer = styled.footer`
   @media (min-width: 640px) {
     padding-left: 40px;
     padding-right: 40px;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-bottom: 48px;
 
     &::before {
       left: 32px;
@@ -140,26 +124,12 @@ const Footer = styled.footer`
   }
 `
 
-const ColumnsWrapper = styled.div`
+const LinksWrapper = styled.div`
   display: flex;
-  gap: 80px;
-`
-
-const Column = styled.div``
-
-const LinkGroup = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-`
-
-const LinkGroupTitle = styled.h3`
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: hsla(0 0% 0% / 0.3);
-  margin-bottom: 2px;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 24px;
 `
 
 const StyledLink = styled.a`
@@ -167,14 +137,14 @@ const StyledLink = styled.a`
   gap: 4px;
   font-size: 14px;
   font-weight: 450;
-  color: hsla(0 0% 0% / 0.6);
+  color: hsla(0 0% 0% / 0.5);
 
   transition-property: color;
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
   &:hover {
-    color: hsl(0 0% 0%);
+    color: hsla(0 0% 0% / 0.8);
   }
 `
 
@@ -192,16 +162,17 @@ const ExternalLinkIcon = styled(ArrowTopRightIcon)`
   }
 `
 
+const SignatureLabel = styled.label`
+  font-size: 14px;
+  color: hsla(0 0% 0% / 0.2);
+  font-weight: 400;
+  margin-top: 8px;
+`
+
 const SignatureImageWrapper = styled.div`
   position: relative;
-  align-self: flex-end;
   aspect-ratio: 5 / 4;
   height: 100px;
-  right: -24px;
-
-  @media (min-width: 640px) {
-    align-self: center;
-  }
 `
 
 export { Layout }
