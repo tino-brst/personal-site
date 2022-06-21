@@ -1,11 +1,11 @@
+import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
 import { useOnKeyDown } from '@hooks/useOnKeyDown'
 import { useQueryParam } from '@hooks/useQueryParam'
 import { useSize } from '@hooks/useSize'
 import { includesEvery, toggle } from '@lib/array'
 import { getArticles } from '@lib/articles'
-import { compareDatesDesc, formatDate } from '@lib/dates'
+import { compareDatesDesc } from '@lib/dates'
 import {
-  ArrowRightIcon,
   BorderStyleIcon,
   CaretDownIcon,
   MagnifyingGlassIcon,
@@ -13,8 +13,6 @@ import {
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
-import NextImage from 'next/image'
-import NextLink from 'next/link'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -204,41 +202,11 @@ function WritingPage(props: Props) {
           </Tags>
         </Filters>
       </FiltersWrapper>
-
-      <Articles>
+      <ArticleGrid>
         {articles.map((article) => (
-          <ArticleListItem key={article.slug}>
-            <NextLink href={`/writing/${article.slug}`} passHref={true}>
-              <ArticleLink>
-                <ArticleImageWrapper>
-                  {article.thumbnailImageSrc && (
-                    <ArticleImage
-                      src={article.thumbnailImageSrc}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  )}
-                </ArticleImageWrapper>
-                <ArticleDescription>
-                  {article.titleInnerHtml ? (
-                    <ArticleTitle
-                      dangerouslySetInnerHTML={{
-                        __html: article.titleInnerHtml,
-                      }}
-                    />
-                  ) : (
-                    <ArticleTitle>{article.title}</ArticleTitle>
-                  )}
-                  <ArticleDescriptionBottom>
-                    <ArticleDate>{formatDate(article.publishedOn)}</ArticleDate>
-                    <GoToArticleIcon width={18} height={18} />
-                  </ArticleDescriptionBottom>
-                </ArticleDescription>
-              </ArticleLink>
-            </NextLink>
-          </ArticleListItem>
+          <ArticleGridItem key={article.slug} {...article} />
         ))}
-      </Articles>
+      </ArticleGrid>
       {/* TODO: add empty states */}
     </Wrapper>
   )
@@ -578,178 +546,6 @@ const TagIcon = styled.span`
 
   ${Tag}.disabled & {
     color: hsl(0 0% 0% / 0.1);
-  }
-`
-
-const Articles = styled.ol`
-  --gap: 18px;
-
-  margin-top: 32px;
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-
-  @media (min-width: 640px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-`
-
-// TODO: while a search is active, remove having the first item be bigger than
-// the others
-const ArticleListItem = styled.li`
-  @media (min-width: 640px) {
-    flex: 0 0 calc(50% - var(--gap) / 2);
-
-    &:first-child {
-      flex-basis: 100%;
-    }
-  }
-`
-
-const ArticleLink = styled.a`
-  border-radius: 16px;
-  height: 100%;
-
-  isolation: isolate;
-  padding: 12px;
-  background-color: hsla(0 0% 0% / 0.03);
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  transition-property: transform, background-color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-
-  &:hover,
-  &:active {
-    background-color: hsla(0 0% 0% / 0.05);
-  }
-
-  &:active {
-    transform: scale(0.99);
-  }
-
-  @media (min-width: 640px) {
-    ${ArticleListItem}:first-child & {
-      flex-direction: row;
-      gap: 14px;
-    }
-
-    ${ArticleListItem}:first-child:active & {
-      transform: scale(0.99);
-    }
-  }
-`
-
-const ArticleImageWrapper = styled.div`
-  --border-radius: 6px;
-
-  aspect-ratio: 2 / 1;
-  position: relative;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-
-  /* Fixes corner overflow on image scale transition */
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-
-  &::after {
-    position: absolute;
-    content: '';
-    inset: 0;
-    border-radius: var(--border-radius);
-    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
-
-    transition-property: background-color;
-    transition-duration: 0.5s;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  }
-
-  ${ArticleLink}:hover &::after,
-  ${ArticleLink}:active &::after {
-    background-color: hsla(0 0% 0% / 0.08);
-  }
-
-  @media (min-width: 640px) {
-    ${ArticleListItem}:first-child & {
-      flex: 2 1 0;
-    }
-  }
-`
-
-const ArticleImage = styled(NextImage)`
-  transition-property: transform;
-  transition-duration: 0.4s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-
-  ${ArticleLink}:hover &,
-  ${ArticleLink}:active & {
-    transform: scale(1.03);
-  }
-`
-
-const ArticleDescription = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 8px;
-
-  padding: 4px;
-  padding-top: 0;
-
-  @media (min-width: 640px) {
-    ${ArticleListItem}:first-child & {
-      flex: 1 1 0;
-
-      padding: 4px;
-      padding-left: 0;
-    }
-  }
-`
-
-const ArticleDescriptionBottom = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-`
-
-// TODO: while a search is active, de-emphasize the text, keeping only the
-// matches with full contrast. Fade in underline and contrast changes.
-const ArticleTitle = styled.h2`
-  font-weight: 550;
-  font-size: 22px;
-  letter-spacing: 0.01em;
-  color: hsla(0 0% 0% / 0.8);
-
-  & > span {
-    text-underline-offset: 2px;
-    text-decoration-thickness: 2px;
-    text-decoration-line: underline;
-    text-decoration-style: solid;
-    text-decoration-color: hsla(0 0% 0% / 0.3);
-  }
-`
-
-const ArticleDate = styled.time`
-  font-weight: 550;
-  font-size: 14px;
-  color: hsla(0 0% 0% / 0.4);
-`
-
-const GoToArticleIcon = styled(ArrowRightIcon)`
-  color: hsla(0 0% 0% / 0.15);
-
-  transition-property: color, transform;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-
-  ${ArticleLink}:hover & {
-    color: hsla(0 0% 0% / 0.3);
-    transform: scale(1.1);
   }
 `
 
