@@ -130,6 +130,7 @@ const ThumbnailImageWrapper = styled.div`
   }
 `
 
+// TODO apply hover effects only if using mouse
 const ThumbnailImage = styled(NextImage)`
   transition-property: transform;
   transition-duration: 0.4s;
@@ -206,8 +207,6 @@ const GoToIcon = styled(ArrowRightIcon)`
 
 const ArticleGrid = styled.ol`
   --gap: 18px;
-
-  margin-top: 32px;
 
   display: flex;
   flex-direction: column;
