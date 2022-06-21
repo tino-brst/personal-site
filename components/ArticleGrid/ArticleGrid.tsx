@@ -36,9 +36,8 @@ function ArticleGridItem(props: Props) {
               <Title>{props.title}</Title>
             )}
             <InfoBottom>
-              <Date>{formatDate(props.publishedOn)}</Date>
-              {/* TODO move size to CSS */}
-              <GoToIcon width={18} height={18} />
+              <PublicationDate>{formatDate(props.publishedOn)}</PublicationDate>
+              <GoToIcon />
             </InfoBottom>
           </Info>
         </Link>
@@ -48,6 +47,7 @@ function ArticleGridItem(props: Props) {
 }
 
 // TODO: while a search is active, remove having the first item be bigger than
+// the others
 const Wrapper = styled.li`
   @media (min-width: 640px) {
     flex: 0 0 calc(50% - var(--gap) / 2);
@@ -168,8 +168,8 @@ const InfoBottom = styled.div`
   justify-content: space-between;
 `
 
-// TODO while a search is active, de-emphasize the text, keeping only the
-// matches with full contrast. Fade in underline and contrast changes.
+// TODO while a search is active, de-emphasize the non matching text, keeping
+// only the matches with full contrast. Fade in underline and contrast changes.
 const Title = styled.h2`
   font-weight: 550;
   font-size: 22px;
@@ -185,14 +185,15 @@ const Title = styled.h2`
   }
 `
 
-// TODO look into time tag and its attributes
-const Date = styled.time`
+const PublicationDate = styled.time`
   font-weight: 550;
   font-size: 14px;
   color: hsla(0 0% 0% / 0.4);
 `
 
 const GoToIcon = styled(ArrowRightIcon)`
+  width: 18px;
+  height: 18px;
   color: hsla(0 0% 0% / 0.15);
 
   transition-property: color, transform;
