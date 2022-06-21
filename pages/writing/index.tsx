@@ -430,6 +430,7 @@ const ExpandIcon = styled(CaretDownIcon)`
 const FiltersWrapper = styled.div`
   --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
 
+  margin-bottom: 32px;
   visibility: hidden;
 
   &.ready {

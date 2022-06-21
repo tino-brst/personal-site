@@ -1,4 +1,5 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
+import { Spacer } from '@components/Spacer'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
@@ -38,6 +39,7 @@ function HomePage(props: Props) {
           <ArticleGridItem key={article.slug} {...article} />
         ))}
       </ArticleGrid>
+      <Spacer vertical size={32} />
       <NextLink href="/writing" passHref={true}>
         <Link>
           All articles
