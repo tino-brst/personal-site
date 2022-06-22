@@ -1,14 +1,9 @@
-import { Code } from '@components/markdown/Code'
-import { CodeBlock } from '@components/markdown/CodeBlock'
-import { Heading2, Heading3, Heading4 } from '@components/markdown/Heading'
-import { Image } from '@components/markdown/Image'
-import { Link } from '@components/markdown/Link'
-import { Paragraph } from '@components/markdown/Paragraph'
-import { Strong } from '@components/markdown/Strong'
+import { Link } from '@components/Link'
+import * as md from '@components/markdown'
 import { Parallax } from '@components/Parallax'
 import {
   AsideTableOfContents,
-  TableOfContents
+  TableOfContents,
 } from '@components/TableOfContents'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useLikeCount } from '@hooks/useLikeCount'
@@ -25,7 +20,7 @@ import {
   ClockIcon,
   GitHubLogoIcon,
   HeartFilledIcon,
-  ListBulletIcon
+  ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -215,20 +210,16 @@ function ArticlePage(props: Props) {
               {likeCount.value}
             </LikeButton>
           </Thanks>
-          <EditOnGitHubWrapper>
-            <EditOnGitHubLabel>Found a typo?</EditOnGitHubLabel>
+          <EditOnGitHub>
+            Found a typo?
             <EditOnGitHubLink
-              href={editOnGitHubURL(
-                'tino-brst',
-                'personal-site',
-                `articles/${props.slug}.mdx`
-              )}
+              href={getArticleEditOnGitHubURL(props.slug)}
               target="_blank"
             >
               <EditOnGitHubIcon />
               Edit on GitHub
             </EditOnGitHubLink>
-          </EditOnGitHubWrapper>
+          </EditOnGitHub>
         </Main>
       </Wrapper>
       <UpNext>
@@ -282,9 +273,9 @@ function ArticlePage(props: Props) {
             )}
           </ArticleListItem>
         </ArticleList>
-        <NextLink href="/writing" passHref={true}>
+        <NextLink href="/writing" passHref>
           <AllArticlesLink>
-            <ArrowLeftIcon width={20} height={20} />
+            <AllArticlesIcon />
             All Articles
           </AllArticlesLink>
         </NextLink>
@@ -333,7 +324,7 @@ function backToTop() {
   window.scroll({ behavior: 'smooth', top: 0 })
 }
 
-function editOnGitHubURL(
+function getEditOnGitHubURL(
   username: string,
   repo: string,
   file: string,
@@ -342,16 +333,24 @@ function editOnGitHubURL(
   return `https://github.com/${username}/${repo}/edit/${branch}/${file}`
 }
 
+function getArticleEditOnGitHubURL(slug: string) {
+  return getEditOnGitHubURL(
+    'tino-brst',
+    'personal-site',
+    `articles/${slug}.mdx`
+  )
+}
+
 const components: ComponentMap = {
-  h2: Heading2,
-  h3: Heading3,
-  h4: Heading4,
-  p: Paragraph,
-  pre: CodeBlock,
-  code: Code,
-  img: Image,
-  a: Link,
-  strong: Strong,
+  h2: md.Heading2,
+  h3: md.Heading3,
+  h4: md.Heading4,
+  p: md.Paragraph,
+  pre: md.CodeBlock,
+  code: md.Code,
+  img: md.Image,
+  a: md.Link,
+  strong: md.Strong,
 }
 
 type PathParams = {
@@ -978,29 +977,27 @@ const ArticleLabel = styled.div`
   }
 `
 
-const AllArticlesLink = styled.a`
+const AllArticlesLink = styled(Link)`
   align-self: center;
-  padding: 12px 14px;
-  font-weight: 500;
-  background-color: hsla(0 0% 0% / 0.03);
-  color: black;
-  border-radius: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
+`
 
-  transition-property: transform, background-color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
+const AllArticlesIcon = styled(ArrowLeftIcon)`
+  width: 20px;
+  height: 20px;
+`
 
-  &:hover,
-  &:active {
-    background-color: hsla(0 0% 0% / 0.06);
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
+const ViewCount = styled.div`
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 32px;
+  color: hsla(0 0% 0% / 0.2);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
 `
 
 const Thanks = styled.div`
@@ -1085,62 +1082,26 @@ const LikeButtonIcon = styled(HeartFilledIcon)`
   }
 `
 
-const EditOnGitHubWrapper = styled.div`
+const EditOnGitHub = styled.div`
   margin-top: 32px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   align-items: center;
-`
-
-const EditOnGitHubLabel = styled.span`
   color: hsla(0 0% 0% / 0.4);
   font-size: 14px;
   font-weight: 500;
 `
 
-const EditOnGitHubLink = styled.a`
-  align-self: center;
-  height: 44px;
-  line-height: 1;
-  padding: 12px 14px;
-  font-weight: 500;
-  background-color: hsla(0 0% 0% / 0.03);
-  color: black;
-  border-radius: 16px;
+const EditOnGitHubLink = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 8px;
-
-  transition-property: transform, background-color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-
-  &:hover,
-  &:active {
-    background-color: hsla(0 0% 0% / 0.06);
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
+  gap: 10px;
 `
 
 const EditOnGitHubIcon = styled(GitHubLogoIcon)`
   width: 18px;
   height: 18px;
-  margin-right: 2px;
-`
-
-const ViewCount = styled.div`
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 32px;
-  color: hsla(0 0% 0% / 0.2);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
 `
 
 const ContentEndMarker = styled.div`
