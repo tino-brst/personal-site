@@ -1,4 +1,5 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
+import { Link } from '@components/Link'
 import { Spacer } from '@components/Spacer'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
@@ -26,12 +27,11 @@ function HomePage(props: Props) {
         developer specializing in web technologies. I like to lorem ipsum
         dolorem potatoes. And some other stuff.
       </Description>
-      <NextLink href="/about" passHref={true}>
-        <Link>
+      <NextLink href="/about" passHref>
+        <GoToLink>
           About me
-          {/* TODO: move icon sizes to css */}
-          <ArrowRightIcon width={20} height={20} />
-        </Link>
+          <GoToIcon />
+        </GoToLink>
       </NextLink>
       <Heading>Latest Articles</Heading>
       <ArticleGrid>
@@ -40,11 +40,11 @@ function HomePage(props: Props) {
         ))}
       </ArticleGrid>
       <Spacer vertical size={32} />
-      <NextLink href="/writing" passHref={true}>
-        <Link>
+      <NextLink href="/writing" passHref>
+        <GoToLink>
           All articles
-          <ArrowRightIcon width={20} height={20} />
-        </Link>
+          <GoToIcon />
+        </GoToLink>
       </NextLink>
     </Wrapper>
   )
@@ -78,40 +78,26 @@ const Description = styled.p`
   margin-bottom: 32px;
 `
 
-const Link = styled.a`
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  align-self: center;
-  padding: 12px 14px;
-  font-weight: 500;
-  background-color: hsla(0 0% 0% / 0.03);
-  color: black;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  transition-property: transform, background-color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-
-  &:hover,
-  &:active {
-    background-color: hsla(0 0% 0% / 0.06);
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-`
-
 const Heading = styled.h2`
   color: black;
   font-size: 1.8rem;
   font-weight: 600;
   margin-top: 48px;
   margin-bottom: 24px;
+`
+
+const GoToLink = styled(Link)`
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
+const GoToIcon = styled(ArrowRightIcon)`
+  width: 20px;
+  height: 20px;
 `
 
 const getStaticProps: GetStaticProps<Props> = async () => {
