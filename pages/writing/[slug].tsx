@@ -1,10 +1,8 @@
+import { AsideTableOfContents } from '@components/AsideTableOfContents'
+import { FloatingTableOfContents } from '@components/FloatingTableOfContents'
 import { Link } from '@components/Link'
 import * as md from '@components/markdown'
 import { Parallax } from '@components/Parallax'
-import {
-  AsideTableOfContents,
-  TableOfContents,
-} from '@components/TableOfContents'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useLikeCount } from '@hooks/useLikeCount'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
@@ -154,10 +152,6 @@ function ArticlePage(props: Props) {
         </HeaderImageWrapper>
         {props.tableOfContents.children.length > 0 && (
           <Aside>
-            <AsideHeader>
-              In this article
-              <ListBulletIcon width={18} height={18} />
-            </AsideHeader>
             <AsideTableOfContents />
           </Aside>
         )}
@@ -298,14 +292,11 @@ function ArticlePage(props: Props) {
             </TableOfContentsButton>
           </ButtonBackground>
         </ButtonGroup>
-        {/* TODO: probably shouldn't be shown if the entire article fits in the view, even if it does have multiple headings (see back-to-top button) */}
-        <TableOfContentsWrapper
-          className={clsx({ open: isTableOfContentsOpen })}
+        <FloatingTableOfContents
           ref={tableOfContentsRef}
-        >
-          <TableOfContentsHeader>In this article</TableOfContentsHeader>
-          <TableOfContents onSelect={closeTableOfContents} />
-        </TableOfContentsWrapper>
+          onSelect={closeTableOfContents}
+          isOpen={isTableOfContentsOpen}
+        />
       </FloatingStuff>
     </TableOfContentsProvider>
   )
@@ -466,18 +457,6 @@ const Aside = styled.aside`
   @media (min-width: calc(768px + 2 * 16px + ${asideWidth}px * 2)) {
     display: revert;
   }
-`
-
-const AsideHeader = styled.header`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: hsla(0 0% 0% / 0.3);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
 `
 
 const Main = styled.main`
@@ -753,47 +732,6 @@ const TableOfContentsIcon = styled(ListBulletIcon)`
 
 const BackToTopIcon = styled(ChevronUpIcon)`
   ${sharedIconsStyles}
-`
-
-const TableOfContentsWrapper = styled.div`
-  visibility: hidden;
-  pointer-events: auto;
-  opacity: 0;
-  transform: translateY(8px) scale(0.9);
-  transform-origin: bottom right;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  max-height: 304px;
-  border-radius: 14px;
-  background: hsla(0 0% 98% / 0.9);
-  backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
-    0px 0px 0px 1px rgba(0, 0, 0, 0.05);
-
-  transition-property: opacity, transform, visibility;
-  transition-duration: 0.2s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-
-  &.open {
-    visibility: visible;
-    opacity: 1;
-    transform: none;
-  }
-`
-
-const TableOfContentsHeader = styled.header`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  background: hsla(0 0% 100% / 0.7);
-  box-shadow: 0 1px hsla(0 0% 0% / 0.05);
-  color: hsla(0 0% 0% / 0.3);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 500;
 `
 
 const UpNext = styled.div`
