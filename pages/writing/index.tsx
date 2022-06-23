@@ -349,6 +349,8 @@ const TagIcon = styled.span`
   }
 `
 
+/* ---------------------------------- Next ---------------------------------- */
+
 const getStaticProps: GetStaticProps<Props> = async () => {
   const articles = (await getArticles())
     .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn))
