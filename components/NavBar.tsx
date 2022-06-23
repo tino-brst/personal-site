@@ -134,7 +134,7 @@ function NavBar() {
           })}
         />
         <Bar>
-          <NextLink href="/" passHref={true}>
+          <NextLink href="/" passHref>
             <HomeLink>
               <AvatarImage
                 src={avatarImageSrc}
@@ -193,7 +193,7 @@ function TrayLink(props: {
   const router = useRouter()
 
   return (
-    <NextLink href={props.to} passHref={true}>
+    <NextLink href={props.to} passHref>
       <Link
         onClick={props.onClick}
         className={clsx({
