@@ -90,10 +90,6 @@ function SearchInputButton(props: Props) {
   )
 }
 
-function hasFocus(element: HTMLElement | null): boolean {
-  return document.activeElement === element
-}
-
 const Wrapper = styled.div`
   --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
   --border-radius: 16px;
@@ -234,5 +230,9 @@ const Button = styled.button`
     pointer-events: none;
   }
 `
+
+function hasFocus(element: HTMLElement | null): boolean {
+  return document.activeElement === element
+}
 
 export { SearchInputButton }

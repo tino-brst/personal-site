@@ -302,83 +302,6 @@ function ArticlePage(props: Props) {
   )
 }
 
-function getOffset(element: HTMLElement): number {
-  const { top } = element.getBoundingClientRect()
-
-  const elementReferenceY = top
-  const viewportReferenceY = 0
-
-  return elementReferenceY - viewportReferenceY
-}
-
-function backToTop() {
-  window.scroll({ behavior: 'smooth', top: 0 })
-}
-
-function getEditOnGitHubURL(
-  username: string,
-  repo: string,
-  file: string,
-  branch = 'main'
-): string {
-  return `https://github.com/${username}/${repo}/edit/${branch}/${file}`
-}
-
-function getArticleEditOnGitHubURL(slug: string) {
-  return getEditOnGitHubURL(
-    'tino-brst',
-    'personal-site',
-    `articles/${slug}.mdx`
-  )
-}
-
-const components: ComponentMap = {
-  h2: md.Heading2,
-  h3: md.Heading3,
-  h4: md.Heading4,
-  p: md.Paragraph,
-  pre: md.CodeBlock,
-  code: md.Code,
-  img: md.Image,
-  a: md.Link,
-  strong: md.Strong,
-}
-
-type PathParams = {
-  slug: string
-}
-
-const getStaticPaths: GetStaticPaths<PathParams> = async () => {
-  const paths = (await getArticles()).map(({ slug }) => ({ params: { slug } }))
-
-  return {
-    paths,
-    fallback: false,
-  }
-}
-
-const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
-  const articles = (await getArticles()).sort((a, b) =>
-    compareDatesDesc(a.publishedOn, b.publishedOn)
-  )
-
-  const currentArticleIndex = articles.findIndex(
-    (article) => article.slug === context.params!.slug
-  )
-
-  const currentArticle = articles[currentArticleIndex]
-  const newerArticle = articles[currentArticleIndex - 1] ?? null
-  const olderArticle = articles[currentArticleIndex + 1] ?? null
-
-  return {
-    props: {
-      ...currentArticle,
-      newerArticle,
-      olderArticle,
-    },
-  }
-}
-
 const Wrapper = styled.div`
   --gap: 40px;
 
@@ -1026,6 +949,87 @@ const EditOnGitHubIcon = styled(GitHubLogoIcon)`
 const ContentEndMarker = styled.div`
   visibility: hidden;
 `
+
+/* ---------------------------------- Misc --------------------------------- */
+
+function getOffset(element: HTMLElement): number {
+  const { top } = element.getBoundingClientRect()
+
+  const elementReferenceY = top
+  const viewportReferenceY = 0
+
+  return elementReferenceY - viewportReferenceY
+}
+
+function backToTop() {
+  window.scroll({ behavior: 'smooth', top: 0 })
+}
+
+function getEditOnGitHubURL(
+  username: string,
+  repo: string,
+  file: string,
+  branch = 'main'
+): string {
+  return `https://github.com/${username}/${repo}/edit/${branch}/${file}`
+}
+
+function getArticleEditOnGitHubURL(slug: string) {
+  return getEditOnGitHubURL(
+    'tino-brst',
+    'personal-site',
+    `articles/${slug}.mdx`
+  )
+}
+
+const components: ComponentMap = {
+  h2: md.Heading2,
+  h3: md.Heading3,
+  h4: md.Heading4,
+  p: md.Paragraph,
+  pre: md.CodeBlock,
+  code: md.Code,
+  img: md.Image,
+  a: md.Link,
+  strong: md.Strong,
+}
+
+/* ---------------------------------- Next ---------------------------------- */
+
+type PathParams = {
+  slug: string
+}
+
+const getStaticPaths: GetStaticPaths<PathParams> = async () => {
+  const paths = (await getArticles()).map(({ slug }) => ({ params: { slug } }))
+
+  return {
+    paths,
+    fallback: false,
+  }
+}
+
+const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
+  const articles = (await getArticles()).sort((a, b) =>
+    compareDatesDesc(a.publishedOn, b.publishedOn)
+  )
+
+  const currentArticleIndex = articles.findIndex(
+    (article) => article.slug === context.params!.slug
+  )
+
+  const currentArticle = articles[currentArticleIndex]
+  const newerArticle = articles[currentArticleIndex - 1] ?? null
+  const olderArticle = articles[currentArticleIndex + 1] ?? null
+
+  return {
+    props: {
+      ...currentArticle,
+      newerArticle,
+      olderArticle,
+    },
+  }
+}
 
 export default ArticlePage
 export { getStaticPaths, getStaticProps }
