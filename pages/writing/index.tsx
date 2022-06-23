@@ -26,39 +26,47 @@ type Props = {
   tags: Array<string>
 }
 
-// TODO: Idea 💡 First, make color-thief work with a next image (access
-// underlying img element). Then try loading a tiny next image, and extract the
-// main colors from that tiny image, maybe even have the image base64?
-
 // TODO: remove unused color deps
 
 function WritingPage(props: Props) {
-  const [searchParam, setSearchParam] = useQueryParam('search')
-  const search = typeof searchParam === 'string' ? searchParam : ''
+  // Search
 
-  const [activeTagsParam, setActiveTagsParam] = useQueryParam('tags')
-  const activeTags = React.useMemo(() => {
-    return typeof activeTagsParam === 'string' ? activeTagsParam.split(',') : []
-  }, [activeTagsParam])
+  const [searchParam, setSearchParam] = useQueryParam('search')
+
+  const search = typeof searchParam === 'string' ? searchParam : ''
 
   function handleSearchChange(value: string) {
     setSearchParam(value === '' ? undefined : value)
   }
 
-  const handleActiveTagsChange = (value: string) => {
+  const [isSearchOpen, setIsSearchOpen] = React.useState(search !== '')
+
+  // Filter tags
+
+  const [activeTagsParam, setActiveTagsParam] = useQueryParam('tags')
+
+  const activeTags = React.useMemo(() => {
+    return typeof activeTagsParam === 'string' ? activeTagsParam.split(',') : []
+  }, [activeTagsParam])
+
+  function handleActiveTagsChange(value: string) {
     const newActiveTags = toggle(activeTags, value).join(',')
     setActiveTagsParam(newActiveTags === '' ? undefined : newActiveTags)
   }
 
-  const [isSearchOpen, setIsSearchOpen] = React.useState(search !== '')
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(
     activeTags.length > 0
   )
+
   const filtersRef = React.useRef<HTMLDivElement>(null)
   const filtersSize = useSize(filtersRef)
 
+  // Articles filtering/sorting
+
   const articles = React.useMemo(() => {
-    let articles: Array<Article & { titleInnerHtml?: string }> = props.articles
+    let articles: Array<Article & { titleInnerHtml?: string }> = [
+      ...props.articles,
+    ]
 
     if (activeTags.length) {
       articles = articles.filter((article) =>
@@ -161,8 +169,6 @@ const Wrapper = styled.div`
   }
 `
 
-// TODO: extract to component shared across pages? (moving margin to the
-// articles list like the image in an article)
 const Title = styled.h1`
   color: black;
   font-size: 2.2rem;
