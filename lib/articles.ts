@@ -11,10 +11,10 @@ type Article = {
   slug: string
   title: string
   tags: Array<string>
-  headerImage?: string
+  imageSrc: string | null
   tableOfContents: Root
   readingTime: string
-  publishedOn: Date
+  publishedOn: number
   contentCode: string
 }
 
@@ -30,10 +30,10 @@ async function parseArticle(filePath: string): Promise<Article> {
     slug: path.basename(filePath, '.mdx'),
     title: frontmatter.title,
     tags: parseTags(frontmatter.tags),
-    headerImage: frontmatter.headerImage,
+    imageSrc: frontmatter.headerImage ?? null,
     tableOfContents: getTableOfContents(document),
     readingTime: readingTime(articleContents).text,
-    publishedOn: new Date(frontmatter.publishedOn),
+    publishedOn: new Date(frontmatter.publishedOn).getTime(),
     contentCode: code,
   }
 }
