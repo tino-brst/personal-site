@@ -1,8 +1,8 @@
-import * as React from 'react'
-import styled from 'styled-components'
+import clsx from 'clsx'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import clsx from 'clsx'
+import * as React from 'react'
+import styled from 'styled-components'
 
 type NavGroupContextValue = {
   highlightWidth: number
@@ -77,7 +77,7 @@ function NavGroupLink(props: {
   }
 
   return (
-    <NextLink href={props.to} passHref={true}>
+    <NextLink href={props.to} passHref>
       <Link
         className={clsx({
           active: props.exact

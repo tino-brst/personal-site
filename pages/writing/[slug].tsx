@@ -170,11 +170,7 @@ function ArticlePage(props: Props) {
           {props.tags.length > 0 && (
             <Tags>
               {props.tags.map((tag) => (
-                <NextLink
-                  key={tag}
-                  href={`/writing?tags=${tag}`}
-                  passHref={true}
-                >
+                <NextLink key={tag} href={`/writing?tags=${tag}`} passHref>
                   <Tag>
                     {/* TODO: use hashtag icon instead of character */}
                     <TagIcon>#</TagIcon>
@@ -220,10 +216,7 @@ function ArticlePage(props: Props) {
         <ArticleList>
           <ArticleListItem>
             {props.newerArticle && (
-              <NextLink
-                href={`/writing/${props.newerArticle.slug}`}
-                passHref={true}
-              >
+              <NextLink href={`/writing/${props.newerArticle.slug}`} passHref>
                 <ArticleLink className="next">
                   <ArticleImageWrapper>
                     {props.newerArticle.imageSrc && (
@@ -244,10 +237,7 @@ function ArticlePage(props: Props) {
           </ArticleListItem>
           <ArticleListItem>
             {props.olderArticle && (
-              <NextLink
-                href={`/writing/${props.olderArticle.slug}`}
-                passHref={true}
-              >
+              <NextLink href={`/writing/${props.olderArticle.slug}`} passHref>
                 <ArticleLink className="previous">
                   <ArticleImageWrapper>
                     {props.olderArticle.imageSrc && (
