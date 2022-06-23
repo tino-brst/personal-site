@@ -3,19 +3,21 @@ import { Link } from '@components/Link'
 import { Spacer } from '@components/Spacer'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
+import { pick } from '@lib/pick'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { GetStaticProps } from 'next'
 import NextLink from 'next/link'
 import styled from 'styled-components'
 
+type ArticlePreview = {
+  title: string
+  slug: string
+  publishedOn: number
+  imageSrc: string | null
+}
+
 type Props = {
-  latestArticles: Array<{
-    slug: string
-    url: string
-    title: string
-    thumbnailImageSrc: string | null
-    publishedOn: number
-  }>
+  articles: Array<ArticlePreview>
 }
 
 function HomePage(props: Props) {
@@ -35,7 +37,7 @@ function HomePage(props: Props) {
       </NextLink>
       <Heading>Latest Articles</Heading>
       <ArticleGrid>
-        {props.latestArticles.map((article) => (
+        {props.articles.map((article) => (
           <ArticleGridItem key={article.slug} {...article} />
         ))}
       </ArticleGrid>
@@ -101,20 +103,16 @@ const GoToIcon = styled(ArrowRightIcon)`
 `
 
 const getStaticProps: GetStaticProps<Props> = async () => {
-  const articles = await getArticles()
+  const articles = (await getArticles())
+    .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn))
+    .slice(0, 5)
+    .map<ArticlePreview>((article) =>
+      pick(article, ['slug', 'title', 'imageSrc', 'publishedOn'])
+    )
 
   return {
     props: {
-      latestArticles: articles
-        .map((article) => ({
-          slug: article.slug,
-          url: `/writing/${article.slug}`,
-          title: article.title,
-          thumbnailImageSrc: article.headerImage ?? null,
-          publishedOn: article.publishedOn.getTime(),
-        }))
-        .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn))
-        .slice(0, 5),
+      articles,
     },
   }
 }

@@ -5,23 +5,22 @@ import NextLink from 'next/link'
 import styled from 'styled-components'
 
 type Props = {
-  slug: string
   title: string
-  titleInnerHtml?: string
+  slug: string
   publishedOn: number
-  // TODO switch to thumbnailImageSrc?: string
-  thumbnailImageSrc: string | null
+  imageSrc: string | null
+  titleInnerHtml?: string
 }
 
 function ArticleGridItem(props: Props) {
   return (
     <Wrapper>
-      <NextLink href={`/writing/${props.slug}`} passHref={true}>
+      <NextLink href={`/writing/${props.slug}`} passHref>
         <Link>
           <ThumbnailImageWrapper>
-            {props.thumbnailImageSrc && (
+            {props.imageSrc && (
               <ThumbnailImage
-                src={props.thumbnailImageSrc}
+                src={props.imageSrc}
                 layout="fill"
                 objectFit="cover"
               />

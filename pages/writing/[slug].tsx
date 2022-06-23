@@ -35,23 +35,23 @@ const barHeight = 70
 const barBottomMargin = 48
 const asideWidth = 240
 
-type RelatedArticle = {
+type ArticlePreview = {
   title: string
   slug: string
-  thumbnailImageSrc: string | null
+  imageSrc: string | null
 }
 
 type Props = {
   slug: string
   title: string
   tags: Array<string>
-  headerImageSrc: string | null
+  imageSrc: string | null
   tableOfContents: Root
   readingTime: string
   publishedOn: number
   contentCode: string
-  newerArticle: RelatedArticle | null
-  olderArticle: RelatedArticle | null
+  newerArticle: ArticlePreview | null
+  olderArticle: ArticlePreview | null
 }
 
 function ArticlePage(props: Props) {
@@ -139,9 +139,9 @@ function ArticlePage(props: Props) {
             // scrolling on the previous article.
             key={router.asPath}
           >
-            {props.headerImageSrc && (
+            {props.imageSrc && (
               <NextImage
-                src={props.headerImageSrc}
+                src={props.imageSrc}
                 layout="fill"
                 objectFit="cover"
                 priority
@@ -226,9 +226,9 @@ function ArticlePage(props: Props) {
               >
                 <ArticleLink className="next">
                   <ArticleImageWrapper>
-                    {props.newerArticle.thumbnailImageSrc && (
+                    {props.newerArticle.imageSrc && (
                       <ArticleImage
-                        src={props.newerArticle.thumbnailImageSrc}
+                        src={props.newerArticle.imageSrc}
                         layout="fill"
                         objectFit="cover"
                       />
@@ -250,9 +250,9 @@ function ArticlePage(props: Props) {
               >
                 <ArticleLink className="previous">
                   <ArticleImageWrapper>
-                    {props.olderArticle.thumbnailImageSrc && (
+                    {props.olderArticle.imageSrc && (
                       <ArticleImage
-                        src={props.olderArticle.thumbnailImageSrc}
+                        src={props.olderArticle.imageSrc}
                         layout="fill"
                         objectFit="cover"
                       />
@@ -349,10 +349,10 @@ type PathParams = {
 }
 
 const getStaticPaths: GetStaticPaths<PathParams> = async () => {
-  const articles = await getArticles()
+  const paths = (await getArticles()).map(({ slug }) => ({ params: { slug } }))
 
   return {
-    paths: articles.map(({ slug }) => ({ params: { slug } })),
+    paths,
     fallback: false,
   }
 }
@@ -362,38 +362,19 @@ const getStaticProps: GetStaticProps<Props, PathParams> = async (context) => {
     compareDatesDesc(a.publishedOn, b.publishedOn)
   )
 
-  const articleIndex = articles.findIndex(
+  const currentArticleIndex = articles.findIndex(
     (article) => article.slug === context.params!.slug
   )
 
-  const article = articles[articleIndex]
-  const newerArticle = articles[articleIndex - 1]
-  const olderArticle = articles[articleIndex + 1]
+  const currentArticle = articles[currentArticleIndex]
+  const newerArticle = articles[currentArticleIndex - 1] ?? null
+  const olderArticle = articles[currentArticleIndex + 1] ?? null
 
   return {
     props: {
-      slug: article.slug,
-      title: article.title,
-      tags: article.tags,
-      headerImageSrc: article.headerImage ?? null,
-      readingTime: article.readingTime,
-      publishedOn: article.publishedOn.getTime(),
-      contentCode: article.contentCode,
-      tableOfContents: article.tableOfContents,
-      newerArticle: newerArticle
-        ? {
-            title: newerArticle.title,
-            slug: newerArticle.slug,
-            thumbnailImageSrc: newerArticle.headerImage ?? null,
-          }
-        : null,
-      olderArticle: olderArticle
-        ? {
-            title: olderArticle.title,
-            slug: olderArticle.slug,
-            thumbnailImageSrc: olderArticle.headerImage ?? null,
-          }
-        : null,
+      ...currentArticle,
+      newerArticle,
+      olderArticle,
     },
   }
 }

@@ -5,6 +5,7 @@ import { useSize } from '@hooks/useSize'
 import { includesEvery, toggle } from '@lib/array'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
+import { pick } from '@lib/pick'
 import { BorderStyleIcon, CaretDownIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
@@ -12,17 +13,16 @@ import { GetStaticProps } from 'next'
 import * as React from 'react'
 import styled from 'styled-components'
 
-type Article = {
-  slug: string
+type ArticlePreview = {
   title: string
-  thumbnailImageSrc: string | null
-  tags: Array<string>
-  readingTime: string
+  slug: string
   publishedOn: number
+  imageSrc: string | null
+  tags: Array<string>
 }
 
 type Props = {
-  articles: Array<Article>
+  articles: Array<ArticlePreview>
   tags: Array<string>
 }
 
@@ -64,7 +64,7 @@ function WritingPage(props: Props) {
   // Articles filtering/sorting
 
   const articles = React.useMemo(() => {
-    let articles: Array<Article & { titleInnerHtml?: string }> = [
+    let articles: Array<ArticlePreview & { titleInnerHtml?: string }> = [
       ...props.articles,
     ]
 
@@ -350,22 +350,19 @@ const TagIcon = styled.span`
 `
 
 const getStaticProps: GetStaticProps<Props> = async () => {
-  const articles = await getArticles()
+  const articles = (await getArticles())
+    .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn))
+    .map<ArticlePreview>((article) =>
+      pick(article, ['slug', 'title', 'imageSrc', 'publishedOn', 'tags'])
+    )
+
+  // TODO: define sorting criteria for the tags (most articles? alphabetical?)
+  const tags = Array.from(new Set(articles.flatMap((article) => article.tags)))
 
   return {
     props: {
-      articles: articles
-        .map((article) => ({
-          slug: article.slug,
-          title: article.title,
-          thumbnailImageSrc: article.headerImage ?? null,
-          tags: article.tags,
-          readingTime: article.readingTime,
-          publishedOn: article.publishedOn.getTime(),
-        }))
-        .sort((a, b) => compareDatesDesc(a.publishedOn, b.publishedOn)),
-      // TODO: define sorting criteria for the tags (most articles? alphabetical?)
-      tags: Array.from(new Set(articles.flatMap((article) => article.tags))),
+      articles,
+      tags,
     },
   }
 }
