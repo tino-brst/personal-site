@@ -30,7 +30,7 @@ async function parseArticle(filePath: string): Promise<Article> {
     slug: path.basename(filePath, '.mdx'),
     title: frontmatter.title,
     tags: parseTags(frontmatter.tags),
-    imageSrc: frontmatter.headerImage ?? null,
+    imageSrc: frontmatter.image ?? null,
     tableOfContents: getTableOfContents(document),
     readingTime: readingTime(articleContents).text,
     publishedOn: new Date(frontmatter.publishedOn).getTime(),
