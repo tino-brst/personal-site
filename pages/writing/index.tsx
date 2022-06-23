@@ -1,20 +1,16 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
-import { useOnKeyDown } from '@hooks/useOnKeyDown'
+import { SearchInputButton } from '@components/SearchInputButton'
 import { useQueryParam } from '@hooks/useQueryParam'
 import { useSize } from '@hooks/useSize'
 import { includesEvery, toggle } from '@lib/array'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
-import {
-  BorderStyleIcon,
-  CaretDownIcon,
-  MagnifyingGlassIcon,
-} from '@radix-ui/react-icons'
+import { BorderStyleIcon, CaretDownIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
 import * as React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 type Article = {
   slug: string
@@ -45,8 +41,7 @@ function WritingPage(props: Props) {
     return typeof activeTagsParam === 'string' ? activeTagsParam.split(',') : []
   }, [activeTagsParam])
 
-  function handleSearchInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value
+  function handleSearchChange(value: string) {
     setSearchParam(value === '' ? undefined : value)
   }
 
@@ -56,39 +51,6 @@ function WritingPage(props: Props) {
   }
 
   const [isSearchOpen, setIsSearchOpen] = React.useState(search !== '')
-  const searchInputRef = React.useRef<HTMLInputElement>(null)
-  const searchButtonRef = React.useRef<HTMLButtonElement>(null)
-  const searchPlaceholderRef = React.useRef<HTMLDivElement>(null)
-  const cancelSearchButtonRef = React.useRef<HTMLButtonElement>(null)
-
-  const searchPlaceholderSize = useSize(searchPlaceholderRef)
-  const cancelSearchButtonSize = useSize(cancelSearchButtonRef)
-
-  function cancelSearch() {
-    setIsSearchOpen(false)
-    searchButtonRef.current?.focus()
-  }
-
-  function handleSearchButtonClick() {
-    setIsSearchOpen(true)
-    searchInputRef.current?.focus()
-    searchInputRef.current?.select()
-  }
-
-  useOnKeyDown(
-    'Escape',
-    (event) => {
-      if (isElementInFocus(searchInputRef.current)) {
-        // Prevents the browser exiting full-screen, besides closing the search
-        event.preventDefault()
-        cancelSearch()
-      }
-    },
-    isSearchOpen
-  )
-
-  const searchButtonText = 'Search articles'
-
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(
     activeTags.length > 0
   )
@@ -131,38 +93,12 @@ function WritingPage(props: Props) {
       </Description>
       <Search>
         <SearchInputButton
-          className={clsx({ open: isSearchOpen })}
-          style={{
-            '--default-width': `${searchPlaceholderSize.width}px`,
-            '--cancel-button-width': `${cancelSearchButtonSize.width}px`,
-          }}
-        >
-          <SearchInputButtonPlaceholder ref={searchPlaceholderRef}>
-            <SearchIcon />
-            {searchButtonText}
-          </SearchInputButtonPlaceholder>
-          <SearchInput
-            value={search}
-            onChange={handleSearchInputChange}
-            ref={searchInputRef}
-            placeholder={searchButtonText}
-            tabIndex={isSearchOpen ? undefined : -1}
-          />
-          <CancelSearchButton
-            ref={cancelSearchButtonRef}
-            onClick={cancelSearch}
-            tabIndex={isSearchOpen ? undefined : -1}
-          >
-            Cancel
-          </CancelSearchButton>
-          <SearchButton
-            ref={searchButtonRef}
-            onClick={handleSearchButtonClick}
-            tabIndex={isSearchOpen ? -1 : undefined}
-          >
-            {searchButtonText}
-          </SearchButton>
-        </SearchInputButton>
+          placeholder="Search articles"
+          value={search}
+          onChange={handleSearchChange}
+          isOpen={isSearchOpen}
+          onIsOpenChange={(value) => setIsSearchOpen(value)}
+        />
         <FiltersToggleButton
           onClick={() => setIsFiltersOpen((value) => !value)}
         >
@@ -247,149 +183,6 @@ const Search = styled.div`
   align-items: center;
   gap: 12px;
   max-width: 400px;
-`
-
-const SearchInputButton = styled.div`
-  --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
-  --border-radius: 16px;
-  --padding-x: 14px;
-  --padding-y: 12px;
-  --padding: var(--padding-y) var(--padding-x);
-  --icon-size: 20px;
-  --starting-font-weight: 500;
-  --gap: 6px;
-
-  position: relative;
-  display: flex;
-  flex: 0 1 var(--default-width);
-  background-color: hsla(0 0% 0% / 0.03);
-  border-radius: var(--border-radius);
-  will-change: flex-grow;
-
-  transition: var(--transition);
-
-  &.open {
-    flex-grow: 1;
-  }
-
-  /* TODO: active/hover transitions should be consistent with other links */
-  /* TODO: transition only whats needed */
-
-  &:hover,
-  &:active {
-    background-color: hsla(0 0% 0% / 0.06);
-  }
-
-  &:not(.open):active {
-    transform: scale(0.96);
-  }
-`
-
-const SearchInputButtonPlaceholder = styled.div`
-  color: transparent;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  gap: var(--gap);
-  padding: var(--padding);
-  font-weight: var(--starting-font-weight);
-`
-
-const SearchIcon = styled(MagnifyingGlassIcon)`
-  width: var(--icon-size);
-  height: var(--icon-size);
-  color: black;
-
-  transition: var(--transition);
-
-  ${SearchInputButton}.open & {
-    color: hsla(0 0% 0% / 0.5);
-  }
-`
-
-const CancelSearchButton = styled.button`
-  position: absolute;
-  right: 0;
-  height: 100%;
-  padding-right: var(--padding-x);
-  padding-left: var(--padding-x);
-  transform: translateX(-4px);
-  cursor: pointer;
-  opacity: 0;
-  font-weight: 500;
-  color: black;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-
-  /* TODO: look into animations to postpone its appearing when opening, and make
-  the hiding quicker when closing */
-
-  transition: var(--transition);
-
-  ${SearchInputButton}.open & {
-    transform: none;
-    opacity: 1;
-  }
-`
-
-const sharedInputButtonStyle = css`
-  position: absolute;
-  inset: 0;
-  padding: var(--padding);
-  padding-left: calc(var(--padding-x) + var(--icon-size) + var(--gap));
-  border-radius: var(--border-radius);
-`
-
-const defaultTextStyle = css`
-  color: black;
-  font-weight: var(--starting-font-weight);
-`
-
-const openTextStyle = css`
-  color: hsla(0 0% 0% / 0.3);
-  font-weight: 400;
-`
-
-const SearchInput = styled.input`
-  ${sharedInputButtonStyle}
-  min-width: 0;
-  opacity: 0;
-  color: black;
-
-  transition: var(--transition);
-
-  ${SearchInputButton}.open & {
-    opacity: 1;
-    /* TODO: see if it can be delayed (animation keyframes?) */
-    padding-right: var(--cancel-button-width);
-  }
-
-  /* Placeholder styles */
-
-  &::placeholder {
-    ${defaultTextStyle}
-    transition: var(--transition);
-  }
-
-  ${SearchInputButton}.open &::placeholder {
-    ${openTextStyle}
-  }
-`
-
-const SearchButton = styled.button`
-  ${sharedInputButtonStyle}
-  ${defaultTextStyle}
-  cursor: pointer;
-
-  transition: var(--transition);
-
-  ${SearchInputButton}.open & {
-    ${openTextStyle}
-    opacity: 0;
-    pointer-events: none;
-  }
 `
 
 const FiltersToggleButton = styled.button`
@@ -549,10 +342,6 @@ const TagIcon = styled.span`
     color: hsl(0 0% 0% / 0.1);
   }
 `
-
-function isElementInFocus(element: HTMLElement | null): boolean {
-  return document.activeElement === element
-}
 
 const getStaticProps: GetStaticProps<Props> = async () => {
   const articles = await getArticles()
