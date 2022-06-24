@@ -102,7 +102,7 @@ const GoToIcon = styled(ArrowRightIcon)`
   height: 20px;
 `
 
-/* ---------------------------------- Next ---------------------------------- */
+/* ---------------------------------- Next.js ------------------------------- */
 
 const getStaticProps: GetStaticProps<Props> = async () => {
   const articles = (await getArticles())
