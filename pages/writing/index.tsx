@@ -349,7 +349,7 @@ const TagIcon = styled.span`
   }
 `
 
-/* ---------------------------------- Next ---------------------------------- */
+/* ---------------------------------- Next.js ------------------------------- */
 
 const getStaticProps: GetStaticProps<Props> = async () => {
   const articles = (await getArticles())
