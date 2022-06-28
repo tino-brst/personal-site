@@ -3,7 +3,6 @@ import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { useOnWindowScroll } from '@hooks/useOnWindowScroll'
 import { useSize } from '@hooks/useSize'
 import { map } from '@lib/math'
-import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
 import Image from 'next/image'
@@ -12,6 +11,7 @@ import { useRouter } from 'next/router'
 import avatarImageSrc from 'public/images/avatar.png'
 import * as React from 'react'
 import styled from 'styled-components'
+import { MenuIcon } from './icons/MenuIcon'
 import { NavGroup, NavGroupLink } from './NavGroup'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -155,7 +155,7 @@ function NavBar() {
             </NavGroup>
             <ThemeToggle />
             <TrayButton onClick={() => setIsTrayOpen((value) => !value)}>
-              <HamburgerMenuIcon width={23} height={23} />
+              <MenuIcon isOpen={isTrayOpen} />
             </TrayButton>
           </BarEnd>
         </Bar>
