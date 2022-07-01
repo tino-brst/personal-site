@@ -16,8 +16,6 @@ import { MenuIcon } from './icons/MenuIcon'
 import { ThemeIcon } from './icons/ThemeIcon'
 import { NavGroup, NavGroupLink } from './NavGroup'
 
-// TODO switch to classes instead of props
-
 const barHeight = 70
 const scrollThreshold = 48
 
@@ -131,12 +129,20 @@ function NavBar() {
   }, [])
 
   return (
-    <StickyPlaceholder>
-      <Wrapper ref={wrapperRef} isMenuOpen={isMenuOpen}>
+    <>
+      <StickyPlaceholder />
+      <Root
+        ref={wrapperRef}
+        className={clsx({
+          menuOpen: isMenuOpen,
+        })}
+      >
         <Background
           ref={backgroundRef}
-          isMenuOpen={isMenuOpen}
-          className={clsx({ opaque: settings.isAlwaysOpaque })}
+          className={clsx({
+            opaque: settings.isAlwaysOpaque,
+            menuOpen: isMenuOpen,
+          })}
         />
         <ProgressBar
           ref={progressBarRef}
@@ -145,7 +151,7 @@ function NavBar() {
             complete: isProgressComplete,
           })}
         />
-        <Bar>
+        <Content>
           <NextLink href="/" passHref>
             <HomeLink>
               <AvatarImage
@@ -177,9 +183,9 @@ function NavBar() {
               <MenuIcon isOpen={isMenuOpen} />
             </MenuToggle>
           </BarEnd>
-        </Bar>
+        </Content>
         <MenuWrapper
-          isMenuOpen={isMenuOpen}
+          className={clsx({ menuOpen: isMenuOpen })}
           style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
         >
           <Menu ref={menuRef}>
@@ -197,8 +203,8 @@ function NavBar() {
             </MenuLink>
           </Menu>
         </MenuWrapper>
-      </Wrapper>
-    </StickyPlaceholder>
+      </Root>
+    </>
   )
 }
 
@@ -234,27 +240,31 @@ const StickyPlaceholder = styled.div`
   right: 0;
   height: ${barHeight}px;
   margin-bottom: ${scrollThreshold}px;
-  z-index: 1;
 `
 
-const Wrapper = styled.div<{ isMenuOpen: boolean }>`
-  position: relative;
-  box-shadow: ${(p) =>
-    p.isMenuOpen
-      ? '0px 0px 4px rgba(0, 0, 0, 0.01), 0px 4px 60px rgba(0, 0, 0, 0.05)'
-      : null};
+const Root = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
   transition-duration: 0.2s;
+
+  &.menuOpen {
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.01),
+      0px 4px 60px rgba(0, 0, 0, 0.05);
+  }
 
   @media (min-width: 640px) {
     box-shadow: none;
   }
 `
 
-const Background = styled.div<{ isMenuOpen: boolean }>`
-  opacity: ${(p) => (p.isMenuOpen ? 1 : `var(${cssVar.scrollBasedOpacity})`)};
+const Background = styled.div`
+  opacity: var(${cssVar.scrollBasedOpacity});
   position: absolute;
   z-index: -1;
   inset: 0;
@@ -265,6 +275,10 @@ const Background = styled.div<{ isMenuOpen: boolean }>`
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
   transition-duration: 0.2s;
+
+  &.menuOpen {
+    opacity: 1;
+  }
 
   &.opaque {
     opacity: 1;
@@ -306,7 +320,7 @@ const ProgressBar = styled.div`
   }
 `
 
-const Bar = styled.div`
+const Content = styled.div`
   height: ${barHeight}px;
   display: flex;
   align-items: center;
@@ -373,15 +387,21 @@ const MenuToggle = styled(NavButton)`
   }
 `
 
-const MenuWrapper = styled.div<{ isMenuOpen: boolean }>`
+const MenuWrapper = styled.div`
   overflow: hidden;
-  max-height: ${(p) => (p.isMenuOpen ? `var(${cssVar.menuHeight})` : 0)};
-  opacity: ${(p) => (p.isMenuOpen ? 1 : 0)};
-  transform: ${(p) => (p.isMenuOpen ? null : 'translateY(-8px) scale(0.8)')};
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.8);
 
   transition-property: max-height, transform, opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
   transition-duration: 0.2s, 0.2s, 0.15s;
+
+  &.menuOpen {
+    max-height: var(${cssVar.menuHeight});
+    opacity: 1;
+    transform: none;
+  }
 
   @media (min-width: 640px) {
     max-height: 0;
