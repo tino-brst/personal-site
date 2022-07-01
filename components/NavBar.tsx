@@ -28,8 +28,7 @@ const cssVar = {
 
 function NavBar() {
   const theme = useTheme()
-  const { isProgressShown, isAlwaysOpaque, progressCompleteThreshold } =
-    useNavBar()
+  const settings = useNavBar()
 
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
@@ -110,7 +109,7 @@ function NavBar() {
 
     const threshold = Math.min(
       document.documentElement.scrollHeight - window.innerHeight,
-      progressCompleteThreshold - barHeight
+      settings.progressCompleteThreshold - barHeight
     )
 
     const progress = map(window.scrollY, [0, threshold], [0, 1])
@@ -118,7 +117,7 @@ function NavBar() {
     progressBarRef.current.style.setProperty('--progress', `${progress}`)
 
     setIsProgressComplete(progress === 1)
-  }, [progressCompleteThreshold])
+  }, [settings.progressCompleteThreshold])
 
   useOnWindowScroll(updateProgress)
 
@@ -137,12 +136,12 @@ function NavBar() {
         <Background
           ref={backgroundRef}
           isMenuOpen={isMenuOpen}
-          className={clsx({ opaque: isAlwaysOpaque })}
+          className={clsx({ opaque: settings.isAlwaysOpaque })}
         />
         <ProgressBar
           ref={progressBarRef}
           className={clsx({
-            visible: isProgressShown,
+            visible: settings.isProgressShown,
             complete: isProgressComplete,
           })}
         />
