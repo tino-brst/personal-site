@@ -5,6 +5,7 @@ import { useSize } from '@hooks/useSize'
 import { map } from '@lib/math'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
+import { useTheme } from 'contexts/theme'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -12,8 +13,8 @@ import avatarImageSrc from 'public/images/avatar.png'
 import * as React from 'react'
 import styled from 'styled-components'
 import { MenuIcon } from './icons/MenuIcon'
+import { ThemeIcon } from './icons/ThemeIcon'
 import { NavGroup, NavGroupLink } from './NavGroup'
-import { ThemeToggle } from './ThemeToggle'
 
 // TODO switch to classes instead of props
 
@@ -26,6 +27,7 @@ const cssVar = {
 }
 
 function NavBar() {
+  const theme = useTheme()
   const { isProgressShown, isAlwaysOpaque, progressCompleteThreshold } =
     useNavBar()
 
@@ -120,6 +122,15 @@ function NavBar() {
 
   useOnWindowScroll(updateProgress)
 
+  // Used to avoid client/server render miss-matches, skipping those things for
+  // which the rendered result depends on client info (e.g. the theme toggle)
+
+  const [isMounted, setIsMounted] = React.useState(false)
+
+  useIsomorphicLayoutEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   return (
     <StickyPlaceholder>
       <Wrapper ref={wrapperRef} isMenuOpen={isMenuOpen}>
@@ -155,7 +166,14 @@ function NavBar() {
               <NavGroupLink to="/writing">Writing</NavGroupLink>
               <NavGroupLink to="/about">About</NavGroupLink>
             </NavGroup>
-            <ThemeToggle />
+            {isMounted && (
+              <NavButton onClick={theme.toggle}>
+                <ThemeIcon
+                  theme={theme.resolved}
+                  isSystemBased={theme.active === 'system'}
+                />
+              </NavButton>
+            )}
             <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
               <MenuIcon isOpen={isMenuOpen} />
             </MenuToggle>
