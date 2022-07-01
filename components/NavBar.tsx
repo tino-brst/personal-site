@@ -325,7 +325,7 @@ const BarEnd = styled.div`
   gap: 12px;
 `
 
-const TrayButton = styled.button`
+const NavButton = styled.button`
   cursor: pointer;
   width: 44px;
   height: 44px;
@@ -346,7 +346,9 @@ const TrayButton = styled.button`
   &:active {
     transform: scale(0.94);
   }
+`
 
+const TrayButton = styled(NavButton)`
   @media (min-width: 640px) {
     display: none;
   }
