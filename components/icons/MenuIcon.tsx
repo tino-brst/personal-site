@@ -5,20 +5,26 @@ type Props = {
   isOpen: boolean
 }
 
+const iconSize = 32
+const lineWidth = 18
+const d = `M ${iconSize / 2 - lineWidth / 2} ${iconSize / 2} H ${
+  iconSize / 2 + lineWidth / 2
+}`
+
 function MenuIcon(props: Props) {
   return (
     <Root
       className={clsx({ open: props.isOpen })}
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
+      width={iconSize}
+      height={iconSize}
+      viewBox={`0 0 ${iconSize} ${iconSize}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <g className="top">
-        <path className="top" d="M 7 16 H 25" />
+        <path className="top__line" d={d} />
       </g>
       <g className="bottom">
-        <path className="bottom" d="M 7 16 H 25" />
+        <path className="bottom__line" d={d} />
       </g>
     </Root>
   )
@@ -26,6 +32,7 @@ function MenuIcon(props: Props) {
 
 const Root = styled.svg`
   --transition-duration: 0.1s;
+  --offset-y: 4px;
 
   color: black;
   stroke: currentColor;
@@ -34,8 +41,8 @@ const Root = styled.svg`
 
   /* Default state [=] */
 
-  g.top,
-  g.bottom {
+  .top,
+  .bottom {
     transform-origin: center;
     transition-property: transform;
     transition-duration: var(--transition-duration);
@@ -43,41 +50,41 @@ const Root = styled.svg`
     transition-timing-function: ease-in;
   }
 
-  path.top,
-  path.bottom {
+  .top__line,
+  .bottom__line {
     transition-property: transform;
     transition-duration: var(--transition-duration);
     transition-delay: var(--transition-duration);
     transition-timing-function: ease-out;
   }
 
-  path.top {
-    transform: translateY(-4px);
+  .top__line {
+    transform: translateY(calc(-1 * var(--offset-y)));
   }
 
-  path.bottom {
-    transform: translateY(4px);
+  .bottom__line {
+    transform: translateY(var(--offset-y));
   }
 
   /* Open state [x] */
 
   &.open {
-    g.top,
-    g.bottom {
+    .top,
+    .bottom {
       transition-delay: var(--transition-duration);
       transition-timing-function: ease-out;
     }
 
-    g.top {
+    .top {
       transform: rotate(45deg);
     }
 
-    g.bottom {
+    .bottom {
       transform: rotate(-45deg);
     }
 
-    path.top,
-    path.bottom {
+    .top__line,
+    .bottom__line {
       transform: none;
 
       transition-delay: 0s;
