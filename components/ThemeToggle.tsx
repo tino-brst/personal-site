@@ -1,8 +1,8 @@
-import * as React from 'react'
-import styled from 'styled-components'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useTheme } from 'contexts/theme'
-import { Half2Icon } from '@radix-ui/react-icons'
+import * as React from 'react'
+import styled from 'styled-components'
+import { ThemeIcon } from './icons/ThemeIcon'
 
 function ThemeToggle() {
   const theme = useTheme()
@@ -40,10 +40,9 @@ function ThemeToggle() {
 
   return (
     <Button onClick={theme.toggle}>
-      <Half2Icon
-        width={21}
-        height={21}
-        style={{ transform: 'rotate(45deg)' }}
+      <ThemeIcon
+        theme={theme.resolved}
+        isSystemBased={theme.active === 'system'}
       />
     </Button>
   )
