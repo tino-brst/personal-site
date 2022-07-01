@@ -15,12 +15,14 @@ import { MenuIcon } from './icons/MenuIcon'
 import { NavGroup, NavGroupLink } from './NavGroup'
 import { ThemeToggle } from './ThemeToggle'
 
+// TODO switch to classes instead of props
+
 const barHeight = 70
 const scrollThreshold = 48
 
 const cssVar = {
   scrollBasedOpacity: '--scroll-based-opacity',
-  trayHeight: '--tray-height',
+  menuHeight: '--menu-height',
 }
 
 function NavBar() {
@@ -29,10 +31,10 @@ function NavBar() {
 
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
-  const trayRef = React.useRef<HTMLDivElement>(null)
+  const menuRef = React.useRef<HTMLDivElement>(null)
 
-  const [isTrayOpen, setIsTrayOpen] = React.useState(false)
-  const traySize = useSize(trayRef)
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  const menuSize = useSize(menuRef)
 
   // Initialize scroll based opacity CSS var & keep up-to-date with scroll
   // changes (not set in inline styles to avoid re-renders with each scroll
@@ -55,7 +57,7 @@ function NavBar() {
   useOnWindowScroll(updateScrollBasedOpacity)
 
   // Handle switching the background's opacity changes from instant (while
-  // scrolling) to animated (when opening/closing the tray). Accomplished via
+  // scrolling) to animated (when opening/closing the menu). Accomplished via
   // toggling the CSS prop transition-property between 'opacity' and 'none'.
 
   useIsomorphicLayoutEffect(() => {
@@ -64,18 +66,18 @@ function NavBar() {
     if (!background) return
 
     // By default, the background's opacity has no transitions. Whenever there
-    // is a change due to scrolling, it's applied immediately. But when the tray
+    // is a change due to scrolling, it's applied immediately. But when the menu
     // is opening/closing, there _should_ be a transition, and thus the
     // opacity's transition is enabled.
-    if (isTrayOpen) {
+    if (isMenuOpen) {
       background.style.transitionProperty = 'opacity'
     }
 
-    // When the tray is closing, wait for the transition to end, and restore the
+    // When the menu is closing, wait for the transition to end, and restore the
     // opacity to having no animations, and thus apply scroll changes
     // immediately.
     // TODO: attach to onTransitionEnd?
-    if (!isTrayOpen) {
+    if (!isMenuOpen) {
       const transitionEndHandler = () => {
         background.style.transitionProperty = 'none'
       }
@@ -85,16 +87,16 @@ function NavBar() {
       return () =>
         background.removeEventListener('transitionend', transitionEndHandler)
     }
-  }, [isTrayOpen])
+  }, [isMenuOpen])
 
-  // Close the tray when clicking outside of the bar/tray or scrolling the page
+  // Close the menu when clicking outside of the bar/menu or scrolling the page
 
-  const closeTray = React.useCallback(() => {
-    setIsTrayOpen(false)
+  const closeMenu = React.useCallback(() => {
+    setIsMenuOpen(false)
   }, [])
 
-  useOnWindowScroll(closeTray)
-  useOnInteractionOutside(wrapperRef, closeTray, isTrayOpen)
+  useOnWindowScroll(closeMenu)
+  useOnInteractionOutside(wrapperRef, closeMenu, isMenuOpen)
 
   // Progress Bar
 
@@ -120,10 +122,10 @@ function NavBar() {
 
   return (
     <StickyPlaceholder>
-      <Wrapper ref={wrapperRef} isTrayOpen={isTrayOpen}>
+      <Wrapper ref={wrapperRef} isMenuOpen={isMenuOpen}>
         <Background
           ref={backgroundRef}
-          isTrayOpen={isTrayOpen}
+          isMenuOpen={isMenuOpen}
           className={clsx({ opaque: isAlwaysOpaque })}
         />
         <ProgressBar
@@ -154,37 +156,37 @@ function NavBar() {
               <NavGroupLink to="/about">About</NavGroupLink>
             </NavGroup>
             <ThemeToggle />
-            <TrayButton onClick={() => setIsTrayOpen((value) => !value)}>
-              <MenuIcon isOpen={isTrayOpen} />
-            </TrayButton>
+            <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
+              <MenuIcon isOpen={isMenuOpen} />
+            </MenuToggle>
           </BarEnd>
         </Bar>
-        <TrayWrapper
-          isTrayOpen={isTrayOpen}
-          style={{ [cssVar.trayHeight]: `${traySize.height}px` }}
+        <MenuWrapper
+          isMenuOpen={isMenuOpen}
+          style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
         >
-          <Tray ref={trayRef}>
+          <Menu ref={menuRef}>
             {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
             {/* TODO: remove from tab-index, aria hidden, etc */}
             {/* TODO: cascade animation for each item? */}
-            <TrayLink to="/" onClick={closeTray} exact>
+            <MenuLink href="/" onClick={closeMenu} exact>
               Home
-            </TrayLink>
-            <TrayLink to="/writing" onClick={closeTray}>
+            </MenuLink>
+            <MenuLink href="/writing" onClick={closeMenu}>
               Writing
-            </TrayLink>
-            <TrayLink to="/about" onClick={closeTray}>
+            </MenuLink>
+            <MenuLink href="/about" onClick={closeMenu}>
               About
-            </TrayLink>
-          </Tray>
-        </TrayWrapper>
+            </MenuLink>
+          </Menu>
+        </MenuWrapper>
       </Wrapper>
     </StickyPlaceholder>
   )
 }
 
-function TrayLink(props: {
-  to: string
+function MenuLink(props: {
+  href: string
   onClick: () => void
   /** When true, the active style will only be applied if the location is matched _exactly_. */
   exact?: boolean
@@ -193,13 +195,13 @@ function TrayLink(props: {
   const router = useRouter()
 
   return (
-    <NextLink href={props.to} passHref>
+    <NextLink href={props.href} passHref>
       <Link
         onClick={props.onClick}
         className={clsx({
           active: props.exact
-            ? router.pathname === props.to
-            : router.pathname.startsWith(props.to),
+            ? router.pathname === props.href
+            : router.pathname.startsWith(props.href),
         })}
       >
         {props.children}
@@ -218,10 +220,10 @@ const StickyPlaceholder = styled.div`
   z-index: 1;
 `
 
-const Wrapper = styled.div<{ isTrayOpen: boolean }>`
+const Wrapper = styled.div<{ isMenuOpen: boolean }>`
   position: relative;
   box-shadow: ${(p) =>
-    p.isTrayOpen
+    p.isMenuOpen
       ? '0px 0px 4px rgba(0, 0, 0, 0.01), 0px 4px 60px rgba(0, 0, 0, 0.05)'
       : null};
 
@@ -234,8 +236,8 @@ const Wrapper = styled.div<{ isTrayOpen: boolean }>`
   }
 `
 
-const Background = styled.div<{ isTrayOpen: boolean }>`
-  opacity: ${(p) => (p.isTrayOpen ? 1 : `var(${cssVar.scrollBasedOpacity})`)};
+const Background = styled.div<{ isMenuOpen: boolean }>`
+  opacity: ${(p) => (p.isMenuOpen ? 1 : `var(${cssVar.scrollBasedOpacity})`)};
   position: absolute;
   z-index: -1;
   inset: 0;
@@ -348,17 +350,17 @@ const NavButton = styled.button`
   }
 `
 
-const TrayButton = styled(NavButton)`
+const MenuToggle = styled(NavButton)`
   @media (min-width: 640px) {
     display: none;
   }
 `
 
-const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
+const MenuWrapper = styled.div<{ isMenuOpen: boolean }>`
   overflow: hidden;
-  max-height: ${(p) => (p.isTrayOpen ? `var(${cssVar.trayHeight})` : 0)};
-  opacity: ${(p) => (p.isTrayOpen ? 1 : 0)};
-  transform: ${(p) => (p.isTrayOpen ? null : 'translateY(-8px) scale(0.8)')};
+  max-height: ${(p) => (p.isMenuOpen ? `var(${cssVar.menuHeight})` : 0)};
+  opacity: ${(p) => (p.isMenuOpen ? 1 : 0)};
+  transform: ${(p) => (p.isMenuOpen ? null : 'translateY(-8px) scale(0.8)')};
 
   transition-property: max-height, transform, opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
@@ -369,7 +371,7 @@ const TrayWrapper = styled.div<{ isTrayOpen: boolean }>`
   }
 `
 
-const Tray = styled.div`
+const Menu = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
