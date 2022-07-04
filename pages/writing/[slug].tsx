@@ -1,7 +1,7 @@
 import { AsideTableOfContents } from '@components/AsideTableOfContents'
 import { FloatingTableOfContents } from '@components/FloatingTableOfContents'
 import { Link } from '@components/Link'
-import * as md from '@components/markdown'
+import { components } from '@components/mdx'
 import { Parallax } from '@components/Parallax'
 import { UpNext } from '@components/UpNext'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
@@ -23,7 +23,7 @@ import {
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
-import { ComponentMap, getMDXComponent } from 'mdx-bundler/client'
+import { getMDXComponent } from 'mdx-bundler/client'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
@@ -729,18 +729,6 @@ function getArticleEditOnGitHubURL(slug: string) {
     'personal-site',
     `articles/${slug}.mdx`
   )
-}
-
-const components: ComponentMap = {
-  h2: md.Heading2,
-  h3: md.Heading3,
-  h4: md.Heading4,
-  p: md.Paragraph,
-  pre: md.CodeBlock,
-  code: md.Code,
-  img: md.Image,
-  a: md.Link,
-  strong: md.Strong,
 }
 
 /* ---------------------------------- Next.js ------------------------------- */
