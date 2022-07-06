@@ -8,6 +8,8 @@ type Props = {
   isSystemBased?: boolean
 }
 
+// TODO tweak rotation speed
+
 const iconSize = 32
 const circleRadius = 9
 const autoSize = 10.5
