@@ -1,4 +1,7 @@
-import { CopyIcon } from '@radix-ui/react-icons'
+import { CheckMarkIcon } from '@components/icons/CheckMarkIcon'
+import { CopyIcon } from '@components/icons/CopyIcon'
+import { useTimeout } from '@hooks/useTimeout'
+import clsx from 'clsx'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -9,9 +12,14 @@ type Props = {
 function CodeBlock(props: Props) {
   const preElementRef = React.useRef<HTMLPreElement>(null)
 
-  const handleClick = () => {
-    const preTextContent = preElementRef.current?.textContent ?? ''
-    navigator.clipboard?.writeText(preTextContent)
+  const [hasJustCopied, setHasJustCopied] = React.useState(false)
+  const hasJustCopiedTimeout = useTimeout(() => setHasJustCopied(false), 1500)
+
+  function handleCopyButtonClick() {
+    navigator.clipboard?.writeText(preElementRef.current?.textContent ?? '')
+
+    setHasJustCopied(true)
+    hasJustCopiedTimeout.start()
   }
 
   return (
@@ -19,8 +27,16 @@ function CodeBlock(props: Props) {
       <Pre {...props} ref={preElementRef}>
         {props.children}
       </Pre>
-      <CopyButton onClick={handleClick}>
-        <Icon />
+      <CopyButton
+        className={clsx({ copied: hasJustCopied })}
+        onClick={handleCopyButtonClick}
+      >
+        <CopyIconWrapper>
+          <CopyIcon />
+        </CopyIconWrapper>
+        <CheckMarkIconWrapper>
+          <CheckMarkIcon isComplete={hasJustCopied} />
+        </CheckMarkIconWrapper>
       </CopyButton>
     </Wrapper>
   )
@@ -82,14 +98,14 @@ const CopyButton = styled.button`
   right: var(--copy-button-inset-x);
   width: var(--copy-button-size);
   height: var(--copy-button-size);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
   background-color: hsla(0 0% 98%);
   border-radius: 8px;
   box-shadow: 0 0 0 1px hsl(0deg 0% 0% / 6%),
     0 2px 11px 3px hsl(0deg 0% 0% / 2%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: hsla(0 0% 96%);
@@ -103,24 +119,51 @@ const CopyButton = styled.button`
     transform: scale(0.9);
 
     ${Wrapper}:hover &, 
-    &:focus-visible {
+    &:focus-visible,
+    &.copied {
       opacity: 1;
       transform: none;
     }
   }
 `
 
-const Icon = styled(CopyIcon)`
-  --size: 18px;
-
-  display: block;
-  width: var(--size);
-  height: var(--size);
-  color: black;
+const IconWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   will-change: transform;
+`
 
-  transition-property: transform;
+const CopyIconWrapper = styled(IconWrapper)`
+  transition-property: opacity, transform;
   transition-duration: 0.15s;
+  transition-delay: 0.15s, 0.15s;
+
+  ${CopyButton}.copied & {
+    transform: scale(0.9);
+    opacity: 0;
+
+    transition-delay: 0s;
+  }
+
+  ${CopyButton}:active & {
+    transform: scale(0.9);
+
+    transition-delay: 0s;
+  }
+`
+
+const CheckMarkIconWrapper = styled(IconWrapper)`
+  opacity: 0;
+
+  transition-property: opacity, transform;
+  transition-duration: 0.15s;
+
+  ${CopyButton}.copied & {
+    transform: none;
+    opacity: 1;
+  }
 
   ${CopyButton}:active & {
     transform: scale(0.9);
