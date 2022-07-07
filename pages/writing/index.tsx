@@ -1,4 +1,5 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
+import { FilterIcon } from '@components/icons/FilterIcon'
 import { SearchInputButton } from '@components/SearchInputButton'
 import { useQueryParam } from '@hooks/useQueryParam'
 import { useSize } from '@hooks/useSize'
@@ -6,7 +7,7 @@ import { includesEvery, toggle } from '@lib/array'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
-import { BorderStyleIcon, CaretDownIcon } from '@radix-ui/react-icons'
+import { CaretDownIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
@@ -110,7 +111,7 @@ function WritingPage(props: Props) {
         <FiltersToggleButton
           onClick={() => setIsFiltersOpen((value) => !value)}
         >
-          <FiltersIcon />
+          <FilterIcon hasBadge={activeTags.length > 0} />
           <ExpandIcon />
         </FiltersToggleButton>
       </Search>
@@ -212,12 +213,6 @@ const FiltersToggleButton = styled.button`
   &:active {
     transform: scale(0.96);
   }
-`
-
-const FiltersIcon = styled(BorderStyleIcon)`
-  width: 20px;
-  height: 20px;
-  color: black;
 `
 
 const ExpandIcon = styled(CaretDownIcon)`
