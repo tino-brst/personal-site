@@ -7,8 +7,8 @@ const Link = styled.a`
   font-size: 16px;
   line-height: 1;
   border-radius: 16px;
-  color: black;
-  background-color: hsla(0 0% 0% / 0.03);
+  color: var(--color-fg-accent);
+  background-color: var(--color-bg-subtle);
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;
@@ -16,7 +16,7 @@ const Link = styled.a`
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.06);
+    background-color: var(--color-bg-subtle-hover);
   }
 
   &:active {

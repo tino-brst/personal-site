@@ -34,7 +34,6 @@ const Root = styled.svg`
   --transition-duration: 0.1s;
   --offset-y: 4px;
 
-  color: black;
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;

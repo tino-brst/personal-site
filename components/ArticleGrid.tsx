@@ -25,6 +25,7 @@ function ArticleGridItem(props: Props) {
                 objectFit="cover"
               />
             )}
+            <ThumbnailImageOverlay />
           </ThumbnailImageWrapper>
           <Info>
             {props.titleInnerHtml ? (
@@ -63,7 +64,7 @@ const Link = styled.a`
 
   isolation: isolate;
   padding: 12px;
-  background-color: hsla(0 0% 0% / 0.03);
+  background-color: var(--color-bg-subtle);
 
   display: flex;
   flex-direction: column;
@@ -75,7 +76,7 @@ const Link = styled.a`
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.05);
+    background-color: var(--color-bg-subtle-hover);
   }
 
   &:active {
@@ -109,17 +110,8 @@ const ThumbnailImageWrapper = styled.div`
     position: absolute;
     content: '';
     inset: 0;
+    box-shadow: var(--shadow-border);
     border-radius: var(--border-radius);
-    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
-
-    transition-property: background-color;
-    transition-duration: 0.5s;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  }
-
-  ${Link}:hover &::after,
-  ${Link}:active &::after {
-    background-color: hsla(0 0% 0% / 0.08);
   }
 
   @media (min-width: 640px) {
@@ -138,6 +130,24 @@ const ThumbnailImage = styled(NextImage)`
   ${Link}:hover &,
   ${Link}:active & {
     transform: scale(1.03);
+  }
+`
+
+const ThumbnailImageOverlay = styled.div`
+  position: absolute;
+  content: '';
+  inset: 0;
+  opacity: 0;
+  background: var(--color-overlay);
+  border-radius: var(--border-radius);
+
+  transition-property: opacity;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+
+  ${Link}:hover &,
+  ${Link}:active & {
+    opacity: 1;
   }
 `
 
@@ -173,34 +183,34 @@ const Title = styled.h2`
   font-weight: 550;
   font-size: 22px;
   letter-spacing: 0.01em;
-  color: hsla(0 0% 0% / 0.8);
+  color: var(--color-fg-accent);
 
   & > span {
     text-underline-offset: 2px;
     text-decoration-thickness: 2px;
     text-decoration-line: underline;
     text-decoration-style: solid;
-    text-decoration-color: hsla(0 0% 0% / 0.3);
+    text-decoration-color: var(--color-fg-subtle);
   }
 `
 
 const PublicationDate = styled.time`
   font-weight: 550;
   font-size: 14px;
-  color: hsla(0 0% 0% / 0.4);
+  color: var(--color-fg-default);
 `
 
 const GoToIcon = styled(ArrowRightIcon)`
   width: 18px;
   height: 18px;
-  color: hsla(0 0% 0% / 0.15);
+  color: var(--color-fg-subtle);
 
   transition-property: color, transform;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   ${Link}:hover & {
-    color: hsla(0 0% 0% / 0.3);
+    color: var(--color-fg-subtle-hover);
     transform: scale(1.1);
   }
 `

@@ -268,9 +268,9 @@ const Background = styled.div`
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: hsla(0 0% 100% / 0.9);
+  background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: 0 1px hsla(0 0% 0% / 0.05), inset 0 0.5px 0 hsla(0 0% 0% / 0.08);
+  box-shadow: var(--shadow-border-bottom), var(--shadow-border-top-inset);
 
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
@@ -302,7 +302,7 @@ const ProgressBar = styled.div`
   left: 0;
   right: 0;
   height: var(--height);
-  background: hsla(0deg 0% 0% / 0.1);
+  background: var(--color-fg-subtler);
   transform: scaleX(var(--progress));
   transform-origin: left;
   display: none;
@@ -345,12 +345,13 @@ const HomeLink = styled.a`
   line-height: 0;
   font-size: 1.1rem;
   font-weight: 500;
-  color: black;
+  color: var(--color-fg-accent);
 `
 
 const AvatarImage = styled(Image)`
   border-radius: 50%;
   background-color: hsla(0 0% 0% / 0.05);
+  background-color: var(--color-bg-muted);
 `
 
 const BarEnd = styled.div`
@@ -366,6 +367,7 @@ const NavButton = styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 12px;
+  color: var(--color-fg-accent);
 
   transition-property: background-color, transform;
   transition-duration: 0.15s;
@@ -373,7 +375,7 @@ const NavButton = styled.button`
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.03);
+    background-color: var(--color-bg-subtle);
   }
 
   &:active {
@@ -424,7 +426,7 @@ const Link = styled.a`
   font-weight: 500;
   border-radius: 12px;
   padding: 12px 18px;
-  color: hsla(0 0% 0% / 0.4);
+  color: var(--color-fg-default);
 
   transition-property: background-color, transform, color;
   transition-duration: 0.15s;
@@ -432,7 +434,7 @@ const Link = styled.a`
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.03);
+    background-color: var(--color-bg-subtle);
   }
 
   &:active {
@@ -440,7 +442,7 @@ const Link = styled.a`
   }
 
   &.active {
-    color: black;
+    color: var(--color-fg-accent);
   }
 `
 

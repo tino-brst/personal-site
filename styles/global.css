@@ -1,17 +1,51 @@
-/* Themes Custom Props */
+/* Themes Vars */
+
+/* TODO rename subtle to muted & subtler to subtle */
 
 :root {
-  --color-bg: white;
-  --color-fg: black;
-  --color-accent: royalblue;
-  --color-border: whitesmoke;
+  color-scheme: light;
+
+  --color-bg-default: white;
+  --color-bg-muted: hsla(0 0% 0% / 0.05);
+  --color-bg-subtle: hsla(0 0% 0% / 0.03);
+  --color-bg-subtle-hover: hsla(0 0% 0% / 0.06);
+  --color-bg-translucent: hsla(0 0% 99% / 0.95);
+
+  --color-fg-default: hsla(0 0% 0% / 0.4);
+  --color-fg-default-hover: hsla(0 0% 0% / 0.6);
+  --color-fg-subtle: hsla(0 0% 0% / 0.2);
+  --color-fg-subtle-hover: hsla(0 0% 0% / 0.3);
+  --color-fg-subtler: hsla(0 0% 0% / 0.08);
+  --color-fg-accent: black;
+
+  --color-overlay: hsla(0 0% 0% / 0.08);
+
+  --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
+  --shadow-border-bottom: 0 1px hsla(0 0% 0% / 0.05);
+  --shadow-border-top-inset: inset 0 0.5px 0 hsla(0 0% 0% / 0.08);
 }
 
 :root.dark {
-  --color-bg: black;
-  --color-fg: white;
-  --color-accent: hsl(225, 80%, 65%);
-  --color-border: hsl(0, 0%, 20%);
+  color-scheme: dark;
+
+  --color-bg-default: black;
+  --color-bg-muted: hsla(0 0% 100% / 0.12);
+  --color-bg-subtle: hsla(0 0% 100% / 0.15);
+  --color-bg-subtle-hover: hsla(0 0% 100% / 0.18);
+  --color-bg-translucent: hsla(0 0% 12% / 0.8);
+
+  --color-fg-default: hsla(0 0% 100% / 0.5);
+  --color-fg-default-hover: hsla(0 0% 100% / 0.8);
+  --color-fg-subtle: hsla(0 0% 100% / 0.3);
+  --color-fg-subtle-hover: hsla(0 0% 100% / 0.4);
+  --color-fg-subtler: hsla(0 0% 100% / 0.2);
+  --color-fg-accent: white;
+
+  --color-overlay: hsla(0 0% 100% / 0.06);
+
+  --shadow-border: inset 0 0 0 1px hsla(0 0% 100% / 0.08);
+  --shadow-border-bottom: 0 1px hsla(0 0% 100% / 0.08);
+  --shadow-border-top-inset: inset 0 0.5px 0 hsla(0 0% 100% / 0.08);
 }
 
 /* Code Highlighting */
@@ -86,24 +120,20 @@
 /* Globals */
 
 :root {
-  color-scheme: light;
-  background: var(--color-bg);
-  color: var(--color-fg);
+  background: var(--color-bg-default);
+  color: var(--color-fg-default);
+  /* TODO remove magic number */
   scroll-padding-top: calc(70px - 1px);
 }
 
 :root.dark {
-  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  color: hsl(0 0% 40%);
   font-family: 'InterVariable', -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
-
-  /* TODO: enable on dark theme (white on black) */
-  /* -webkit-font-smoothing: antialiased; */
 }
 
 /* Debugging focus outlines */

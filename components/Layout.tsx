@@ -110,7 +110,7 @@ const Footer = styled.footer`
     display: block;
     content: '';
     height: 1px;
-    background-color: hsla(0 0% 0% / 0.08);
+    background-color: var(--color-fg-subtler);
   }
 
   @media (min-width: 640px) {
@@ -137,34 +137,34 @@ const StyledLink = styled.a`
   gap: 4px;
   font-size: 14px;
   font-weight: 450;
-  color: hsla(0 0% 0% / 0.5);
+  color: var(--color-fg-default);
 
   transition-property: color;
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
   &:hover {
-    color: hsla(0 0% 0% / 0.8);
+    color: var(--color-fg-default-hover);
   }
 `
 
 const ExternalLinkIcon = styled(ArrowTopRightIcon)`
   position: relative;
   top: 2px;
-  color: hsla(0 0% 0% / 0.3);
+  color: var(--color-fg-subtle);
 
   transition-property: color;
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
   ${StyledLink}:hover & {
-    color: hsla(0 0% 0% / 0.5);
+    color: var(--color-fg-subtle-hover);
   }
 `
 
 const SignatureLabel = styled.label`
   font-size: 12px;
-  color: hsla(0 0% 0% / 0.2);
+  color: var(--color-fg-subtle);
   font-weight: 500;
   margin-bottom: 12px;
 `
@@ -173,6 +173,7 @@ const SignatureImageWrapper = styled.div`
   position: relative;
   aspect-ratio: 5 / 4;
   height: 90px;
+  color: var(--color-fg-accent);
 `
 
 export { Layout }
