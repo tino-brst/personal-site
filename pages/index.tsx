@@ -66,7 +66,7 @@ const Wrapper = styled.div`
 `
 
 const Title = styled.h1`
-  color: black;
+  color: var(--color-fg-accent);
   font-size: 2.2rem;
   font-weight: 600;
   margin-top: 18px;
@@ -75,13 +75,13 @@ const Title = styled.h1`
 
 const Description = styled.p`
   font-size: 16px;
-  color: hsl(0 0% 50%);
+  color: var(--color-fg-default);
   line-height: 1.5;
   margin-bottom: 32px;
 `
 
 const Heading = styled.h2`
-  color: black;
+  color: var(--color-fg-accent);
   font-size: 1.8rem;
   font-weight: 600;
   margin-top: 48px;
@@ -98,6 +98,7 @@ const GoToLink = styled(Link)`
 `
 
 const GoToIcon = styled(ArrowRightIcon)`
+  color: var(--color-fg-accent);
   width: 20px;
   height: 20px;
 `

@@ -108,7 +108,7 @@ const Highlight = styled.div`
   z-index: -1;
   opacity: 0;
   border-radius: 12px;
-  background-color: hsla(0 0% 0% / 0.03);
+  background-color: var(--color-bg-subtle);
 
   /* transition-property: opacity, transform OR opacity, transform, left, width */
   transition-duration: 0.15s, 0.15s, 0.1s, 0.1s;
@@ -132,7 +132,7 @@ const Link = styled.a`
   font-weight: 500;
   padding-left: 16px;
   padding-right: 16px;
-  color: hsla(0 0% 0% / 0.4);
+  color: var(--color-fg-default);
 
   transition-property: transform, color;
   transition-duration: 0.15s;
@@ -143,7 +143,7 @@ const Link = styled.a`
   }
 
   &.active {
-    color: black;
+    color: var(--color-fg-accent);
   }
 `
 
