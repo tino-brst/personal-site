@@ -1,6 +1,8 @@
 /* Themes Vars */
 
 /* TODO rename subtle to muted & subtler to subtle */
+/* TODO text selection color in light/dark theme  */
+/* TODO disable transitions on theme switching */
 
 :root {
   color-scheme: light;
@@ -9,7 +11,9 @@
   --color-bg-muted: hsla(0 0% 0% / 0.05);
   --color-bg-subtle: hsla(0 0% 0% / 0.03);
   --color-bg-subtle-hover: hsla(0 0% 0% / 0.06);
+  --color-bg-subtler: hsla(0 0% 0% / 0.02);
   --color-bg-translucent: hsla(0 0% 99% / 0.95);
+  --color-bg-emphasis: black;
 
   --color-fg-default: hsla(0 0% 0% / 0.4);
   --color-fg-default-hover: hsla(0 0% 0% / 0.6);
@@ -17,6 +21,9 @@
   --color-fg-subtle-hover: hsla(0 0% 0% / 0.3);
   --color-fg-subtler: hsla(0 0% 0% / 0.08);
   --color-fg-accent: black;
+  --color-fg-accent-secondary: hsla(0 0% 0% / 0.5);
+  --color-fg-emphasis: white;
+  --color-fg-emphasis-subtle: hsl(0 0% 100% / 0.4);
 
   --color-overlay: hsla(0 0% 0% / 0.08);
 
@@ -32,7 +39,9 @@
   --color-bg-muted: hsla(0 0% 100% / 0.12);
   --color-bg-subtle: hsla(0 0% 100% / 0.15);
   --color-bg-subtle-hover: hsla(0 0% 100% / 0.18);
-  --color-bg-translucent: hsla(0 0% 12% / 0.8);
+  --color-bg-subtler: hsla(0 0% 100% / 0.1);
+  --color-bg-translucent: hsla(0 0% 12% / 0.9);
+  --color-bg-emphasis: white;
 
   --color-fg-default: hsla(0 0% 100% / 0.5);
   --color-fg-default-hover: hsla(0 0% 100% / 0.8);
@@ -40,6 +49,9 @@
   --color-fg-subtle-hover: hsla(0 0% 100% / 0.4);
   --color-fg-subtler: hsla(0 0% 100% / 0.2);
   --color-fg-accent: white;
+  --color-fg-accent-secondary: hsla(0 0% 100% / 0.5);
+  --color-fg-emphasis: black;
+  --color-fg-emphasis-subtle: hsl(0 0% 0% / 0.4);
 
   --color-overlay: hsla(0 0% 100% / 0.06);
 

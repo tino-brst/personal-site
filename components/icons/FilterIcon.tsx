@@ -45,18 +45,17 @@ function FilterIcon(props: Props) {
 }
 
 const Root = styled.svg`
-  color: black;
   fill: none;
   stroke-width: 0;
   stroke-linecap: round;
-  stroke: currentColor; // main color
+  stroke: var(--color-fg-accent); // main color
 
   .line {
     stroke-width: 2;
   }
 
   .badge {
-    fill: grey; // secondary color
+    fill: var(--color-fg-accent-secondary); // secondary color
     transform: scale(0);
     transform-origin: ${badgeCenterX}px ${badgeCenterY}px;
 

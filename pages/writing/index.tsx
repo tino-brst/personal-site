@@ -171,7 +171,7 @@ const Wrapper = styled.div`
 `
 
 const Title = styled.h1`
-  color: black;
+  color: var(--color-fg-accent);
   font-size: 2.2rem;
   font-weight: 600;
   margin-top: 18px;
@@ -180,7 +180,7 @@ const Title = styled.h1`
 
 const Description = styled.p`
   font-size: 16px;
-  color: hsl(0 0% 50%);
+  color: var(--color-fg-default);
   line-height: 1.5;
   margin-bottom: 24px;
 `
@@ -207,7 +207,7 @@ const FiltersToggleButton = styled.button`
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.03);
+    background-color: var(--color-bg-subtle);
   }
 
   &:active {
@@ -218,17 +218,21 @@ const FiltersToggleButton = styled.button`
 const ExpandIcon = styled(CaretDownIcon)`
   width: 18px;
   height: 18px;
-  color: black;
+  color: var(--color-fg-default);
 `
 
 const FiltersWrapper = styled.div`
-  --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
+  --transition-duration: 0.3s;
+  --transition-timing-func: cubic-bezier(0.32, 0.08, 0.24, 1);
 
   margin-bottom: 32px;
   visibility: hidden;
 
+  transition-duration: var(--transition-duration);
+  transition-timing-function: var(--transition-timing-function);
+
   &.ready {
-    transition: var(--transition);
+    transition-property: max-height, visibility;
     max-height: 0;
   }
 
@@ -245,16 +249,17 @@ const Filters = styled.div`
 const FiltersTitle = styled.h3`
   font-size: 12px;
   width: fit-content;
-  color: hsla(0 0% 0% / 0.4);
   font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   margin-bottom: 16px;
-
+  color: var(--color-fg-default);
   opacity: 0;
   transform: translateY(2px);
 
-  transition: var(--transition);
+  transition-property: opacity, transform;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: var(--transition-timing-function);
 
   ${FiltersWrapper}.open & {
     opacity: 1;
@@ -270,7 +275,9 @@ const Tags = styled.ol`
   opacity: 0;
   transform: translateY(6px);
 
-  transition: var(--transition);
+  transition-property: opacity, transform;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: var(--transition-timing-function);
 
   ${FiltersWrapper}.open & {
     opacity: 1;
@@ -281,13 +288,13 @@ const Tags = styled.ol`
 const Tag = styled.label`
   --border-radius: 8px;
   position: relative;
-  color: black;
+  color: var(--color-fg-accent);
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 14px;
   font-weight: 500;
-  background-color: hsla(0 0% 0% / 0.03);
+  background-color: var(--color-bg-subtle);
   border-radius: var(--border-radius);
   padding: 6px 10px;
 
@@ -296,13 +303,13 @@ const Tag = styled.label`
   transition-timing-function: ease-in-out;
 
   &.checked {
-    background-color: hsl(0 0% 10%);
-    color: hsla(0 0% 100% / 0.95);
+    background-color: var(--color-bg-emphasis);
+    color: var(--color-fg-emphasis);
   }
 
   &.disabled {
-    background-color: hsla(0 0% 0% / 0.02);
-    color: hsla(0 0% 0% / 0.3);
+    background-color: var(--color-bg-subtler);
+    color: var(--color-fg-default);
   }
 
   &:not(.disabled) {
@@ -311,7 +318,7 @@ const Tag = styled.label`
 
   &:not(.checked, .disabled):hover,
   &:not(.checked, .disabled):active {
-    background-color: hsla(0 0% 0% / 0.06);
+    background-color: var(--color-bg-subtle-hover);
   }
 
   &:not(.disabled):active {
@@ -326,7 +333,7 @@ const TagInput = styled.input`
 `
 
 const TagIcon = styled.span`
-  color: hsl(0 0% 0% / 0.3);
+  color: var(--color-fg-subtle);
   transform: scale(1.2);
   font-weight: 400;
   pointer-events: none;
@@ -336,11 +343,11 @@ const TagIcon = styled.span`
   transition-timing-function: ease-in-out;
 
   ${Tag}.checked & {
-    color: hsl(0 0% 100% / 0.4);
+    color: var(--color-fg-emphasis-subtle);
   }
 
   ${Tag}.disabled & {
-    color: hsl(0 0% 0% / 0.1);
+    color: var(--color-fg-subtler);
   }
 `
 
