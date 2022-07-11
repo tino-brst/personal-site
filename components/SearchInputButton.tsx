@@ -103,8 +103,8 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex: 0 1 var(--default-width);
-  background-color: hsla(0 0% 0% / 0.03);
   border-radius: var(--border-radius);
+  background-color: var(--color-bg-subtle);
   will-change: flex-grow;
 
   transition: var(--transition);
@@ -118,7 +118,7 @@ const Wrapper = styled.div`
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.06);
+    background-color: var(--color-bg-subtle-hover);
   }
 
   &:not(.open):active {
@@ -139,12 +139,12 @@ const Placeholder = styled.div`
 const SearchIcon = styled(MagnifyingGlassIcon)`
   width: var(--icon-size);
   height: var(--icon-size);
-  color: black;
+  color: var(--color-fg-accent);
 
   transition: var(--transition);
 
   ${Wrapper}.open & {
-    color: hsla(0 0% 0% / 0.5);
+    opacity: 0.5;
   }
 `
 
@@ -158,7 +158,7 @@ const CancelButton = styled.button`
   cursor: pointer;
   opacity: 0;
   font-weight: 500;
-  color: black;
+  color: var(--color-fg-accent);
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
   border-top-right-radius: var(--border-radius);
@@ -184,12 +184,12 @@ const sharedInputButtonStyle = css`
 `
 
 const defaultTextStyle = css`
-  color: black;
+  color: var(--color-fg-accent);
   font-weight: var(--starting-font-weight);
 `
 
 const openTextStyle = css`
-  color: hsla(0 0% 0% / 0.3);
+  color: var(--color-fg-default);
   font-weight: 400;
 `
 
@@ -197,7 +197,7 @@ const Input = styled.input`
   ${sharedInputButtonStyle}
   min-width: 0;
   opacity: 0;
-  color: black;
+  color: var(--color-fg-accent);
 
   transition: var(--transition);
 
