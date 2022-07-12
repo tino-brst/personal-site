@@ -350,7 +350,6 @@ const HomeLink = styled.a`
 
 const AvatarImage = styled(Image)`
   border-radius: 50%;
-  background-color: hsla(0 0% 0% / 0.05);
   background-color: var(--color-bg-muted);
 `
 

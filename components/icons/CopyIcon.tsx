@@ -48,7 +48,7 @@ function CopyIcon(props: Props) {
 }
 
 const Root = styled.svg`
-  color: black;
+  color: currentColor;
   stroke-width: 0;
   fill: currentColor;
 

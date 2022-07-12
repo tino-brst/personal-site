@@ -276,17 +276,7 @@ const HeaderImageOverlay = styled.div`
   position: absolute;
   inset: 0;
   top: ${barHeight}px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.48) 40%,
-    rgba(255, 255, 255, 0.7) 60%,
-    rgba(255, 255, 255, 0.78) 70%,
-    rgba(255, 255, 255, 0.83) 75%,
-    rgba(255, 255, 255, 0.88) 80%,
-    rgba(255, 255, 255, 0.95) 90%,
-    rgba(255, 255, 255, 1) 100%
-  );
+  background: var(--gradient-header-image);
 `
 
 const Aside = styled.aside`
@@ -337,7 +327,7 @@ const Header = styled.header`
     display: block;
     content: '';
     height: 1px;
-    background-color: hsla(0 0% 0% / 0.05);
+    background-color: var(--color-border);
   }
 
   @media (min-width: 640px) {
@@ -358,7 +348,7 @@ const Info = styled.div`
   gap: 24px;
   font-size: 14px;
   font-weight: 550;
-  color: hsla(0 0% 40% / 0.9);
+  color: var(--color-fg-contrast);
 `
 
 const InfoItem = styled.div`
@@ -368,7 +358,7 @@ const InfoItem = styled.div`
 `
 
 const Title = styled.h1`
-  color: black;
+  color: var(--color-fg-accent);
   font-size: 2.2rem;
   font-weight: 600;
   margin-top: 18px;
@@ -423,8 +413,9 @@ const Tag = styled.a`
   gap: 0.4ch;
   font-size: 14px;
   font-weight: 500;
-  color: hsl(0 0% 0% / 0.7);
-  background-color: hsla(0 0% 0% / 0.03);
+  color: var(--color-fg-tag);
+  background-color: var(--color-bg-tag);
+
   backdrop-filter: saturate(180%) blur(10px);
   border-radius: 8px;
   padding: 6px 10px;
@@ -439,17 +430,16 @@ const Tag = styled.a`
   }
 
   &:hover {
-    background-color: hsla(0 0% 0% / 0.06);
+    background-color: var(--color-bg-tag-hover);
   }
 
   &:active {
-    background-color: hsla(0 0% 0% / 0.08);
     transform: scale(0.95);
   }
 `
 
 const TagIcon = styled.span`
-  color: hsl(0 0% 0% / 0.3);
+  color: var(--color-fg-subtle);
 `
 
 const FloatingStuff = styled.div`
@@ -482,7 +472,7 @@ const ButtonGroup = styled.div`
   --divider-width: 1px;
 
   pointer-events: auto;
-  color: black;
+  color: var(--color-fg-accent);
   z-index: 1;
   overflow: hidden;
   flex-shrink: 0;
@@ -491,10 +481,10 @@ const ButtonGroup = styled.div`
   display: flex;
   justify-content: right;
   border-radius: 12px;
-  background: hsla(0 0% 99% / 0.9);
+  background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
-    0px 0px 0px 1px rgba(0, 0, 0, 0.05);
+    0px 0px 0px 1px rgba(0, 0, 0, 0.05), var(--shadow-border-inset-dark);
   max-width: var(--button-width);
 
   transition-property: max-width;
@@ -509,7 +499,7 @@ const ButtonGroup = styled.div`
 const ButtonGroupDivider = styled.div`
   flex: 0 0 var(--divider-width);
   height: 100%;
-  background-color: hsla(0 0% 0% / 0.05);
+  background-color: var(--color-border);
   opacity: 0;
 
   transition-property: opacity;
@@ -532,7 +522,7 @@ const ButtonBackground = styled.div`
   transition-timing-function: ease-in-out;
 
   &:hover {
-    background-color: hsla(0 0% 0% / 0.03);
+    background-color: var(--color-bg-subtle);
   }
 `
 
@@ -585,7 +575,7 @@ const ViewCount = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-top: 32px;
-  color: hsla(0 0% 0% / 0.2);
+  color: var(--color-fg-subtle);
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
@@ -595,7 +585,7 @@ const Thanks = styled.div`
   padding: 24px;
   padding-top: 28px;
   border-radius: 16px;
-  background-color: hsla(0 0% 0% / 0.03);
+  background-color: var(--color-bg-subtle);
   margin-top: 32px;
 
   @media (min-width: 640px) {
@@ -609,7 +599,7 @@ const ThanksTitle = styled.h2`
   text-align: center;
   font-size: 20px;
   font-weight: 550;
-  color: hsla(0 0% 0% / 0.8);
+  color: var(--color-fg-accent-muted);
 `
 
 const ThanksDescription = styled.p`
@@ -618,23 +608,23 @@ const ThanksDescription = styled.p`
   font-size: 16px;
   font-weight: 450;
   line-height: 1.5;
-  color: hsla(0 0% 0% / 0.5);
+  color: var(--color-fg-default);
 
   & a {
-    color: hsla(0 0% 0% / 0.6);
+    color: var(--color-link);
     font-weight: 500;
     text-decoration-line: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 1px;
-    text-decoration-color: hsla(0 0% 0% / 0.1);
+    text-decoration-color: var(--color-link-decoration);
 
     transition-property: text-decoration-color, color;
     transition-duration: 0.15s;
   }
 
   & a:hover {
-    color: hsla(0 0% 0% / 0.7);
-    text-decoration-color: hsla(0 0% 0% / 0.2);
+    color: var(--color-link-hover);
+    text-decoration-color: var(--color-link-decoration-hover);
   }
   @media (min-width: 640px) {
     font-weight: 400;
@@ -662,14 +652,14 @@ const LikeButton = styled.button`
 `
 
 const LikeButtonIcon = styled(HeartFilledIcon)`
-  color: hsla(0 0% 0% / 0.2);
+  color: var(--color-fg-subtle);
   width: 24px;
   height: 24px;
 
   transition: color 0.15s;
 
   &.liked {
-    color: hsla(0 0% 0% / 0.8);
+    color: var(--color-fg-accent-muted);
   }
 `
 
@@ -679,7 +669,7 @@ const EditOnGitHub = styled.div`
   flex-direction: column;
   gap: 12px;
   align-items: center;
-  color: hsla(0 0% 0% / 0.4);
+  color: var(--color-fg-default);
   font-size: 14px;
   font-weight: 500;
 `

@@ -13,23 +13,53 @@
   --color-bg-subtle-hover: hsla(0 0% 0% / 0.06);
   --color-bg-subtler: hsla(0 0% 0% / 0.02);
   --color-bg-translucent: hsla(0 0% 99% / 0.95);
+  --color-bg-translucent-hover: hsla(0 0% 99% / 0.95);
   --color-bg-emphasis: black;
+  --color-bg-tag: hsla(0 0% 0% / 0.03);
+  --color-bg-tag-hover: hsla(0 0% 0% / 0.06);
 
   --color-fg-default: hsla(0 0% 0% / 0.4);
+  --color-fg-prose: hsla(0 0% 0% / 0.6);
   --color-fg-default-hover: hsla(0 0% 0% / 0.6);
   --color-fg-subtle: hsla(0 0% 0% / 0.2);
   --color-fg-subtle-hover: hsla(0 0% 0% / 0.3);
   --color-fg-subtler: hsla(0 0% 0% / 0.08);
   --color-fg-accent: black;
+  --color-fg-accent-muted: hsla(0 0% 0% / 0.7);
   --color-fg-accent-secondary: hsla(0 0% 0% / 0.5);
   --color-fg-emphasis: white;
   --color-fg-emphasis-subtle: hsl(0 0% 100% / 0.4);
+  --color-fg-contrast: hsla(0 0% 40% / 0.9);
+  --color-fg-tag: hsl(0 0% 0% / 0.7);
 
+  --color-border: hsla(0 0% 0% / 0.07);
   --color-overlay: hsla(0 0% 0% / 0.08);
+  --color-link: hsla(0 0% 0% / 0.6);
+  --color-link-hover: hsla(0 0% 0% / 0.7);
+  --color-link-decoration: hsla(0 0% 0% / 0.1);
+  --color-link-decoration-hover: hsla(0 0% 0% / 0.2);
+  --color-bg-toc-header: hsla(0 0% 100% / 0.7);
+  --color-bg-code-highlight: hsla(0 0% 0% / 0.03);
+  --color-border-code: hsla(0 0% 0% / 0.03);
+  --color-border-image: hsla(0 0% 0% / 0.05);
 
-  --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
+  --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
+  --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 0% / 0.08);
+  --shadow-border-inset-dark: inset 0 0 0 0 hsla(0 0% 0% / 0);
   --shadow-border-bottom: 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-top-inset: inset 0 0.5px 0 hsla(0 0% 0% / 0.08);
+
+  --gradient-header-image: linear-gradient(
+    180deg,
+    hsla(0, 0%, 100%, 0) 0%,
+    hsla(0, 0%, 100%, 0.48) 40%,
+    hsla(0, 0%, 100%, 0.7) 60%,
+    hsla(0, 0%, 100%, 0.78) 70%,
+    hsla(0, 0%, 100%, 0.83) 75%,
+    hsla(0, 0%, 100%, 0.88) 80%,
+    hsla(0, 0%, 100%, 0.95) 90%,
+    hsl(0, 0%, 100%) 100%
+  );
 }
 
 :root.dark {
@@ -37,27 +67,57 @@
 
   --color-bg-default: black;
   --color-bg-muted: hsla(0 0% 100% / 0.12);
-  --color-bg-subtle: hsla(0 0% 100% / 0.15);
-  --color-bg-subtle-hover: hsla(0 0% 100% / 0.18);
+  --color-bg-subtle: hsla(0 0% 100% / 0.12);
+  --color-bg-subtle-hover: hsla(0 0% 100% / 0.15);
   --color-bg-subtler: hsla(0 0% 100% / 0.1);
-  --color-bg-translucent: hsla(0 0% 12% / 0.9);
+  --color-bg-translucent: hsla(0 0% 15% / 0.9);
+  --color-bg-translucent-hover: hsla(0 0% 18% / 0.9);
   --color-bg-emphasis: white;
+  --color-bg-tag: hsla(0 0% 100% / 0.12);
+  --color-bg-tag-hover: hsla(0 0% 100% / 0.15);
 
   --color-fg-default: hsla(0 0% 100% / 0.5);
+  --color-fg-prose: hsla(0 0% 100% / 0.7);
   --color-fg-default-hover: hsla(0 0% 100% / 0.8);
   --color-fg-subtle: hsla(0 0% 100% / 0.3);
   --color-fg-subtle-hover: hsla(0 0% 100% / 0.4);
   --color-fg-subtler: hsla(0 0% 100% / 0.2);
   --color-fg-accent: white;
+  --color-fg-accent-muted: hsla(0 0% 100% / 0.85);
   --color-fg-accent-secondary: hsla(0 0% 100% / 0.5);
   --color-fg-emphasis: black;
   --color-fg-emphasis-subtle: hsl(0 0% 0% / 0.4);
+  --color-fg-contrast: hsla(0 0% 60% / 0.9);
+  --color-fg-tag: hsl(0 0% 100% / 0.7);
 
+  --color-border: hsla(0 0% 100% / 0.12);
   --color-overlay: hsla(0 0% 100% / 0.06);
+  --color-link: hsla(0 0% 100% / 0.7);
+  --color-link-hover: hsla(0 0% 100% / 0.8);
+  --color-link-decoration: hsla(0 0% 100% / 0.2);
+  --color-link-decoration-hover: hsla(0 0% 100% / 0.3);
+  --color-bg-toc-header: hsla(0 0% 100% / 0.05);
+  --color-bg-code-highlight: hsla(0 0% 100% / 0.1);
+  --color-border-code: hsla(0 0% 100% / 0.08);
+  --color-border-image: hsla(0 0% 100% / 0.08);
 
-  --shadow-border: inset 0 0 0 1px hsla(0 0% 100% / 0.08);
+  --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
+  --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 100% / 0.08);
+  --shadow-border-inset-dark: inset 0 0 0 1px hsla(0 0% 100% / 0.08);
   --shadow-border-bottom: 0 1px hsla(0 0% 100% / 0.08);
   --shadow-border-top-inset: inset 0 0.5px 0 hsla(0 0% 100% / 0.08);
+
+  --gradient-header-image: linear-gradient(
+    180deg,
+    hsla(0, 0%, 0%, 0) 0%,
+    hsla(0, 0%, 0%, 0.48) 40%,
+    hsla(0, 0%, 0%, 0.7) 60%,
+    hsla(0, 0%, 0%, 0.78) 70%,
+    hsla(0, 0%, 0%, 0.83) 75%,
+    hsla(0, 0%, 0%, 0.88) 80%,
+    hsla(0, 0%, 0%, 0.95) 90%,
+    hsl(0, 0%, 0%) 100%
+  );
 }
 
 /* Code Highlighting */

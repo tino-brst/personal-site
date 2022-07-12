@@ -110,7 +110,7 @@ const Footer = styled.footer`
     display: block;
     content: '';
     height: 1px;
-    background-color: var(--color-fg-subtler);
+    background-color: var(--color-border);
   }
 
   @media (min-width: 640px) {

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 const Paragraph = styled.p`
+  color: var(--color-fg-prose);
   line-height: 1.5em;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -17,7 +18,7 @@ const Paragraph = styled.p`
     line-height: 0.9em;
     margin-right: 8px;
     margin-top: 5px;
-    color: black;
+    color: var(--color-fg-accent);
   }
 `
 

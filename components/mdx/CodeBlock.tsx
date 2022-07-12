@@ -53,8 +53,8 @@ const Wrapper = styled.div`
   margin-top: 24px;
   margin-bottom: 24px;
   overflow: hidden;
-  box-shadow: inset 0 -0.5px 0 hsla(0 0% 0% / 0.03),
-    inset 0 0.5px 0 hsla(0 0% 0% / 0.03);
+  box-shadow: inset 0 -0.5px 0 var(--color-border-code),
+    inset 0 0.5px 0 var(--color-border-code);
 
   @media (min-width: 640px) {
     --copy-button-inset-x: 20px;
@@ -63,13 +63,14 @@ const Wrapper = styled.div`
     margin-left: 0;
     margin-right: 0;
     border-radius: 10px;
-    box-shadow: inset 0 0 0 0.5px hsla(0 0% 0% / 0.03);
+    box-shadow: inset 0 0 0 0.5px var(--color-border-code);
   }
 `
 
 const Pre = styled.pre`
+  color: var(--color-fg-accent-muted);
   line-height: 1.5;
-  background-color: hsla(0 0% 0% / 0.02);
+  background-color: var(--color-bg-subtler);
   padding-top: 20px;
   padding-bottom: 20px;
   white-space: pre;
@@ -88,7 +89,7 @@ const Pre = styled.pre`
   }
 
   & .line.highlight {
-    background-color: hsla(0 0% 0% / 0.03);
+    background-color: var(--color-bg-code-highlight);
   }
 `
 
@@ -99,16 +100,16 @@ const CopyButton = styled.button`
   width: var(--copy-button-size);
   height: var(--copy-button-size);
   cursor: pointer;
-  background-color: hsla(0 0% 98%);
+  background-color: var(--color-bg-translucent);
   border-radius: 8px;
-  box-shadow: 0 0 0 1px hsl(0deg 0% 0% / 6%),
-    0 2px 11px 3px hsl(0deg 0% 0% / 2%);
+  box-shadow: 0 0 0 1px hsl(0deg 0% 0% / 0.2),
+    0 2px 11px 3px hsl(0deg 0% 0% / 2%), var(--shadow-border-inset-dark);
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    background-color: hsla(0 0% 96%);
+    background-color: var(--color-bg-translucent-hover);
   }
 
   transition-property: background-color, opacity, transform;
@@ -133,6 +134,7 @@ const IconWrapper = styled.div`
   align-items: center;
   justify-content: center;
   will-change: transform;
+  color: var(--color-fg-accent);
 `
 
 const CopyIconWrapper = styled(IconWrapper)`

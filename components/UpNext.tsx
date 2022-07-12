@@ -31,6 +31,7 @@ function UpNext(props: Props) {
                       objectFit="cover"
                     />
                   )}
+                  <ArticleImageOverlay />
                 </ArticleImageWrapper>
                 <ArticleInfo>
                   <ArticleTitle>{props.newerArticle.title}</ArticleTitle>
@@ -52,6 +53,7 @@ function UpNext(props: Props) {
                       objectFit="cover"
                     />
                   )}
+                  <ArticleImageOverlay />
                 </ArticleImageWrapper>
                 <ArticleInfo>
                   <ArticleTitle>{props.olderArticle.title}</ArticleTitle>
@@ -93,7 +95,7 @@ const Wrapper = styled.section`
     display: block;
     content: '';
     height: 1px;
-    background-color: hsla(0 0% 0% / 0.08);
+    background-color: var(--color-border);
   }
 
   @media (min-width: 640px) {
@@ -128,7 +130,7 @@ const ArticleLink = styled.a`
 
   height: 100%;
   border-radius: 16px;
-  background-color: hsla(0 0% 0% / 0.03);
+  background-color: var(--color-bg-subtle);
 
   display: flex;
   padding: var(--padding);
@@ -141,7 +143,7 @@ const ArticleLink = styled.a`
   /* TODO: all hover states should also be applied while active, like below */
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.05);
+    background-color: var(--color-bg-subtle-hover);
   }
 
   &:active {
@@ -160,6 +162,7 @@ const ArticleImageWrapper = styled.div`
   aspect-ratio: 4 / 3;
   flex: 1 1 0;
   border-radius: var(--border-radius);
+  box-shadow: var(--shadow-border-inset);
   overflow: hidden;
 
   /* Fixes corner overflow on image scale transition */
@@ -169,22 +172,11 @@ const ArticleImageWrapper = styled.div`
     position: absolute;
     content: '';
     inset: 0;
+    box-shadow: var(--shadow-border-inset);
     border-radius: var(--border-radius);
-    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.1);
-
-    transition-property: background-color;
-    transition-duration: 0.5s;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  }
-
-  ${ArticleLink}:hover &::after,
-  ${ArticleLink}:active &::after {
-    background-color: hsla(0 0% 0% / 0.08);
   }
 
   @media (min-width: 640px) {
-    --border-radius: 6px;
-
     aspect-ratio: 2 / 1;
     flex: 0 0 auto;
   }
@@ -198,6 +190,24 @@ const ArticleImage = styled(NextImage)`
   ${ArticleLink}:hover &,
   ${ArticleLink}:active & {
     transform: scale(1.03);
+  }
+`
+
+const ArticleImageOverlay = styled.div`
+  position: absolute;
+  content: '';
+  inset: 0;
+  opacity: 0;
+  border-radius: var(--border-radius);
+  background: var(--color-overlay);
+
+  transition-property: opacity;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+
+  ${ArticleLink}:hover &,
+  ${ArticleLink}:active & {
+    opacity: 1;
   }
 `
 
@@ -229,7 +239,7 @@ const ArticleTitle = styled.h2`
   font-size: 16px;
   letter-spacing: 0.01em;
   line-height: 1.3em;
-  color: hsla(0 0% 0% / 0.8);
+  color: var(--color-fg-accent);
 
   @media (min-width: 640px) {
     font-size: 18px;
@@ -240,7 +250,7 @@ const ArticleLabel = styled.div`
   font-weight: 550;
   font-size: 14px;
   letter-spacing: 0.01em;
-  color: hsla(0 0% 0% / 0.4);
+  color: var(--color-fg-default);
   line-height: 1;
 
   display: flex;

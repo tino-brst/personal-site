@@ -1,7 +1,7 @@
+import { Link2Icon } from '@radix-ui/react-icons'
+import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
 import styled, { css, StyledComponent } from 'styled-components'
-import { useTableOfContents } from 'contexts/table-of-contents'
-import { Link2Icon } from '@radix-ui/react-icons'
 
 type Props = {
   level: 2 | 3 | 4
@@ -60,12 +60,12 @@ function Heading4(props: Omit<Props, 'level'>) {
 
 const Icon = styled(Link2Icon)`
   margin-left: 0.5ch;
-  color: hsla(0 0% 0% / 0.5);
+  color: var(--color-fg-default);
   will-change: transform;
 `
 
 const sharedStyles = css`
-  color: black;
+  color: var(--color-fg-accent);
   font-weight: 600;
   margin-bottom: 20px;
   margin-top: var(--margin-top);
