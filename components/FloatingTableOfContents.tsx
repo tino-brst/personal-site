@@ -91,10 +91,10 @@ const Wrapper = styled.div`
   overflow: hidden;
   max-height: 304px;
   border-radius: 14px;
-  background: hsla(0 0% 98% / 0.9);
+  background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
-    0px 0px 0px 1px rgba(0, 0, 0, 0.05);
+    var(--shadow-border), var(--shadow-border-inset-dark);
 
   transition-property: opacity, transform, visibility;
   transition-duration: 0.2s;
@@ -112,9 +112,9 @@ const Header = styled.header`
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: hsla(0 0% 100% / 0.7);
-  box-shadow: 0 1px hsla(0 0% 0% / 0.05);
-  color: hsla(0 0% 0% / 0.3);
+  background: var(--color-bg-toc-header);
+  box-shadow: var(--shadow-border-bottom);
+  color: var(--color-fg-subtle);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-size: 12px;
@@ -135,7 +135,7 @@ const Link = styled.a`
   display: flex;
   align-items: center;
   gap: 6px;
-  color: hsla(0 0% 0% / 0.5);
+  color: var(--color-fg-default);
   font-size: 16px;
   font-weight: 400;
   padding: 8px;
@@ -148,7 +148,7 @@ const Link = styled.a`
 
   &:hover,
   &:active {
-    background-color: hsla(0 0% 0% / 0.04);
+    background-color: var(--color-bg-subtle);
   }
 
   &:active {
@@ -157,7 +157,7 @@ const Link = styled.a`
 
   &.active,
   &.activeAncestor {
-    color: hsla(0 0% 0% / 0.8);
+    color: var(--color-fg-accent);
   }
 
   &.topLevel {

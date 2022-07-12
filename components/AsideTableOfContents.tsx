@@ -63,7 +63,7 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   gap: 10px;
-  color: hsla(0 0% 0% / 0.3);
+  color: var(--color-fg-subtle);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -87,15 +87,15 @@ const Link = styled.a`
   display: flex;
   align-items: center;
   gap: 6px;
-  color: hsla(0 0% 0% / 0.5);
+  color: var(--color-fg-default);
   font-size: 14px;
   font-weight: 400;
   line-height: 1.6;
   margin-left: calc(12px * var(--level));
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 
-  transition-property: color;
+  transition-property: color, font-weight;
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
@@ -103,21 +103,22 @@ const Link = styled.a`
     font-weight: 500;
   }
 
-  &.active,
-  &.activeAncestor {
-    color: hsla(0 0% 0% / 0.8);
+  &.active {
+    font-weight: 500;
   }
 
   &:hover,
-  &:active {
-    color: black;
+  &:active,
+  &.active,
+  &.activeAncestor {
+    color: var(--color-fg-accent-muted);
   }
 `
 
 const ActiveListItemIcon = styled(ChevronLeftIcon)`
   width: 14px;
   height: 14px;
-  color: black;
+  color: var(--color-fg-accent);
   opacity: 0;
   transform: scale(0.5) translateX(-4px);
 

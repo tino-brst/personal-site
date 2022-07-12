@@ -1,6 +1,5 @@
 import { Parallax } from '@components/Parallax'
 import NextImage from 'next/image'
-import * as React from 'react'
 import styled from 'styled-components'
 
 type Props = {
@@ -34,13 +33,13 @@ const Wrapper = styled.div`
   margin-top: 24px;
   margin-bottom: 24px;
   overflow: hidden;
-  box-shadow: inset 0 -1px 0 hsla(0 0% 0% / 0.05),
-    inset 0 1px 0 hsla(0 0% 0% / 0.05);
+  box-shadow: inset 0 -1px 0 var(--color-border-image),
+    inset 0 1px 0 var(--color-border-image);
 
   @media (min-width: 640px) {
     margin-left: 0;
     margin-right: 0;
-    box-shadow: inset 0 0 0 1px hsla(0 0% 0% / 0.05);
+    box-shadow: inset 0 0 0 1px var(--color-border-image);
     border-radius: var(--border-radius);
   }
 `

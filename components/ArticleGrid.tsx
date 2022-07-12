@@ -110,7 +110,7 @@ const ThumbnailImageWrapper = styled.div`
     position: absolute;
     content: '';
     inset: 0;
-    box-shadow: var(--shadow-border);
+    box-shadow: var(--shadow-border-inset);
     border-radius: var(--border-radius);
   }
 

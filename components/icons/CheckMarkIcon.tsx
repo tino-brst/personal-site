@@ -20,7 +20,7 @@ function CheckMarkIcon(props: Props) {
 }
 
 const Root = styled.svg`
-  color: black;
+  color: currentColor;
   fill: none;
 
   stroke-width: 2px;
