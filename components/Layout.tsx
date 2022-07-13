@@ -1,12 +1,12 @@
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import { useNavBar } from 'contexts/nav-bar'
-import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import styled from 'styled-components'
 import { NavBar } from './NavBar'
+import { Signature } from './Signature'
 
 type Props = {
   children?: React.ReactNode
@@ -43,12 +43,7 @@ function Layout(props: Props) {
         </LinksWrapper>
         <SignatureLabel>made with care by</SignatureLabel>
         <SignatureImageWrapper>
-          <NextImage
-            priority
-            src="/images/signature.svg"
-            layout="fill"
-            objectFit="cover"
-          />
+          <Signature />
         </SignatureImageWrapper>
       </Footer>
     </Wrapper>
