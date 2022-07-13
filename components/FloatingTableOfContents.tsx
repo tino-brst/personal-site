@@ -94,7 +94,8 @@ const Wrapper = styled.div`
   background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
-    var(--shadow-border), var(--shadow-border-inset-dark);
+    0 0 0 1px var(--color-shadow-border),
+    inset 0 0 0 1px var(--color-shadow-border-contrast);
 
   transition-property: opacity, transform, visibility;
   transition-duration: 0.2s;
@@ -113,7 +114,8 @@ const Header = styled.header`
   gap: 10px;
   padding: 12px 16px;
   background: var(--color-bg-toc-header);
-  box-shadow: var(--shadow-border-bottom);
+  box-shadow: 0 1px var(--color-shadow-border-subtle),
+    inset 0 -0.5px 0 var(--color-shadow-border-contrast);
   color: var(--color-fg-subtle);
   letter-spacing: 0.05em;
   text-transform: uppercase;

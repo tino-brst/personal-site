@@ -33,13 +33,15 @@ const Wrapper = styled.div`
   margin-top: 24px;
   margin-bottom: 24px;
   overflow: hidden;
-  box-shadow: inset 0 -1px 0 var(--color-border-image),
-    inset 0 1px 0 var(--color-border-image);
+  box-shadow: inset 0 -1px 0 var(--color-shadow-border-subtle),
+    inset 0 1px 0 var(--color-shadow-border-subtle),
+    0 1px var(--color-shadow-border-contrast);
 
   @media (min-width: 640px) {
     margin-left: 0;
     margin-right: 0;
-    box-shadow: inset 0 0 0 1px var(--color-border-image);
+    box-shadow: inset 0 0 0 1px var(--color-shadow-border),
+      0 0 0 1px var(--color-shadow-border-contrast);
     border-radius: var(--border-radius);
   }
 `
