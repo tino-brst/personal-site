@@ -102,8 +102,9 @@ const CopyButton = styled.button`
   cursor: pointer;
   background-color: var(--color-bg-translucent);
   border-radius: 8px;
-  box-shadow: 0 0 0 1px hsl(0deg 0% 0% / 0.2),
-    0 2px 11px 3px hsl(0deg 0% 0% / 2%), var(--shadow-border-inset-dark);
+  box-shadow: 0 2px 11px 3px hsl(0 0% 0% / 0.02),
+    0 0 0 1px var(--color-shadow-border),
+    inset 0 0 0 1px var(--color-shadow-border-contrast);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -484,7 +484,8 @@ const ButtonGroup = styled.div`
   background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
-    0px 0px 0px 1px rgba(0, 0, 0, 0.05), var(--shadow-border-inset-dark);
+    0 0 0 1px var(--color-shadow-border),
+    inset 0 0 0 1px var(--color-shadow-border-contrast);
   max-width: var(--button-width);
 
   transition-property: max-width;

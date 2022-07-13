@@ -270,7 +270,9 @@ const Background = styled.div`
   inset: 0;
   background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: var(--shadow-border-bottom), var(--shadow-border-top-inset);
+  box-shadow: 0 1px var(--color-shadow-border),
+    inset 0 -0.5px 0 var(--color-shadow-border-contrast),
+    inset 0 0.5px 0 var(--color-border-top-navbar);
 
   transition-property: none;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
