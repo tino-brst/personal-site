@@ -1,3 +1,4 @@
+import { useIsInView } from '@hooks/useIsInView'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import { useNavBar } from 'contexts/nav-bar'
@@ -24,6 +25,9 @@ function Layout(props: Props) {
     navBar.setIsAlwaysOpaque(isArticlePage)
   }, [navBar, router.pathname])
 
+  const signatureRef = React.useRef<SVGSVGElement>(null)
+  const isSignatureInView = useIsInView(signatureRef)
+
   return (
     <Wrapper>
       <NavBar />
@@ -42,9 +46,9 @@ function Layout(props: Props) {
           <Link href="mailto:tinos.corner@icloud.com">Email</Link>
         </LinksWrapper>
         <SignatureLabel>made with care by</SignatureLabel>
-        <SignatureImageWrapper>
-          <Signature />
-        </SignatureImageWrapper>
+        <SignatureWrapper>
+          <Signature isDrawn={isSignatureInView} ref={signatureRef} />
+        </SignatureWrapper>
       </Footer>
     </Wrapper>
   )
@@ -164,10 +168,10 @@ const SignatureLabel = styled.label`
   margin-bottom: 12px;
 `
 
-const SignatureImageWrapper = styled.div`
+const SignatureWrapper = styled.div`
   position: relative;
   aspect-ratio: 5 / 4;
-  height: 90px;
+  height: 100px;
   color: var(--color-fg-accent);
 `
 
