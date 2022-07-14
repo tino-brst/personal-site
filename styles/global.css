@@ -1,4 +1,4 @@
-/* Themes Vars */
+/* Theme vars */
 
 /* TODO rename subtle to muted & subtler to subtle */
 /* TODO text selection color in light/dark theme  */
@@ -191,14 +191,10 @@
   --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
 }
 
-/* Theme-specific Tweaks */
+/* Theme-specific tweaks */
 
 :root {
   color-scheme: light;
-  background: var(--color-bg-default);
-  color: var(--color-fg-default);
-  /* TODO remove magic number */
-  scroll-padding-top: calc(70px - 1px);
 }
 
 :root.dark {
@@ -208,10 +204,14 @@
 
 /* Misc */
 
-body {
+:root {
+  background: var(--color-bg-default);
+  color: var(--color-fg-default);
   font-family: 'InterVariable', -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
+  /* TODO remove magic number */
+  scroll-padding-top: calc(70px - 1px);
 }
 
 /* Debugging focus outlines */
