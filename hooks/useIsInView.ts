@@ -19,8 +19,8 @@ type Options = Partial<{
 }>
 
 /**
- * Simply returns a boolean signaling if the given element is in view or not.
- * With the same (almost) options as an `IntersectionObserver`.
+ * Simply returns a boolean signaling if the given element is in view or not,
+ * configurable via threshold and margin values, ala `IntersectionObserver`.
  */
 function useIsInView(
   ref: React.RefObject<Element>,
