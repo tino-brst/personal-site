@@ -129,7 +129,7 @@ function ArticlePage(props: Props) {
       <Wrapper>
         <HeaderImageWrapper>
           <StyledParallax
-            multiplier={-0.1}
+            multiplier={-0.2}
             getOffset={getOffset}
             // Rerender the component on path changes to avoid keeping its state
             // (i.e. its parallax effect) when going back and forth between
