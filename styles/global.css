@@ -212,6 +212,9 @@
     sans-serif;
   /* TODO remove magic number */
   scroll-padding-top: calc(70px - 1px);
+
+  /* Removes the interaction overlays on mobile (light gray in Safari and light blue in Chrome) */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Debugging focus outlines */
