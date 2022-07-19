@@ -1,11 +1,11 @@
 import { useIsInView } from '@hooks/useIsInView'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
-import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import { useNavBar } from 'contexts/nav-bar'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import styled from 'styled-components'
+import { ArrowTopRightIcon } from './icons/ArrowTopRightIcon'
 import { NavBar } from './NavBar'
 import { Signature } from './Signature'
 
@@ -65,7 +65,7 @@ function Link(props: LinkProps) {
     <NextLink href={props.href} passHref>
       <StyledLink target={props.external ? '_blank' : undefined}>
         {props.children}
-        {props.external && <ExternalLinkIcon height={14} width={14} />}
+        {props.external && <ExternalLinkIcon />}
       </StyledLink>
     </NextLink>
   )
@@ -136,11 +136,11 @@ const StyledLink = styled.a`
   gap: 4px;
   font-size: 14px;
   font-weight: 450;
+  line-height: 1;
   color: var(--color-fg-default);
 
   transition-property: color;
   transition-duration: 0.1s;
-  transition-timing-function: ease-in-out;
 
   &:hover {
     color: var(--color-fg-default-hover);
@@ -148,13 +148,10 @@ const StyledLink = styled.a`
 `
 
 const ExternalLinkIcon = styled(ArrowTopRightIcon)`
-  position: relative;
-  top: 2px;
   color: var(--color-fg-subtle);
 
   transition-property: color;
   transition-duration: 0.1s;
-  transition-timing-function: ease-in-out;
 
   ${StyledLink}:hover & {
     color: var(--color-fg-subtle-hover);

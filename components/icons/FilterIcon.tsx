@@ -7,12 +7,13 @@ const badgeCenterY = 5
 
 type Props = {
   hasBadge: boolean
+  className?: string
 }
 
 function FilterIcon(props: Props) {
   return (
     <Root
-      className={clsx({ badgeVisible: props.hasBadge })}
+      className={clsx([props.className, { badgeVisible: props.hasBadge }])}
       width="20"
       height="20"
       viewBox="0 0 20 20"
@@ -48,14 +49,14 @@ const Root = styled.svg`
   fill: none;
   stroke-width: 0;
   stroke-linecap: round;
-  stroke: var(--color-fg-accent); // main color
+  stroke: currentColor;
 
   .line {
     stroke-width: 2;
   }
 
   .badge {
-    fill: var(--color-fg-accent-secondary); // secondary color
+    fill: currentColor;
     transform: scale(0);
     transform-origin: ${badgeCenterX}px ${badgeCenterY}px;
 

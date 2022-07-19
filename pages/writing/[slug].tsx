@@ -1,5 +1,8 @@
 import { AsideTableOfContents } from '@components/AsideTableOfContents'
 import { FloatingTableOfContents } from '@components/FloatingTableOfContents'
+import { CalendarIcon } from '@components/icons/CalendarIcon'
+import { ClockIcon } from '@components/icons/ClockIcon'
+import { HashIcon } from '@components/icons/HashIcon'
 import { Link } from '@components/Link'
 import { components } from '@components/mdx'
 import { Parallax } from '@components/Parallax'
@@ -13,9 +16,7 @@ import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { Root } from '@lib/mdast-util-toc'
 import {
-  CalendarIcon,
   ChevronUpIcon,
-  ClockIcon,
   GitHubLogoIcon,
   HeartFilledIcon,
   ListBulletIcon,
@@ -158,11 +159,11 @@ function ArticlePage(props: Props) {
         <Header>
           <Info>
             <InfoItem>
-              <CalendarIcon width={12} height={12} />
+              <CalendarIcon />
               <span>{formatDate(props.publishedOn)}</span>
             </InfoItem>
             <InfoItem>
-              <ClockIcon width={12} height={12} />
+              <ClockIcon />
               <span>{props.readingTime}</span>
             </InfoItem>
           </Info>
@@ -172,8 +173,7 @@ function ArticlePage(props: Props) {
               {props.tags.map((tag) => (
                 <NextLink key={tag} href={`/writing?tags=${tag}`} passHref>
                   <Tag>
-                    {/* TODO: use hashtag icon instead of character */}
-                    <TagIcon>#</TagIcon>
+                    <TagIcon />
                     {tag}
                   </Tag>
                 </NextLink>
@@ -410,15 +410,16 @@ const Tags = styled.div`
 const Tag = styled.a`
   display: flex;
   align-items: center;
-  gap: 0.4ch;
+  gap: 4px;
   font-size: 14px;
   font-weight: 500;
+  line-height: 1;
   color: var(--color-fg-tag);
   background-color: var(--color-bg-tag);
 
   backdrop-filter: saturate(180%) blur(10px);
   border-radius: 8px;
-  padding: 6px 10px;
+  padding: 8px 10px 8px 8px;
   scroll-snap-align: start;
 
   transition-property: transform, background-color;
@@ -438,7 +439,9 @@ const Tag = styled.a`
   }
 `
 
-const TagIcon = styled.span`
+const TagIcon = styled(HashIcon)`
+  width: 14px;
+  height: 14px;
   color: var(--color-fg-subtle);
 `
 

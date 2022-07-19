@@ -1,5 +1,7 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
+import { ChevronCompactDownIcon } from '@components/icons/ChevronCompactDownIcon'
 import { FilterIcon } from '@components/icons/FilterIcon'
+import { HashIcon } from '@components/icons/HashIcon'
 import { SearchInputButton } from '@components/SearchInputButton'
 import { useQueryParam } from '@hooks/useQueryParam'
 import { useSize } from '@hooks/useSize'
@@ -7,7 +9,6 @@ import { includesEvery, toggle } from '@lib/array'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
-import { CaretDownIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
@@ -111,8 +112,8 @@ function WritingPage(props: Props) {
         <FiltersToggleButton
           onClick={() => setIsFiltersOpen((value) => !value)}
         >
-          <FilterIcon hasBadge={activeTags.length > 0} />
-          <ExpandIcon />
+          <StyledFilterIcon hasBadge={activeTags.length > 0} />
+          <ExpandIcon isReversed={isFiltersOpen} />
         </FiltersToggleButton>
       </Search>
       <FiltersWrapper
@@ -139,7 +140,7 @@ function WritingPage(props: Props) {
                     disabled={!availableTags.includes(tag)}
                     onChange={() => handleActiveTagsChange(tag)}
                   />
-                  <TagIcon>#</TagIcon>
+                  <TagIcon />
                   {tag}
                 </Tag>
               </li>
@@ -215,10 +216,12 @@ const FiltersToggleButton = styled.button`
   }
 `
 
-const ExpandIcon = styled(CaretDownIcon)`
-  width: 18px;
-  height: 18px;
-  color: var(--color-fg-default);
+const StyledFilterIcon = styled(FilterIcon)`
+  color: var(--color-fg-accent);
+`
+
+const ExpandIcon = styled(ChevronCompactDownIcon)`
+  color: var(--color-fg-subtle);
 `
 
 const FiltersWrapper = styled.div`
@@ -291,12 +294,13 @@ const Tag = styled.label`
   color: var(--color-fg-accent);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   font-size: 14px;
   font-weight: 500;
+  line-height: 1;
   background-color: var(--color-bg-subtle);
   border-radius: var(--border-radius);
-  padding: 6px 10px;
+  padding: 8px 10px 8px 8px;
 
   transition-property: transform, background-color, color;
   transition-duration: 0.15s;
@@ -332,11 +336,10 @@ const TagInput = styled.input`
   border-radius: var(--border-radius);
 `
 
-const TagIcon = styled.span`
+const TagIcon = styled(HashIcon)`
+  width: 14px;
+  height: 14px;
   color: var(--color-fg-subtle);
-  transform: scale(1.2);
-  font-weight: 400;
-  pointer-events: none;
 
   transition-property: color;
   transition-duration: 0.15s;

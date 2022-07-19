@@ -1,9 +1,9 @@
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
-import { ChevronLeftIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
 import styled from 'styled-components'
+import { ChevronLeftIcon } from './icons/ChevronLeftIcon'
 
 type Props = {
   isOpen?: boolean
@@ -168,14 +168,11 @@ const Link = styled.a`
 `
 
 const ActiveListItemIcon = styled(ChevronLeftIcon)`
-  width: 14px;
-  height: 14px;
   opacity: 0;
   transform: scale(0.5) translateX(-4px);
 
   transition-property: opacity, transform;
   transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
 
   ${Link}.active & {
     opacity: 1;

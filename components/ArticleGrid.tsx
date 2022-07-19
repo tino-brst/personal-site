@@ -1,8 +1,8 @@
 import { formatDate } from '@lib/dates'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import styled from 'styled-components'
+import { ArrowRightIcon } from './icons/ArrowRightIcon'
 
 type Props = {
   title: string
@@ -123,6 +123,8 @@ const ThumbnailImageWrapper = styled.div`
 
 // TODO apply hover effects only if using mouse
 const ThumbnailImage = styled(NextImage)`
+  will-change: transform;
+
   transition-property: transform;
   transition-duration: 0.4s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
@@ -173,8 +175,9 @@ const Info = styled.div`
 
 const InfoBottom = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
+  position: relative;
 `
 
 // TODO while a search is active, de-emphasize the non matching text, keeping
@@ -201,17 +204,16 @@ const PublicationDate = styled.time`
 `
 
 const GoToIcon = styled(ArrowRightIcon)`
-  width: 18px;
-  height: 18px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
   color: var(--color-fg-subtle);
 
-  transition-property: color, transform;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
+  transition-property: color;
+  transition-duration: 0.1s;
 
   ${Link}:hover & {
     color: var(--color-fg-subtle-hover);
-    transform: scale(1.1);
   }
 `
 

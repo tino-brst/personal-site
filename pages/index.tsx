@@ -1,10 +1,10 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
+import { ArrowRightIcon } from '@components/icons/ArrowRightIcon'
 import { Link } from '@components/Link'
 import { Spacer } from '@components/Spacer'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { GetStaticProps } from 'next'
 import NextLink from 'next/link'
 import styled from 'styled-components'
@@ -32,7 +32,7 @@ function HomePage(props: Props) {
       <NextLink href="/about" passHref>
         <GoToLink>
           About me
-          <GoToIcon />
+          <ArrowRightIcon />
         </GoToLink>
       </NextLink>
       <Heading>Latest Articles</Heading>

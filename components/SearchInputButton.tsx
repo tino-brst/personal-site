@@ -1,10 +1,10 @@
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useOnKeyDown } from '@hooks/useOnKeyDown'
 import { useSize } from '@hooks/useSize'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import { MagnifyingGlassIcon } from './icons/MagnifyingGlassIcon'
 
 type Props = {
   value: string
@@ -137,14 +137,12 @@ const Placeholder = styled.div`
 `
 
 const SearchIcon = styled(MagnifyingGlassIcon)`
-  width: var(--icon-size);
-  height: var(--icon-size);
   color: var(--color-fg-accent);
 
   transition: var(--transition);
 
   ${Wrapper}.open & {
-    opacity: 0.5;
+    color: var(--color-fg-default);
   }
 `
 

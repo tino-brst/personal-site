@@ -68,7 +68,7 @@ const Root = styled.svg`
   }
 
   .rect-background {
-    stroke-width: 4;
+    stroke-width: 4.5;
     stroke: black;
   }
 `

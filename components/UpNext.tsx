@@ -1,7 +1,7 @@
-import { ArrowLeftIcon } from '@radix-ui/react-icons'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import styled from 'styled-components'
+import { ArrowLeftIcon } from './icons/ArrowLeftIcon'
 import { Link } from './Link'
 
 type ArticlePreview = {
@@ -66,7 +66,7 @@ function UpNext(props: Props) {
       </List>
       <NextLink href="/writing" passHref>
         <AllArticlesLink>
-          <AllArticlesIcon />
+          <ArrowLeftIcon />
           All Articles
         </AllArticlesLink>
       </NextLink>
@@ -268,11 +268,6 @@ const AllArticlesLink = styled(Link)`
   display: flex;
   align-items: center;
   gap: 8px;
-`
-
-const AllArticlesIcon = styled(ArrowLeftIcon)`
-  width: 20px;
-  height: 20px;
 `
 
 export { UpNext }

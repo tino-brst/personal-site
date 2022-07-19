@@ -11,9 +11,9 @@ type Props = {
 // TODO tweak rotation speed
 
 const iconSize = 32
-const circleRadius = 9
+const circleRadius = 8.5
 const autoSize = 10.5
-const autoCenter = 23 // i.e. xy center coords = [23, 23]
+const autoCenter = 23.5 // i.e. xy center coords = [23, 23]
 const autoOffset = autoCenter - autoSize / 2 // xy position coords (i.e. offset from the top-left corner)
 
 function ThemeIcon({ theme = 'light', isSystemBased }: Props) {
@@ -55,7 +55,7 @@ function ThemeIcon({ theme = 'light', isSystemBased }: Props) {
               dominantBaseline="middle"
               textAnchor="middle"
             >
-              A
+              S
             </text>
           </g>
         </mask>
@@ -106,11 +106,11 @@ const Root = styled.svg`
 
   .auto__background {
     stroke: black;
-    stroke-width: 1.5px;
+    stroke-width: 2px;
   }
 
   .auto__text {
-    font-weight: 600;
+    font-weight: 800;
     fill: black;
     font-size: 8px;
   }

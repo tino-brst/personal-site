@@ -1,8 +1,9 @@
-import { ChevronLeftIcon, ListBulletIcon } from '@radix-ui/react-icons'
+import { ListBulletIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
 import styled from 'styled-components'
+import { ChevronLeftIcon } from './icons/ChevronLeftIcon'
 
 function AsideTableOfContents() {
   const toc = useTableOfContents()
@@ -107,8 +108,6 @@ const Link = styled.a`
     font-weight: 500;
   }
 
-  &:hover,
-  &:active,
   &.active,
   &.activeAncestor {
     color: var(--color-fg-accent-muted);
@@ -116,9 +115,7 @@ const Link = styled.a`
 `
 
 const ActiveListItemIcon = styled(ChevronLeftIcon)`
-  width: 14px;
-  height: 14px;
-  color: var(--color-fg-accent);
+  color: var(--color-fg-accent-muted);
   opacity: 0;
   transform: scale(0.5) translateX(-4px);
 
