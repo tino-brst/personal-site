@@ -1,7 +1,7 @@
 import { formatDate } from '@lib/dates'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { ArrowRightIcon } from './icons/ArrowRightIcon'
 
 type Props = {
@@ -180,6 +180,17 @@ const InfoBottom = styled.div`
   position: relative;
 `
 
+const highlight = keyframes`
+  from {
+    opacity: .5;
+    transform: scale(.8);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+`
+
 // TODO while a search is active, de-emphasize the non matching text, keeping
 // only the matches with full contrast. Fade in underline and contrast changes.
 const Title = styled.h2`
@@ -189,11 +200,23 @@ const Title = styled.h2`
   color: var(--color-fg-accent);
 
   & > span {
+    isolation: isolate;
+    position: relative;
     text-underline-offset: 2px;
     text-decoration-thickness: 2px;
     text-decoration-line: underline;
     text-decoration-style: solid;
     text-decoration-color: var(--color-fg-subtle);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--color-bg-highlight);
+      border-radius: 4px;
+      z-index: -1;
+      animation: ${highlight} 0.15s;
+    }
   }
 `
 
