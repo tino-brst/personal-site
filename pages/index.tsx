@@ -32,7 +32,7 @@ function HomePage(props: Props) {
       <NextLink href="/about" passHref>
         <GoToLink>
           About me
-          <ArrowRightIcon />
+          <GoToIcon />
         </GoToLink>
       </NextLink>
       <Heading>Latest Articles</Heading>
@@ -98,7 +98,7 @@ const GoToLink = styled(Link)`
 `
 
 const GoToIcon = styled(ArrowRightIcon)`
-  color: var(--color-fg-accent);
+  stroke: var(--color-fg-accent);
   width: 20px;
   height: 20px;
 `

@@ -9,26 +9,14 @@ function HashIcon({ className }: { className?: string }) {
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <defs>
-        <mask id="hash-icon-mask">
-          <path d="M3.5 13H15.5" />
-          <path d="M4.5 7H16.5" />
-          <path d="M6 17.5L8.5 2.5" />
-          <path d="M11.5 17.5L14 2.5" />
-        </mask>
-      </defs>
-      <rect width="100%" height="100%" mask="url(#hash-icon-mask)" />
+      <path d="M 3.5 13 H 15.5 M 4.5 7 H 16.5 M 6 17.5 L 8.5 2.5 M 11.5 17.5 L 14 2.5" />
     </Root>
   )
 }
 
 const Root = styled.svg`
-  fill: currentColor;
-
-  mask {
-    stroke-linecap: round;
-    stroke-width: 2;
-    stroke: white;
-  }
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 2;
 `
 export { HashIcon }

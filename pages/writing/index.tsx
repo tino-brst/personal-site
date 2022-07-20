@@ -230,6 +230,7 @@ const FiltersWrapper = styled.div`
 
   margin-bottom: 32px;
   visibility: hidden;
+  will-change: max-height;
 
   transition-duration: var(--transition-duration);
   transition-timing-function: var(--transition-timing-function);
@@ -339,18 +340,18 @@ const TagInput = styled.input`
 const TagIcon = styled(HashIcon)`
   width: 14px;
   height: 14px;
-  color: var(--color-fg-subtle);
+  stroke: var(--color-fg-subtle);
 
-  transition-property: color;
+  transition-property: stroke;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
   ${Tag}.checked & {
-    color: var(--color-fg-emphasis-subtle);
+    stroke: var(--color-fg-emphasis-subtle);
   }
 
   ${Tag}.disabled & {
-    color: var(--color-fg-subtler);
+    stroke: var(--color-fg-subtler);
   }
 `
 

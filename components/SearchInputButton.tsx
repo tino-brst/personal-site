@@ -137,12 +137,12 @@ const Placeholder = styled.div`
 `
 
 const SearchIcon = styled(MagnifyingGlassIcon)`
-  color: var(--color-fg-accent);
+  stroke: var(--color-fg-accent);
 
   transition: var(--transition);
 
   ${Wrapper}.open & {
-    color: var(--color-fg-default);
+    stroke: var(--color-fg-default);
   }
 `
 

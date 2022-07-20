@@ -230,13 +230,13 @@ const GoToIcon = styled(ArrowRightIcon)`
   position: absolute;
   right: 0;
   bottom: 0;
-  color: var(--color-fg-subtle);
+  stroke: var(--color-fg-subtle);
 
-  transition-property: color;
+  transition-property: stroke;
   transition-duration: 0.1s;
 
   ${Link}:hover & {
-    color: var(--color-fg-subtle-hover);
+    stroke: var(--color-fg-subtle-hover);
   }
 `
 
