@@ -59,16 +59,16 @@ const Root = styled.svg`
 
   .rect-back {
     fill: none;
-    stroke-width: 1.5;
+    stroke-width: 1.6;
   }
 
   .rect-front {
     fill: black;
-    stroke-width: 1.5;
+    stroke-width: 1.6;
   }
 
   .rect-background {
-    stroke-width: 4.5;
+    stroke-width: 5;
     stroke: black;
   }
 `

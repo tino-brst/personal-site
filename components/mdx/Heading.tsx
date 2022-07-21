@@ -1,4 +1,4 @@
-import { Link2Icon } from '@radix-ui/react-icons'
+import { LinkIcon } from '@components/icons/LinkIcon'
 import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
 import styled, { css, StyledComponent } from 'styled-components'
@@ -38,10 +38,10 @@ function Heading(props: Props) {
 
   return (
     <Component ref={ref} id={props.id}>
-      <a href={`#${props.id}`}>
+      <Link href={`#${props.id}`}>
         {props.children}
-        <Icon width={18} height={18} />
-      </a>
+        <Icon />
+      </Link>
     </Component>
   )
 }
@@ -58,7 +58,20 @@ function Heading4(props: Omit<Props, 'level'>) {
   return <Heading {...props} level={4} />
 }
 
-const Icon = styled(Link2Icon)`
+const Link = styled.a`
+  display: flex;
+  align-items: center;
+  width: fit-content;
+
+  transition-property: transform;
+  transition-duration: 0.15s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+`
+
+const Icon = styled(LinkIcon)`
   margin-left: 0.5ch;
   color: var(--color-fg-default);
   will-change: transform;
