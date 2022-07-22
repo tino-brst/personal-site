@@ -44,6 +44,7 @@
   --color-shadow-border-contrast: hsla(0 0% 100% / 0.5);
   --color-border-code: hsla(0 0% 0% / 0.03);
   --color-border-top-navbar: hsla(0 0% 0% / 0.08);
+  --color-progress-bar: hsla(0 0% 0% / 0.1);
 
   --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 0% / 0.08);
@@ -52,7 +53,7 @@
   --shadow-border-top-inset: inset 0 0.5px 0 hsla(0 0% 0% / 0.08);
 
   --gradient-header-image: linear-gradient(
-    180deg,
+    to bottom,
     hsla(0, 0%, 100%, 0) 0%,
     hsla(0, 0%, 100%, 0.48) 40%,
     hsla(0, 0%, 100%, 0.7) 60%,
@@ -104,6 +105,7 @@
   --color-shadow-border-contrast: hsla(0 0% 100% / 0.08);
   --color-border-code: hsla(0 0% 100% / 0.08);
   --color-border-top-navbar: var(--color-shadow-border-contrast);
+  --color-progress-bar: hsla(0 0% 100% / 0.2);
 
   --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 100% / 0.08);
@@ -112,7 +114,7 @@
   --shadow-border-top-inset: inset 0 0.5px 0 hsla(0 0% 100% / 0.08);
 
   --gradient-header-image: linear-gradient(
-    180deg,
+    to bottom,
     hsla(0, 0%, 0%, 0) 0%,
     hsla(0, 0%, 0%, 0.48) 40%,
     hsla(0, 0%, 0%, 0.7) 60%,

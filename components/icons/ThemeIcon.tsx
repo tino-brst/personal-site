@@ -92,7 +92,7 @@ const Root = styled.svg`
 
   .circle {
     stroke: white;
-    stroke-width: 2px;
+    stroke-width: 1.8px;
     fill: transparent;
   }
 
@@ -106,7 +106,7 @@ const Root = styled.svg`
 
   .auto__background {
     stroke: black;
-    stroke-width: 2px;
+    stroke-width: 1.7px;
   }
 
   .auto__text {

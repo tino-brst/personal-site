@@ -304,7 +304,7 @@ const ProgressBar = styled.div`
   left: 0;
   right: 0;
   height: var(--height);
-  background: var(--color-fg-subtler);
+  background: var(--color-progress-bar);
   transform: scaleX(var(--progress));
   transform-origin: left;
   display: none;

@@ -39,6 +39,7 @@ const Root = styled.svg`
   stroke-width: 0;
 
   mask {
+    fill: none;
     stroke: white;
     stroke-width: 1.5;
 
