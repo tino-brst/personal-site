@@ -26,7 +26,7 @@ const cssVar = {
 
 function NavBar() {
   const theme = useTheme()
-  const settings = useNavBar()
+  const navBar = useNavBar()
 
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
@@ -107,7 +107,7 @@ function NavBar() {
 
     const threshold = Math.min(
       document.documentElement.scrollHeight - window.innerHeight,
-      settings.progressCompleteThreshold - barHeight
+      navBar.progressCompleteThreshold - barHeight
     )
 
     const progress = map(window.scrollY, [0, threshold], [0, 1])
@@ -115,7 +115,7 @@ function NavBar() {
     progressBarRef.current.style.setProperty('--progress', `${progress}`)
 
     setIsProgressComplete(progress === 1)
-  }, [settings.progressCompleteThreshold])
+  }, [navBar.progressCompleteThreshold])
 
   useOnWindowScroll(updateProgress)
 
@@ -137,17 +137,20 @@ function NavBar() {
           menuOpen: isMenuOpen,
         })}
       >
+        <Status className={clsx({ visible: navBar.isStatusShown })}>
+          {navBar.status}
+        </Status>
         <Background
           ref={backgroundRef}
           className={clsx({
-            opaque: settings.isAlwaysOpaque,
+            opaque: navBar.isAlwaysOpaque,
             menuOpen: isMenuOpen,
           })}
         />
         <ProgressBar
           ref={progressBarRef}
           className={clsx({
-            visible: settings.isProgressShown,
+            visible: navBar.isProgressShown,
             complete: isProgressComplete,
           })}
         />
@@ -260,6 +263,34 @@ const Root = styled.div`
 
   @media (min-width: 640px) {
     box-shadow: none;
+  }
+`
+
+const Status = styled.div`
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 8px;
+  color: var(--color-fg-status);
+  background-color: var(--color-bg-status);
+  backdrop-filter: saturate(180%) blur(10px);
+  opacity: 0;
+  transform: translateY(-4px) scale(0.95);
+  transform-origin: center top;
+  box-shadow: var(--shadow-status);
+
+  transition-property: transform, opacity, width;
+  transition-duration: 0.2s;
+
+  &.visible {
+    opacity: 1;
+    transform: none;
   }
 `
 

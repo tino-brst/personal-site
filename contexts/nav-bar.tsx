@@ -1,3 +1,4 @@
+import { useTimeout } from '@hooks/useTimeout'
 import * as React from 'react'
 
 type ContextValue = {
@@ -7,16 +8,38 @@ type ContextValue = {
   setProgressCompleteThreshold: (value: number) => void
   isAlwaysOpaque: boolean
   setIsAlwaysOpaque: (value: boolean) => void
+  status: string
+  setStatus: (value: string) => void
+  isStatusShown: boolean
 }
 
 const Context = React.createContext<ContextValue | undefined>(undefined)
 Context.displayName = 'NavBarContext'
 
 function NavBarProvider({ children }: React.PropsWithChildren<{}>) {
-  const [isProgressShown, setIsProgressShown] = React.useState(false)
   const [isAlwaysOpaque, setIsAlwaysOpaque] = React.useState(false)
+
+  // Progress Bar
+
+  const [isProgressShown, setIsProgressShown] = React.useState(false)
   const [progressCompleteThreshold, setProgressCompleteThreshold] =
     React.useState(Infinity)
+
+  // Status Notifications ('Switched to light theme', 'Copied to clipboard', etc)
+  // Probably could be its own StatusContext/useStatus
+
+  const [status, setStatus] = React.useState('')
+  const [isStatusShown, setIsStatusShown] = React.useState(false)
+  const statusTimeout = useTimeout(() => setIsStatusShown(false), 2000, false)
+
+  const customSetStatus = React.useCallback(
+    (value: string) => {
+      setStatus(value)
+      setIsStatusShown(true)
+      statusTimeout.start()
+    },
+    [statusTimeout]
+  )
 
   const value = React.useMemo<ContextValue>(
     () => ({
@@ -26,8 +49,18 @@ function NavBarProvider({ children }: React.PropsWithChildren<{}>) {
       setProgressCompleteThreshold,
       isAlwaysOpaque,
       setIsAlwaysOpaque,
+      status,
+      setStatus: customSetStatus,
+      isStatusShown,
     }),
-    [isAlwaysOpaque, isProgressShown, progressCompleteThreshold]
+    [
+      customSetStatus,
+      isAlwaysOpaque,
+      isProgressShown,
+      isStatusShown,
+      progressCompleteThreshold,
+      status,
+    ]
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>
