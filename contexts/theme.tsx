@@ -7,6 +7,8 @@ const themes = ['light', 'dark', 'system'] as const
 type ActiveTheme = 'light' | 'dark' | 'system'
 type ResolvedTheme = 'light' | 'dark'
 
+type OnToggle = (prevValue: ActiveTheme, newValue: ActiveTheme) => void
+
 type ContextValue = {
   /** Active theme */
   active: ActiveTheme
@@ -16,8 +18,8 @@ type ContextValue = {
   values: typeof themes
   /** Update the active theme */
   setActive: (value: ActiveTheme) => void
-  /** Cycles through the available themes (light → dark → system → 🔁) */
-  toggle: () => void
+  /** Cycles through the available themes (light → dark → system → 🔁). Takes a callback to add side-effects to active theme changes. */
+  toggle: (onToggle?: OnToggle) => void
 }
 
 type Props = {
@@ -53,20 +55,34 @@ function ThemeProvider({
     }
   }, [resolved])
 
-  const toggle = React.useCallback(() => {
-    setActive((value) => {
-      switch (value) {
-        case 'light':
-          return 'dark'
-        case 'dark':
-          return 'system'
-        case 'system':
-          return 'light'
-        default:
-          throw new Error(`Unknown theme '${value}'.`)
-      }
-    })
-  }, [setActive])
+  const toggle = React.useCallback(
+    (onToggle?: OnToggle) => {
+      setActive((value) => {
+        let newValue: ActiveTheme
+
+        switch (value) {
+          case 'light':
+            newValue = 'dark'
+            break
+          case 'dark':
+            newValue = 'system'
+            break
+          case 'system':
+            newValue = 'light'
+            break
+          default:
+            throw new Error(`Unknown theme '${value}'.`)
+        }
+
+        if (onToggle) {
+          onToggle(value, newValue)
+        }
+
+        return newValue
+      })
+    },
+    [setActive]
+  )
 
   const value = React.useMemo<ContextValue>(
     () => ({
