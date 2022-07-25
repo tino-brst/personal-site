@@ -51,7 +51,7 @@ function ThemeIcon({ theme = 'light', isSystemBased }: Props) {
             <text
               className="auto__text"
               x={autoCenter}
-              y={autoCenter + 0.75}
+              y={autoCenter + 0.68}
               dominantBaseline="middle"
               textAnchor="middle"
             >

@@ -2,6 +2,7 @@ import { CheckMarkIcon } from '@components/icons/CheckMarkIcon'
 import { CopyIcon } from '@components/icons/CopyIcon'
 import { useTimeout } from '@hooks/useTimeout'
 import clsx from 'clsx'
+import { useNavBar } from 'contexts/nav-bar'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -10,6 +11,7 @@ type Props = {
 }
 
 function CodeBlock(props: Props) {
+  const navBar = useNavBar()
   const preElementRef = React.useRef<HTMLPreElement>(null)
 
   const [hasJustCopied, setHasJustCopied] = React.useState(false)
@@ -20,6 +22,7 @@ function CodeBlock(props: Props) {
 
     setHasJustCopied(true)
     hasJustCopiedTimeout.start()
+    navBar.setStatus('Code copied to clipboard')
   }
 
   return (

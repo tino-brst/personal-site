@@ -175,7 +175,25 @@ function NavBar() {
               <NavGroupLink to="/about">About</NavGroupLink>
             </NavGroup>
             {isMounted && (
-              <NavButton onClick={theme.toggle}>
+              <NavButton
+                onClick={() =>
+                  theme.toggle((_, newValue) => {
+                    switch (newValue) {
+                      case 'light':
+                        navBar.setStatus('Switched to light theme')
+                        break
+                      case 'dark':
+                        navBar.setStatus('Switched to dark theme')
+                        break
+                      case 'system':
+                        navBar.setStatus(`Matching the system's theme`)
+                        break
+                      default:
+                        break
+                    }
+                  })
+                }
+              >
                 <ThemeIcon
                   theme={theme.resolved}
                   isSystemBased={theme.active === 'system'}
