@@ -8,10 +8,10 @@ import { Link } from '@components/Link'
 import { components } from '@components/mdx'
 import { Parallax } from '@components/Parallax'
 import { UpNext } from '@components/UpNext'
+import { useLikeCount } from '@hooks/api/useLikeCount'
+import { useViewCount } from '@hooks/api/useViewCount'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
-import { useLikeCount } from '@hooks/useLikeCount'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
-import { useViewCount } from '@hooks/useViewCount'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
@@ -19,7 +19,7 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon
+  ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
