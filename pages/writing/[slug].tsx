@@ -3,6 +3,7 @@ import { FloatingTableOfContents } from '@components/FloatingTableOfContents'
 import { CalendarIcon } from '@components/icons/CalendarIcon'
 import { ClockIcon } from '@components/icons/ClockIcon'
 import { HashIcon } from '@components/icons/HashIcon'
+import { LikeIcon as BaseLikeIcon } from '@components/icons/LikeIcon'
 import { Link } from '@components/Link'
 import { components } from '@components/mdx'
 import { Parallax } from '@components/Parallax'
@@ -18,8 +19,7 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  HeartFilledIcon,
-  ListBulletIcon,
+  ListBulletIcon
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -30,7 +30,7 @@ import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 const barHeight = 70
 const barBottomMargin = 48
@@ -193,10 +193,13 @@ function ArticlePage(props: Props) {
               <a href="https://twitter.com/bursetAgustin">Twitter</a> or via{' '}
               <a href="mailto:tinos.corner@icloud.com">email</a>.
             </ThanksDescription>
-            <LikeButton onClick={() => likeCount.toggleUserLike()}>
-              <LikeButtonIcon
-                className={clsx({ liked: likeCount.hasUserLike })}
-              />
+            <LikeButton
+              className={clsx({ liked: likeCount.hasUserLike })}
+              onClick={likeCount.toggleUserLike}
+            >
+              <LikeIconWrapper>
+                <LikeIcon />
+              </LikeIconWrapper>
               {likeCount.value}
             </LikeButton>
           </Thanks>
@@ -640,6 +643,9 @@ const ThanksDescription = styled.p`
 `
 
 const LikeButton = styled.button`
+  --accent-color: hsl(348 83% 47%);
+  --accent-color-muted: hsl(348 90% 38%);
+
   user-select: none;
   margin-top: 16px;
   width: 100%;
@@ -653,17 +659,91 @@ const LikeButton = styled.button`
   font-weight: 500;
   border-radius: 4px;
   cursor: pointer;
-`
 
-const LikeButtonIcon = styled(HeartFilledIcon)`
-  color: var(--color-fg-subtle);
-  width: 24px;
-  height: 24px;
+  transition-property: transform, color;
+  transition-duration: 0.15s;
 
-  transition: color 0.15s;
+  &:active {
+    transform: scale(0.9);
+  }
 
   &.liked {
     color: var(--color-fg-accent-muted);
+  }
+`
+
+const bounceUp = keyframes`
+  0% {
+    transform: none;
+    animation-timing-function: ease-out;
+  }
+  50% {
+    transform: translateY(-4px);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: none;
+  }
+`
+
+const LikeIconWrapper = styled.div`
+  position: relative;
+  will-change: transform;
+
+  ::before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    opacity: 0.1;
+    transform: scale(0);
+
+    transition-property: transform, opacity;
+    transition-duration: 0.6s;
+  }
+
+  ${LikeButton}.liked & {
+    animation: ${bounceUp} 0.3s;
+
+    ::before {
+      opacity: 0;
+      transform: scale(3);
+    }
+  }
+
+  ${LikeButton}:active & {
+    ::before {
+      transform: scale(1.2);
+
+      transition-duration: 0.3s;
+    }
+  }
+
+  ${LikeButton}.liked:active & {
+    ::before {
+      opacity: 0;
+      transform: scale(0);
+      transition: none;
+    }
+  }
+`
+
+const LikeIcon = styled(BaseLikeIcon)`
+  display: block;
+  fill: var(--color-fg-subtle);
+
+  transition-property: fill;
+  transition-duration: 0.15s;
+
+  ${LikeButton}.liked & {
+    fill: var(--accent-color);
+    transition-duration: 0.3s;
+  }
+
+  ${LikeButton}:active & {
+    fill: var(--accent-color-muted);
   }
 `
 
