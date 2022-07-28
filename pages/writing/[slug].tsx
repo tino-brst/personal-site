@@ -131,6 +131,15 @@ function ArticlePage(props: Props) {
 
   const seoProps: NextSeoProps = {
     title: `${props.title} • Tino's Corner`,
+    openGraph: {
+      title: props.title,
+      type: 'article',
+      site_name: `Tino's Corner`,
+      images: [{ url: props.imageSrc ?? '' }],
+      article: {
+        publishedTime: new Date(props.publishedOn).toISOString(),
+      },
+    },
   }
 
   return (
