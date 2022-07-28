@@ -1,7 +1,6 @@
+import { LikesResponseData } from 'pages/api/likes/[slug]'
 import * as React from 'react'
 import useSWR from 'swr'
-import { debounce } from '@lib/debounce'
-import { LikesResponseData } from 'pages/api/likes/[slug]'
 
 type UseLikeCountResult = {
   toggleUserLike: () => void
@@ -36,10 +35,10 @@ function useLikeCount(slug: string): UseLikeCountResult {
     // Send the request to update the user's like status, and update
     // the local value with the returned (updated) one.
     try {
-      await mutate(async (data) => {
+      await mutate((data) => {
         if (data === undefined) return
 
-        return debouncedUpdateUserLike(slug, data.hasUserLike)
+        return updateUserLike(slug, data.hasUserLike)
 
         // 👇 Revalidation is disabled once again, since the request already
         // returns the updated data.
@@ -60,8 +59,6 @@ function useLikeCount(slug: string): UseLikeCountResult {
     isLoading: !data && !error,
   }
 }
-
-const debouncedUpdateUserLike = debounce(updateUserLike, 1000)
 
 async function updateUserLike(slug: string, value: boolean) {
   const response = await fetch(`/api/likes/${slug}`, {
