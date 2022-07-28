@@ -1,4 +1,6 @@
 function AboutPage() {
+  // TODO add NextSeo
+
   return null
 }
 

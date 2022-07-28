@@ -6,6 +6,7 @@ import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
 import { GetStaticProps } from 'next'
+import { NextSeo, NextSeoProps } from 'next-seo'
 import NextLink from 'next/link'
 import styled from 'styled-components'
 
@@ -21,8 +22,13 @@ type Props = {
 }
 
 function HomePage(props: Props) {
+  const seoProps: NextSeoProps = {
+    title: `Tino's Corner`,
+  }
+
   return (
     <Wrapper>
+      <NextSeo {...seoProps} />
       <Title>Hi! I&apos;m Tino</Title>
       <Description>
         And this is my little corner of the internet. I&apos;m a design-minded

@@ -12,6 +12,7 @@ import { pick } from '@lib/pick'
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
+import { NextSeo, NextSeoProps } from 'next-seo'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -95,8 +96,15 @@ function WritingPage(props: Props) {
     [articles]
   )
 
+  // SEO
+
+  const seoProps: NextSeoProps = {
+    title: `Writing • Tino's Corner`,
+  }
+
   return (
     <Wrapper>
+      <NextSeo {...seoProps} />
       <Title>Writing</Title>
       <Description>
         Thoughts on code, design, lorem ipsum, and more.

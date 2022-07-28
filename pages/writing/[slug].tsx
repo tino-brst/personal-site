@@ -26,6 +26,7 @@ import { useNavBar } from 'contexts/nav-bar'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { getMDXComponent } from 'mdx-bundler/client'
 import { GetStaticPaths, GetStaticProps } from 'next'
+import { NextSeo, NextSeoProps } from 'next-seo'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -125,8 +126,16 @@ function ArticlePage(props: Props) {
     return () => resizeObserver.disconnect()
   }, [navBar])
 
+  // SEO
+  // TODO once the domain is set, add the canonical field (update all occurrences)
+
+  const seoProps: NextSeoProps = {
+    title: `${props.title} • Tino's Corner`,
+  }
+
   return (
     <TableOfContentsProvider tableOfContents={props.tableOfContents}>
+      <NextSeo {...seoProps} />
       <Wrapper>
         <HeaderImageWrapper>
           <StyledParallax
