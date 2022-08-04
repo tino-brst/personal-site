@@ -215,7 +215,6 @@ function NavBar() {
           <Menu ref={menuRef}>
             {/* TODO close menu on esc, set focus on close button (maybe just closing it and the tabindex makes it return to the button) */}
             {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
-            {/* TODO: remove from tab-index, aria hidden, etc */}
             {/* TODO: cascade animation for each item? */}
             <NextLink href="/" passHref>
               <Link
@@ -470,16 +469,18 @@ const MenuToggle = styled(NavButton)`
 `
 
 const MenuWrapper = styled.div`
+  visibility: hidden;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
   transform: translateY(-8px) scale(0.8);
 
-  transition-property: max-height, transform, opacity;
+  transition-property: max-height, transform, opacity, visibility;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.2s, 0.2s, 0.15s;
+  transition-duration: 0.2s, 0.2s, 0.15s, 0.2s;
 
   &.menuOpen {
+    visibility: visible;
     max-height: var(${cssVar.menuHeight});
     opacity: 1;
     transform: none;
