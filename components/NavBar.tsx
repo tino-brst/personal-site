@@ -26,6 +26,7 @@ const cssVar = {
 }
 
 function NavBar() {
+  const router = useRouter()
   const theme = useTheme()
   const navBar = useNavBar()
 
@@ -216,46 +217,40 @@ function NavBar() {
             {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
             {/* TODO: remove from tab-index, aria hidden, etc */}
             {/* TODO: cascade animation for each item? */}
-            <MenuLink href="/" onClick={closeMenu} exact>
-              Home
-            </MenuLink>
-            <MenuLink href="/writing" onClick={closeMenu}>
-              Writing
-            </MenuLink>
-            <MenuLink href="/about" onClick={closeMenu}>
-              About
-            </MenuLink>
+            <NextLink href="/" passHref>
+              <Link
+                onClick={closeMenu}
+                className={clsx({
+                  active: router.pathname === '/',
+                })}
+              >
+                Home
+              </Link>
+            </NextLink>
+            <NextLink href="/writing" passHref>
+              <Link
+                onClick={closeMenu}
+                className={clsx({
+                  active: router.pathname.startsWith('/writing'),
+                })}
+              >
+                Writing
+              </Link>
+            </NextLink>
+            <NextLink href="/about" passHref>
+              <Link
+                onClick={closeMenu}
+                className={clsx({
+                  active: router.pathname.startsWith('/about'),
+                })}
+              >
+                About
+              </Link>
+            </NextLink>
           </Menu>
         </MenuWrapper>
       </Root>
     </>
-  )
-}
-
-// TODO remove redundant component
-
-function MenuLink(props: {
-  href: string
-  onClick: () => void
-  /** When true, the active style will only be applied if the location is matched _exactly_. */
-  exact?: boolean
-  children?: React.ReactNode
-}) {
-  const router = useRouter()
-
-  return (
-    <NextLink href={props.href} passHref>
-      <Link
-        onClick={props.onClick}
-        className={clsx({
-          active: props.exact
-            ? router.pathname === props.href
-            : router.pathname.startsWith(props.href),
-        })}
-      >
-        {props.children}
-      </Link>
-    </NextLink>
   )
 }
 
