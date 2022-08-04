@@ -53,9 +53,7 @@ function SearchInputButton(props: Props) {
 
   const handleEscapeKeyDown = React.useCallback(
     (event: KeyboardEvent) => {
-      // TODO add the Cancel button, so pressing esc while the cancel button is
-      // focused also works
-      if (hasFocus(inputRef.current)) {
+      if (hasFocus(inputRef.current) || hasFocus(cancelButtonRef.current)) {
         // Prevent the browser exiting full-screen if in that state
         event.preventDefault()
         onIsOpenChange(false)
