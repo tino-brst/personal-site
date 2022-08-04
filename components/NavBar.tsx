@@ -473,7 +473,8 @@ const MenuWrapper = styled.div`
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transform: translateY(-8px) scale(0.8);
+  transform: scale(0.8);
+  transform-origin: top center;
 
   transition-property: max-height, transform, opacity, visibility;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
