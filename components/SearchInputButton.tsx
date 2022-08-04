@@ -1,3 +1,4 @@
+import { useIsFirstRender } from '@hooks/useIsFirstRender'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useOnKeyDown } from '@hooks/useOnKeyDown'
 import { useSize } from '@hooks/useSize'
@@ -33,8 +34,11 @@ function SearchInputButton(props: Props) {
   // input and auto-selects its content (if any). Closing the search returns
   // focus to the button
 
-  // TODO skip on mount / first render
+  const isFirstRender = useIsFirstRender()
+
   useIsomorphicLayoutEffect(() => {
+    if (isFirstRender) return
+
     if (props.isOpen) {
       inputRef.current?.focus()
       inputRef.current?.select()
