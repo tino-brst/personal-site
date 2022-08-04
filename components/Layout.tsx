@@ -5,6 +5,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 import { ArrowTopRightIcon } from './icons/ArrowTopRightIcon'
 import { NavBar } from './NavBar'
 import { Signature } from './Signature'
@@ -126,7 +127,7 @@ const Footer = styled.footer`
 const LinksWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 18px;
   justify-content: center;
   margin-bottom: 48px;
 `
@@ -147,31 +148,21 @@ const StyledLink = styled.a`
   transition-property: color;
   transition-duration: 0.1s;
 
-  &:active,
-  &:focus-visible {
-    ${styledLinkHoverStyles}
-  }
-
   @media (hover: hover) {
     &:hover {
       ${styledLinkHoverStyles}
     }
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 8px;
-    inset: -6px;
-    box-shadow: 0 0 0 1px transparent;
-
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
+  &:active,
+  &:focus-visible {
+    ${styledLinkHoverStyles}
   }
 
-  &:focus-visible::after {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  --focus-inset: -6px;
+  --focus-radius: 8px;
+
+  ${focusRing}
 `
 const externalLinkIconHoverStyles = css`
   color: var(--color-fg-subtle-hover);
@@ -179,6 +170,7 @@ const externalLinkIconHoverStyles = css`
 
 const ExternalLinkIcon = styled(ArrowTopRightIcon)`
   color: var(--color-fg-subtle);
+  margin-right: -1px;
 
   transition-property: color;
   transition-duration: 0.1s;

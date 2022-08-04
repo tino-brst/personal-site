@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 
 const hoverStyles = css`
   background-color: var(--color-bg-subtle-hover);
@@ -19,35 +20,25 @@ const Link = styled.a`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:focus-visible,
-  &:active {
-    ${hoverStyles}
-  }
-
   @media (hover: hover) {
     &:hover {
       ${hoverStyles}
     }
   }
 
+  &:focus-visible,
+  &:active {
+    ${hoverStyles}
+  }
+
   &:active {
     transform: scale(0.96);
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 20px;
-    inset: -4px;
-    box-shadow: 0 0 0 1px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 18px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::after {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 export { Link }

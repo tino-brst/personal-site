@@ -3,6 +3,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 
 type NavGroupContextValue = {
   highlightWidth: number
@@ -31,18 +32,21 @@ function NavGroup(props: { children?: React.ReactNode }) {
   const [isMouseComingFromOutside, setIsMouseComingFromOutside] =
     React.useState(true)
 
+  const value = React.useMemo<NavGroupContextValue>(
+    () => ({
+      highlightWidth,
+      highlightOffsetLeft,
+      isMouseComingFromOutside: isMouseComingFromOutside,
+      setHighlightWidth,
+      setHighlightOffsetLeft,
+      setIsMouseComingFromOutside: setIsMouseComingFromOutside,
+    }),
+    [highlightOffsetLeft, highlightWidth, isMouseComingFromOutside]
+  )
+
   return (
     <Wrapper onMouseLeave={() => setIsMouseComingFromOutside(true)}>
-      <NavGroupContext.Provider
-        value={{
-          highlightWidth,
-          highlightOffsetLeft,
-          isMouseComingFromOutside: isMouseComingFromOutside,
-          setHighlightWidth,
-          setHighlightOffsetLeft,
-          setIsMouseComingFromOutside: setIsMouseComingFromOutside,
-        }}
-      >
+      <NavGroupContext.Provider value={value}>
         <Highlight
           style={{
             width: highlightWidth,
@@ -71,15 +75,17 @@ function NavGroupLink(props: {
     navGroup.setIsMouseComingFromOutside(false)
   }
 
-  function handleMouseEnter(event: React.MouseEvent<HTMLAnchorElement>) {
-    navGroup.setHighlightWidth(event.currentTarget.clientWidth)
-    navGroup.setHighlightOffsetLeft(event.currentTarget.offsetLeft)
-  }
+  const updateHighlight = React.useCallback(
+    (element: HTMLElement) => {
+      const targetRect = element.getBoundingClientRect()
+      const offsetParentRect = element.offsetParent?.getBoundingClientRect()
+      const offsetLeft = targetRect.left - (offsetParentRect?.left ?? 0)
 
-  function handleFocus(event: React.FocusEvent<HTMLAnchorElement, Element>) {
-    navGroup.setHighlightWidth(event.currentTarget.clientWidth)
-    navGroup.setHighlightOffsetLeft(event.currentTarget.offsetLeft)
-  }
+      navGroup.setHighlightWidth(targetRect.width)
+      navGroup.setHighlightOffsetLeft(offsetLeft)
+    },
+    [navGroup]
+  )
 
   return (
     <NextLink href={props.to} passHref>
@@ -89,9 +95,9 @@ function NavGroupLink(props: {
             ? router.pathname === props.to
             : router.pathname.startsWith(props.to),
         })}
-        onMouseMove={handleMouseEnter}
+        onMouseMove={(event) => updateHighlight(event.currentTarget)}
+        onFocus={(event) => updateHighlight(event.currentTarget)}
         onMouseLeave={handleMouseLeave}
-        onFocus={handleFocus}
       >
         {props.children}
       </Link>
@@ -163,20 +169,10 @@ const Link = styled.a`
     color: var(--color-fg-accent);
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 16px;
-    inset: -4px;
-    box-shadow: 0 0 0 1px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 14px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::after {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 export { NavGroup, NavGroupLink }

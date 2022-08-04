@@ -2,6 +2,7 @@ import { formatDate } from '@lib/dates'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import styled, { css, keyframes } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 import { ArrowRightIcon } from './icons/ArrowRightIcon'
 
 type Props = {
@@ -79,15 +80,15 @@ const Link = styled.a`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:focus-visible,
-  &:active {
-    ${linkHoverStyles}
-  }
-
   @media (hover: hover) {
     &:hover {
       ${linkHoverStyles}
     }
+  }
+
+  &:focus-visible,
+  &:active {
+    ${linkHoverStyles}
   }
 
   &:active {
@@ -105,20 +106,10 @@ const Link = styled.a`
     }
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 20px;
-    inset: -4px;
-    box-shadow: 0 0 0 1px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 18px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::after {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.15);
-  }
+  ${focusRing}
 `
 
 const ThumbnailImageWrapper = styled.div`
@@ -158,14 +149,14 @@ const ThumbnailImage = styled(NextImage)`
   transition-duration: 0.4s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
 
-  ${Link}:focus-visible & {
-    ${thumbnailImageHoverStyles}
-  }
-
   @media (hover: hover) {
     ${Link}:hover & {
       ${thumbnailImageHoverStyles}
     }
+  }
+
+  ${Link}:focus-visible & {
+    ${thumbnailImageHoverStyles}
   }
 `
 
@@ -185,15 +176,15 @@ const ThumbnailImageOverlay = styled.div`
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
 
-  ${Link}:focus-visible &,
-  ${Link}:active & {
-    ${thumbnailImageOverlayHoverStyles}
-  }
-
   @media (hover: hover) {
     ${Link}:hover & {
       ${thumbnailImageOverlayHoverStyles}
     }
+  }
+
+  ${Link}:focus-visible &,
+  ${Link}:active & {
+    ${thumbnailImageOverlayHoverStyles}
   }
 `
 

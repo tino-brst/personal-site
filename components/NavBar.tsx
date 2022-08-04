@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import avatarImageSrc from 'public/images/avatar.png'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 import { MenuIcon } from './icons/MenuIcon'
 import { ThemeIcon } from './icons/ThemeIcon'
 import { NavGroup, NavGroupLink } from './NavGroup'
@@ -407,24 +408,10 @@ const HomeLink = styled.a`
   border-radius: calc(var(--avatar-size) / 2);
   color: var(--color-fg-accent);
 
-  &::after {
-    --inset: -4px;
+  --focus-inset: -2px;
+  --focus-radius: calc(var(--avatar-size) / 2 + 2px);
 
-    /* TODO add to all focus rings */
-    pointer-events: none;
-    content: '';
-    position: absolute;
-    border-radius: calc(var(--avatar-size) / 2 + var(--inset) * -1);
-    inset: var(--inset);
-    box-shadow: 0 0 0 1px transparent;
-
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::after {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 const AvatarImageWrapper = styled.div`
@@ -460,38 +447,25 @@ const NavButton = styled.button`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:focus-visible,
-  &:active {
-    ${navButtonHoverStyles}
-  }
-
   @media (hover: hover) {
     &:hover {
       ${navButtonHoverStyles}
     }
   }
 
+  &:focus-visible,
+  &:active {
+    ${navButtonHoverStyles}
+  }
+
   &:active {
     transform: scale(0.94);
   }
 
-  &::after {
-    --inset: -4px;
+  --focus-inset: -2px;
+  --focus-radius: 14px;
 
-    pointer-events: none;
-    content: '';
-    position: absolute;
-    border-radius: calc(12px + var(--inset) * -1);
-    inset: var(--inset);
-    box-shadow: 0 0 0 1px transparent;
-
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::after {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 const MenuToggle = styled(NavButton)`
@@ -548,8 +522,6 @@ const Link = styled.a`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  /* TODO move all hover before focus/active */
-
   @media (hover: hover) {
     &:hover {
       ${linkHoverStyles}
@@ -569,23 +541,10 @@ const Link = styled.a`
     color: var(--color-fg-accent);
   }
 
-  &::after {
-    --inset: -4px;
+  --focus-inset: -2px;
+  --focus-radius: 14px;
 
-    pointer-events: none;
-    content: '';
-    position: absolute;
-    border-radius: calc(12px + var(--inset) * -1);
-    inset: var(--inset);
-    box-shadow: 0 0 0 1px transparent;
-
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::after {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 export { NavBar }

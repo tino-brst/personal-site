@@ -4,6 +4,12 @@ import { useSize } from '@hooks/useSize'
 import clsx from 'clsx'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import {
+  focusRing,
+  focusRingBaseStyles,
+  focusRingVisibleHoverStyles,
+  focusRingVisibleStyles,
+} from 'styles/focusRing'
 import { MagnifyingGlassIcon } from './icons/MagnifyingGlassIcon'
 
 type Props = {
@@ -174,21 +180,10 @@ const CancelButton = styled.button`
     opacity: 1;
   }
 
-  &::before {
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    border-radius: 10px 20px 20px 10px;
-    inset: -4px;
-    box-shadow: 0 0 0 1px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 8px 18px 18px 8px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::before {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 const sharedInputButtonStyle = css`
@@ -210,20 +205,21 @@ const openTextStyle = css`
 `
 
 const InputFocusRing = styled.div`
-  &::before {
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    border-radius: 20px;
-    inset: -4px;
-    box-shadow: 0 0 0 1px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 18px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
+  &::before {
+    ${focusRingBaseStyles}
   }
 
   &:focus-within::before {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
+    ${focusRingVisibleStyles}
+  }
+
+  @media (hover: hover) {
+    &:focus-within:hover::before {
+      ${focusRingVisibleHoverStyles}
+    }
   }
 `
 
@@ -290,21 +286,10 @@ const Button = styled.button`
     pointer-events: none;
   }
 
-  &::before {
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    border-radius: 20px;
-    inset: -4px;
-    box-shadow: 0 0 0 1px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 18px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::before {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 function hasFocus(element: HTMLElement | null): boolean {

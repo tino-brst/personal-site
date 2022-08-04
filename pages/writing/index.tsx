@@ -15,6 +15,7 @@ import { GetStaticProps } from 'next'
 import { NextSeo, NextSeoProps } from 'next-seo'
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 
 type ArticlePreview = {
   title: string
@@ -233,21 +234,10 @@ const ShowFiltersToggle = styled.button`
     transform: scale(0.96);
   }
 
-  &::before {
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    border-radius: 20px;
-    inset: -4px;
-    box-shadow: 0 0 0 1px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 18px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::before {
-    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
-  }
+  ${focusRing}
 `
 
 const StyledFilterIcon = styled(FilterIcon)`
@@ -391,21 +381,10 @@ const TagInput = styled.input`
     background-color: var(--color-bg-subtler);
   }
 
-  &::before {
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    border-radius: 10px;
-    inset: -2px;
-    box-shadow: 0 0 0 0px transparent;
+  --focus-inset: -2px;
+  --focus-radius: 10px;
 
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-  }
-
-  &:focus-visible::before {
-    box-shadow: 0 0 0 2px hsla(0 0% 0% / 0.15);
-  }
+  ${focusRing}
 `
 
 const TagIcon = styled(HashIcon)`
