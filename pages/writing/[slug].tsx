@@ -651,6 +651,11 @@ const ThanksTitle = styled.h2`
   color: var(--color-fg-accent-muted);
 `
 
+const thanksLinkHoverStyles = css`
+  color: var(--color-link-hover);
+  text-decoration-color: var(--color-link-decoration-hover);
+`
+
 const ThanksDescription = styled.p`
   margin-top: 16px;
   text-align: center;
@@ -677,10 +682,13 @@ const ThanksDescription = styled.p`
     ${focusRing}
   }
 
+  & a:focus-visible {
+    ${thanksLinkHoverStyles}
+  }
+
   @media (hover: hover) {
     & a:hover {
-      color: var(--color-link-hover);
-      text-decoration-color: var(--color-link-decoration-hover);
+      ${thanksLinkHoverStyles}
     }
   }
 `
@@ -735,7 +743,7 @@ const bounceUp = keyframes`
 `
 
 const LikeIconWrapper = styled.div`
-  margin-top: -8px;
+  margin-top: -6px;
   position: relative;
   will-change: transform;
 
