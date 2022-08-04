@@ -1,7 +1,7 @@
 import { formatDate } from '@lib/dates'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { ArrowRightIcon } from './icons/ArrowRightIcon'
 
 type Props = {
@@ -58,6 +58,10 @@ const Wrapper = styled.li`
   }
 `
 
+const linkHoverStyles = css`
+  background-color: var(--color-bg-subtle-hover);
+`
+
 const Link = styled.a`
   border-radius: 16px;
   height: 100%;
@@ -66,6 +70,7 @@ const Link = styled.a`
   padding: 12px;
   background-color: var(--color-bg-subtle);
 
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -74,9 +79,15 @@ const Link = styled.a`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:hover,
+  &:focus-visible,
   &:active {
-    background-color: var(--color-bg-subtle-hover);
+    ${linkHoverStyles}
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      ${linkHoverStyles}
+    }
   }
 
   &:active {
@@ -92,6 +103,21 @@ const Link = styled.a`
     ${Wrapper}:first-child:active & {
       transform: scale(0.99);
     }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 20px;
+    inset: -4px;
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::after {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.15);
   }
 `
 
@@ -121,7 +147,10 @@ const ThumbnailImageWrapper = styled.div`
   }
 `
 
-// TODO apply hover effects only if using mouse
+const thumbnailImageHoverStyles = css`
+  transform: scale(1.03);
+`
+
 const ThumbnailImage = styled(NextImage)`
   will-change: transform;
 
@@ -129,10 +158,19 @@ const ThumbnailImage = styled(NextImage)`
   transition-duration: 0.4s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
 
-  ${Link}:hover &,
-  ${Link}:active & {
-    transform: scale(1.03);
+  ${Link}:focus-visible & {
+    ${thumbnailImageHoverStyles}
   }
+
+  @media (hover: hover) {
+    ${Link}:hover & {
+      ${thumbnailImageHoverStyles}
+    }
+  }
+`
+
+const thumbnailImageOverlayHoverStyles = css`
+  opacity: 1;
 `
 
 const ThumbnailImageOverlay = styled.div`
@@ -147,9 +185,15 @@ const ThumbnailImageOverlay = styled.div`
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
 
-  ${Link}:hover &,
+  ${Link}:focus-visible &,
   ${Link}:active & {
-    opacity: 1;
+    ${thumbnailImageOverlayHoverStyles}
+  }
+
+  @media (hover: hover) {
+    ${Link}:hover & {
+      ${thumbnailImageOverlayHoverStyles}
+    }
   }
 `
 
@@ -226,6 +270,10 @@ const PublicationDate = styled.time`
   color: var(--color-fg-default);
 `
 
+const goToIconHoverStyles = css`
+  stroke: var(--color-fg-subtle-hover);
+`
+
 const GoToIcon = styled(ArrowRightIcon)`
   position: absolute;
   right: 0;
@@ -235,8 +283,15 @@ const GoToIcon = styled(ArrowRightIcon)`
   transition-property: stroke;
   transition-duration: 0.1s;
 
-  ${Link}:hover & {
-    stroke: var(--color-fg-subtle-hover);
+  ${Link}:focus-visible &,
+  ${Link}:active & {
+    ${goToIconHoverStyles}
+  }
+
+  @media (hover: hover) {
+    ${Link}:hover & {
+      ${goToIconHoverStyles}
+    }
   }
 `
 

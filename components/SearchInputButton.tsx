@@ -27,6 +27,7 @@ function SearchInputButton(props: Props) {
   // input and auto-selects its content (if any). Closing the search returns
   // focus to the button
 
+  // TODO skip on mount / first render
   useIsomorphicLayoutEffect(() => {
     if (props.isOpen) {
       inputRef.current?.focus()
@@ -42,6 +43,8 @@ function SearchInputButton(props: Props) {
 
   const handleEscapeKeyDown = React.useCallback(
     (event: KeyboardEvent) => {
+      // TODO add the Cancel button, so pressing esc while the cancel button is
+      // focused also works
       if (hasFocus(inputRef.current)) {
         // Prevent the browser exiting full-screen if in that state
         event.preventDefault()
@@ -65,13 +68,15 @@ function SearchInputButton(props: Props) {
         <SearchIcon />
         {props.placeholder}
       </Placeholder>
-      <Input
-        value={props.value}
-        onChange={(event) => props.onChange(event.target.value)}
-        ref={inputRef}
-        placeholder={props.placeholder}
-        tabIndex={props.isOpen ? undefined : -1}
-      />
+      <InputFocusRing>
+        <Input
+          value={props.value}
+          onChange={(event) => props.onChange(event.target.value)}
+          ref={inputRef}
+          placeholder={props.placeholder}
+          tabIndex={props.isOpen ? undefined : -1}
+        />
+      </InputFocusRing>
       <CancelButton
         ref={cancelButtonRef}
         onClick={() => props.onIsOpenChange(false)}
@@ -90,6 +95,10 @@ function SearchInputButton(props: Props) {
   )
 }
 
+const hoverStyles = css`
+  background-color: var(--color-bg-subtle-hover);
+`
+
 const Wrapper = styled.div`
   --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
   --border-radius: 16px;
@@ -103,8 +112,6 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex: 0 1 var(--default-width);
-  border-radius: var(--border-radius);
-  background-color: var(--color-bg-subtle);
   will-change: flex-grow;
 
   transition: var(--transition);
@@ -115,11 +122,6 @@ const Wrapper = styled.div`
 
   /* TODO: active/hover transitions should be consistent with other links */
   /* TODO: transition only whats needed */
-
-  &:hover,
-  &:active {
-    background-color: var(--color-bg-subtle-hover);
-  }
 
   &:not(.open):active {
     transform: scale(0.96);
@@ -171,6 +173,22 @@ const CancelButton = styled.button`
     transform: none;
     opacity: 1;
   }
+
+  &::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    border-radius: 10px 20px 20px 10px;
+    inset: -4px;
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::before {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
+  }
 `
 
 const sharedInputButtonStyle = css`
@@ -191,13 +209,44 @@ const openTextStyle = css`
   font-weight: 400;
 `
 
+const InputFocusRing = styled.div`
+  &::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    border-radius: 20px;
+    inset: -4px;
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-within::before {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
+  }
+`
+
 const Input = styled.input`
   ${sharedInputButtonStyle}
   min-width: 0;
   opacity: 0;
   color: var(--color-fg-accent);
+  border-radius: var(--border-radius);
+  background-color: var(--color-bg-subtle);
 
   transition: var(--transition);
+
+  @media (hover: hover) {
+    &:hover {
+      ${hoverStyles}
+    }
+  }
+
+  &:focus-visible,
+  &:active {
+    ${hoverStyles}
+  }
 
   ${Wrapper}.open & {
     opacity: 1;
@@ -219,13 +268,42 @@ const Button = styled.button`
   ${sharedInputButtonStyle}
   ${defaultTextStyle}
   cursor: pointer;
+  border-radius: var(--border-radius);
+  background-color: var(--color-bg-subtle);
 
   transition: var(--transition);
+
+  @media (hover: hover) {
+    &:hover {
+      ${hoverStyles}
+    }
+  }
+
+  &:focus-visible,
+  &:active {
+    ${hoverStyles}
+  }
 
   ${Wrapper}.open & {
     ${openTextStyle}
     opacity: 0;
     pointer-events: none;
+  }
+
+  &::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    border-radius: 20px;
+    inset: -4px;
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::before {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
   }
 `
 

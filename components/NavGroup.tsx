@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 type NavGroupContextValue = {
   highlightWidth: number
@@ -76,6 +76,11 @@ function NavGroupLink(props: {
     navGroup.setHighlightOffsetLeft(event.currentTarget.offsetLeft)
   }
 
+  function handleFocus(event: React.FocusEvent<HTMLAnchorElement, Element>) {
+    navGroup.setHighlightWidth(event.currentTarget.clientWidth)
+    navGroup.setHighlightOffsetLeft(event.currentTarget.offsetLeft)
+  }
+
   return (
     <NextLink href={props.to} passHref>
       <Link
@@ -84,8 +89,9 @@ function NavGroupLink(props: {
             ? router.pathname === props.to
             : router.pathname.startsWith(props.to),
         })}
-        onMouseEnter={handleMouseEnter}
+        onMouseMove={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
       >
         {props.children}
       </Link>
@@ -102,6 +108,10 @@ const Wrapper = styled.div`
   }
 `
 
+const highlightHoverStyles = css`
+  opacity: 1;
+`
+
 const Highlight = styled.div`
   position: absolute;
   height: 100%;
@@ -114,9 +124,15 @@ const Highlight = styled.div`
   transition-duration: 0.15s, 0.15s, 0.1s, 0.1s;
   transition-timing-function: ease-in-out;
 
-  ${Wrapper}:hover &,
+  @media (hover: hover) {
+    ${Wrapper}:hover & {
+      ${highlightHoverStyles}
+    }
+  }
+
+  ${Wrapper}:focus-within &,
   ${Wrapper}:active & {
-    opacity: 1;
+    ${highlightHoverStyles}
   }
 
   ${Wrapper}:active & {
@@ -126,6 +142,7 @@ const Highlight = styled.div`
 
 const Link = styled.a`
   height: 44px;
+  position: relative;
   display: flex;
   align-items: center;
   font-size: 1.1rem;
@@ -144,6 +161,21 @@ const Link = styled.a`
 
   &.active {
     color: var(--color-fg-accent);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 16px;
+    inset: -4px;
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::after {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
   }
 `
 

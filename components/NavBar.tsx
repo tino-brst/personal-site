@@ -6,12 +6,12 @@ import { map } from '@lib/math'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
 import { useTheme } from 'contexts/theme'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import avatarImageSrc from 'public/images/avatar.png'
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { MenuIcon } from './icons/MenuIcon'
 import { ThemeIcon } from './icons/ThemeIcon'
 import { NavGroup, NavGroupLink } from './NavGroup'
@@ -157,12 +157,13 @@ function NavBar() {
         <Content>
           <NextLink href="/" passHref>
             <HomeLink>
-              <AvatarImage
-                src={avatarImageSrc}
-                height={46}
-                width={46}
-                alt="Tino's Memoji"
-              />
+              <AvatarImageWrapper>
+                <NextImage
+                  src={avatarImageSrc}
+                  layout="fill"
+                  alt="Tino's Memoji"
+                />
+              </AvatarImageWrapper>
               Tino&apos;s Corner
             </HomeLink>
           </NextLink>
@@ -210,6 +211,7 @@ function NavBar() {
           style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
         >
           <Menu ref={menuRef}>
+            {/* TODO close menu on esc, set focus on close button (maybe just closing it and the tabindex makes it return to the button) */}
             {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
             {/* TODO: remove from tab-index, aria hidden, etc */}
             {/* TODO: cascade animation for each item? */}
@@ -228,6 +230,8 @@ function NavBar() {
     </>
   )
 }
+
+// TODO remove redundant component
 
 function MenuLink(props: {
   href: string
@@ -390,16 +394,43 @@ const Content = styled.div`
 `
 
 const HomeLink = styled.a`
+  --avatar-size: 46px;
+
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  line-height: 0;
-  font-size: 1.1rem;
+  padding-right: 8px;
+  line-height: 1;
+  font-size: 18px;
   font-weight: 500;
+  border-radius: calc(var(--avatar-size) / 2);
   color: var(--color-fg-accent);
+
+  &::after {
+    --inset: -4px;
+
+    /* TODO add to all focus rings */
+    pointer-events: none;
+    content: '';
+    position: absolute;
+    border-radius: calc(var(--avatar-size) / 2 + var(--inset) * -1);
+    inset: var(--inset);
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::after {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
+  }
 `
 
-const AvatarImage = styled(Image)`
+const AvatarImageWrapper = styled.div`
+  position: relative;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   border-radius: 50%;
   background-color: var(--color-bg-muted);
 `
@@ -409,27 +440,57 @@ const BarEnd = styled.div`
   gap: 12px;
 `
 
+const navButtonHoverStyles = css`
+  background-color: var(--color-bg-subtle);
+`
+
 const NavButton = styled.button`
   cursor: pointer;
   width: 44px;
   height: 44px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
   color: var(--color-fg-accent);
+  user-select: none;
 
   transition-property: background-color, transform;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:hover,
+  &:focus-visible,
   &:active {
-    background-color: var(--color-bg-subtle);
+    ${navButtonHoverStyles}
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      ${navButtonHoverStyles}
+    }
   }
 
   &:active {
     transform: scale(0.94);
+  }
+
+  &::after {
+    --inset: -4px;
+
+    pointer-events: none;
+    content: '';
+    position: absolute;
+    border-radius: calc(12px + var(--inset) * -1);
+    inset: var(--inset);
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::after {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
   }
 `
 
@@ -469,10 +530,15 @@ const Menu = styled.div`
   padding-bottom: 24px;
 `
 
+const linkHoverStyles = css`
+  background-color: var(--color-bg-subtle);
+`
+
 const Link = styled.a`
+  position: relative;
   display: flex;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 20px;
   font-weight: 500;
   border-radius: 12px;
   padding: 12px 18px;
@@ -482,9 +548,17 @@ const Link = styled.a`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:hover,
+  /* TODO move all hover before focus/active */
+
+  @media (hover: hover) {
+    &:hover {
+      ${linkHoverStyles}
+    }
+  }
+
+  &:focus-visible,
   &:active {
-    background-color: var(--color-bg-subtle);
+    ${linkHoverStyles}
   }
 
   &:active {
@@ -493,6 +567,24 @@ const Link = styled.a`
 
   &.active {
     color: var(--color-fg-accent);
+  }
+
+  &::after {
+    --inset: -4px;
+
+    pointer-events: none;
+    content: '';
+    position: absolute;
+    border-radius: calc(12px + var(--inset) * -1);
+    inset: var(--inset);
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::after {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
   }
 `
 

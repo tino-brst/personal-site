@@ -132,13 +132,13 @@ function ArticlePage(props: Props) {
   const seoProps: NextSeoProps = {
     title: `${props.title} • Tino's Corner`,
     openGraph: {
-      title: props.title,
       type: 'article',
+      title: props.title,
+      description: 'Lorem ipsum dolorem potates and all that stuff',
       site_name: `Tino's Corner`,
       images: [{ url: props.imageSrc ?? '' }],
       // TODO add description field to articles
       // TODO once the domain is set, add url field
-      description: 'Lorem ipsum dolorem potates and all that stuff',
       article: {
         publishedTime: new Date(props.publishedOn).toISOString(),
       },

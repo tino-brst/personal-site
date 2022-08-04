@@ -4,7 +4,7 @@ import { useNavBar } from 'contexts/nav-bar'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { ArrowTopRightIcon } from './icons/ArrowTopRightIcon'
 import { NavBar } from './NavBar'
 import { Signature } from './Signature'
@@ -131,7 +131,12 @@ const LinksWrapper = styled.div`
   margin-bottom: 48px;
 `
 
+const styledLinkHoverStyles = css`
+  color: var(--color-fg-default-hover);
+`
+
 const StyledLink = styled.a`
+  position: relative;
   display: flex;
   gap: 4px;
   font-size: 14px;
@@ -142,9 +147,34 @@ const StyledLink = styled.a`
   transition-property: color;
   transition-duration: 0.1s;
 
-  &:hover {
-    color: var(--color-fg-default-hover);
+  &:active,
+  &:focus-visible {
+    ${styledLinkHoverStyles}
   }
+
+  @media (hover: hover) {
+    &:hover {
+      ${styledLinkHoverStyles}
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 8px;
+    inset: -6px;
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::after {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
+  }
+`
+const externalLinkIconHoverStyles = css`
+  color: var(--color-fg-subtle-hover);
 `
 
 const ExternalLinkIcon = styled(ArrowTopRightIcon)`
@@ -153,8 +183,15 @@ const ExternalLinkIcon = styled(ArrowTopRightIcon)`
   transition-property: color;
   transition-duration: 0.1s;
 
-  ${StyledLink}:hover & {
-    color: var(--color-fg-subtle-hover);
+  ${StyledLink}:active &, 
+  ${StyledLink}:focus-visible & {
+    ${externalLinkIconHoverStyles}
+  }
+
+  @media (hover: hover) {
+    ${StyledLink}:hover & {
+      ${externalLinkIconHoverStyles}
+    }
   }
 `
 

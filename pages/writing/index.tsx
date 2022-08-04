@@ -14,7 +14,7 @@ import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
 import { NextSeo, NextSeoProps } from 'next-seo'
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 type ArticlePreview = {
   title: string
@@ -117,12 +117,10 @@ function WritingPage(props: Props) {
           isOpen={isSearchOpen}
           onIsOpenChange={(value) => setIsSearchOpen(value)}
         />
-        <FiltersToggleButton
-          onClick={() => setIsFiltersOpen((value) => !value)}
-        >
+        <ShowFiltersToggle onClick={() => setIsFiltersOpen((value) => !value)}>
           <StyledFilterIcon hasBadge={activeTags.length > 0} />
           <ExpandIcon isReversed={isFiltersOpen} />
-        </FiltersToggleButton>
+        </ShowFiltersToggle>
       </Search>
       <FiltersWrapper
         className={clsx({
@@ -201,7 +199,12 @@ const Search = styled.div`
   max-width: 400px;
 `
 
-const FiltersToggleButton = styled.button`
+const showFiltersToggleHoverStyles = css`
+  background-color: var(--color-bg-subtle);
+`
+
+const ShowFiltersToggle = styled.button`
+  position: relative;
   cursor: pointer;
   padding: 12px 12px 12px 14px;
   border-radius: 16px;
@@ -209,18 +212,41 @@ const FiltersToggleButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 4px;
+  will-change: transform;
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  &:hover,
+  @media (hover: hover) {
+    &:hover {
+      ${showFiltersToggleHoverStyles}
+    }
+  }
+
+  &:focus-visible,
   &:active {
-    background-color: var(--color-bg-subtle);
+    ${showFiltersToggleHoverStyles}
   }
 
   &:active {
     transform: scale(0.96);
+  }
+
+  &::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    border-radius: 20px;
+    inset: -4px;
+    box-shadow: 0 0 0 1px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::before {
+    box-shadow: 0 0 0 4px hsla(0 0% 0% / 0.1);
   }
 `
 
@@ -268,6 +294,7 @@ const FiltersTitle = styled.h3`
   color: var(--color-fg-default);
   opacity: 0;
   transform: translateY(2px);
+  will-change: transform;
 
   transition-property: opacity, transform;
   transition-duration: var(--transition-duration);
@@ -283,6 +310,7 @@ const Tags = styled.ol`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  will-change: transform;
 
   opacity: 0;
   transform: translateY(6px);
@@ -298,8 +326,9 @@ const Tags = styled.ol`
 `
 
 const Tag = styled.label`
-  --border-radius: 8px;
+  isolation: isolate;
   position: relative;
+  cursor: pointer;
   color: var(--color-fg-accent);
   display: flex;
   align-items: center;
@@ -307,42 +336,76 @@ const Tag = styled.label`
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
-  background-color: var(--color-bg-subtle);
-  border-radius: var(--border-radius);
   padding: 8px 10px 8px 8px;
+  will-change: transform;
+  user-select: none;
 
-  transition-property: transform, background-color, color;
+  transition-property: transform, color;
   transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
+
+  &:active {
+    transform: scale(0.95);
+  }
 
   &.checked {
-    background-color: var(--color-bg-emphasis);
     color: var(--color-fg-emphasis);
   }
 
   &.disabled {
-    background-color: var(--color-bg-subtler);
     color: var(--color-fg-default);
+    transform: none;
+    cursor: default;
   }
+`
 
-  &:not(.disabled) {
-    cursor: pointer;
-  }
-
-  &:not(.checked, .disabled):hover,
-  &:not(.checked, .disabled):active {
-    background-color: var(--color-bg-subtle-hover);
-  }
-
-  &:not(.disabled):active {
-    transform: scale(0.95);
-  }
+const tagInputHoverStyles = css`
+  background-color: var(--color-bg-subtle-hover);
 `
 
 const TagInput = styled.input`
   position: absolute;
+  z-index: -1;
   inset: 0;
-  border-radius: var(--border-radius);
+  border-radius: 8px;
+  background-color: var(--color-bg-subtle);
+
+  transition-property: background-color;
+  transition-duration: 0.15s;
+
+  @media (hover: hover) {
+    ${Tag}:hover & {
+      ${tagInputHoverStyles}
+    }
+  }
+
+  &:focus-visible,
+  ${Tag}:active & {
+    ${tagInputHoverStyles}
+  }
+
+  ${Tag}.checked & {
+    background-color: var(--color-bg-emphasis);
+  }
+
+  ${Tag}.disabled & {
+    background-color: var(--color-bg-subtler);
+  }
+
+  &::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    border-radius: 10px;
+    inset: -2px;
+    box-shadow: 0 0 0 0px transparent;
+
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+  }
+
+  &:focus-visible::before {
+    box-shadow: 0 0 0 2px hsla(0 0% 0% / 0.15);
+  }
 `
 
 const TagIcon = styled(HashIcon)`
