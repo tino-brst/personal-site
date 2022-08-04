@@ -47,8 +47,8 @@
   --color-border-code: hsla(0 0% 0% / 0.03);
   --color-border-top-navbar: hsla(0 0% 0% / 0.08);
   --color-progress-bar: hsla(0 0% 0% / 0.1);
-  --color-focus-ring: hsla(0 0% 0% / 0.1);
-  --color-focus-ring-hover: hsla(0 0% 0% / 0.2);
+  --color-focus-ring: hsla(0 0% 0% / 0.2);
+  --color-focus-ring-hover: hsla(0 0% 0% / 0.3);
 
   --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 0% / 0.08);

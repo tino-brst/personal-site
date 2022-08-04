@@ -32,6 +32,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import styled, { css, keyframes } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 
 const barHeight = 70
 const barBottomMargin = 48
@@ -391,13 +392,15 @@ const Title = styled.h1`
 
 const Tags = styled.div`
   --gap: 8px;
-  margin-top: 20px;
+  margin-top: 16px;
+  margin-bottom: -4px;
   margin-left: -24px;
   margin-right: -24px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   padding-left: 24px;
   max-width: 100vw;
   display: flex;
-  overflow-y: hidden;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-padding-left: 24px;
@@ -418,9 +421,10 @@ const Tags = styled.div`
   }
 
   @media (min-width: 640px) {
-    margin-left: 0;
-    margin-right: 0;
-    padding: 0;
+    margin-left: -4px;
+    margin-left: -4px;
+    padding-left: 4px;
+    padding-left: 4px;
     max-width: 100%;
     flex-wrap: wrap;
     row-gap: var(--gap);
@@ -431,7 +435,12 @@ const Tags = styled.div`
   }
 `
 
+const tagHoverStyles = css`
+  background-color: var(--color-bg-tag-hover);
+`
+
 const Tag = styled.a`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -454,13 +463,25 @@ const Tag = styled.a`
     margin-right: var(--gap);
   }
 
-  &:hover {
-    background-color: var(--color-bg-tag-hover);
+  @media (hover: hover) {
+    &:hover {
+      ${tagHoverStyles}
+    }
+  }
+
+  &:focus-visible,
+  &:active {
+    ${tagHoverStyles}
   }
 
   &:active {
     transform: scale(0.95);
   }
+
+  --focus-inset: -2px;
+  --focus-radius: 10px;
+
+  ${focusRing}
 `
 
 const TagIcon = styled(HashIcon)`
@@ -639,6 +660,7 @@ const ThanksDescription = styled.p`
   color: var(--color-fg-default);
 
   & a {
+    position: relative;
     color: var(--color-link);
     font-weight: 500;
     text-decoration-line: underline;
@@ -648,17 +670,17 @@ const ThanksDescription = styled.p`
 
     transition-property: text-decoration-color, color;
     transition-duration: 0.15s;
+
+    --focus-inset: -2px;
+    --focus-radius: 4px;
+
+    ${focusRing}
   }
 
-  & a:hover {
-    color: var(--color-link-hover);
-    text-decoration-color: var(--color-link-decoration-hover);
-  }
-  @media (min-width: 640px) {
-    font-weight: 400;
-
-    & a {
-      font-weight: 450;
+  @media (hover: hover) {
+    & a:hover {
+      color: var(--color-link-hover);
+      text-decoration-color: var(--color-link-decoration-hover);
     }
   }
 `
@@ -667,8 +689,9 @@ const LikeButton = styled.button`
   --accent-color: hsl(348 83% 47%);
   --accent-color-muted: hsl(348 90% 38%);
 
+  position: relative;
   user-select: none;
-  margin-top: 16px;
+  margin-top: 20px;
   width: 100%;
   padding: 8px;
   display: flex;
@@ -678,7 +701,6 @@ const LikeButton = styled.button`
   gap: 8px;
   line-height: 1;
   font-weight: 500;
-  border-radius: 4px;
   cursor: pointer;
 
   transition-property: transform, color;
@@ -691,6 +713,11 @@ const LikeButton = styled.button`
   &.liked {
     color: var(--color-fg-accent-muted);
   }
+
+  --focus-inset: 0;
+  --focus-radius: 8px;
+
+  ${focusRing}
 `
 
 const bounceUp = keyframes`
@@ -708,6 +735,7 @@ const bounceUp = keyframes`
 `
 
 const LikeIconWrapper = styled.div`
+  margin-top: -8px;
   position: relative;
   will-change: transform;
 

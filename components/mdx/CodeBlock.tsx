@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
 import * as React from 'react'
 import styled from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 
 type Props = {
   children?: React.ReactNode
@@ -112,11 +113,7 @@ const CopyButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  &:hover {
-    background-color: var(--color-bg-translucent-hover);
-  }
-
-  transition-property: background-color, opacity, transform;
+  transition-property: opacity, transform;
   transition-duration: 0.15s;
 
   @media (hover: hover) {
@@ -130,6 +127,11 @@ const CopyButton = styled.button`
       transform: none;
     }
   }
+
+  --focus-inset: -3px;
+  --focus-radius: 11px;
+
+  ${focusRing}
 `
 
 const IconWrapper = styled.div`

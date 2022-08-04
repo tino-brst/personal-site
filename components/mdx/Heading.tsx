@@ -2,6 +2,7 @@ import { LinkIcon } from '@components/icons/LinkIcon'
 import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
 import styled, { css, StyledComponent } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 
 type Props = {
   level: 2 | 3 | 4
@@ -59,6 +60,7 @@ function Heading4(props: Omit<Props, 'level'>) {
 }
 
 const Link = styled.a`
+  position: relative;
   display: flex;
   align-items: center;
   width: fit-content;
@@ -69,6 +71,11 @@ const Link = styled.a`
   &:active {
     transform: scale(0.98);
   }
+
+  --focus-inset: -4px -4px;
+  --focus-radius: 8px;
+
+  ${focusRing}
 `
 
 const Icon = styled(LinkIcon)`
@@ -94,7 +101,7 @@ const sharedStyles = css`
       transition-timing-function: ease-in-out;
     }
 
-    &:hover ${Icon} {
+    ${Link}:focus-visible ${Icon}, &:hover ${Icon} {
       opacity: 1;
       transform: none;
     }
