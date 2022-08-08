@@ -2,7 +2,8 @@ import { ListBulletIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 import { ChevronLeftIcon } from './icons/ChevronLeftIcon'
 
 function AsideTableOfContents() {
@@ -112,6 +113,16 @@ const Link = styled.a`
   &.activeAncestor {
     color: var(--color-fg-accent-muted);
   }
+
+  --focus-inset: 2px -8px;
+  --focus-radius: 8px;
+
+  ${focusRing}
+`
+
+const iconHoverStyles = css`
+  opacity: 0.3;
+  transform: none;
 `
 
 const ActiveListItemIcon = styled(ChevronLeftIcon)`
@@ -123,10 +134,15 @@ const ActiveListItemIcon = styled(ChevronLeftIcon)`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  ${Link}:hover &, 
+  @media (hover: hover) {
+    ${Link}:hover & {
+      ${iconHoverStyles}
+    }
+  }
+
+  ${Link}:focus-visible &, 
   ${Link}:active & {
-    opacity: 0.3;
-    transform: none;
+    ${iconHoverStyles}
   }
 
   ${Link}:active & {

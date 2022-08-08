@@ -19,7 +19,7 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon,
+  ListBulletIcon
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -560,6 +560,10 @@ const ButtonGroupDivider = styled.div`
   }
 `
 
+// TODO The button background could possibly be part of the button? Since the
+// scaling on active is being done directly to the icon, and the scaling on the
+// back to top when expanding could be moved ot the icon too
+
 const ButtonBackground = styled.div`
   line-height: 0;
   flex-shrink: 0;
@@ -578,13 +582,23 @@ const ButtonBackground = styled.div`
 const Button = styled.button`
   width: 100%;
   height: 100%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  ${focusRing}
 `
 
-const TableOfContentsButton = styled(Button)``
+const TableOfContentsButton = styled(Button)`
+  --focus-radius: 7px;
+  --focus-inset: 4px;
+
+  ${ButtonGroup}.expanded & {
+    --focus-radius: 1px 8px 8px 1px;
+  }
+`
 
 const BackToTopButton = styled(Button)`
   opacity: 0;
@@ -593,6 +607,9 @@ const BackToTopButton = styled(Button)`
   transition-property: opacity, transform;
   transition-duration: 0.15s;
   transition-delay: 0s;
+
+  --focus-radius: 8px 1px 1px 8px;
+  --focus-inset: 4px 4px 4px 5px;
 
   ${ButtonGroup}.expanded & {
     opacity: 1;

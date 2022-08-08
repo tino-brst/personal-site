@@ -2,7 +2,8 @@ import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import clsx from 'clsx'
 import { useTableOfContents } from 'contexts/table-of-contents'
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 import { ChevronLeftIcon } from './icons/ChevronLeftIcon'
 
 type Props = {
@@ -133,7 +134,12 @@ const List = styled.ol`
   scroll-padding-bottom: 8px;
 `
 
+const linkHoverStyles = css`
+  background-color: var(--color-bg-subtle);
+`
+
 const Link = styled.a`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -148,9 +154,15 @@ const Link = styled.a`
   transition-duration: 0.1s;
   transition-timing-function: ease-in-out;
 
-  &:hover,
+  @media (hover: hover) {
+    &:hover {
+      ${linkHoverStyles}
+    }
+  }
+
+  &:focus-visible,
   &:active {
-    background-color: var(--color-bg-subtle);
+    ${linkHoverStyles}
   }
 
   &:active {
@@ -165,6 +177,11 @@ const Link = styled.a`
   &.topLevel {
     font-weight: 500;
   }
+
+  --focus-inset: -2px;
+  --focus-radius: 10px;
+
+  ${focusRing}
 `
 
 const ActiveListItemIcon = styled(ChevronLeftIcon)`
