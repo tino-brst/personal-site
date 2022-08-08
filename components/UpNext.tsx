@@ -1,6 +1,7 @@
 import NextImage from 'next/image'
 import NextLink from 'next/link'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { focusRing } from 'styles/focusRing'
 import { ArrowLeftIcon } from './icons/ArrowLeftIcon'
 import { Link } from './Link'
 
@@ -23,20 +24,20 @@ function UpNext(props: Props) {
           {props.newerArticle && (
             <NextLink href={`/writing/${props.newerArticle.slug}`} passHref>
               <ArticleLink>
-                <ArticleImageWrapper>
+                <ThumbnailWrapper>
                   {props.newerArticle.imageSrc && (
-                    <ArticleImage
+                    <Thumbnail
                       src={props.newerArticle.imageSrc}
                       layout="fill"
                       objectFit="cover"
                     />
                   )}
-                  <ArticleImageOverlay />
-                </ArticleImageWrapper>
-                <ArticleInfo>
-                  <ArticleTitle>{props.newerArticle.title}</ArticleTitle>
-                  <ArticleLabel>Next</ArticleLabel>
-                </ArticleInfo>
+                  <ThumbnailOverlay />
+                </ThumbnailWrapper>
+                <Info>
+                  <Title>{props.newerArticle.title}</Title>
+                  <Label>Next</Label>
+                </Info>
               </ArticleLink>
             </NextLink>
           )}
@@ -45,20 +46,20 @@ function UpNext(props: Props) {
           {props.olderArticle && (
             <NextLink href={`/writing/${props.olderArticle.slug}`} passHref>
               <ArticleLink>
-                <ArticleImageWrapper>
+                <ThumbnailWrapper>
                   {props.olderArticle.imageSrc && (
-                    <ArticleImage
+                    <Thumbnail
                       src={props.olderArticle.imageSrc}
                       layout="fill"
                       objectFit="cover"
                     />
                   )}
-                  <ArticleImageOverlay />
-                </ArticleImageWrapper>
-                <ArticleInfo>
-                  <ArticleTitle>{props.olderArticle.title}</ArticleTitle>
-                  <ArticleLabel>Previous</ArticleLabel>
-                </ArticleInfo>
+                  <ThumbnailOverlay />
+                </ThumbnailWrapper>
+                <Info>
+                  <Title>{props.olderArticle.title}</Title>
+                  <Label>Previous</Label>
+                </Info>
               </ArticleLink>
             </NextLink>
           )}
@@ -125,6 +126,10 @@ const ListItem = styled.li`
   flex: 0 0 calc(50% - var(--gap) / 2);
 `
 
+const articleLinkHoverStyles = css`
+  background-color: var(--color-bg-subtle-hover);
+`
+
 const ArticleLink = styled.a`
   --padding: 12px;
 
@@ -132,6 +137,7 @@ const ArticleLink = styled.a`
   border-radius: 16px;
   background-color: var(--color-bg-subtle);
 
+  position: relative;
   display: flex;
   padding: var(--padding);
   gap: var(--padding);
@@ -141,9 +147,16 @@ const ArticleLink = styled.a`
   transition-timing-function: ease-in-out;
 
   /* TODO: all hover states should also be applied while active, like below */
-  &:hover,
+
+  @media (hover: hover) {
+    &:hover {
+      ${articleLinkHoverStyles}
+    }
+  }
+
+  &:focus-visible,
   &:active {
-    background-color: var(--color-bg-subtle-hover);
+    ${articleLinkHoverStyles}
   }
 
   &:active {
@@ -153,9 +166,14 @@ const ArticleLink = styled.a`
   @media (min-width: 640px) {
     flex-direction: column;
   }
+
+  --focus-inset: -2px;
+  --focus-radius: 18px;
+
+  ${focusRing}
 `
 
-const ArticleImageWrapper = styled.div`
+const ThumbnailWrapper = styled.div`
   --border-radius: 6px;
 
   position: relative;
@@ -182,18 +200,33 @@ const ArticleImageWrapper = styled.div`
   }
 `
 
-const ArticleImage = styled(NextImage)`
+const thumbnailHoverStyles = css`
+  transform: scale(1.03);
+`
+
+const Thumbnail = styled(NextImage)`
+  will-change: transform;
+
   transition-property: transform;
   transition-duration: 0.4s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
 
-  ${ArticleLink}:hover &,
-  ${ArticleLink}:active & {
-    transform: scale(1.03);
+  @media (hover: hover) {
+    ${ArticleLink}:hover & {
+      ${thumbnailHoverStyles}
+    }
+  }
+
+  ${ArticleLink}:focus-visible & {
+    ${thumbnailHoverStyles}
   }
 `
 
-const ArticleImageOverlay = styled.div`
+const thumbnailOverlayHoverStyles = css`
+  opacity: 1;
+`
+
+const ThumbnailOverlay = styled.div`
   position: absolute;
   content: '';
   inset: 0;
@@ -205,13 +238,19 @@ const ArticleImageOverlay = styled.div`
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
 
-  ${ArticleLink}:hover &,
+  @media (hover: hover) {
+    ${ArticleLink}:hover & {
+      ${thumbnailOverlayHoverStyles}
+    }
+  }
+
+  ${ArticleLink}:focus-visible &,
   ${ArticleLink}:active & {
-    opacity: 1;
+    ${thumbnailOverlayHoverStyles}
   }
 `
 
-const ArticleInfo = styled.div`
+const Info = styled.div`
   flex: 2 1 0;
 
   display: flex;
@@ -234,7 +273,7 @@ const ArticleInfo = styled.div`
   }
 `
 
-const ArticleTitle = styled.h2`
+const Title = styled.h2`
   font-weight: 550;
   font-size: 16px;
   letter-spacing: 0.01em;
@@ -246,7 +285,7 @@ const ArticleTitle = styled.h2`
   }
 `
 
-const ArticleLabel = styled.div`
+const Label = styled.div`
   font-weight: 550;
   font-size: 14px;
   letter-spacing: 0.01em;
