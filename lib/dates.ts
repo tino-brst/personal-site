@@ -5,11 +5,22 @@ function compareDatesDesc(a: Date | number, b: Date | number): number {
 }
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'medium',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
 })
 
-const formatDate: typeof dateFormatter.format = (date) => {
-  return dateFormatter.format(date)
+function formatDate(value: number | Date): string {
+  const date = value instanceof Date ? value : new Date(value)
+  const currentDate = new Date()
+  const dateString = dateFormatter.format(value)
+
+  // Omit the year if it's the current one
+  if (date.getFullYear() === currentDate.getFullYear()) {
+    return dateString.split(',')[0]
+  }
+
+  return dateString
 }
 
 export { compareDatesDesc, formatDate }
