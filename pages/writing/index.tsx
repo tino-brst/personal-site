@@ -14,7 +14,7 @@ import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
 import { NextSeo, NextSeoProps } from 'next-seo'
 import * as React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 
 type ArticlePreview = {
@@ -97,6 +97,13 @@ function WritingPage(props: Props) {
     [articles]
   )
 
+  // Empty State
+
+  function handleClearSearchButtonClick() {
+    setSearchParam(undefined)
+    setActiveTagsParam(undefined)
+  }
+
   // SEO
 
   const seoProps: NextSeoProps = {
@@ -155,12 +162,20 @@ function WritingPage(props: Props) {
           </Tags>
         </Filters>
       </FiltersWrapper>
-      <ArticleGrid>
-        {articles.map((article) => (
-          <ArticleGridItem key={article.slug} {...article} />
-        ))}
-      </ArticleGrid>
-      {/* TODO: add empty states */}
+      {articles.length === 0 ? (
+        <EmptyState>
+          <EmptyStateTitle>No articles found</EmptyStateTitle>
+          <ClearSearchButton onClick={handleClearSearchButtonClick}>
+            Clear search
+          </ClearSearchButton>
+        </EmptyState>
+      ) : (
+        <ArticleGrid>
+          {articles.map((article) => (
+            <ArticleGridItem key={article.slug} {...article} />
+          ))}
+        </ArticleGrid>
+      )}
     </Wrapper>
   )
 }
@@ -403,6 +418,79 @@ const TagIcon = styled(HashIcon)`
   ${Tag}.disabled & {
     stroke: var(--color-fg-subtler);
   }
+`
+
+const emptyStateFadeIn = keyframes`
+  from {
+    transform: scale(.95);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+`
+
+const EmptyState = styled.div`
+  --animation: ${emptyStateFadeIn} 0.3s backwards
+    cubic-bezier(0.3, 0.69, 0.54, 1.01);
+
+  margin-top: 84px;
+  margin-bottom: 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+`
+
+const EmptyStateTitle = styled.h2`
+  color: var(--color-fg-accent);
+  font-size: 20px;
+  font-weight: 550;
+
+  animation: var(--animation);
+`
+
+const clearSearchButtonHoverStyles = css`
+  background-color: var(--color-bg-subtle-hover);
+`
+
+const ClearSearchButton = styled.button`
+  position: relative;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: var(--color-bg-subtle);
+  color: var(--color-fg-default);
+  padding: 8px 12px;
+  border-radius: 9999px;
+
+  transition-property: transform, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+
+  animation: var(--animation);
+  animation-delay: 0.1s;
+
+  @media (hover: hover) {
+    &:hover {
+      ${clearSearchButtonHoverStyles}
+    }
+  }
+
+  &:focus-visible,
+  &:active {
+    ${clearSearchButtonHoverStyles}
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  --focus-inset: -2px;
+  --focus-radius: 9999px;
+
+  ${focusRing}
 `
 
 /* ---------------------------------- Next.js ------------------------------- */
