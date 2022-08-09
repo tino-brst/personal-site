@@ -79,7 +79,8 @@ function useQueryParam(
     // its query object yet (router.query = {}), even though there may be
     // parameters in the URL readily available at router.asPath
 
-    const [_, search] = router.asPath.split('?')
+    const [pathname] = router.asPath.split('?')
+    const search = searchMap.get(pathname)
     const searchParams = new URLSearchParams(search)
     const searchParamValues = searchParams.getAll(name)
 
@@ -99,15 +100,17 @@ function useQueryParam(
       : searchParamValues.length === 1
       ? searchParamValues[0]
       : searchParamValues
-  }, [router.isReady, router.query, router.asPath, name, fallbackValue])
+  }, [router.isReady, router.asPath, router.query, name, fallbackValue])
 
   const setValue = React.useCallback<SetValue>(
     (value) => {
-      const [pathname, search] = router.asPath.split('?')
+      const [pathname] = router.asPath.split('?')
+      const search = searchMap.get(pathname)
       const searchParams = new URLSearchParams(search)
 
       const newValue =
         value instanceof Function ? value(prevValue.current) : value
+
       prevValue.current = newValue
 
       if (newValue === undefined) {
@@ -132,6 +135,8 @@ function useQueryParam(
         ? pathname
         : `${pathname}?${searchParams}`
 
+      searchMap.set(pathname, searchParams.toString())
+
       if (replace) {
         router.replace(url, undefined, transitionOptions)
       } else {
@@ -145,6 +150,8 @@ function useQueryParam(
 
   return [value, setValue]
 }
+
+const searchMap = new Map<string, string>()
 
 function isEmpty(iterable: Iterable<any>): boolean {
   return iterable[Symbol.iterator]().next().done ?? true
