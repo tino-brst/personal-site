@@ -84,6 +84,7 @@ const Wrapper = styled.div`
 
 const Content = styled.div`
   flex: 1;
+  padding-top: ${NavBar.marginBottom}px;
 `
 
 const Footer = styled.footer`

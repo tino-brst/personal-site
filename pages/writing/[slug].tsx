@@ -6,6 +6,7 @@ import { HashIcon } from '@components/icons/HashIcon'
 import { LikeIcon as BaseLikeIcon } from '@components/icons/LikeIcon'
 import { Link } from '@components/Link'
 import { components } from '@components/mdx'
+import { NavBar } from '@components/NavBar'
 import { Parallax } from '@components/Parallax'
 import { UpNext } from '@components/UpNext'
 import { useLikeCount } from '@hooks/api/useLikeCount'
@@ -19,7 +20,7 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon
+  ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -34,8 +35,6 @@ import * as React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 
-const barHeight = 70
-const barBottomMargin = 48
 const asideWidth = 240
 
 type ArticlePreview = {
@@ -147,7 +146,10 @@ function ArticlePage(props: Props) {
   }
 
   return (
-    <TableOfContentsProvider tableOfContents={props.tableOfContents}>
+    <TableOfContentsProvider
+      tableOfContents={props.tableOfContents}
+      scrollOffsetTop={NavBar.height}
+    >
       <NextSeo {...seoProps} />
       <Wrapper>
         <HeaderImageWrapper>
@@ -274,7 +276,7 @@ const Wrapper = styled.div`
 
   isolation: isolate;
   margin-bottom: 48px;
-  margin-top: -${barHeight + barBottomMargin}px;
+  margin-top: -${NavBar.height + NavBar.marginBottom}px;
   display: grid;
   grid-template-columns: 1fr min(100vw, calc(768px + 2 * 16px)) 1fr;
   grid-template-areas:
@@ -300,7 +302,7 @@ const StyledParallax = styled(Parallax)`
 const HeaderImageOverlay = styled.div`
   position: absolute;
   inset: 0;
-  top: ${barHeight}px;
+  top: ${NavBar.height}px;
   background: var(--gradient-header-image);
 `
 
@@ -308,7 +310,7 @@ const Aside = styled.aside`
   grid-area: aside;
   align-self: start;
   position: sticky;
-  top: calc(${barHeight}px + var(--gap));
+  top: calc(${NavBar.height}px + var(--gap));
 
   padding-left: 20px;
   padding-right: 24px;
@@ -504,7 +506,7 @@ const FloatingStuff = styled.div`
   gap: 12px;
   width: calc(100vw - 2 * var(--inset));
   max-width: 380px;
-  max-height: calc(100vh - var(--inset) * 2 - ${barHeight}px);
+  max-height: calc(100vh - var(--inset) * 2 - ${NavBar.height}px);
 
   @media (min-width: 640px) {
     --inset: 24px;

@@ -1,7 +1,5 @@
+import { flatten, isSection, Root, Section, visit } from '@lib/mdast-util-toc'
 import * as React from 'react'
-import { Root, Section, visit, isSection, flatten } from '@lib/mdast-util-toc'
-
-const barHeight = 70
 
 type ContextValue = {
   items: Array<Section>
@@ -14,6 +12,7 @@ type ContextValue = {
 
 type Props = {
   tableOfContents: Root
+  scrollOffsetTop: number
   children: React.ReactNode
 }
 
@@ -61,7 +60,7 @@ function TableOfContentsProvider(props: Props) {
       // the window.
       const firstHeadingAtOrPastTop = findRight(
         headingsSortedByOrderOfAppearance,
-        (heading) => isAtOrPastWindowTop(heading, barHeight)
+        (heading) => isAtOrPastWindowTop(heading, props.scrollOffsetTop)
       )
 
       // If there is no heading at/past the top of the window, then the first

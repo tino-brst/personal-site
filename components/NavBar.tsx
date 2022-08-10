@@ -17,8 +17,8 @@ import { MenuIcon } from './icons/MenuIcon'
 import { ThemeIcon } from './icons/ThemeIcon'
 import { NavGroup, NavGroupLink } from './NavGroup'
 
-const barHeight = 70
-const scrollThreshold = 48
+const height = 70
+const marginBottom = 48
 
 const cssVar = {
   scrollBasedOpacity: '--scroll-based-opacity',
@@ -44,14 +44,14 @@ function NavBar() {
   useIsomorphicLayoutEffect(() => {
     backgroundRef.current?.style.setProperty(
       cssVar.scrollBasedOpacity,
-      `${map(window.scrollY, [0, scrollThreshold], [0, 1])}`
+      `${map(window.scrollY, [0, marginBottom], [0, 1])}`
     )
   }, [])
 
   const updateScrollBasedOpacity = React.useCallback(() => {
     backgroundRef.current?.style.setProperty(
       cssVar.scrollBasedOpacity,
-      `${map(window.scrollY, [0, scrollThreshold], [0, 1])}`
+      `${map(window.scrollY, [0, marginBottom], [0, 1])}`
     )
   }, [])
 
@@ -109,7 +109,7 @@ function NavBar() {
 
     const threshold = Math.min(
       document.documentElement.scrollHeight - window.innerHeight,
-      navBar.progressCompleteThreshold - barHeight
+      navBar.progressCompleteThreshold - height
     )
 
     const progress = map(window.scrollY, [0, threshold], [0, 1])
@@ -131,139 +131,127 @@ function NavBar() {
   }, [])
 
   return (
-    <>
-      <StickyPlaceholder />
-      <Root
-        ref={wrapperRef}
+    <Root
+      ref={wrapperRef}
+      className={clsx({
+        menuOpen: isMenuOpen,
+      })}
+    >
+      <Status className={clsx({ visible: navBar.isStatusShown })}>
+        {navBar.status}
+      </Status>
+      <Background
+        ref={backgroundRef}
         className={clsx({
+          opaque: navBar.isAlwaysOpaque,
           menuOpen: isMenuOpen,
         })}
+      />
+      <ProgressBar
+        ref={progressBarRef}
+        className={clsx({
+          visible: navBar.isProgressShown,
+          complete: isProgressComplete,
+        })}
+      />
+      <Content>
+        <NextLink href="/" passHref>
+          <HomeLink>
+            <AvatarImageWrapper>
+              <NextImage
+                src={avatarImageSrc}
+                layout="fill"
+                alt="Tino's Memoji"
+              />
+            </AvatarImageWrapper>
+            Tino&apos;s Corner
+          </HomeLink>
+        </NextLink>
+        <BarEnd>
+          <NavGroup>
+            <NavGroupLink to="/" exact>
+              Home
+            </NavGroupLink>
+            <NavGroupLink to="/writing">Writing</NavGroupLink>
+            <NavGroupLink to="/about">About</NavGroupLink>
+          </NavGroup>
+          {isMounted && (
+            <NavButton
+              onClick={() =>
+                theme.toggle((_, newValue) => {
+                  switch (newValue) {
+                    case 'light':
+                      navBar.setStatus('Switched to light theme')
+                      break
+                    case 'dark':
+                      navBar.setStatus('Switched to dark theme')
+                      break
+                    case 'system':
+                      navBar.setStatus(`Matching the system's theme`)
+                      break
+                    default:
+                      break
+                  }
+                })
+              }
+            >
+              <ThemeIcon
+                theme={theme.resolved}
+                isSystemBased={theme.active === 'system'}
+              />
+            </NavButton>
+          )}
+          <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
+            <MenuIcon isOpen={isMenuOpen} />
+          </MenuToggle>
+        </BarEnd>
+      </Content>
+      <MenuWrapper
+        className={clsx({ menuOpen: isMenuOpen })}
+        style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
       >
-        <Status className={clsx({ visible: navBar.isStatusShown })}>
-          {navBar.status}
-        </Status>
-        <Background
-          ref={backgroundRef}
-          className={clsx({
-            opaque: navBar.isAlwaysOpaque,
-            menuOpen: isMenuOpen,
-          })}
-        />
-        <ProgressBar
-          ref={progressBarRef}
-          className={clsx({
-            visible: navBar.isProgressShown,
-            complete: isProgressComplete,
-          })}
-        />
-        <Content>
+        <Menu ref={menuRef}>
+          {/* TODO close menu on esc, set focus on close button (maybe just closing it and the tabindex makes it return to the button) */}
+          {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
+          {/* TODO: cascade animation for each item? */}
           <NextLink href="/" passHref>
-            <HomeLink>
-              <AvatarImageWrapper>
-                <NextImage
-                  src={avatarImageSrc}
-                  layout="fill"
-                  alt="Tino's Memoji"
-                />
-              </AvatarImageWrapper>
-              Tino&apos;s Corner
-            </HomeLink>
+            <Link
+              onClick={closeMenu}
+              className={clsx({
+                active: router.pathname === '/',
+              })}
+            >
+              Home
+            </Link>
           </NextLink>
-          <BarEnd>
-            <NavGroup>
-              <NavGroupLink to="/" exact>
-                Home
-              </NavGroupLink>
-              <NavGroupLink to="/writing">Writing</NavGroupLink>
-              <NavGroupLink to="/about">About</NavGroupLink>
-            </NavGroup>
-            {isMounted && (
-              <NavButton
-                onClick={() =>
-                  theme.toggle((_, newValue) => {
-                    switch (newValue) {
-                      case 'light':
-                        navBar.setStatus('Switched to light theme')
-                        break
-                      case 'dark':
-                        navBar.setStatus('Switched to dark theme')
-                        break
-                      case 'system':
-                        navBar.setStatus(`Matching the system's theme`)
-                        break
-                      default:
-                        break
-                    }
-                  })
-                }
-              >
-                <ThemeIcon
-                  theme={theme.resolved}
-                  isSystemBased={theme.active === 'system'}
-                />
-              </NavButton>
-            )}
-            <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
-              <MenuIcon isOpen={isMenuOpen} />
-            </MenuToggle>
-          </BarEnd>
-        </Content>
-        <MenuWrapper
-          className={clsx({ menuOpen: isMenuOpen })}
-          style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
-        >
-          <Menu ref={menuRef}>
-            {/* TODO close menu on esc, set focus on close button (maybe just closing it and the tabindex makes it return to the button) */}
-            {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
-            {/* TODO: cascade animation for each item? */}
-            <NextLink href="/" passHref>
-              <Link
-                onClick={closeMenu}
-                className={clsx({
-                  active: router.pathname === '/',
-                })}
-              >
-                Home
-              </Link>
-            </NextLink>
-            <NextLink href="/writing" passHref>
-              <Link
-                onClick={closeMenu}
-                className={clsx({
-                  active: router.pathname.startsWith('/writing'),
-                })}
-              >
-                Writing
-              </Link>
-            </NextLink>
-            <NextLink href="/about" passHref>
-              <Link
-                onClick={closeMenu}
-                className={clsx({
-                  active: router.pathname.startsWith('/about'),
-                })}
-              >
-                About
-              </Link>
-            </NextLink>
-          </Menu>
-        </MenuWrapper>
-      </Root>
-    </>
+          <NextLink href="/writing" passHref>
+            <Link
+              onClick={closeMenu}
+              className={clsx({
+                active: router.pathname.startsWith('/writing'),
+              })}
+            >
+              Writing
+            </Link>
+          </NextLink>
+          <NextLink href="/about" passHref>
+            <Link
+              onClick={closeMenu}
+              className={clsx({
+                active: router.pathname.startsWith('/about'),
+              })}
+            >
+              About
+            </Link>
+          </NextLink>
+        </Menu>
+      </MenuWrapper>
+    </Root>
   )
 }
 
-const StickyPlaceholder = styled.div`
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: ${barHeight}px;
-  margin-bottom: ${scrollThreshold}px;
-`
-
 const Root = styled.div`
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -371,7 +359,7 @@ const ProgressBar = styled.div`
 `
 
 const Content = styled.div`
-  height: ${barHeight}px;
+  height: ${height}px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -543,5 +531,8 @@ const Link = styled.a`
 
   ${focusRing}
 `
+
+NavBar.height = height
+NavBar.marginBottom = marginBottom
 
 export { NavBar }
