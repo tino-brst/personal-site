@@ -1,6 +1,13 @@
 // Prevents the FOUC of death (https://github.com/vercel/next.js/pull/35163)
 
-import Document, { DocumentContext } from 'next/document'
+import Document, {
+  DocumentContext,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from 'next/document'
+import Script from 'next/script'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
@@ -29,5 +36,18 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal()
     }
+  }
+
+  render() {
+    return (
+      <Html>
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+          <Script src="/theme.js" strategy="beforeInteractive" />
+        </body>
+      </Html>
+    )
   }
 }
