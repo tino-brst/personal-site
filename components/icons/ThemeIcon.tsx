@@ -87,7 +87,7 @@ const Root = styled.svg`
     transform: rotate(45deg);
 
     transition-property: transform;
-    transition-duration: 0.3s;
+    transition-duration: 0.3s !important;
   }
 
   .circle {
@@ -101,7 +101,7 @@ const Root = styled.svg`
     transform: scale(0);
 
     transition-property: transform;
-    transition-duration: 0.2s;
+    transition-duration: 0.2s !important;
   }
 
   .auto__background {

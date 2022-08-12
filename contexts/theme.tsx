@@ -30,6 +30,15 @@ type Props = {
   children: React.ReactNode
 }
 
+// TODO: probably should allow customizing these classes
+// See https://github.com/pacocoursey/next-themes
+// ThemeProvider 'value' prop
+
+const className = {
+  darkTheme: 'dark',
+  switchingTheme: 'switchingTheme',
+}
+
 const Context = React.createContext<ContextValue | undefined>(undefined)
 Context.displayName = 'ThemeContext'
 
@@ -44,15 +53,24 @@ function ThemeProvider({
     active === 'system' ? (isSystemThemeDark ? 'dark' : 'light') : active
 
   React.useEffect(() => {
-    // TODO: probably should allow customizing these classes
-    // See https://github.com/pacocoursey/next-themes
-    // ThemeProvider 'value' prop
+    // Remove transitions for snappy & consistent theme switching (actually,
+    // they are just made instantaneous, not "removed")
+    document.documentElement.classList.add(className.switchingTheme)
 
+    // Apply theme
     if (resolved === 'dark') {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add(className.darkTheme)
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove(className.darkTheme)
     }
+
+    // Force restyle
+    window.getComputedStyle(document.body)
+
+    // Restore transitions
+    setTimeout(() => {
+      document.documentElement.classList.remove(className.switchingTheme)
+    }, 0)
   }, [resolved])
 
   const toggle = React.useCallback(

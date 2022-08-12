@@ -291,7 +291,7 @@ const Status = styled.div`
   box-shadow: var(--shadow-status);
 
   transition-property: transform, opacity, width;
-  transition-duration: 0.2s;
+  transition-duration: 0.2s !important;
 
   &.visible {
     opacity: 1;
