@@ -19,6 +19,13 @@ type Options = Partial<{
    * 30px 40px"). Positive values shrink the view, negative values expand it.
    */
   viewMargins: string
+  /**
+   * Makes the returned boolean value sticky. Once it's set to true (i.e.
+   * element in view), it stays set to true (even if the element later on gets
+   * out of view). Useful for entrance animations that should not run again.
+   * Defaults to `false`.
+   */
+  once: boolean
 }>
 
 /**
@@ -27,15 +34,20 @@ type Options = Partial<{
  */
 function useIsInView(
   ref: React.RefObject<Element>,
-  { threshold = 0, viewMargins }: Options = {}
+  { threshold = 0, viewMargins, once = false }: Options = {}
 ): boolean {
   const [isInView, setIsInView] = React.useState(false)
+  const [hasBeenInView, setHasBeenInView] = React.useState(false)
 
   useIsomorphicLayoutEffect(() => {
-    if (!ref.current) return
+    if (!ref.current || (once && hasBeenInView)) return
 
     const callback: IntersectionObserverCallback = ([entry]) => {
       setIsInView(entry.isIntersecting)
+
+      if (once && entry.isIntersecting) {
+        setHasBeenInView(true)
+      }
     }
 
     const observer = new IntersectionObserver(callback, {
@@ -46,7 +58,7 @@ function useIsInView(
     observer.observe(ref.current)
 
     return () => observer.disconnect()
-  }, [viewMargins, ref, threshold])
+  }, [viewMargins, ref, threshold, once, hasBeenInView])
 
   return isInView
 }
