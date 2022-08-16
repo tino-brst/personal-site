@@ -45,29 +45,39 @@ function TableOfContentsProvider(props: Props) {
     return map
   }, [props.tableOfContents])
 
-  const headingsSortedByOrderOfAppearance = React.useMemo(
-    () => [...headings].sort(compareOffsetTop),
-    [headings]
-  )
+  const headingsInOrderOfAppearance = React.useMemo(() => {
+    return [...headings].sort(compareOffsetTop)
+  }, [headings])
 
   React.useEffect(() => {
-    if (!headingsSortedByOrderOfAppearance.length) return
+    if (!headingsInOrderOfAppearance.length) return
+
+    // Create and array containing all heading elements with their respective
+    // offsetTops. Done out of the scroll handler to avoid calling a bunch of
+    // getComputedStyles on each scroll event.
+
+    // Beware: changing margins (e.g. due to having different values for
+    // mobile/desktop) are not handled
+
+    const headings = headingsInOrderOfAppearance.map((heading) => ({
+      element: heading,
+      top: getTop(heading),
+    }))
 
     function handleWindowScroll() {
-      const firstHeading = headingsSortedByOrderOfAppearance[0]
+      const firstHeading = headings[0]
 
       // From the bottom, find the first heading that is at or past the top of
       // the window.
-      const firstHeadingAtOrPastTop = findRight(
-        headingsSortedByOrderOfAppearance,
-        (heading) => isAtOrPastWindowTop(heading, props.scrollOffsetTop)
+      const firstHeadingAtOrPastTop = findRight(headings, (heading) =>
+        isAtOrPastWindowTop(heading.top, props.scrollOffsetTop)
       )
 
       // If there is no heading at/past the top of the window, then the first
       // one still hasn't crossed the top, and is chosen as the active one.
       const sectionId = firstHeadingAtOrPastTop
-        ? firstHeadingAtOrPastTop.id
-        : firstHeading.id
+        ? firstHeadingAtOrPastTop.element.id
+        : firstHeading.element.id
 
       setActiveSectionId(sectionId)
       setActiveSectionAncestorIds(sectionAncestorIdsMap.get(sectionId) ?? [])
@@ -84,15 +94,25 @@ function TableOfContentsProvider(props: Props) {
     window.addEventListener('scroll', handleWindowScroll, { passive: true })
 
     return () => window.removeEventListener('scroll', handleWindowScroll)
-  }, [headingsSortedByOrderOfAppearance, sectionAncestorIdsMap])
+  }, [
+    headingsInOrderOfAppearance,
+    sectionAncestorIdsMap,
+    props.scrollOffsetTop,
+  ])
 
-  const registerSectionHeading = (heading: HTMLHeadingElement) => {
-    setHeadings((headings) => [...headings, heading])
-  }
+  const registerSectionHeading = React.useCallback(
+    (heading: HTMLHeadingElement) => {
+      setHeadings((headings) => [...headings, heading])
+    },
+    []
+  )
 
-  const unregisterSectionHeading = (heading: HTMLHeadingElement) => {
-    setHeadings((headings) => headings.filter((e) => e !== heading))
-  }
+  const unregisterSectionHeading = React.useCallback(
+    (heading: HTMLHeadingElement) => {
+      setHeadings((headings) => headings.filter((e) => e !== heading))
+    },
+    []
+  )
 
   const value = React.useMemo<ContextValue>(
     () => ({
@@ -108,6 +128,8 @@ function TableOfContentsProvider(props: Props) {
       props.tableOfContents.children.length,
       activeSectionId,
       activeSectionAncestorIds,
+      registerSectionHeading,
+      unregisterSectionHeading,
     ]
   )
 
@@ -159,14 +181,18 @@ function findRight<T>(
  * instead of 20 (which is just below the threshold). To still consider that
  * element as 'at the top', a slight bias is added, rounding the number up.
  */
-function isAtOrPastWindowTop(element: HTMLElement, offset = 0) {
-  const elementStyle = window.getComputedStyle(element)
-  const elementMarginTop = elementStyle.marginTop
-    ? parseInt(elementStyle.marginTop)
-    : 0
-  const elementTop = element.offsetTop - elementMarginTop
-
+function isAtOrPastWindowTop(elementTop: number, offset = 0) {
   return elementTop <= Math.ceil(window.scrollY) + offset
+}
+
+/**
+ * Gets an element's offset top taking into account its top margin.
+ */
+function getTop(element: HTMLElement): number {
+  const style = window.getComputedStyle(element)
+  const marginTop = parseInt(style.marginTop)
+
+  return marginTop === NaN ? element.offsetTop : element.offsetTop - marginTop
 }
 
 export { TableOfContentsProvider, useTableOfContents }

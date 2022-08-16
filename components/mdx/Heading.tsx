@@ -12,16 +12,17 @@ type Props = {
 
 function Heading(props: Props) {
   const ref = React.useRef<HTMLHeadingElement>(null)
-  const tableOfContents = useTableOfContents()
+  const { registerSectionHeading, unregisterSectionHeading } =
+    useTableOfContents()
 
   React.useEffect(() => {
     if (!ref.current) return
 
     const heading = ref.current
-    tableOfContents.registerSectionHeading(heading)
+    registerSectionHeading(heading)
 
-    return () => tableOfContents.unregisterSectionHeading(heading)
-  }, [tableOfContents])
+    return () => unregisterSectionHeading(heading)
+  }, [registerSectionHeading, unregisterSectionHeading])
 
   let Component: StyledComponent<'h2' | 'h3' | 'h4', any, {}, never>
 
