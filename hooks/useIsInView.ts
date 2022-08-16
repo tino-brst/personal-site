@@ -1,4 +1,5 @@
 import React from 'react'
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
 type Options = Partial<{
   /**
@@ -30,13 +31,11 @@ function useIsInView(
 ): boolean {
   const [isInView, setIsInView] = React.useState(false)
 
-  React.useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!ref.current) return
 
     const callback: IntersectionObserverCallback = ([entry]) => {
-      if (entry.isIntersecting) {
-        setIsInView(true)
-      }
+      setIsInView(entry.isIntersecting)
     }
 
     const observer = new IntersectionObserver(callback, {
