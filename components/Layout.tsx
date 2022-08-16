@@ -27,7 +27,7 @@ function Layout(props: Props) {
   }, [navBar, router.pathname])
 
   const signatureRef = React.useRef<SVGSVGElement>(null)
-  const isSignatureInView = useIsInView(signatureRef)
+  const isSignatureInView = useIsInView(signatureRef, { threshold: 1 })
 
   return (
     <Wrapper>
