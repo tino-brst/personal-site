@@ -1,3 +1,4 @@
+import { useIsInView } from '@hooks/useIsInView'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import clsx from 'clsx'
 import React from 'react'
@@ -24,9 +25,10 @@ function Parallax({
   children,
 }: React.PropsWithChildren<Props> = {}) {
   const ref = React.useRef<HTMLDivElement>(null)
+  const isInView = useIsInView(ref)
 
   useIsomorphicLayoutEffect(() => {
-    if (!ref.current) return
+    if (!ref.current || !isInView) return
 
     const element = ref.current
 
@@ -43,7 +45,7 @@ function Parallax({
       window.removeEventListener('scroll', updateOffset)
       window.removeEventListener('resize', updateOffset)
     }
-  }, [])
+  }, [getOffset, isInView])
 
   return (
     <Wrapper
