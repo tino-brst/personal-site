@@ -131,131 +131,141 @@ function NavBar() {
   }, [])
 
   return (
-    <Root
-      ref={wrapperRef}
-      className={clsx({
-        menuOpen: isMenuOpen,
-      })}
-    >
-      <Status className={clsx({ visible: navBar.isStatusShown })}>
-        {navBar.status}
-      </Status>
-      <Background
-        ref={backgroundRef}
+    <RootPlaceholder>
+      <Root
+        ref={wrapperRef}
         className={clsx({
-          opaque: navBar.isAlwaysOpaque,
           menuOpen: isMenuOpen,
         })}
-      />
-      <ProgressBar
-        ref={progressBarRef}
-        className={clsx({
-          visible: navBar.isProgressShown,
-          complete: isProgressComplete,
-        })}
-      />
-      <Content>
-        <NextLink href="/" passHref>
-          <HomeLink>
-            <AvatarImageWrapper>
-              <NextImage
-                src={avatarImageSrc}
-                layout="fill"
-                alt="Tino's Memoji"
-              />
-            </AvatarImageWrapper>
-            Tino&apos;s Corner
-          </HomeLink>
-        </NextLink>
-        <BarEnd>
-          <NavGroup>
-            <NavGroupLink to="/" exact>
-              Home
-            </NavGroupLink>
-            <NavGroupLink to="/writing">Writing</NavGroupLink>
-            <NavGroupLink to="/about">About</NavGroupLink>
-          </NavGroup>
-          {isMounted && (
-            <NavButton
-              onClick={() =>
-                theme.toggle((_, newValue) => {
-                  switch (newValue) {
-                    case 'light':
-                      navBar.setStatus('Switched to light theme')
-                      break
-                    case 'dark':
-                      navBar.setStatus('Switched to dark theme')
-                      break
-                    case 'system':
-                      navBar.setStatus(`Matching the system's theme`)
-                      break
-                    default:
-                      break
-                  }
-                })
-              }
-            >
-              <ThemeIcon
-                theme={theme.resolved}
-                isSystemBased={theme.active === 'system'}
-              />
-            </NavButton>
-          )}
-          <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
-            <MenuIcon isOpen={isMenuOpen} />
-          </MenuToggle>
-        </BarEnd>
-      </Content>
-      <MenuWrapper
-        className={clsx({ menuOpen: isMenuOpen })}
-        style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
       >
-        <Menu ref={menuRef}>
-          {/* TODO close menu on esc, set focus on close button (maybe just closing it and the tabindex makes it return to the button) */}
-          {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
-          {/* TODO: cascade animation for each item? */}
+        <Status className={clsx({ visible: navBar.isStatusShown })}>
+          {navBar.status}
+        </Status>
+        <Background
+          ref={backgroundRef}
+          className={clsx({
+            opaque: navBar.isAlwaysOpaque,
+            menuOpen: isMenuOpen,
+          })}
+        />
+        <ProgressBar
+          ref={progressBarRef}
+          className={clsx({
+            visible: navBar.isProgressShown,
+            complete: isProgressComplete,
+          })}
+        />
+        <Content>
           <NextLink href="/" passHref>
-            <Link
-              onClick={closeMenu}
-              className={clsx({
-                active: router.pathname === '/',
-              })}
-            >
-              Home
-            </Link>
+            <HomeLink>
+              <AvatarImageWrapper>
+                <NextImage
+                  src={avatarImageSrc}
+                  layout="fill"
+                  alt="Tino's Memoji"
+                />
+              </AvatarImageWrapper>
+              Tino&apos;s Corner
+            </HomeLink>
           </NextLink>
-          <NextLink href="/writing" passHref>
-            <Link
-              onClick={closeMenu}
-              className={clsx({
-                active: router.pathname.startsWith('/writing'),
-              })}
-            >
-              Writing
-            </Link>
-          </NextLink>
-          <NextLink href="/about" passHref>
-            <Link
-              onClick={closeMenu}
-              className={clsx({
-                active: router.pathname.startsWith('/about'),
-              })}
-            >
-              About
-            </Link>
-          </NextLink>
-        </Menu>
-      </MenuWrapper>
-    </Root>
+          <BarEnd>
+            <NavGroup>
+              <NavGroupLink to="/" exact>
+                Home
+              </NavGroupLink>
+              <NavGroupLink to="/writing">Writing</NavGroupLink>
+              <NavGroupLink to="/about">About</NavGroupLink>
+            </NavGroup>
+            {isMounted && (
+              <NavButton
+                onClick={() =>
+                  theme.toggle((_, newValue) => {
+                    switch (newValue) {
+                      case 'light':
+                        navBar.setStatus('Switched to light theme')
+                        break
+                      case 'dark':
+                        navBar.setStatus('Switched to dark theme')
+                        break
+                      case 'system':
+                        navBar.setStatus(`Matching the system's theme`)
+                        break
+                      default:
+                        break
+                    }
+                  })
+                }
+              >
+                <ThemeIcon
+                  theme={theme.resolved}
+                  isSystemBased={theme.active === 'system'}
+                />
+              </NavButton>
+            )}
+            <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
+              <MenuIcon isOpen={isMenuOpen} />
+            </MenuToggle>
+          </BarEnd>
+        </Content>
+        <MenuWrapper
+          className={clsx({ menuOpen: isMenuOpen })}
+          style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
+        >
+          <Menu ref={menuRef}>
+            {/* TODO close menu on esc, set focus on close button (maybe just closing it and the tabindex makes it return to the button) */}
+            {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
+            {/* TODO: cascade animation for each item? */}
+            <NextLink href="/" passHref>
+              <Link
+                onClick={closeMenu}
+                className={clsx({
+                  active: router.pathname === '/',
+                })}
+              >
+                Home
+              </Link>
+            </NextLink>
+            <NextLink href="/writing" passHref>
+              <Link
+                onClick={closeMenu}
+                className={clsx({
+                  active: router.pathname.startsWith('/writing'),
+                })}
+              >
+                Writing
+              </Link>
+            </NextLink>
+            <NextLink href="/about" passHref>
+              <Link
+                onClick={closeMenu}
+                className={clsx({
+                  active: router.pathname.startsWith('/about'),
+                })}
+              >
+                About
+              </Link>
+            </NextLink>
+          </Menu>
+        </MenuWrapper>
+      </Root>
+    </RootPlaceholder>
   )
 }
 
-const Root = styled.div`
+const RootPlaceholder = styled.div`
+  height: ${height}px;
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1;
+`
+
+const Root = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
