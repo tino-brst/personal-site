@@ -2,12 +2,14 @@ import React from 'react'
 
 type Options = Partial<{
   /**
-   * The element/view minimum intersection threshold at which the element is considered in view. Defaults to 1.
+   * The element/view minimum intersection threshold at which the element is considered in view. Defaults to 0.
    *
    * Examples:
+   * ```txt
    * 0   → "In view" as soon as a single pixel enters the view
    * 0.5 → "In view" once half the element enters the view
    * 1   → "In view" once it has completely entered the view
+   * ```
    */
   threshold: number
   /**
@@ -24,7 +26,7 @@ type Options = Partial<{
  */
 function useIsInView(
   ref: React.RefObject<Element>,
-  { threshold = 1, viewMargins }: Options = {}
+  { threshold = 0, viewMargins }: Options = {}
 ): boolean {
   const [isInView, setIsInView] = React.useState(false)
 
