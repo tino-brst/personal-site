@@ -47,15 +47,21 @@ function NavGroup(props: { children?: React.ReactNode }) {
   return (
     <Wrapper onMouseLeave={() => setIsMouseComingFromOutside(true)}>
       <NavGroupContext.Provider value={value}>
-        <Highlight
+        <HighlightPosition
           style={{
-            width: highlightWidth,
-            left: highlightOffsetLeft,
-            transitionProperty: isMouseComingFromOutside
-              ? 'opacity, transform'
-              : 'opacity, transform, left, width',
+            transform: `translateX(${highlightOffsetLeft}px)`,
+            transitionProperty: isMouseComingFromOutside ? 'none' : 'transform',
           }}
-        />
+        >
+          <Highlight
+            style={{
+              width: highlightWidth,
+              transitionProperty: isMouseComingFromOutside
+                ? 'opacity, transform'
+                : 'opacity, transform, width',
+            }}
+          />
+        </HighlightPosition>
         {props.children}
       </NavGroupContext.Provider>
     </Wrapper>
@@ -118,17 +124,27 @@ const highlightHoverStyles = css`
   opacity: 1;
 `
 
-const Highlight = styled.div`
+const HighlightPosition = styled.div`
   position: absolute;
   height: 100%;
   z-index: -1;
+
+  /* Handled with inline styles: */
+  /* transition-property: none | transform */
+  transition-duration: 0.1s;
+  transition-timing-function: ease;
+`
+
+const Highlight = styled.div`
+  height: 100%;
   opacity: 0;
   border-radius: 12px;
   background-color: var(--color-bg-subtle);
 
-  /* transition-property: opacity, transform OR opacity, transform, left, width */
-  transition-duration: 0.15s, 0.15s, 0.1s, 0.1s;
-  transition-timing-function: ease-in-out;
+  /* Handled with inline styles: */
+  /* transition-property: opacity, transform | opacity, transform, width */
+  transition-duration: 0.15s, 0.15s, 0.1s;
+  transition-timing-function: ease;
 
   @media (hover: hover) {
     ${Wrapper}:hover & {
