@@ -1,4 +1,3 @@
-import { useIsInView } from '@hooks/useIsInView'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useNavBar } from 'contexts/nav-bar'
 import NextLink from 'next/link'
@@ -26,12 +25,6 @@ function Layout(props: Props) {
     navBar.setIsAlwaysOpaque(isArticlePage)
   }, [navBar, router.pathname])
 
-  const signatureRef = React.useRef<SVGSVGElement>(null)
-  const isSignatureInView = useIsInView(signatureRef, {
-    threshold: 1,
-    once: true,
-  })
-
   return (
     <Wrapper>
       <NavBar />
@@ -50,9 +43,7 @@ function Layout(props: Props) {
           <Link href="mailto:tinos.corner@icloud.com">Email</Link>
         </LinksWrapper>
         <SignatureLabel>made with care by</SignatureLabel>
-        <SignatureWrapper>
-          <Signature isDrawn={isSignatureInView} ref={signatureRef} />
-        </SignatureWrapper>
+        <Signature />
       </Footer>
     </Wrapper>
   )
@@ -196,13 +187,6 @@ const SignatureLabel = styled.label`
   color: var(--color-fg-subtle);
   font-weight: 500;
   margin-bottom: 12px;
-`
-
-const SignatureWrapper = styled.div`
-  position: relative;
-  aspect-ratio: 5 / 4;
-  height: 100px;
-  color: var(--color-fg-accent);
 `
 
 export { Layout }
