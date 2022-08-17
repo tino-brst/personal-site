@@ -267,17 +267,32 @@ const Root = styled.div`
   left: 0;
   right: 0;
 
-  transition-property: box-shadow;
+  transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
   transition-duration: 0.2s;
 
-  &.menuOpen {
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.01),
-      0px 4px 60px rgba(0, 0, 0, 0.05);
+  &::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.01), 0px 0px 80px rgba(0, 0, 0, 0.1);
+
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+    transition-duration: 0.2s;
+  }
+
+  &.menuOpen::before {
+    opacity: 1;
   }
 
   @media (min-width: 640px) {
-    box-shadow: none;
+    &::before {
+      display: none;
+    }
   }
 `
 
