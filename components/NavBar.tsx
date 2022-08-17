@@ -325,10 +325,10 @@ const Status = styled.div`
 `
 
 const Background = styled.div`
-  opacity: var(${cssVar.scrollBasedOpacity});
   position: absolute;
   z-index: -1;
   inset: 0;
+  opacity: var(${cssVar.scrollBasedOpacity});
   background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0 1px var(--color-shadow-border),
@@ -348,7 +348,9 @@ const Background = styled.div`
   }
 
   @media (min-width: 640px) {
-    opacity: var(${cssVar.scrollBasedOpacity});
+    &.menuOpen {
+      opacity: var(${cssVar.scrollBasedOpacity});
+    }
 
     &.opaque {
       opacity: 1;
@@ -501,7 +503,12 @@ const MenuWrapper = styled.div`
   }
 
   @media (min-width: 640px) {
-    max-height: 0;
+    &.menuOpen {
+      visibility: hidden;
+      max-height: 0;
+      opacity: 0;
+      transform: scale(0.8);
+    }
   }
 `
 
