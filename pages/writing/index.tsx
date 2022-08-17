@@ -97,6 +97,21 @@ function WritingPage(props: Props) {
     [articles]
   )
 
+  const tags = React.useMemo(
+    () =>
+      props.tags.map((tag) => {
+        const isActive = activeTags.includes(tag)
+        const isDisabled = !isActive && !availableTags.includes(tag)
+
+        return {
+          value: tag,
+          isActive,
+          isDisabled,
+        }
+      }),
+    [props.tags, activeTags, availableTags]
+  )
+
   // Empty State
 
   function handleClearSearchButtonClick() {
@@ -140,22 +155,22 @@ function WritingPage(props: Props) {
         <Filters ref={filtersRef}>
           <FiltersTitle>Filter by tags</FiltersTitle>
           <Tags>
-            {props.tags.map((tag) => (
-              <li key={tag}>
+            {tags.map((tag) => (
+              <li key={tag.value}>
                 <Tag
                   className={clsx({
-                    checked: activeTags.includes(tag),
-                    disabled: !availableTags.includes(tag),
+                    checked: tag.isActive,
+                    disabled: tag.isDisabled,
                   })}
                 >
                   <TagInput
                     type="checkbox"
-                    checked={activeTags.includes(tag)}
-                    disabled={!availableTags.includes(tag)}
-                    onChange={() => handleActiveTagsChange(tag)}
+                    checked={tag.isActive}
+                    disabled={tag.isDisabled}
+                    onChange={() => handleActiveTagsChange(tag.value)}
                   />
                   <TagIcon />
-                  {tag}
+                  {tag.value}
                 </Tag>
               </li>
             ))}
