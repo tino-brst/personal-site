@@ -65,7 +65,6 @@ async function updateUserLike(slug: string, value: boolean) {
     method: value ? 'PUT' : 'DELETE',
   })
 
-  // TODO: error handling
   if (response.ok) {
     return response.json()
   }

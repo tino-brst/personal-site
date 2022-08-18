@@ -30,7 +30,7 @@ type Props = {
   children: React.ReactNode
 }
 
-// TODO: probably should allow customizing these classes
+// NTH probably should allow customizing these classes
 // See https://github.com/pacocoursey/next-themes
 // ThemeProvider 'value' prop
 

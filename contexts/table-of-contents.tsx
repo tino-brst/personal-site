@@ -89,7 +89,7 @@ function TableOfContentsProvider(props: Props) {
     // wrong section as active.
     handleWindowScroll()
 
-    // TODO: handle other elements besides the window as root
+    // NTH handle other elements besides the window as root
     window.addEventListener('scroll', handleWindowScroll, { passive: true })
 
     return () => window.removeEventListener('scroll', handleWindowScroll)

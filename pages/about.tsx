@@ -1,5 +1,5 @@
 function AboutPage() {
-  // TODO add NextSeo
+  // TODO add SEO
 
   return null
 }

@@ -20,7 +20,7 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon
+  ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -315,7 +315,7 @@ const Aside = styled.aside`
   padding-right: 24px;
   display: none;
 
-  /* TODO: clean-up magic numbers */
+  /* TODO clean-up magic numbers */
   @media (min-width: calc(768px + 2 * 16px + ${asideWidth}px * 2)) {
     display: revert;
   }

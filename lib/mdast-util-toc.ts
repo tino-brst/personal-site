@@ -1,7 +1,7 @@
-import * as Mdast from 'mdast'
-import * as Unist from 'unist-util-is'
-import { toString } from 'mdast-util-to-string'
 import GitHubSlugger from 'github-slugger'
+import * as Mdast from 'mdast'
+import { toString } from 'mdast-util-to-string'
+import * as Unist from 'unist-util-is'
 
 type Node = {
   level: number
@@ -76,7 +76,7 @@ function getTableOfContents(document: Mdast.Root): Root {
   })
 
   // Build table of contents tree
-  // TODO: but why? (explain algorithm)
+  // NTH but why? (explain algorithm)
   const root: Root = { level: 0, children: [] }
   const stack = new Stack<Root | Section>()
 

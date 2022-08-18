@@ -17,7 +17,7 @@ function Layout(props: Props) {
   const router = useRouter()
   const navBar = useNavBar()
 
-  // TODO: I think it makes more sense to have each page state its preference?
+  // TODO I think it makes more sense to have each page state its preference?
   useIsomorphicLayoutEffect(() => {
     const isArticlePage = router.pathname.startsWith('/writing/')
 

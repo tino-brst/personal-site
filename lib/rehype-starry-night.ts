@@ -105,10 +105,10 @@ function getLanguage(className: Array<string | number>): string | undefined {
 function splitNewLines(nodes: Array<RootContent>): Array<Text | Element> {
   const result: Array<Text | Element> = []
 
-  // TODO probably could simplify this to a bunch of maps
+  // NTH probably could simplify this to a bunch of maps
 
   for (const node of nodes) {
-    // TODO explain yourself mf
+    // NTH explain yourself mf
     if (!(is<Text>(node, 'text') || is<Element>(node, 'element'))) {
       continue
     }
