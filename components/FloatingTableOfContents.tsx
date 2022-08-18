@@ -117,7 +117,7 @@ const Header = styled.header`
   background: var(--color-bg-toc-header);
   box-shadow: 0 1px var(--color-shadow-border-subtle),
     inset 0 -0.5px 0 var(--color-shadow-border-contrast);
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-size: 12px;

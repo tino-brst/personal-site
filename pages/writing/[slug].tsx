@@ -488,7 +488,7 @@ const Tag = styled.a`
 const TagIcon = styled(HashIcon)`
   width: 14px;
   height: 14px;
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
 `
 
 const FloatingStuff = styled.div`
@@ -642,7 +642,7 @@ const ViewCount = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-top: 32px;
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
@@ -807,7 +807,7 @@ const LikeIconWrapper = styled.div`
 
 const LikeIcon = styled(BaseLikeIcon)`
   display: block;
-  fill: var(--color-fg-subtle);
+  fill: var(--color-fg-muted);
 
   transition-property: fill;
   transition-duration: 0.15s;

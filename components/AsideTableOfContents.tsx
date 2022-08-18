@@ -65,7 +65,7 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.05em;

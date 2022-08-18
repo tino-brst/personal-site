@@ -168,11 +168,11 @@ const StyledLink = styled.a`
   ${focusRing}
 `
 const externalLinkIconHoverStyles = css`
-  color: var(--color-fg-subtle-hover);
+  color: var(--color-fg-muted-hover);
 `
 
 const ExternalLinkIcon = styled(ArrowTopRightIcon)`
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
   margin-right: -1px;
 
   transition-property: color;
@@ -192,7 +192,7 @@ const ExternalLinkIcon = styled(ArrowTopRightIcon)`
 
 const SignatureLabel = styled.label`
   font-size: 12px;
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
   font-weight: 500;
   margin-bottom: 10px;
 `
@@ -210,7 +210,7 @@ const PS = styled.div`
     font-weight: 500;
     font-size: 12px;
     line-height: 1.6;
-    color: var(--color-fg-subtle);
+    color: var(--color-fg-muted);
   }
 
   a {

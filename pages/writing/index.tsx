@@ -273,7 +273,7 @@ const StyledFilterIcon = styled(FilterIcon)`
 `
 
 const ExpandIcon = styled(ChevronCompactDownIcon)`
-  color: var(--color-fg-subtle);
+  color: var(--color-fg-muted);
 `
 
 const FiltersWrapper = styled.div`
@@ -418,7 +418,7 @@ const TagInput = styled.input`
 const TagIcon = styled(HashIcon)`
   width: 14px;
   height: 14px;
-  stroke: var(--color-fg-subtle);
+  stroke: var(--color-fg-muted);
 
   transition-property: stroke;
   transition-duration: 0.15s;
@@ -429,7 +429,7 @@ const TagIcon = styled(HashIcon)`
   }
 
   ${Tag}.disabled & {
-    stroke: var(--color-fg-subtler);
+    stroke: var(--color-fg-subtle);
   }
 `
 

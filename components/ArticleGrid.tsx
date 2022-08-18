@@ -237,7 +237,7 @@ const Title = styled.h2`
     text-decoration-thickness: 2px;
     text-decoration-line: underline;
     text-decoration-style: solid;
-    text-decoration-color: var(--color-fg-subtle);
+    text-decoration-color: var(--color-fg-muted);
 
     &::before {
       content: '';
@@ -258,14 +258,14 @@ const PublicationDate = styled.time`
 `
 
 const goToIconHoverStyles = css`
-  stroke: var(--color-fg-subtle-hover);
+  stroke: var(--color-fg-muted-hover);
 `
 
 const GoToIcon = styled(ArrowRightIcon)`
   position: absolute;
   right: 0;
   bottom: 0;
-  stroke: var(--color-fg-subtle);
+  stroke: var(--color-fg-muted);
 
   transition-property: stroke;
   transition-duration: 0.1s;
