@@ -45,6 +45,14 @@ function Layout(props: Props) {
         <SignatureLabel>made with care by</SignatureLabel>
         <Signature />
       </Footer>
+      <PS>
+        <p>
+          p.s. the site&apos;s code is open source and{' '}
+          <a href="https://github.com/tino-brst/personal-site">
+            available on GitHub
+          </a>
+        </p>
+      </PS>
     </Wrapper>
   )
 }
@@ -95,7 +103,7 @@ const Footer = styled.footer`
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 48px;
-  padding-bottom: 48px;
+  padding-bottom: 44px;
 
   &::before {
     position: absolute;
@@ -186,7 +194,51 @@ const SignatureLabel = styled.label`
   font-size: 12px;
   color: var(--color-fg-subtle);
   font-weight: 500;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+`
+
+const psLinkHoverStyles = css`
+  color: var(--color-fg-default-hover);
+`
+
+const PS = styled.div`
+  background-color: var(--color-bg-subtlerer);
+  padding: 8px 16px;
+
+  p {
+    text-align: center;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--color-fg-subtle);
+  }
+
+  a {
+    position: relative;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    color: var(--color-fg-default);
+
+    transition-property: color;
+    transition-duration: 0.1s;
+
+    @media (hover: hover) {
+      &:hover {
+        ${psLinkHoverStyles}
+      }
+    }
+
+    &:active,
+    &:focus-visible {
+      ${psLinkHoverStyles}
+    }
+
+    --focus-inset: -2px 0;
+    --focus-radius: 4px;
+
+    ${focusRing}
+  }
 `
 
 export { Layout }

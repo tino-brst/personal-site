@@ -10,6 +10,7 @@
   --color-bg-subtle: hsla(0 0% 0% / 0.03);
   --color-bg-subtle-hover: hsla(0 0% 0% / 0.06);
   --color-bg-subtler: hsla(0 0% 0% / 0.02);
+  --color-bg-subtlerer: hsla(0 0% 0% / 0.01);
   --color-bg-translucent: hsla(0 0% 99% / 0.95);
   --color-bg-translucent-hover: hsla(0 0% 99% / 0.95);
   --color-bg-emphasis: black;
@@ -77,6 +78,7 @@
   --color-bg-subtle: hsla(0 0% 100% / 0.12);
   --color-bg-subtle-hover: hsla(0 0% 100% / 0.15);
   --color-bg-subtler: hsla(0 0% 100% / 0.1);
+  --color-bg-subtlerer: hsla(0 0% 100% / 0.08);
   --color-bg-translucent: hsla(0 0% 15% / 0.9);
   --color-bg-translucent-hover: hsla(0 0% 18% / 0.9);
   --color-bg-emphasis: white;
