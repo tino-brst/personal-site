@@ -30,8 +30,6 @@ type Props = {
   tags: Array<string>
 }
 
-// TODO: remove unused color deps
-
 function WritingPage(props: Props) {
   // Search
 
@@ -517,7 +515,6 @@ const getStaticProps: GetStaticProps<Props> = async () => {
       pick(article, ['slug', 'title', 'imageSrc', 'publishedOn', 'tags'])
     )
 
-  // TODO: define sorting criteria for the tags (most articles? alphabetical?)
   const tags = Array.from(new Set(articles.flatMap((article) => article.tags)))
 
   return {

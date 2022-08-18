@@ -1,16 +1,12 @@
-import type { Plugin } from 'unified'
-import type { Element, Text, Root } from 'hast'
-import type { RefractorElement, RefractorRoot, Syntax } from 'refractor'
-import { h } from 'hastscript'
+import type { Element, Root, Text } from 'hast'
 import { toString } from 'hast-util-to-string'
-import { visit } from 'unist-util-visit'
-import { is } from 'unist-util-is'
-import { refractor } from 'refractor/lib/core'
+import { h } from 'hastscript'
 import parseNumericRange from 'parse-numeric-range'
-
-// TODO: Make line class names passable via options
-// TODO: ? Publish to NPM
-// TODO: ? Support for // @highlight-start/end/line "directives"
+import type { RefractorElement, RefractorRoot, Syntax } from 'refractor'
+import { refractor } from 'refractor/lib/core'
+import type { Plugin } from 'unified'
+import { is } from 'unist-util-is'
+import { visit } from 'unist-util-visit'
 
 type Options = Partial<{
   /**

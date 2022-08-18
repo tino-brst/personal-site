@@ -4,8 +4,6 @@ import clsx from 'clsx'
 import React from 'react'
 import styled from 'styled-components'
 
-// TODO enable only while visible? (using intersection observer)
-
 type Props = {
   /** translationY = offset * multiplier */
   multiplier?: number

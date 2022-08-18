@@ -146,8 +146,6 @@ const ArticleLink = styled.a`
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
 
-  /* TODO: all hover states should also be applied while active, like below */
-
   @media (hover: hover) {
     &:hover {
       ${articleLinkHoverStyles}

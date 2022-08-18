@@ -1,8 +1,5 @@
 import { css } from 'styled-components'
 
-// TODO switch to just changing the opacity instead of the shadow color (allows
-// to animate both separately too)
-
 const focusRingBaseStyles = css`
   content: '';
   pointer-events: none;

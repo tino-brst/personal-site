@@ -20,7 +20,7 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon,
+  ListBulletIcon
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -244,7 +244,6 @@ function ArticlePage(props: Props) {
         olderArticle={props.olderArticle}
       />
       <FloatingStuff>
-        {/* TODO: add tooltips "Open Table Of Contents", "Back to Top", etc */}
         <ButtonGroup className={clsx({ expanded: showBackToTop })}>
           <ButtonBackground>
             <BackToTopButton onClick={backToTop}>

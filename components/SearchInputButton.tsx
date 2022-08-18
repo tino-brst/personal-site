@@ -128,9 +128,6 @@ const Wrapper = styled.div`
     flex-grow: 1;
   }
 
-  /* TODO: active/hover transitions should be consistent with other links */
-  /* TODO: transition only whats needed */
-
   &:not(.open):active {
     transform: scale(0.96);
   }
@@ -171,9 +168,6 @@ const CancelButton = styled.button`
   border-bottom-left-radius: 2px;
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
-
-  /* TODO: look into animations to postpone its appearing when opening, and make
-  the hiding quicker when closing */
 
   transition: var(--transition);
 
@@ -248,7 +242,6 @@ const Input = styled.input`
 
   ${Wrapper}.open & {
     opacity: 1;
-    /* TODO: see if it can be delayed (animation keyframes?) */
     padding-right: var(--cancel-button-width);
   }
 

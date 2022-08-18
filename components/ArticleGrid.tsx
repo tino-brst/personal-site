@@ -47,8 +47,6 @@ function ArticleGridItem(props: Props) {
   )
 }
 
-// TODO: while a search is active, remove having the first item be bigger than
-// the others
 const Wrapper = styled.li`
   @media (min-width: 640px) {
     flex: 0 0 calc(50% - var(--gap) / 2);
@@ -226,8 +224,6 @@ const highlight = keyframes`
   }
 `
 
-// TODO while a search is active, de-emphasize the non matching text, keeping
-// only the matches with full contrast. Fade in underline and contrast changes.
 const Title = styled.h2`
   font-weight: 550;
   font-size: 22px;

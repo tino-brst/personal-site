@@ -8,8 +8,6 @@ type Props = {
   isSystemBased?: boolean
 }
 
-// TODO tweak rotation speed
-
 const iconSize = 32
 const circleRadius = 8.5
 const autoSize = 10.5
@@ -51,11 +49,11 @@ function ThemeIcon({ theme = 'light', isSystemBased }: Props) {
             <text
               className="auto__text"
               x={autoCenter}
-              y={autoCenter + 0.68}
+              y={autoCenter + 0.65}
               dominantBaseline="middle"
               textAnchor="middle"
             >
-              S
+              A
             </text>
           </g>
         </mask>

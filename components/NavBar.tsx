@@ -77,7 +77,6 @@ function NavBar() {
     // When the menu is closing, wait for the transition to end, and restore the
     // opacity to having no animations, and thus apply scroll changes
     // immediately.
-    // TODO: attach to onTransitionEnd?
     if (!isMenuOpen) {
       const transitionEndHandler = () => {
         background.style.transitionProperty = 'none'
@@ -212,9 +211,6 @@ function NavBar() {
           style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
         >
           <Menu ref={menuRef}>
-            {/* TODO close menu on esc, set focus on close button (maybe just closing it and the tabindex makes it return to the button) */}
-            {/* TODO: trap-focus on menu items (and toggle) while menu is open */}
-            {/* TODO: cascade animation for each item? */}
             <NextLink href="/" passHref>
               <Link
                 onClick={closeMenu}

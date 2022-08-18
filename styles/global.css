@@ -1,8 +1,6 @@
 /* Theme vars */
 
 /* TODO rename subtle to muted & subtler to subtle */
-/* TODO text selection color in light/dark theme  */
-/* TODO disable transitions on theme switching */
 
 :root {
   --color-bg-default: white;

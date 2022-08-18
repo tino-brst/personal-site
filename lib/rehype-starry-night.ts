@@ -7,10 +7,6 @@ import type { Plugin } from 'unified'
 import { is } from 'unist-util-is'
 import { visit } from 'unist-util-visit'
 
-// TODO: Make line class names passable via options
-// TODO: ? Publish to NPM
-// TODO: ? Support for // @highlight-start/end/line "directives"
-
 type Options = {
   /**
    * Grammars to use. Passed to `createStarryNight()`.
@@ -40,8 +36,6 @@ const rehypeStarryNight: Plugin<[Options], Root> = (options) => {
 
       const language = getLanguage(node.properties.className)
       const scope = starryNight.flagToScope(language ?? '')
-
-      // TODO docs docs docs!
 
       if (!scope) {
         if (!options.ignoreMissing) {
