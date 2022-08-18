@@ -89,7 +89,6 @@ function TableOfContentsProvider(props: Props) {
     // wrong section as active.
     handleWindowScroll()
 
-    // TODO: handle margins (for nav-bars, etc)
     // TODO: handle other elements besides the window as root
     window.addEventListener('scroll', handleWindowScroll, { passive: true })
 
@@ -180,6 +179,11 @@ function findRight<T>(
  * with a top at (for example) `y = 20`, may scroll the window to a `y = 19.5`,
  * instead of 20 (which is just below the threshold). To still consider that
  * element as 'at the top', a slight bias is added, rounding the number up.
+ *
+ * The optional `offset` parameter can be used to tweak the line considered
+ * as top border. Useful to take into account things like navigation bars, where
+ * the line to use as reference is not the window top, but the bottom of the
+ * navbar.
  */
 function isAtOrPastWindowTop(elementTop: number, offset = 0) {
   return elementTop <= Math.ceil(window.scrollY) + offset
