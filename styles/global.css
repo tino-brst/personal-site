@@ -239,3 +239,7 @@
 :root.switchingTheme * {
   transition-duration: 0s;
 }
+
+::selection {
+  background: hsla(0 0% 0% / 0.1);
+}
