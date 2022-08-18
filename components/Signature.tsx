@@ -72,6 +72,7 @@ const Root = styled.div`
   color: var(--color-fg-accent);
   cursor: pointer;
   user-select: none;
+  will-change: transform;
 
   transition-property: transform;
   transition-duration: 0.15s;
