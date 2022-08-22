@@ -126,11 +126,13 @@ function WritingPage(props: Props) {
   return (
     <Wrapper>
       <NextSeo {...seoProps} />
-      <Title>Writing</Title>
-      <Description>
+      <Title data-stagger style={{ '--stagger': 0 }}>
+        Writing
+      </Title>
+      <Description data-stagger style={{ '--stagger': 1 }}>
         Thoughts on code, design, lorem ipsum, and more.
       </Description>
-      <Search>
+      <Search data-stagger style={{ '--stagger': 2 }}>
         <SearchInputButton
           placeholder="Search articles"
           value={search}
@@ -148,7 +150,10 @@ function WritingPage(props: Props) {
           ready: filtersSize.isReady,
           open: isFiltersOpen,
         })}
-        style={{ '--content-height': `${filtersSize.height}px` }}
+        style={{
+          '--content-height': `${filtersSize.height}px`,
+          '--stagger': 3,
+        }}
       >
         <Filters ref={filtersRef}>
           <FiltersTitle>Filter by tags</FiltersTitle>
@@ -175,20 +180,22 @@ function WritingPage(props: Props) {
           </Tags>
         </Filters>
       </FiltersWrapper>
-      {articles.length === 0 ? (
-        <EmptyState>
-          <EmptyStateTitle>No articles found</EmptyStateTitle>
-          <ClearSearchButton onClick={handleClearSearchButtonClick}>
-            Clear search
-          </ClearSearchButton>
-        </EmptyState>
-      ) : (
-        <ArticleGrid>
-          {articles.map((article) => (
-            <ArticleGridItem key={article.slug} {...article} />
-          ))}
-        </ArticleGrid>
-      )}
+      <div data-stagger style={{ '--stagger': 4 }}>
+        {articles.length === 0 ? (
+          <EmptyState>
+            <EmptyStateTitle>No articles found</EmptyStateTitle>
+            <ClearSearchButton onClick={handleClearSearchButtonClick}>
+              Clear search
+            </ClearSearchButton>
+          </EmptyState>
+        ) : (
+          <ArticleGrid>
+            {articles.map((article) => (
+              <ArticleGridItem key={article.slug} {...article} />
+            ))}
+          </ArticleGrid>
+        )}
+      </div>
     </Wrapper>
   )
 }
