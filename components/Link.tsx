@@ -15,10 +15,10 @@ const Link = styled.a`
   border-radius: 16px;
   color: var(--color-fg-accent);
   background-color: var(--color-bg-subtle);
+  will-change: transform;
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
 
   @media (hover: hover) {
     &:hover {

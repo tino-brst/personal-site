@@ -239,3 +239,21 @@
 ::selection {
   background: hsla(0 0% 0% / 0.1);
 }
+
+@keyframes stagger {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+[data-stagger] {
+  animation-name: stagger;
+  animation-fill-mode: backwards;
+  animation-duration: 0.6s;
+  animation-delay: calc(var(--stagger) * 0.3s);
+}

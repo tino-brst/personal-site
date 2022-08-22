@@ -29,27 +29,32 @@ function HomePage(props: Props) {
   return (
     <Wrapper>
       <NextSeo {...seoProps} />
-      <Title>Hi! I&apos;m Tino</Title>
-      <Description>
+      <Title data-stagger style={{ '--stagger': 0 }}>
+        Hi! I&apos;m Tino
+      </Title>
+      <Description data-stagger style={{ '--stagger': 0.5 }}>
         And this is my little corner of the internet. I&apos;m a design-minded
         developer specializing in web technologies. I like to lorem ipsum
         dolorem potatoes. And some other stuff.
       </Description>
       <NextLink href="/about" passHref>
-        <GoToLink>
+        <GoToLink data-stagger style={{ '--stagger': 1 }}>
           About me
           <GoToIcon />
         </GoToLink>
       </NextLink>
-      <Heading>Latest Articles</Heading>
-      <ArticleGrid>
+      <Heading data-stagger style={{ '--stagger': 1.5 }}>
+        Latest Articles
+      </Heading>
+      <ArticleGrid data-stagger style={{ '--stagger': 2 }}>
         {props.articles.map((article) => (
           <ArticleGridItem key={article.slug} {...article} />
         ))}
       </ArticleGrid>
+      {/* TODO remove Spacer */}
       <Spacer vertical size={32} />
       <NextLink href="/writing" passHref>
-        <GoToLink>
+        <GoToLink data-stagger style={{ '--stagger': 3 }}>
           All articles
           <GoToIcon />
         </GoToLink>

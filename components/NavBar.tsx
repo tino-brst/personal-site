@@ -30,12 +30,17 @@ function NavBar() {
   const theme = useTheme()
   const navBar = useNavBar()
 
-  const wrapperRef = React.useRef<HTMLDivElement>(null)
+  const rootRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
   const menuRef = React.useRef<HTMLDivElement>(null)
 
+  const [isVisible, setIsVisible] = React.useState(false)
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
   const menuSize = useSize(menuRef)
+
+  React.useEffect(() => {
+    setIsVisible(true)
+  }, [])
 
   // Initialize scroll based opacity CSS var & keep up-to-date with scroll
   // changes (not set in inline styles to avoid re-renders with each scroll
@@ -96,7 +101,7 @@ function NavBar() {
   }, [])
 
   useOnWindowScroll(closeMenu)
-  useOnInteractionOutside(wrapperRef, closeMenu, isMenuOpen)
+  useOnInteractionOutside(rootRef, closeMenu, isMenuOpen)
 
   // Progress Bar
 
@@ -132,8 +137,9 @@ function NavBar() {
   return (
     <RootPlaceholder>
       <Root
-        ref={wrapperRef}
+        ref={rootRef}
         className={clsx({
+          visible: isVisible,
           menuOpen: isMenuOpen,
         })}
       >
@@ -262,10 +268,12 @@ const Root = styled.div`
   top: 0;
   left: 0;
   right: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
 
-  transition-property: opacity;
+  transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.2s;
+  transition-duration: 0.6s;
 
   &::before {
     content: '';
@@ -289,6 +297,11 @@ const Root = styled.div`
     &::before {
       display: none;
     }
+  }
+
+  &.visible {
+    visibility: visible;
+    transform: none;
   }
 `
 
@@ -392,10 +405,21 @@ const Content = styled.div`
   margin-left: auto;
   max-width: calc(768px + 2 * 16px);
   gap: 20px;
+  transform-origin: center top;
+  transform: scale(0.9);
+
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
+  transition-duration: 0.8s;
 
   @media (min-width: 640px) {
     padding-right: 32px;
     padding-left: 32px;
+    transform: scale(0.95);
+  }
+
+  ${Root}.visible & {
+    transform: none;
   }
 `
 
