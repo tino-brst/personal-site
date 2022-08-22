@@ -30,15 +30,6 @@ type Props = {
   children: React.ReactNode
 }
 
-// NTH probably should allow customizing these classes
-// See https://github.com/pacocoursey/next-themes
-// ThemeProvider 'value' prop
-
-const className = {
-  darkTheme: 'dark',
-  switchingTheme: 'switchingTheme',
-}
-
 const Context = React.createContext<ContextValue | undefined>(undefined)
 Context.displayName = 'ThemeContext'
 
@@ -55,13 +46,13 @@ function ThemeProvider({
   React.useEffect(() => {
     // Remove transitions for snappy & consistent theme switching (actually,
     // they are just made instantaneous, not "removed")
-    document.documentElement.classList.add(className.switchingTheme)
+    document.documentElement.setAttribute('data-switching-theme', '')
 
     // Apply theme
     if (resolved === 'dark') {
-      document.documentElement.classList.add(className.darkTheme)
+      document.documentElement.setAttribute('data-dark-theme', '')
     } else {
-      document.documentElement.classList.remove(className.darkTheme)
+      document.documentElement.removeAttribute('data-dark-theme')
     }
 
     // Force restyle
@@ -69,7 +60,7 @@ function ThemeProvider({
 
     // Restore transitions
     setTimeout(() => {
-      document.documentElement.classList.remove(className.switchingTheme)
+      document.documentElement.removeAttribute('data-switching-theme')
     }, 0)
   }, [resolved])
 

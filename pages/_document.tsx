@@ -56,7 +56,7 @@ export default class MyDocument extends Document {
                 const isSystemThemeDark = window.matchMedia(query).matches
 
                 if (activeTheme === 'dark' || (activeTheme === 'system' && isSystemThemeDark)) {
-                  document.documentElement.classList.add('dark')
+                  document.documentElement.setAttribute('data-dark-theme', '')
                 }
               })()
             `}
