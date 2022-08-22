@@ -25,6 +25,20 @@ function Layout(props: Props) {
     navBar.setIsAlwaysOpaque(isArticlePage)
   }, [navBar, router.pathname])
 
+  // Skip animations on all but the first page load
+
+  React.useEffect(() => {
+    const handleRouteChange = () => {
+      document.documentElement.setAttribute('data-skip-animations', '')
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router.events])
+
   return (
     <Wrapper>
       <NavBar />

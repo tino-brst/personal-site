@@ -249,6 +249,10 @@
   animation-delay: calc(var(--stagger) * 0.1s);
 }
 
+:root[data-skip-animations] [data-stagger] {
+  animation: none;
+}
+
 @keyframes stagger {
   from {
     transform: translateY(20px);
