@@ -68,7 +68,7 @@
   );
 }
 
-:root.dark {
+:root[data-dark-theme] {
   --color-bg-default: black;
   --color-bg-muted: hsla(0 0% 100% / 0.12);
   --color-bg-subtle: hsla(0 0% 100% / 0.12);
@@ -172,7 +172,7 @@
   --color-prettylights-syntax-constant-other-reference-link: #0a3069;
 }
 
-:root.dark {
+:root[data-dark-theme] {
   --color-prettylights-syntax-comment: #8b949e;
   --color-prettylights-syntax-constant: #79c0ff;
   --color-prettylights-syntax-entity: #d2a8ff;
@@ -211,7 +211,7 @@
   color-scheme: light;
 }
 
-:root.dark {
+:root[data-dark-theme] {
   color-scheme: dark;
   -webkit-font-smoothing: antialiased;
 }
@@ -232,7 +232,7 @@
   scroll-padding-top: calc(70px - 1px);
 }
 
-:root.switchingTheme * {
+:root[data-switching-theme] * {
   transition-duration: 0s;
 }
 
