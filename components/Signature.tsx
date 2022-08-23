@@ -66,6 +66,7 @@ function Signature() {
   )
 }
 
+// TODO restore aspect ratio
 const Root = styled.div`
   height: 100px;
   color: var(--color-fg-accent);

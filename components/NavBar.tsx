@@ -11,7 +11,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import avatarImageSrc from 'public/images/avatar.png'
 import * as React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 import { MenuIcon } from './icons/MenuIcon'
 import { ThemeIcon } from './icons/ThemeIcon'
@@ -120,8 +120,9 @@ function NavBar() {
 
   useOnWindowScroll(updateProgress)
 
-  // Used to avoid client/server render miss-matches, skipping those things for
-  // which the rendered result depends on client info (e.g. the theme toggle)
+  // Used to postpone showing client-context dependent content & avoid
+  // client/server render miss-matches (e.g. the theme toggle, the nav bar and
+  // its position based opacity, etc)
 
   const [isMounted, setIsMounted] = React.useState(false)
 
@@ -135,6 +136,7 @@ function NavBar() {
         ref={wrapperRef}
         className={clsx({
           menuOpen: isMenuOpen,
+          ready: isMounted,
         })}
       >
         <Status className={clsx({ visible: navBar.isStatusShown })}>
@@ -257,15 +259,21 @@ const RootPlaceholder = styled.div`
   z-index: 1;
 `
 
+const navBarEnter = keyframes`
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: none;
+  }
+`
+
 const Root = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-
-  transition-property: opacity;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.25, 1);
-  transition-duration: 0.2s;
+  visibility: hidden;
 
   &::before {
     content: '';
@@ -283,6 +291,11 @@ const Root = styled.div`
 
   &.menuOpen::before {
     opacity: 1;
+  }
+
+  &.ready {
+    visibility: visible;
+    animation: ${navBarEnter} cubic-bezier(0.4, 0, 0.25, 1) 0.6s backwards;
   }
 
   @media (min-width: 640px) {
@@ -381,6 +394,17 @@ const ProgressBar = styled.div`
   }
 `
 
+const contentEnter = keyframes`
+  from {
+    opacity: 0.3;
+    transform: scale(.95);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+`
+
 const Content = styled.div`
   height: ${height}px;
   display: flex;
@@ -392,6 +416,10 @@ const Content = styled.div`
   margin-left: auto;
   max-width: calc(768px + 2 * 16px);
   gap: 20px;
+
+  ${Root}.ready & {
+    animation: ${contentEnter} cubic-bezier(0.4, 0, 0.25, 1) 1s backwards;
+  }
 
   @media (min-width: 640px) {
     padding-right: 32px;
