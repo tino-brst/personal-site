@@ -1,4 +1,6 @@
+import { useIsInView } from '@hooks/useIsInView'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
+import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -39,11 +41,19 @@ function Layout(props: Props) {
     }
   }, [router.events])
 
+  // Footer entrance animation
+
+  const footerRef = React.useRef(null)
+  const isFooterInView = useIsInView(footerRef, {
+    once: true,
+    viewMargins: '-20px',
+  })
+
   return (
     <Wrapper>
       <NavBar />
       <Content>{props.children}</Content>
-      <Footer>
+      <Footer ref={footerRef} className={clsx({ show: isFooterInView })}>
         <LinksWrapper>
           <Link href="https://linkedin.com/in/agustin-burset/" external>
             LinkedIn
@@ -109,6 +119,11 @@ const Footer = styled.footer`
   flex-direction: column;
   align-items: center;
   position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+
+  transition-property: opacity, transform;
+  transition-duration: 0.6s;
 
   max-width: calc(768px + 2 * 16px);
   margin-top: 48px;
@@ -128,6 +143,11 @@ const Footer = styled.footer`
     content: '';
     height: 1px;
     background-color: var(--color-border);
+  }
+
+  &.show {
+    opacity: 1;
+    transform: none;
   }
 
   @media (min-width: 640px) {
