@@ -143,10 +143,19 @@ const Footer = styled.footer`
     content: '';
     height: 1px;
     background-color: var(--color-border);
+    transform: scaleX(0);
+
+    transition-property: transform;
+    transition-duration: 0.6s;
+    transition-delay: 0.2s;
   }
 
   &.show {
     opacity: 1;
+    transform: none;
+  }
+
+  &.show::before {
     transform: none;
   }
 

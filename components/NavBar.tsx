@@ -396,7 +396,7 @@ const ProgressBar = styled.div`
 
 const contentEnter = keyframes`
   from {
-    opacity: 0.3;
+    opacity: 0.6;
     transform: scale(.95);
   }
   to {
