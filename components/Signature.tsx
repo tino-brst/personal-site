@@ -66,9 +66,9 @@ function Signature() {
   )
 }
 
-// TODO restore aspect ratio
 const Root = styled.div`
   height: 100px;
+  aspect-ratio: 5 / 4;
   color: var(--color-fg-accent);
   cursor: pointer;
   user-select: none;
