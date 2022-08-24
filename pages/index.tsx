@@ -5,6 +5,7 @@ import { Spacer } from '@components/Spacer'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
+import { getStaggerProps } from '@lib/stagger'
 import { GetStaticProps } from 'next'
 import { NextSeo, NextSeoProps } from 'next-seo'
 import NextLink from 'next/link'
@@ -29,24 +30,20 @@ function HomePage(props: Props) {
   return (
     <Wrapper>
       <NextSeo {...seoProps} />
-      <Title data-stagger style={{ '--stagger': 0 }}>
-        Hi! I&apos;m Tino
-      </Title>
-      <Description data-stagger style={{ '--stagger': 1 }}>
+      <Title {...getStaggerProps(0)}>Hi! I&apos;m Tino</Title>
+      <Description {...getStaggerProps(1)}>
         And this is my little corner of the internet. I&apos;m a design-minded
         developer specializing in web technologies. I like to lorem ipsum
         dolorem potatoes. And some other stuff.
       </Description>
       <NextLink href="/about" passHref>
-        <GoToLink data-stagger style={{ '--stagger': 2 }}>
+        <GoToLink {...getStaggerProps(2)}>
           About me
           <GoToIcon />
         </GoToLink>
       </NextLink>
-      <Heading data-stagger style={{ '--stagger': 3 }}>
-        Latest Articles
-      </Heading>
-      <ArticleGrid data-stagger style={{ '--stagger': 4 }}>
+      <Heading {...getStaggerProps(3)}>Latest Articles</Heading>
+      <ArticleGrid {...getStaggerProps(4)}>
         {props.articles.map((article) => (
           <ArticleGridItem key={article.slug} {...article} />
         ))}
@@ -54,7 +51,7 @@ function HomePage(props: Props) {
       {/* TODO remove Spacer */}
       <Spacer vertical size={32} />
       <NextLink href="/writing" passHref>
-        <GoToLink data-stagger style={{ '--stagger': 5 }}>
+        <GoToLink {...getStaggerProps(5)}>
           All articles
           <GoToIcon />
         </GoToLink>

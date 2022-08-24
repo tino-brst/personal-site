@@ -97,6 +97,7 @@ const Pre = styled.pre`
   }
 `
 
+// TODO match transition duration with status message
 const CopyButton = styled.button`
   position: absolute;
   bottom: var(--copy-button-inset-y);

@@ -20,7 +20,7 @@ import { Root } from '@lib/mdast-util-toc'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon,
+  ListBulletIcon
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -243,6 +243,7 @@ function ArticlePage(props: Props) {
         newerArticle={props.newerArticle}
         olderArticle={props.olderArticle}
       />
+      {/* TODO move floating stuff to the top for quicker tabbing access */}
       <FloatingStuff>
         <ButtonGroup className={clsx({ expanded: showBackToTop })}>
           <ButtonBackground>

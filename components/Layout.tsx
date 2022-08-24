@@ -42,6 +42,7 @@ function Layout(props: Props) {
   }, [router.events])
 
   // Footer entrance animation
+  // TODO extract Footer
 
   const footerRef = React.useRef(null)
   const isFooterInView = useIsInView(footerRef, {

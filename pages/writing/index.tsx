@@ -9,6 +9,7 @@ import { includesEvery, toggle } from '@lib/array'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
+import { getStaggerProps } from '@lib/stagger'
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
@@ -126,13 +127,11 @@ function WritingPage(props: Props) {
   return (
     <Wrapper>
       <NextSeo {...seoProps} />
-      <Title data-stagger style={{ '--stagger': 0 }}>
-        Writing
-      </Title>
-      <Description data-stagger style={{ '--stagger': 1 }}>
+      <Title {...getStaggerProps(0)}>Writing</Title>
+      <Description {...getStaggerProps(1)}>
         Thoughts on code, design, lorem ipsum, and more.
       </Description>
-      <Search data-stagger style={{ '--stagger': 2 }}>
+      <Search {...getStaggerProps(2)}>
         <SearchInputButton
           placeholder="Search articles"
           value={search}
@@ -150,10 +149,7 @@ function WritingPage(props: Props) {
           ready: filtersSize.isReady,
           open: isFiltersOpen,
         })}
-        style={{
-          '--content-height': `${filtersSize.height}px`,
-          '--stagger': 3,
-        }}
+        style={{ '--content-height': `${filtersSize.height}px` }}
       >
         <Filters ref={filtersRef}>
           <FiltersTitle>Filter by tags</FiltersTitle>
@@ -180,7 +176,7 @@ function WritingPage(props: Props) {
           </Tags>
         </Filters>
       </FiltersWrapper>
-      <div data-stagger style={{ '--stagger': 4 }}>
+      <div {...getStaggerProps(3)}>
         {articles.length === 0 ? (
           <EmptyState>
             <EmptyStateTitle>No articles found</EmptyStateTitle>
