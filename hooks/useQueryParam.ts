@@ -7,8 +7,6 @@ type SetValue = React.Dispatch<
   React.SetStateAction<string | Array<string> | undefined>
 >
 
-// TODO document that setting the value to undefined clears it from the url
-
 // Next.js doesn't export these 😒
 type TransitionOptions = Partial<{
   /** Update the path of the current page without rerunning `getStaticProps`, `getServerSideProps` or `getInitialProps`. Defaults to `true` */
@@ -35,14 +33,16 @@ type Options = Partial<{
 /**
  * Drop-in replacement to accessing Next.js `router.query` URL search
  * parameters, with the possibility of updating their values (just like
- * `React.useState`).
+ * `React.useState`). To remove a parameter from the URL, set it to
+ * `undefined`.
  */
 function useQueryParam(name: string): [Value, SetValue]
 
 /**
  * Drop-in replacement to accessing Next.js `router.query` URL search
  * parameters, with the possibility of updating their values (just like
- * `React.useState`).
+ * `React.useState`). To remove a parameter from the URL, set it to
+ * `undefined`.
  */
 function useQueryParam(
   name: string,
@@ -54,7 +54,8 @@ function useQueryParam(
 /**
  * Drop-in replacement to accessing Next.js `router.query` URL search
  * parameters, with the possibility of updating their values (just like
- * `React.useState`).
+ * `React.useState`). To remove a parameter from the URL, set it to
+ * `undefined`.
  */
 function useQueryParam(name: string, options?: Options): [Value, SetValue]
 
