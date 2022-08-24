@@ -204,6 +204,7 @@ function ArticlePage(props: Props) {
               ))}
             </Tags>
           )}
+          <Divider />
         </Header>
         <Main>
           <Content components={components} />
@@ -337,6 +338,21 @@ const Main = styled.main`
   }
 `
 
+const Divider = styled.hr`
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  content: '';
+  height: 1px;
+  background-color: var(--color-border);
+
+  @media (min-width: 640px) {
+    left: 32px;
+    right: 32px;
+  }
+`
+
 const Header = styled.header`
   position: relative;
   grid-area: header;
@@ -346,26 +362,10 @@ const Header = styled.header`
   padding-bottom: 48px;
   margin-top: 45vh;
 
-  &::before {
-    position: absolute;
-    bottom: 0;
-    left: 16px;
-    right: 16px;
-    display: block;
-    content: '';
-    height: 1px;
-    background-color: var(--color-border);
-  }
-
   @media (min-width: 640px) {
     padding-left: 40px;
     padding-right: 40px;
     margin-top: 40vh;
-
-    &::before {
-      left: 32px;
-      right: 32px;
-    }
   }
 `
 
