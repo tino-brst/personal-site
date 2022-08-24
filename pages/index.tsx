@@ -1,7 +1,6 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
 import { ArrowRightIcon } from '@components/icons/ArrowRightIcon'
 import { Link } from '@components/Link'
-import { Spacer } from '@components/Spacer'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
@@ -43,13 +42,11 @@ function HomePage(props: Props) {
         </GoToLink>
       </NextLink>
       <Heading {...getStaggerProps(3)}>Latest Articles</Heading>
-      <ArticleGrid {...getStaggerProps(4)}>
+      <StyledArticleGrid {...getStaggerProps(4)}>
         {props.articles.map((article) => (
           <ArticleGridItem key={article.slug} {...article} />
         ))}
-      </ArticleGrid>
-      {/* TODO remove Spacer */}
-      <Spacer vertical size={32} />
+      </StyledArticleGrid>
       <NextLink href="/writing" passHref>
         <GoToLink {...getStaggerProps(5)}>
           All articles
@@ -109,6 +106,10 @@ const GoToIcon = styled(ArrowRightIcon)`
   stroke: var(--color-fg-accent);
   width: 20px;
   height: 20px;
+`
+
+const StyledArticleGrid = styled(ArticleGrid)`
+  margin-bottom: 32px;
 `
 
 /* ---------------------------------- Next.js ------------------------------- */

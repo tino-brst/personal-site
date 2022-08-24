@@ -1,5 +1,6 @@
 function AboutPage() {
-  // TODO add SEO
+  // TODO SEO
+  // TODO Stagger animations
 
   return null
 }
