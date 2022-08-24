@@ -279,7 +279,6 @@ function ArticlePage(props: Props) {
 const Wrapper = styled.div`
   --gap: 40px;
 
-  isolation: isolate;
   margin-bottom: 48px;
   margin-top: -${NavBar.height + NavBar.marginBottom}px;
   display: grid;
