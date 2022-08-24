@@ -185,7 +185,10 @@ function ArticlePage(props: Props) {
         <FloatingStuff>
           <ButtonGroup className={clsx({ expanded: showBackToTop })}>
             <ButtonBackground>
-              <BackToTopButton onClick={backToTop}>
+              <BackToTopButton
+                onClick={backToTop}
+                tabIndex={showBackToTop ? undefined : -1}
+              >
                 <BackToTopIcon width={26} height={26} />
               </BackToTopButton>
             </ButtonBackground>
