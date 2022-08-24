@@ -17,10 +17,11 @@ import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { Root } from '@lib/mdast-util-toc'
+import { getStaggerProps } from '@lib/stagger'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon
+  ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -36,6 +37,7 @@ import styled, { css, keyframes } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 
 const asideWidth = 240
+const mainContentStaggerIndex = 4
 
 type ArticlePreview = {
   title: string
@@ -176,12 +178,12 @@ function ArticlePage(props: Props) {
           <HeaderImageOverlay />
         </HeaderImageWrapper>
         {props.tableOfContents.children.length > 0 && (
-          <Aside>
+          <Aside {...getStaggerProps(mainContentStaggerIndex)}>
             <AsideTableOfContents />
           </Aside>
         )}
         <Header>
-          <Info>
+          <Info {...getStaggerProps(0)}>
             <InfoItem>
               <CalendarIcon />
               <span>{formatDate(props.publishedOn)}</span>
@@ -191,9 +193,9 @@ function ArticlePage(props: Props) {
               <span>{props.readingTime}</span>
             </InfoItem>
           </Info>
-          <Title>{props.title}</Title>
+          <Title {...getStaggerProps(1)}>{props.title}</Title>
           {props.tags.length > 0 && (
-            <Tags>
+            <Tags {...getStaggerProps(2)}>
               {props.tags.map((tag) => (
                 <NextLink key={tag} href={`/writing?tags=${tag}`} passHref>
                   <Tag>
@@ -204,9 +206,9 @@ function ArticlePage(props: Props) {
               ))}
             </Tags>
           )}
-          <Divider />
+          <Divider {...getStaggerProps(3)} />
         </Header>
-        <Main>
+        <Main {...getStaggerProps(mainContentStaggerIndex)}>
           <Content components={components} />
           <ContentEndMarker ref={contentEndMarkerRef} />
           <ViewCount>{viewCount.value} views</ViewCount>
