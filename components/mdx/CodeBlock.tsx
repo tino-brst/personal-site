@@ -1,6 +1,7 @@
 import { CheckMarkIcon } from '@components/icons/CheckMarkIcon'
 import { CopyIcon } from '@components/icons/CopyIcon'
 import { useTimeout } from '@hooks/useTimeout'
+import { statusTimeoutDuration } from '@lib/constants'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
 import * as React from 'react'
@@ -16,7 +17,10 @@ function CodeBlock(props: Props) {
   const preElementRef = React.useRef<HTMLPreElement>(null)
 
   const [hasJustCopied, setHasJustCopied] = React.useState(false)
-  const hasJustCopiedTimeout = useTimeout(() => setHasJustCopied(false), 1500)
+  const hasJustCopiedTimeout = useTimeout(
+    () => setHasJustCopied(false),
+    statusTimeoutDuration
+  )
 
   function handleCopyButtonClick() {
     navigator.clipboard?.writeText(preElementRef.current?.textContent ?? '')
@@ -97,7 +101,6 @@ const Pre = styled.pre`
   }
 `
 
-// TODO match transition duration with status message
 const CopyButton = styled.button`
   position: absolute;
   bottom: var(--copy-button-inset-y);

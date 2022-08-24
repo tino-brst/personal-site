@@ -13,10 +13,17 @@ type ContextValue = {
   isStatusShown: boolean
 }
 
+type Props = {
+  statusTimeoutDuration: number
+}
+
 const Context = React.createContext<ContextValue | undefined>(undefined)
 Context.displayName = 'NavBarContext'
 
-function NavBarProvider({ children }: React.PropsWithChildren<{}>) {
+function NavBarProvider({
+  children,
+  statusTimeoutDuration,
+}: React.PropsWithChildren<Props>) {
   const [isAlwaysOpaque, setIsAlwaysOpaque] = React.useState(false)
 
   // Progress Bar
@@ -30,7 +37,11 @@ function NavBarProvider({ children }: React.PropsWithChildren<{}>) {
 
   const [status, setStatus] = React.useState('')
   const [isStatusShown, setIsStatusShown] = React.useState(false)
-  const statusTimeout = useTimeout(() => setIsStatusShown(false), 2000, false)
+  const statusTimeout = useTimeout(
+    () => setIsStatusShown(false),
+    statusTimeoutDuration,
+    false
+  )
 
   const customSetStatus = React.useCallback(
     (value: string) => {

@@ -10,6 +10,7 @@ import { ThemeProvider } from 'contexts/theme'
 import { Layout } from '@components/Layout'
 import { NavBarProvider } from 'contexts/nav-bar'
 import Head from 'next/head'
+import { statusTimeoutDuration } from '@lib/constants'
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -20,7 +21,7 @@ function App({ Component, pageProps }: AppProps) {
       </Head>
       <SWRConfig value={{ fetcher }}>
         <ThemeProvider>
-          <NavBarProvider>
+          <NavBarProvider statusTimeoutDuration={statusTimeoutDuration}>
             <Layout>
               <Component {...pageProps} />
             </Layout>
