@@ -182,6 +182,29 @@ function ArticlePage(props: Props) {
             <AsideTableOfContents />
           </Aside>
         )}
+        <FloatingStuff>
+          <ButtonGroup className={clsx({ expanded: showBackToTop })}>
+            <ButtonBackground>
+              <BackToTopButton onClick={backToTop}>
+                <BackToTopIcon width={26} height={26} />
+              </BackToTopButton>
+            </ButtonBackground>
+            <ButtonGroupDivider />
+            <ButtonBackground>
+              <TableOfContentsButton
+                ref={tableOfContentsButtonRef}
+                onClick={toggleTableOfContents}
+              >
+                <TableOfContentsIcon width={26} height={26} />
+              </TableOfContentsButton>
+            </ButtonBackground>
+          </ButtonGroup>
+          <FloatingTableOfContents
+            ref={tableOfContentsRef}
+            onSelect={closeTableOfContents}
+            isOpen={isTableOfContentsOpen}
+          />
+        </FloatingStuff>
         <Header>
           <Info {...getStaggerProps(0)}>
             <InfoItem>
@@ -246,30 +269,6 @@ function ArticlePage(props: Props) {
         newerArticle={props.newerArticle}
         olderArticle={props.olderArticle}
       />
-      {/* TODO move floating stuff to the top for quicker tabbing access */}
-      <FloatingStuff>
-        <ButtonGroup className={clsx({ expanded: showBackToTop })}>
-          <ButtonBackground>
-            <BackToTopButton onClick={backToTop}>
-              <BackToTopIcon width={26} height={26} />
-            </BackToTopButton>
-          </ButtonBackground>
-          <ButtonGroupDivider />
-          <ButtonBackground>
-            <TableOfContentsButton
-              ref={tableOfContentsButtonRef}
-              onClick={toggleTableOfContents}
-            >
-              <TableOfContentsIcon width={26} height={26} />
-            </TableOfContentsButton>
-          </ButtonBackground>
-        </ButtonGroup>
-        <FloatingTableOfContents
-          ref={tableOfContentsRef}
-          onSelect={closeTableOfContents}
-          isOpen={isTableOfContentsOpen}
-        />
-      </FloatingStuff>
     </TableOfContentsProvider>
   )
 }
