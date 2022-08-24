@@ -1,10 +1,8 @@
 import { useIsInView } from '@hooks/useIsInView'
-import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
-import NextLink from 'next/link'
 import React from 'react'
-import styled, { css } from 'styled-components'
-import { focusRing } from 'styles/focusRing'
+import styled from 'styled-components'
+import { FooterLink } from './FooterLink'
 import { Signature } from './Signature'
 
 function Footer() {
@@ -17,38 +15,20 @@ function Footer() {
   return (
     <Root ref={ref} className={clsx({ show: isInView })}>
       <LinksWrapper>
-        <Link href="https://linkedin.com/in/agustin-burset/" external>
+        <FooterLink href="https://linkedin.com/in/agustin-burset/" external>
           LinkedIn
-        </Link>
-        <Link href="https://twitter.com/bursetAgustin" external>
+        </FooterLink>
+        <FooterLink href="https://twitter.com/bursetAgustin" external>
           Twitter
-        </Link>
-        <Link href="https://github.com/tino-brst" external>
+        </FooterLink>
+        <FooterLink href="https://github.com/tino-brst" external>
           GitHub
-        </Link>
-        <Link href="mailto:tinos.corner@icloud.com">Email</Link>
+        </FooterLink>
+        <FooterLink href="mailto:tinos.corner@icloud.com">Email</FooterLink>
       </LinksWrapper>
       <SignatureLabel>made with care by</SignatureLabel>
       <Signature />
     </Root>
-  )
-}
-
-// TODO extract FooterLink
-type LinkProps = {
-  href: string
-  external?: boolean
-  children?: React.ReactNode
-}
-
-function Link(props: LinkProps) {
-  return (
-    <NextLink href={props.href} passHref>
-      <StyledLink target={props.external ? '_blank' : undefined}>
-        {props.children}
-        {props.external && <ExternalLinkIcon />}
-      </StyledLink>
-    </NextLink>
   )
 }
 
@@ -115,62 +95,6 @@ const LinksWrapper = styled.div`
   gap: 18px;
   justify-content: center;
   margin-bottom: 48px;
-`
-
-const styledLinkHoverStyles = css`
-  color: var(--color-fg-default-hover);
-`
-
-const StyledLink = styled.a`
-  position: relative;
-  display: flex;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: 450;
-  line-height: 1;
-  color: var(--color-fg-default);
-
-  transition-property: color;
-  transition-duration: 0.1s;
-
-  @media (hover: hover) {
-    &:hover {
-      ${styledLinkHoverStyles}
-    }
-  }
-
-  &:active,
-  &:focus-visible {
-    ${styledLinkHoverStyles}
-  }
-
-  --focus-inset: -6px;
-  --focus-radius: 8px;
-
-  ${focusRing}
-`
-
-const externalLinkIconHoverStyles = css`
-  color: var(--color-fg-muted-hover);
-`
-
-const ExternalLinkIcon = styled(ArrowTopRightIcon)`
-  color: var(--color-fg-muted);
-  margin-right: -1px;
-
-  transition-property: color;
-  transition-duration: 0.1s;
-
-  ${StyledLink}:active &, 
-  ${StyledLink}:focus-visible & {
-    ${externalLinkIconHoverStyles}
-  }
-
-  @media (hover: hover) {
-    ${StyledLink}:hover & {
-      ${externalLinkIconHoverStyles}
-    }
-  }
 `
 
 const SignatureLabel = styled.label`
