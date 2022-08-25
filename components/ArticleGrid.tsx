@@ -117,6 +117,7 @@ const ThumbnailImageWrapper = styled.div`
   aspect-ratio: 2 / 1;
   position: relative;
   border-radius: var(--border-radius);
+  background-color: var(--color-bg-subtlerer);
   overflow: hidden;
 
   /* Fixes corner overflow on image scale transition */

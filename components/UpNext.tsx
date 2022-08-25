@@ -178,6 +178,7 @@ const ThumbnailWrapper = styled.div`
   position: relative;
   aspect-ratio: 4 / 3;
   flex: 1 1 0;
+  background-color: var(--color-bg-subtlerer);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-border-inset);
   overflow: hidden;

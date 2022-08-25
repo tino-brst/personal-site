@@ -40,7 +40,6 @@ function Layout(props: React.PropsWithChildren<{}>) {
       <NavBar />
       <Content>{props.children}</Content>
       <Footer />
-      {/* TODO dotted pattern? */}
       <PS>
         <p>
           p.s. the site&apos;s code is open source and{' '}

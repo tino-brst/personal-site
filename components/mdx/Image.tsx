@@ -33,6 +33,7 @@ const Root = styled.div`
   margin-top: 24px;
   margin-bottom: 24px;
   overflow: hidden;
+  background-color: var(--color-bg-subtlerer);
   box-shadow: inset 0 -1px 0 var(--color-shadow-border-subtle),
     inset 0 1px 0 var(--color-shadow-border-subtle),
     0 1px var(--color-shadow-border-contrast);
