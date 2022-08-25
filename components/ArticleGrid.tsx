@@ -15,7 +15,7 @@ type Props = {
 
 function ArticleGridItem(props: Props) {
   return (
-    <Wrapper>
+    <Root>
       <NextLink href={`/writing/${props.slug}`} passHref>
         <Link>
           <ThumbnailImageWrapper>
@@ -43,11 +43,11 @@ function ArticleGridItem(props: Props) {
           </Info>
         </Link>
       </NextLink>
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.li`
+const Root = styled.li`
   @media (min-width: 640px) {
     flex: 0 0 calc(50% - var(--gap) / 2);
 
@@ -94,12 +94,12 @@ const Link = styled.a`
   }
 
   @media (min-width: 640px) {
-    ${Wrapper}:first-child & {
+    ${Root}:first-child & {
       flex-direction: row;
       gap: 14px;
     }
 
-    ${Wrapper}:first-child:active & {
+    ${Root}:first-child:active & {
       transform: scale(0.99);
     }
   }
@@ -130,7 +130,7 @@ const ThumbnailImageWrapper = styled.div`
   }
 
   @media (min-width: 640px) {
-    ${Wrapper}:first-child & {
+    ${Root}:first-child & {
       flex: 2 1 0;
     }
   }
@@ -197,7 +197,7 @@ const Info = styled.div`
   padding-top: 0;
 
   @media (min-width: 640px) {
-    ${Wrapper}:first-child & {
+    ${Root}:first-child & {
       flex: 1 1 0;
 
       padding: 4px;

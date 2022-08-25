@@ -125,7 +125,7 @@ function WritingPage(props: Props) {
   }
 
   return (
-    <Wrapper>
+    <Root>
       <NextSeo {...seoProps} />
       <Title {...getStaggerProps(0)}>Writing</Title>
       <Description {...getStaggerProps(1)}>
@@ -192,11 +192,11 @@ function WritingPage(props: Props) {
           </ArticleGrid>
         )}
       </div>
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   max-width: calc(768px + 2 * 16px);
   margin-left: auto;
   margin-right: auto;

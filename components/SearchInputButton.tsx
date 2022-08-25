@@ -65,7 +65,7 @@ function SearchInputButton(props: Props) {
   useOnKeyDown('Escape', handleEscapeKeyDown, props.isOpen)
 
   return (
-    <Wrapper
+    <Root
       className={clsx({ open: props.isOpen })}
       style={{
         '--default-width': `${placeholderSize.width}px`,
@@ -99,7 +99,7 @@ function SearchInputButton(props: Props) {
       >
         {props.placeholder}
       </Button>
-    </Wrapper>
+    </Root>
   )
 }
 
@@ -107,7 +107,7 @@ const hoverStyles = css`
   background-color: var(--color-bg-subtle-hover);
 `
 
-const Wrapper = styled.div`
+const Root = styled.div`
   --transition: all 0.3s cubic-bezier(0.32, 0.08, 0.24, 1);
   --border-radius: 16px;
   --padding-x: 14px;
@@ -148,7 +148,7 @@ const SearchIcon = styled(MagnifyingGlassIcon)`
 
   transition: var(--transition);
 
-  ${Wrapper}.open & {
+  ${Root}.open & {
     stroke: var(--color-fg-default);
   }
 `
@@ -171,7 +171,7 @@ const CancelButton = styled.button`
 
   transition: var(--transition);
 
-  ${Wrapper}.open & {
+  ${Root}.open & {
     transform: none;
     opacity: 1;
   }
@@ -240,7 +240,7 @@ const Input = styled.input`
     ${hoverStyles}
   }
 
-  ${Wrapper}.open & {
+  ${Root}.open & {
     opacity: 1;
     padding-right: var(--cancel-button-width);
   }
@@ -250,7 +250,7 @@ const Input = styled.input`
     transition: var(--transition);
   }
 
-  ${Wrapper}.open &::placeholder {
+  ${Root}.open &::placeholder {
     ${openTextStyle}
   }
 `
@@ -275,7 +275,7 @@ const Button = styled.button`
     ${hoverStyles}
   }
 
-  ${Wrapper}.open & {
+  ${Root}.open & {
     ${openTextStyle}
     opacity: 0;
     pointer-events: none;

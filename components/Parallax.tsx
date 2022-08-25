@@ -46,7 +46,7 @@ function Parallax({
   }, [getOffset, isInView])
 
   return (
-    <Wrapper
+    <Root
       className={clsx(className, { clamped: clampTo })}
       ref={ref}
       style={{
@@ -55,11 +55,11 @@ function Parallax({
       }}
     >
       {children}
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   --offset: 0;
   --multiplier: 0;
   --translate-limit: 0;

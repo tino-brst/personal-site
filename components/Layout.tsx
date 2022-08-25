@@ -7,8 +7,6 @@ import { focusRing } from 'styles/focusRing'
 import { Footer } from './Footer'
 import { NavBar } from './NavBar'
 
-// TODO update Wrappers to Root
-
 function Layout(props: React.PropsWithChildren<{}>) {
   const router = useRouter()
   const navBar = useNavBar()
@@ -37,7 +35,7 @@ function Layout(props: React.PropsWithChildren<{}>) {
   }, [router.events])
 
   return (
-    <Wrapper>
+    <Root>
       <NavBar />
       <Content>{props.children}</Content>
       <Footer />
@@ -49,11 +47,11 @@ function Layout(props: React.PropsWithChildren<{}>) {
           </a>
         </p>
       </PS>
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;

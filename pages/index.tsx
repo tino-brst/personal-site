@@ -27,7 +27,7 @@ function HomePage(props: Props) {
   }
 
   return (
-    <Wrapper>
+    <Root>
       <NextSeo {...seoProps} />
       <Title {...getStaggerProps(0)}>Hi! I&apos;m Tino</Title>
       <Description {...getStaggerProps(1)}>
@@ -53,11 +53,11 @@ function HomePage(props: Props) {
           <GoToIcon />
         </GoToLink>
       </NextLink>
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   max-width: calc(768px + 2 * 16px);
   margin-left: auto;
   margin-right: auto;

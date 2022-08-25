@@ -27,7 +27,7 @@ function CodeBlock(props: React.PropsWithChildren<{}>) {
   }
 
   return (
-    <Wrapper>
+    <Root>
       <Pre {...props} ref={preElementRef}>
         {props.children}
       </Pre>
@@ -42,11 +42,11 @@ function CodeBlock(props: React.PropsWithChildren<{}>) {
           <CheckMarkIcon isComplete={hasJustCopied} />
         </CheckMarkIconWrapper>
       </CopyButton>
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   --copy-button-size: 32px;
   --copy-button-inset-x: 24px;
   --copy-button-inset-y: 20px;
@@ -120,7 +120,7 @@ const CopyButton = styled.button`
     opacity: 0;
     transform: scale(0.9);
 
-    ${Wrapper}:hover &, 
+    ${Root}:hover &, 
     &:focus-visible,
     &.copied {
       opacity: 1;

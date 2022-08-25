@@ -45,7 +45,7 @@ function NavGroup(props: React.PropsWithChildren<{}>) {
   )
 
   return (
-    <Wrapper onMouseLeave={() => setIsMouseComingFromOutside(true)}>
+    <Root onMouseLeave={() => setIsMouseComingFromOutside(true)}>
       <NavGroupContext.Provider value={value}>
         <HighlightPosition
           style={{
@@ -64,9 +64,11 @@ function NavGroup(props: React.PropsWithChildren<{}>) {
         </HighlightPosition>
         {props.children}
       </NavGroupContext.Provider>
-    </Wrapper>
+    </Root>
   )
 }
+
+// TODO extract props
 
 function NavGroupLink(
   props: React.PropsWithChildren<{
@@ -112,7 +114,7 @@ function NavGroupLink(
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   display: none;
   position: relative;
 
@@ -148,17 +150,17 @@ const Highlight = styled.div`
   transition-timing-function: ease;
 
   @media (hover: hover) {
-    ${Wrapper}:hover & {
+    ${Root}:hover & {
       ${highlightHoverStyles}
     }
   }
 
-  ${Wrapper}:focus-within &,
-  ${Wrapper}:active & {
+  ${Root}:focus-within &,
+  ${Root}:active & {
     ${highlightHoverStyles}
   }
 
-  ${Wrapper}:active & {
+  ${Root}:active & {
     transform: scale(0.95);
   }
 `

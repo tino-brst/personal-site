@@ -178,6 +178,7 @@ function NavBar() {
               <NavGroupLink to="/about">About</NavGroupLink>
             </NavGroup>
             {isMounted && (
+              // TODO extract comp
               <NavButton
                 onClick={() =>
                   theme.toggle((_, newValue) => {
@@ -213,6 +214,7 @@ function NavBar() {
           style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
         >
           <Menu ref={menuRef}>
+            {/* TODO extract comp */}
             <NextLink href="/" passHref>
               <Link
                 onClick={closeMenu}

@@ -10,7 +10,7 @@ type Props = {
 
 function Image(props: Props) {
   return (
-    <Wrapper>
+    <Root>
       <StyledParallax multiplier={-0.025} clampTo={10}>
         {props.src && (
           <NextImage
@@ -21,11 +21,11 @@ function Image(props: Props) {
           />
         )}
       </StyledParallax>
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   --border-radius: 10px;
 
   margin-left: -24px;

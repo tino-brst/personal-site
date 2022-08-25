@@ -16,7 +16,7 @@ const FloatingTableOfContents = React.forwardRef<HTMLDivElement, Props>(
     const toc = useTableOfContents()
 
     return (
-      <Wrapper className={clsx({ open: props.isOpen })} ref={ref}>
+      <Root className={clsx({ open: props.isOpen })} ref={ref}>
         <Header>In this article</Header>
         <List>
           {toc.items.map((item) => (
@@ -34,7 +34,7 @@ const FloatingTableOfContents = React.forwardRef<HTMLDivElement, Props>(
             </ListItem>
           ))}
         </List>
-      </Wrapper>
+      </Root>
     )
   }
 )
@@ -80,7 +80,7 @@ function ListItem(props: ListItemProps) {
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   visibility: hidden;
   pointer-events: auto;
   opacity: 0;

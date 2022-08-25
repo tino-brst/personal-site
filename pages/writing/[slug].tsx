@@ -153,7 +153,7 @@ function ArticlePage(props: Props) {
       scrollOffsetTop={NavBar.height}
     >
       <NextSeo {...seoProps} />
-      <Wrapper>
+      <Root>
         <HeaderImageWrapper>
           <StyledParallax
             multiplier={-0.2}
@@ -267,7 +267,7 @@ function ArticlePage(props: Props) {
             </EditOnGitHubLink>
           </EditOnGitHub>
         </Main>
-      </Wrapper>
+      </Root>
       <UpNext
         newerArticle={props.newerArticle}
         olderArticle={props.olderArticle}
@@ -276,7 +276,7 @@ function ArticlePage(props: Props) {
   )
 }
 
-const Wrapper = styled.div`
+const Root = styled.div`
   --gap: 40px;
 
   margin-bottom: 48px;

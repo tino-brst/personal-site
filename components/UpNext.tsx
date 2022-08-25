@@ -18,7 +18,7 @@ type Props = {
 
 function UpNext(props: Props) {
   return (
-    <Wrapper>
+    <Root>
       <List>
         <ListItem>
           {props.newerArticle && (
@@ -71,11 +71,11 @@ function UpNext(props: Props) {
           All Articles
         </AllArticlesLink>
       </NextLink>
-    </Wrapper>
+    </Root>
   )
 }
 
-const Wrapper = styled.section`
+const Root = styled.section`
   max-width: calc(768px + 2 * 16px);
   margin-left: auto;
   margin-right: auto;
