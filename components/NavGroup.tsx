@@ -68,15 +68,13 @@ function NavGroup(props: React.PropsWithChildren<{}>) {
   )
 }
 
-// TODO extract props
+type NavGroupLinkProps = React.PropsWithChildren<{
+  to: string
+  /** When true, the active style will only be applied if the location is matched _exactly_. */
+  exact?: boolean
+}>
 
-function NavGroupLink(
-  props: React.PropsWithChildren<{
-    to: string
-    /** When true, the active style will only be applied if the location is matched _exactly_. */
-    exact?: boolean
-  }>
-) {
+function NavGroupLink(props: NavGroupLinkProps) {
   const navGroup = useNavGroup()
   const router = useRouter()
 
