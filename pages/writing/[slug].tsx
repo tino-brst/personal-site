@@ -15,6 +15,7 @@ import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { useWindowEventListener } from '@hooks/useWindowEventListener'
 import { getArticles } from '@lib/articles'
+import { Page } from '@lib/constants'
 import { compareDatesDesc, formatDate } from '@lib/dates'
 import { Root } from '@lib/mdast-util-toc'
 import { getStaggerProps } from '@lib/stagger'
@@ -223,7 +224,11 @@ function ArticlePage(props: Props) {
           {props.tags.length > 0 && (
             <Tags {...getStaggerProps(2)}>
               {props.tags.map((tag) => (
-                <NextLink key={tag} href={`/writing?tags=${tag}`} passHref>
+                <NextLink
+                  key={tag}
+                  href={`${Page.writing}?tags=${tag}`}
+                  passHref
+                >
                   <Tag>
                     <TagIcon />
                     {tag}

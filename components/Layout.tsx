@@ -1,4 +1,5 @@
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
+import { Page } from '@lib/constants'
 import { useNavBar } from 'contexts/nav-bar'
 import { useRouter } from 'next/router'
 import * as React from 'react'
@@ -14,7 +15,7 @@ function Layout(props: React.PropsWithChildren<{}>) {
   // NavBar settings
 
   useIsomorphicLayoutEffect(() => {
-    const isArticlePage = router.pathname.startsWith('/writing/')
+    const isArticlePage = router.pathname.startsWith(`${Page.writing}/`)
 
     navBar.setIsProgressShown(isArticlePage)
     navBar.setIsAlwaysOpaque(isArticlePage)

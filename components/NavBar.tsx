@@ -2,6 +2,7 @@ import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import { useOnInteractionOutside } from '@hooks/useOnInteractionOutside'
 import { useOnWindowScroll } from '@hooks/useOnWindowScroll'
 import { useSize } from '@hooks/useSize'
+import { Page } from '@lib/constants'
 import { map } from '@lib/math'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -20,6 +21,7 @@ import { ThemeToggle } from './ThemeToggle'
 const height = 70
 const marginBottom = 48
 
+// TODO match enum style
 const cssVar = {
   scrollBasedOpacity: '--scroll-based-opacity',
   menuHeight: '--menu-height',
@@ -156,7 +158,7 @@ function NavBar() {
           })}
         />
         <Content>
-          <NextLink href="/" passHref>
+          <NextLink href={Page.home} passHref>
             <HomeLink>
               <AvatarImageWrapper>
                 <NextImage
@@ -170,11 +172,11 @@ function NavBar() {
           </NextLink>
           <BarEnd>
             <NavGroup>
-              <NavGroupLink to="/" exact>
+              <NavGroupLink to={Page.home} exact>
                 Home
               </NavGroupLink>
-              <NavGroupLink to="/writing">Writing</NavGroupLink>
-              <NavGroupLink to="/about">About</NavGroupLink>
+              <NavGroupLink to={Page.writing}>Writing</NavGroupLink>
+              <NavGroupLink to={Page.about}>About</NavGroupLink>
             </NavGroup>
             <ThemeToggle />
             <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
@@ -188,31 +190,31 @@ function NavBar() {
         >
           <Menu ref={menuRef}>
             {/* TODO extract comp */}
-            <NextLink href="/" passHref>
+            <NextLink href={Page.home} passHref>
               <Link
                 onClick={closeMenu}
                 className={clsx({
-                  active: router.pathname === '/',
+                  active: router.pathname === Page.home,
                 })}
               >
                 Home
               </Link>
             </NextLink>
-            <NextLink href="/writing" passHref>
+            <NextLink href={Page.writing} passHref>
               <Link
                 onClick={closeMenu}
                 className={clsx({
-                  active: router.pathname.startsWith('/writing'),
+                  active: router.pathname.startsWith(Page.writing),
                 })}
               >
                 Writing
               </Link>
             </NextLink>
-            <NextLink href="/about" passHref>
+            <NextLink href={Page.about} passHref>
               <Link
                 onClick={closeMenu}
                 className={clsx({
-                  active: router.pathname.startsWith('/about'),
+                  active: router.pathname.startsWith(Page.writing),
                 })}
               >
                 About

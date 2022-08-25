@@ -69,6 +69,7 @@ function NavGroup(props: React.PropsWithChildren<{}>) {
 }
 
 type NavGroupLinkProps = React.PropsWithChildren<{
+  // TODO rename to href
   to: string
   /** When true, the active style will only be applied if the location is matched _exactly_. */
   exact?: boolean

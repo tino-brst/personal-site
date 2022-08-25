@@ -1,3 +1,4 @@
+import { Page } from '@lib/constants'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import styled, { css } from 'styled-components'
@@ -22,7 +23,7 @@ function UpNext(props: Props) {
       <List>
         <ListItem>
           {props.newerArticle && (
-            <NextLink href={`/writing/${props.newerArticle.slug}`} passHref>
+            <NextLink href={Page.article(props.newerArticle.slug)} passHref>
               <ArticleLink>
                 <ThumbnailWrapper>
                   {props.newerArticle.imageSrc && (
@@ -44,7 +45,7 @@ function UpNext(props: Props) {
         </ListItem>
         <ListItem>
           {props.olderArticle && (
-            <NextLink href={`/writing/${props.olderArticle.slug}`} passHref>
+            <NextLink href={Page.article(props.olderArticle.slug)} passHref>
               <ArticleLink>
                 <ThumbnailWrapper>
                   {props.olderArticle.imageSrc && (
@@ -65,7 +66,7 @@ function UpNext(props: Props) {
           )}
         </ListItem>
       </List>
-      <NextLink href="/writing" passHref>
+      <NextLink href={Page.writing} passHref>
         <AllArticlesLink>
           <ArrowLeftIcon />
           All Articles

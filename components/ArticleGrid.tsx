@@ -1,3 +1,4 @@
+import { Page } from '@lib/constants'
 import { formatDate } from '@lib/dates'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
@@ -16,7 +17,7 @@ type Props = {
 function ArticleGridItem(props: Props) {
   return (
     <Root>
-      <NextLink href={`/writing/${props.slug}`} passHref>
+      <NextLink href={Page.article(props.slug)} passHref>
         <Link>
           <ThumbnailImageWrapper>
             {props.imageSrc && (

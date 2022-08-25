@@ -2,6 +2,7 @@ import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
 import { ArrowRightIcon } from '@components/icons/ArrowRightIcon'
 import { Link } from '@components/Link'
 import { getArticles } from '@lib/articles'
+import { Page } from '@lib/constants'
 import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
 import { getStaggerProps } from '@lib/stagger'
@@ -35,7 +36,7 @@ function HomePage(props: Props) {
         developer specializing in web technologies. I like to lorem ipsum
         dolorem potatoes. And some other stuff.
       </Description>
-      <NextLink href="/about" passHref>
+      <NextLink href={Page.about} passHref>
         <GoToLink {...getStaggerProps(2)}>
           About me
           <GoToIcon />
@@ -47,7 +48,7 @@ function HomePage(props: Props) {
           <ArticleGridItem key={article.slug} {...article} />
         ))}
       </StyledArticleGrid>
-      <NextLink href="/writing" passHref>
+      <NextLink href={Page.writing} passHref>
         <GoToLink {...getStaggerProps(5)}>
           All articles
           <GoToIcon />
