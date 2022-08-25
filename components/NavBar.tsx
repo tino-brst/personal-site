@@ -5,7 +5,6 @@ import { useSize } from '@hooks/useSize'
 import { map } from '@lib/math'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
-import { useTheme } from 'contexts/theme'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -14,9 +13,9 @@ import * as React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 import { MenuIcon } from './icons/MenuIcon'
-import { ThemeIcon } from './icons/ThemeIcon'
 import { NavButton } from './NavButton'
 import { NavGroup, NavGroupLink } from './NavGroup'
+import { ThemeToggle } from './ThemeToggle'
 
 const height = 70
 const marginBottom = 48
@@ -28,7 +27,6 @@ const cssVar = {
 
 function NavBar() {
   const router = useRouter()
-  const theme = useTheme()
   const navBar = useNavBar()
 
   const wrapperRef = React.useRef<HTMLDivElement>(null)
@@ -178,33 +176,7 @@ function NavBar() {
               <NavGroupLink to="/writing">Writing</NavGroupLink>
               <NavGroupLink to="/about">About</NavGroupLink>
             </NavGroup>
-            {/* TODO extract comp */}
-            {isMounted && (
-              <NavButton
-                onClick={() =>
-                  theme.toggle((_, newValue) => {
-                    switch (newValue) {
-                      case 'light':
-                        navBar.setStatus('Switched to light theme')
-                        break
-                      case 'dark':
-                        navBar.setStatus('Switched to dark theme')
-                        break
-                      case 'system':
-                        navBar.setStatus(`Matching the system's theme`)
-                        break
-                      default:
-                        break
-                    }
-                  })
-                }
-              >
-                <ThemeIcon
-                  theme={theme.resolved}
-                  isSystemBased={theme.active === 'system'}
-                />
-              </NavButton>
-            )}
+            <ThemeToggle />
             <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>
               <MenuIcon isOpen={isMenuOpen} />
             </MenuToggle>
