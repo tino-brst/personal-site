@@ -1,5 +1,5 @@
 function AboutPage() {
-  // TODO SEO
+  // BLKD SEO
   // TODO Stagger animations
 
   return null

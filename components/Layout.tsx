@@ -7,11 +7,15 @@ import { focusRing } from 'styles/focusRing'
 import { Footer } from './Footer'
 import { NavBar } from './NavBar'
 
+// TODO update React imports
+// TODO update Wrappers to Root
+
 function Layout(props: React.PropsWithChildren<{}>) {
   const router = useRouter()
   const navBar = useNavBar()
 
-  // TODO I think it makes more sense to have each page state its preference?
+  // NavBar settings
+
   useIsomorphicLayoutEffect(() => {
     const isArticlePage = router.pathname.startsWith('/writing/')
 

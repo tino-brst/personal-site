@@ -129,7 +129,7 @@ function ArticlePage(props: Props) {
   }, [navBar])
 
   // SEO
-  // TODO once the domain is set, add the canonical field (update all occurrences)
+  // BLKD once the domain is set, add the canonical field (update all occurrences)
 
   const seoProps: NextSeoProps = {
     title: `${props.title} • Tino's Corner`,
@@ -139,8 +139,8 @@ function ArticlePage(props: Props) {
       description: 'Lorem ipsum dolorem potates and all that stuff',
       site_name: `Tino's Corner`,
       images: [{ url: props.imageSrc ?? '' }],
-      // TODO add description field to articles
-      // TODO once the domain is set, add url field
+      // BLKD add description field to articles
+      // BLKD once the domain is set, add url field
       article: {
         publishedTime: new Date(props.publishedOn).toISOString(),
       },
