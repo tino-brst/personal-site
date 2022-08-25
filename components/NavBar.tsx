@@ -171,11 +171,11 @@ function NavBar() {
           </NextLink>
           <BarEnd>
             <NavGroup>
-              <NavGroupLink to={Page.home} exact>
+              <NavGroupLink href={Page.home} exact>
                 Home
               </NavGroupLink>
-              <NavGroupLink to={Page.writing}>Writing</NavGroupLink>
-              <NavGroupLink to={Page.about}>About</NavGroupLink>
+              <NavGroupLink href={Page.writing}>Writing</NavGroupLink>
+              <NavGroupLink href={Page.about}>About</NavGroupLink>
             </NavGroup>
             <ThemeToggle />
             <MenuToggle onClick={() => setIsMenuOpen((value) => !value)}>

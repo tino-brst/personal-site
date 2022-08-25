@@ -69,8 +69,7 @@ function NavGroup(props: React.PropsWithChildren<{}>) {
 }
 
 type NavGroupLinkProps = React.PropsWithChildren<{
-  // TODO rename to href
-  to: string
+  href: string
   /** When true, the active style will only be applied if the location is matched _exactly_. */
   exact?: boolean
 }>
@@ -96,12 +95,12 @@ function NavGroupLink(props: NavGroupLinkProps) {
   )
 
   return (
-    <NextLink href={props.to} passHref>
+    <NextLink href={props.href} passHref>
       <Link
         className={clsx({
           active: props.exact
-            ? router.pathname === props.to
-            : router.pathname.startsWith(props.to),
+            ? router.pathname === props.href
+            : router.pathname.startsWith(props.href),
         })}
         onMouseMove={(event) => updateHighlight(event.currentTarget)}
         onFocus={(event) => updateHighlight(event.currentTarget)}
