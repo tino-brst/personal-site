@@ -22,14 +22,14 @@ function Layout(props: React.PropsWithChildren<{}>) {
   // Skip animations on all but the first page load
 
   React.useEffect(() => {
-    function handleRouteChange() {
+    function handleRouteChangeStart() {
       document.documentElement.setAttribute('data-skip-animations', '')
     }
 
-    router.events.on('routeChangeStart', handleRouteChange)
+    router.events.on('routeChangeStart', handleRouteChangeStart)
 
     return () => {
-      router.events.off('routeChangeStart', handleRouteChange)
+      router.events.off('routeChangeStart', handleRouteChangeStart)
     }
   }, [router.events])
 
