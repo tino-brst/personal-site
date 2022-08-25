@@ -21,11 +21,10 @@ import { ThemeToggle } from './ThemeToggle'
 const height = 70
 const marginBottom = 48
 
-// TODO match enum style
-const cssVar = {
+const CSSVar = {
   scrollBasedOpacity: '--scroll-based-opacity',
   menuHeight: '--menu-height',
-}
+} as const
 
 function NavBar() {
   const router = useRouter()
@@ -44,14 +43,14 @@ function NavBar() {
 
   useIsomorphicLayoutEffect(() => {
     backgroundRef.current?.style.setProperty(
-      cssVar.scrollBasedOpacity,
+      CSSVar.scrollBasedOpacity,
       `${map(window.scrollY, [0, marginBottom], [0, 1])}`
     )
   }, [])
 
   const updateScrollBasedOpacity = React.useCallback(() => {
     backgroundRef.current?.style.setProperty(
-      cssVar.scrollBasedOpacity,
+      CSSVar.scrollBasedOpacity,
       `${map(window.scrollY, [0, marginBottom], [0, 1])}`
     )
   }, [])
@@ -186,7 +185,7 @@ function NavBar() {
         </Content>
         <MenuWrapper
           className={clsx({ menuOpen: isMenuOpen })}
-          style={{ [cssVar.menuHeight]: `${menuSize.height}px` }}
+          style={{ [CSSVar.menuHeight]: `${menuSize.height}px` }}
         >
           <Menu ref={menuRef}>
             {/* TODO extract comp */}
@@ -314,7 +313,7 @@ const Background = styled.div`
   position: absolute;
   z-index: -1;
   inset: 0;
-  opacity: var(${cssVar.scrollBasedOpacity});
+  opacity: var(${CSSVar.scrollBasedOpacity});
   background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
   box-shadow: 0 1px var(--color-shadow-border),
@@ -335,7 +334,7 @@ const Background = styled.div`
 
   @media (min-width: 640px) {
     &.menuOpen {
-      opacity: var(${cssVar.scrollBasedOpacity});
+      opacity: var(${CSSVar.scrollBasedOpacity});
     }
 
     &.opaque {
@@ -457,7 +456,7 @@ const MenuWrapper = styled.div`
 
   &.menuOpen {
     visibility: visible;
-    max-height: var(${cssVar.menuHeight});
+    max-height: var(${CSSVar.menuHeight});
     opacity: 1;
     transform: none;
   }
