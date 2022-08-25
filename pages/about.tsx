@@ -1,22 +1,22 @@
 import { Link } from '@components/Link'
 import { Parallax } from '@components/Parallax'
+import { getStaggerProps } from '@lib/stagger'
 import NextImage from 'next/image'
 import styled from 'styled-components'
 import aboutProfileImageSrc from '/public/images/tino.jpg'
 
 function AboutPage() {
   // BLKD SEO
-  // BLKD Stagger animations
 
   return (
     <Root>
-      <Title>About me</Title>
-      <ImageMask>
+      <Title {...getStaggerProps(0)}>About me</Title>
+      <ImageMask {...getStaggerProps(1)}>
         <StyledParallax multiplier={-0.025} clampTo={10}>
-          <NextImage src={aboutProfileImageSrc} />
+          <NextImage src={aboutProfileImageSrc} placeholder="blur" />
         </StyledParallax>
       </ImageMask>
-      <Description>
+      <Description {...getStaggerProps(2)}>
         <p>
           Dolor irure qui ex nisi sit eiusmod enim ipsum reprehenderit ex
           consequat. Cupidatat duis dolor nulla ut. Eiusmod enim ad consectetur
@@ -31,7 +31,9 @@ function AboutPage() {
           laborum.
         </p>
       </Description>
-      <StyledLink href="mailto:tinos.corner@icloud.com">Contact me</StyledLink>
+      <StyledLink {...getStaggerProps(3)} href="mailto:tinos.corner@icloud.com">
+        Contact me
+      </StyledLink>
     </Root>
   )
 }
