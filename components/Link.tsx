@@ -11,7 +11,6 @@ const Link = styled.a`
   padding: 12px 14px;
   font-weight: 500;
   font-size: 16px;
-  line-height: 1;
   border-radius: 16px;
   color: var(--color-fg-accent);
   background-color: var(--color-bg-subtle);

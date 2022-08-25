@@ -1,3 +1,4 @@
+import { Link } from '@components/Link'
 import { Parallax } from '@components/Parallax'
 import NextImage from 'next/image'
 import styled from 'styled-components'
@@ -30,6 +31,7 @@ function AboutPage() {
           laborum.
         </p>
       </Description>
+      <StyledLink href="mailto:tinos.corner@icloud.com">Contact me</StyledLink>
     </Root>
   )
 }
@@ -87,6 +89,15 @@ const Description = styled.div`
     margin-top: 20px;
     margin-bottom: 20px;
   }
+`
+
+const StyledLink = styled(Link)`
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  margin-top: 32px;
 `
 
 export default AboutPage
