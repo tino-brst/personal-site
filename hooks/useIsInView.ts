@@ -1,6 +1,9 @@
 import * as React from 'react'
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
+// TODO rename to margin (like the observer), and check the positive/negative
+// description
+
 type Options = Partial<{
   /**
    * The element/view minimum intersection threshold at which the element is considered in view. Defaults to 0.
