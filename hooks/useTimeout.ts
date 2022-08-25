@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 
 type ReturnValue = {
   /** Starts the timer. If a timer is in progress, it's cleared and started again (i.e. behaves like a reset) */

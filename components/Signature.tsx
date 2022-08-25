@@ -1,6 +1,6 @@
 import { useIsInView } from '@hooks/useIsInView'
 import clsx from 'clsx'
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 
 function Signature() {

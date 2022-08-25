@@ -1,7 +1,7 @@
 import { useIsInView } from '@hooks/useIsInView'
 import { useIsomorphicLayoutEffect } from '@hooks/useIsomorphicLayoutEffect'
 import clsx from 'clsx'
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 
 type Props = {
