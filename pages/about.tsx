@@ -1,6 +1,6 @@
 function AboutPage() {
   // BLKD SEO
-  // TODO Stagger animations
+  // BLKD Stagger animations
 
   return null
 }

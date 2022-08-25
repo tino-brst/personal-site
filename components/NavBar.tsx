@@ -11,11 +11,12 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import avatarImageSrc from 'public/images/avatar.png'
 import * as React from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 import { MenuIcon } from './icons/MenuIcon'
 import { NavButton } from './NavButton'
 import { NavGroup, NavGroupLink } from './NavGroup'
+import { NavMenuLink } from './NavMenuLink'
 import { ThemeToggle } from './ThemeToggle'
 
 const height = 70
@@ -188,37 +189,28 @@ function NavBar() {
           style={{ [CSSVar.menuHeight]: `${menuSize.height}px` }}
         >
           <Menu ref={menuRef}>
-            {/* TODO extract comp */}
-            <NextLink href={Page.home} passHref>
-              <Link
-                onClick={closeMenu}
-                className={clsx({
-                  active: router.pathname === Page.home,
-                })}
-              >
-                Home
-              </Link>
-            </NextLink>
-            <NextLink href={Page.writing} passHref>
-              <Link
-                onClick={closeMenu}
-                className={clsx({
-                  active: router.pathname.startsWith(Page.writing),
-                })}
-              >
-                Writing
-              </Link>
-            </NextLink>
-            <NextLink href={Page.about} passHref>
-              <Link
-                onClick={closeMenu}
-                className={clsx({
-                  active: router.pathname.startsWith(Page.writing),
-                })}
-              >
-                About
-              </Link>
-            </NextLink>
+            <NavMenuLink
+              exact
+              href={Page.home}
+              currentPath={router.pathname}
+              onClick={closeMenu}
+            >
+              Home
+            </NavMenuLink>
+            <NavMenuLink
+              href={Page.writing}
+              currentPath={router.pathname}
+              onClick={closeMenu}
+            >
+              Writing
+            </NavMenuLink>
+            <NavMenuLink
+              href={Page.about}
+              currentPath={router.pathname}
+              onClick={closeMenu}
+            >
+              About
+            </NavMenuLink>
           </Menu>
         </MenuWrapper>
       </Root>
@@ -478,49 +470,6 @@ const Menu = styled.div`
   gap: 6px;
   padding-top: 12px;
   padding-bottom: 24px;
-`
-
-const linkHoverStyles = css`
-  background-color: var(--color-bg-subtle);
-`
-
-const Link = styled.a`
-  position: relative;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 500;
-  border-radius: 12px;
-  padding: 12px 18px;
-  color: var(--color-fg-default);
-
-  transition-property: background-color, transform, color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-
-  @media (hover: hover) {
-    &:hover {
-      ${linkHoverStyles}
-    }
-  }
-
-  &:focus-visible,
-  &:active {
-    ${linkHoverStyles}
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  &.active {
-    color: var(--color-fg-accent);
-  }
-
-  --focus-inset: -2px;
-  --focus-radius: 14px;
-
-  ${focusRing}
 `
 
 NavBar.height = height
