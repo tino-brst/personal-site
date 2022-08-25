@@ -8,11 +8,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 
-type Props = {
-  children?: React.ReactNode
-}
-
-function CodeBlock(props: Props) {
+function CodeBlock(props: React.PropsWithChildren<{}>) {
   const navBar = useNavBar()
   const preElementRef = React.useRef<HTMLPreElement>(null)
 

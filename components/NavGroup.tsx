@@ -26,7 +26,7 @@ function useNavGroup(): NavGroupContextValue {
   return value
 }
 
-function NavGroup(props: { children?: React.ReactNode }) {
+function NavGroup(props: React.PropsWithChildren<{}>) {
   const [highlightWidth, setHighlightWidth] = React.useState(0)
   const [highlightOffsetLeft, setHighlightOffsetLeft] = React.useState(0)
   const [isMouseComingFromOutside, setIsMouseComingFromOutside] =
@@ -68,12 +68,13 @@ function NavGroup(props: { children?: React.ReactNode }) {
   )
 }
 
-function NavGroupLink(props: {
-  to: string
-  /** When true, the active style will only be applied if the location is matched _exactly_. */
-  exact?: boolean
-  children?: React.ReactNode
-}) {
+function NavGroupLink(
+  props: React.PropsWithChildren<{
+    to: string
+    /** When true, the active style will only be applied if the location is matched _exactly_. */
+    exact?: boolean
+  }>
+) {
   const navGroup = useNavGroup()
   const router = useRouter()
 

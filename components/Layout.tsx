@@ -8,7 +8,6 @@ import { Footer } from './Footer'
 import { NavBar } from './NavBar'
 
 // TODO update Wrappers to Root
-// TODO use props with children
 
 function Layout(props: React.PropsWithChildren<{}>) {
   const router = useRouter()

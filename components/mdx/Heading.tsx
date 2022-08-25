@@ -4,11 +4,10 @@ import * as React from 'react'
 import styled, { css, StyledComponent } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 
-type Props = {
+type Props = React.PropsWithChildren<{
   level: 2 | 3 | 4
   id?: string
-  children?: React.ReactNode
-}
+}>
 
 function Heading(props: Props) {
   const ref = React.useRef<HTMLHeadingElement>(null)

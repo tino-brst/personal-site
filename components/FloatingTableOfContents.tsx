@@ -41,14 +41,13 @@ const FloatingTableOfContents = React.forwardRef<HTMLDivElement, Props>(
 
 FloatingTableOfContents.displayName = 'FloatingTableOfContents'
 
-type ListItemProps = {
+type ListItemProps = React.PropsWithChildren<{
   headingId: string
   level: number
   isActive: boolean
   isActiveAncestor: boolean
-  children?: React.ReactNode
   onSelect?: () => void
-}
+}>
 
 function ListItem(props: ListItemProps) {
   const linkRef = React.useRef<HTMLAnchorElement>(null)

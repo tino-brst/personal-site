@@ -34,13 +34,12 @@ function AsideTableOfContents() {
   )
 }
 
-type ListItemProps = {
+type ListItemProps = React.PropsWithChildren<{
   headingId: string
   level: number
   isActive: boolean
   isActiveAncestor: boolean
-  children?: React.ReactNode
-}
+}>
 
 function ListItem(props: ListItemProps) {
   return (
