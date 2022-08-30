@@ -59,6 +59,8 @@ const Title = styled.h1`
   margin-bottom: 24px;
 `
 
+// TODO revise contrasting border (maybe make it light like in the articles
+// grid?)
 const ImageMask = styled.div`
   border-radius: 12px;
   overflow: hidden;
