@@ -2,17 +2,16 @@ import styled from 'styled-components'
 
 const Paragraph = styled.p`
   color: var(--color-fg-prose);
-  line-height: 1.5em;
+  line-height: 1.7em;
   margin-top: 20px;
   margin-bottom: 20px;
 
   main > &:first-of-type {
-    /* Takes into account */
-    min-height: 2.9em;
+    min-height: 3.2em;
   }
 
   main > &:first-of-type::first-letter {
-    font-size: 2.9em;
+    font-size: 3.2em;
     font-weight: 500;
     float: left;
     line-height: 0.9em;
