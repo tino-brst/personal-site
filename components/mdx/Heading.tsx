@@ -85,6 +85,7 @@ const Icon = styled(LinkIcon)`
 `
 
 const sharedStyles = css`
+  line-height: normal;
   color: var(--color-fg-accent);
   font-weight: 600;
   margin-bottom: 20px;

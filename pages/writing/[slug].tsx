@@ -336,10 +336,6 @@ const Main = styled.main`
   padding-right: 24px;
   padding-left: 24px;
 
-  & > *:first-child {
-    margin-top: 0;
-  }
-
   @media (min-width: 640px) {
     padding-left: 40px;
     padding-right: 40px;
