@@ -21,6 +21,10 @@ const Wrapper = styled.div`
     color: var(--color-fg-accent-muted);
   }
 
+  em {
+    font-style: italic;
+  }
+
   p {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -44,14 +48,15 @@ const Wrapper = styled.div`
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
       'Liberation Mono', 'Courier New', monospace;
     font-size: 0.9em;
+    color: var(--color-fg-accent-muted);
   }
 
   /* All code that is not part of a codeblock (i.e. <pre><code>...</code></pre>) */
   *:not(pre) > code {
-    color: var(--color-fg-accent-muted);
-    background-color: var(--color-bg-muted);
-    border-radius: 4px;
+    background-color: var(--color-bg-subtle);
+    border-radius: 6px;
     padding: 2px 4px;
+    border: 0.5px solid var(--color-border-code);
   }
 
   /* All links that are not heading links */

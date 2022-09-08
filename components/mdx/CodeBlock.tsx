@@ -72,7 +72,6 @@ const Root = styled.div`
 `
 
 const Pre = styled.pre`
-  color: var(--color-fg-accent-muted);
   line-height: 1.5;
   background-color: var(--color-bg-subtler);
   padding-top: 20px;
