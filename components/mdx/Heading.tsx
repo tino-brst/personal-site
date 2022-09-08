@@ -47,18 +47,6 @@ function Heading(props: Props) {
   )
 }
 
-function Heading2(props: Omit<Props, 'level'>) {
-  return <Heading {...props} level={2} />
-}
-
-function Heading3(props: Omit<Props, 'level'>) {
-  return <Heading {...props} level={3} />
-}
-
-function Heading4(props: Omit<Props, 'level'>) {
-  return <Heading {...props} level={4} />
-}
-
 const Link = styled.a`
   position: relative;
   display: flex;
@@ -133,4 +121,4 @@ const H4 = styled.h4`
   font-size: 1.2rem;
 `
 
-export { Heading2, Heading3, Heading4 }
+export { Heading }

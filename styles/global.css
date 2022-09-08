@@ -236,6 +236,7 @@
   transition-duration: 0s;
 }
 
+/* TODO selection color in dark mode */
 ::selection {
   background: hsla(0 0% 0% / 0.1);
 }
