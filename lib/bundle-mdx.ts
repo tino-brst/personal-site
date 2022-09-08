@@ -1,6 +1,8 @@
 import sourceCss from '@wooorm/starry-night/lang/source.css'
+import sourceGfm from '@wooorm/starry-night/lang/source.gfm'
 import sourceJs from '@wooorm/starry-night/lang/source.js'
 import sourceTsx from '@wooorm/starry-night/lang/source.tsx'
+import sourceHtml from '@wooorm/starry-night/lang/text.html.basic'
 import { bundleMDX } from 'mdx-bundler'
 import rehypeSlug from 'rehype-slug'
 import remarkUnwrapImages from 'remark-unwrap-images'
@@ -17,7 +19,10 @@ function customBundleMDX(mdxSource: string) {
         ...(options.rehypePlugins ?? []),
         [rehypeImageSizes, { root: `${process.cwd()}/public` }],
         rehypeSlug,
-        [rehypeStarryNight, { grammars: [sourceJs, sourceTsx, sourceCss] }],
+        [
+          rehypeStarryNight,
+          { grammars: [sourceJs, sourceTsx, sourceCss, sourceGfm, sourceHtml] },
+        ],
       ],
     }),
   })
