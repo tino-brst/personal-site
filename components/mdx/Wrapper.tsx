@@ -49,7 +49,6 @@ const Wrapper = styled.div`
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
       'Liberation Mono', 'Courier New', monospace;
     font-size: 0.9em;
-    color: var(--color-fg-accent-muted);
   }
 
   /* All code that is not part of a codeblock (i.e. <pre><code>...</code></pre>) */
@@ -57,7 +56,7 @@ const Wrapper = styled.div`
     background-color: var(--color-bg-subtle);
     border-radius: 6px;
     padding: 2px 4px;
-    border: 0.5px solid var(--color-border-code);
+    border: 1px solid var(--color-border-code);
   }
 
   /* All links that are not heading links */
