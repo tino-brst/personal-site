@@ -1,0 +1,215 @@
+---
+title: The Stack
+description: An overview of the tools that make this blog tick.
+subtitle: The tools that make this blog tick
+publishedOn: 2022-10-24T00:00:00-0300
+image: /images/articles/the-stack/header.webp
+imageOG: /images/articles/the-stack/og.jpg
+---
+
+Here we are, following the centuries-old tradition of having a blog's first article be about the tools that make it tick. 
+
+<Note title="Heads-up" type="warning">
+I may go on tangents, turns out I _also_ do that in written form.
+</Note>
+
+## But why
+
+The intention behind building this blog & little corner of the internet (my first one, actually 🪴), that in part informed the tools chosen, was for it to be a place to:
+
+- **Share** the things I learn, hoping that it may be useful to someone else tackling a similar problem/idea; and to future me, that has the (not recommended, would not buy again) super-power of forgetting any bit of info acquired more than two weeks ago.
+- **Play** with new and fancy tools/libraries. Or maybe not so new and fancy, but that I simply hadn't had the chance to use yet (looking at you, grandpa styled-components 👀).
+- **Scratch** (_wait, what?_) my _let's take a problem and make it as approachable as possible_ itch (_oh ... ok_), developed/discovered during my years as a teaching assistant at uni.
+- **Design & Make** things (little bits of UI, interactions, custom React hooks, etc).
+
+_That's nice, but what about the stack?_ Glad you asked, let's get to it.
+
+## Choices choices
+
+There is a bunch of things to decide when building, in this case, a blog. Which framework/library do I use, if any? How do I style it? Will it have any data(base) needs? If giving the user the ability to <kbd>Like ❤️</kbd> an article for example, that like will have to be persisted somewhere, and there will have to be an API in place to access it. How will I write the articles? Will they be just text and images? If so, Markdown sounds like a great choice. Will they have an interactive aspect to them? Like live interactive demos? Then _Fancy Markdown_ (aka [MDX](https://mdxjs.com)) may be the way to go. How often will I write an article? If not too often, making the writing process as painless as possible may not be a priority. The answers to those questions will add to or reduce the stack.
+
+This blog in particular, is a [Next.js](https://nextjs.org) application (i.e. uses [React](https://reactjs.org)), is written in [TypeScript](https://www.typescriptlang.org), styled with [styled-components](https://styled-components.com), and deployed via [Vercel](https://vercel.com/home). And it has a tiny little backend made out of a [PlanetScale](https://planetscale.com) database, accessed via [Prisma](https://www.prisma.io) and Next.js' API Routes. All the code, front & back, lives in the same repo, which you can find [right here](https://github.com/tino-brst/personal-site).
+
+### Next.js
+
+From their home page:
+
+<FancyQuote>Next.js gives you the best developer experience with all the features you need [...]</FancyQuote>
+
+And I can't say I disagree. These are a few of those features that I particularly enjoy:
+
+- **Intuitive** [**file-based routing**](https://nextjs.org/docs/routing/introduction) (which looks like is [getting an upgrade soon](https://nextjs.org/blog/layouts-rfc)). Each page/view (the Home page, the About page, etc) is just another React component, with its route being defined by the name of the file that exports it (`<About /> → pages/about.tsx → [my-site]/about `).
+- **Excellent** [**TypeScript support**](https://nextjs.org/docs/basic-features/typescript). From starter projects via the `create-next-app` CLI, to properly defined/documented types. And I suspect it may only get better now that TS Gandalf [Matt Pocock](https://twitter.com/mattpocockuk) is part of the team.
+- **IT'S FAST**. From the snappy local build times, to its deployment times. With performance improvements always around the corner.
+- **Easy mode APIs** via [API Routes](https://nextjs.org/docs/api-routes/introduction). Set up your API endpoints just like pages, i.e. each file inside the `pages/api` becomes an API endpoint (e.g. `pages/api/views.ts → [my-site]/api/views` ) _\*chef's kiss\*_.
+- **All of the rendering options**. SSR, SSG, CSR, SVG, GoT, etc (_wait, those are not ... nevermind_).
+- **And an excellent developer experience**, thanks to all of the above, and more.
+
+### The Content (aka the articles)
+
+The articles are little more than a collection of markdown files inside an `articles` folder, with a few extras.
+
+Going back to the itch-scratching point of making this blog, if the intention was to create _kinda good tutorials_, the educational content to keep as reference is, in my opinion, the one that makes _**us**_, the reader, part of the learning process. Be it through interactive demos, mini-games, inline code editors, and the like; and not just pure text (like this article so far ... 😅). That's where MDX comes in.
+
+#### MDX to the rescue
+
+Good ol' markdown is great, but [MDX](https://mdxjs.com) allows us to go beyond the classic markdown-known elements (like lists, headings, code blocks, etc), and use any React component we may come up with. If writing a tutorial for a component, let's say a toggle, it allows us to not _just_ have a picture or a gif of the toggle saying _"And finally, this is how our finished component should look like"_, but to actually _have it right there_, to play with and inspect (as in <kbd>Right click</kbd> → <kbd>Inspect Element</kbd>). Like so:
+
+<Toggle />
+
+Or if wanting to let the reader think something through before seeing the solution, instead of a WAIT DON'T SCROLL YET, we can have something like:
+
+<Spoilers>
+This custom anti-spoilers component ✨
+</Spoilers>
+
+Thanks, Fancy Markdown 🫶
+
+#### Plugins
+
+Whenever markdown is involved, there is usually a transformation step that takes it from what we write:
+
+```md
+# Some text
+
+With some **very** important info.
+```
+
+To HTML:
+
+```html
+<h1>Some text</h1>
+<p>
+    With some <strong>very</strong> important info.
+</p>
+```
+
+MDX lets us jump-in and tweak that transformation step, and [extend its capabilities via plugins](https://mdxjs.com/docs/extending-mdx/). There are a _ton_ of them, which come from the vast [rehype](https://github.com/rehypejs/rehype)/[remark](https://github.com/remarkjs/remark) ecosystems, and will cover most needs. For any missing specific use-cases, you can even [write your own](https://mdxjs.com/docs/extending-mdx/#creating-plugins).
+
+Those plugins power things such as:
+
+- **Code blocks syntax-highlighting**, which usually entails the assignment of classes to each bit of code (keywords, variables, comments, etc) to then be able to target them via our stylesheets.
+- **Tables of content** (like the one on this article), which count on each section title/heading having a unique `id`, so they can be navigated to via `my-site/super-cool-article#heading-id`. Any time you come across a table of contents, it's usually just a collection of links to each of those elements' ids, auto-generated via plugins like [this one](https://github.com/rehypejs/rehype-slug).
+- [**Frontmatter**,](https://mdxjs.com/guides/frontmatter/#frontmatter) which is a metadata format that lets us add extra info to a markdown file, usually used (as in this blog) for things like the publication date, title, authors, etc.
+- [**Github Flavored Markdown**](https://github.github.com/gfm/), which extends the base markdown syntax with features like footnotes, strikethrough, tables, and task lists.
+
+### Backend & API
+
+The data(base) needs of the site are quite basic. It keeps track of the number of views on each article, and lets the reader say _"Thanks for the mildly entertaining and informative content"_ via a like button. Were those bits of info reason enough to go and try out a bunch of tools? Of course they were, and they are all a delight to use.
+
+#### Prisma
+
+[Prisma](https://www.prisma.io) makes interacting with databases a breeze. It lets us do a few things:
+
+- **Define our database models and their relationships** via [Schema files](https://www.prisma.io/docs/concepts/components/prisma-schema), which use a straightforward syntax, and even come with their own [VS Code extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) (with syntax highlighting, auto-completion, formatting, jump-to-definition and linting).
+- **Interact with the database** using their type-safe (!) [Prisma Client](https://www.prisma.io/client). No writing database specific queries, with just a `prisma.article.findMany()`, you get all the `Article`s' data, beautifully typed.
+- **Explore and edit the data** in the database via the [Prisma Studio](https://www.prisma.io/studio) GUI, by just running `npx prisma studio`.
+
+#### Database
+
+There were two base requirements for the database:
+
+1. Integrate nicely with Prisma.
+2. Have a decent free tier.
+
+[PlanetScale](https://www.planetscale.com/) not only checks those, but is also extremely easy to set-up, has excellent docs, and both a great CLI and web interface to manage your databases. As close to an _It just works_ database as you can get. Wait, an integration guide from the Prisma team itself? [Of course there is](https://www.prisma.io/planetscale).
+
+#### API Routes
+
+[API routes](https://nextjs.org/docs/api-routes/introduction) let us build our API endpoints with Next.js, right there beside the pages that consume it. From the docs:
+
+> Any file inside the folder `pages/api` is mapped to `/api/*` and will be treated as an API endpoint instead of a `page`.
+
+It's the place (among others, like Next's [`getStaticProps`](https://nextjs.org/docs/basic-features/data-fetching/get-static-props) function) where we can access our database (via the Prisma Client). An (albeit basic) example of an endpoint that returns all articles' data could look something like:
+
+```js title="pages/api/articles.js"
+const prisma = new PrismaClient()
+
+async function handler(req, res) {
+  const articles = await prisma.article.findMany()
+  res.status(200).json(articles)
+}
+
+export default handler
+```
+
+In this site, there are just a couple of endpoints: One for the articles's view count, and another for their likes (which make use of [dynamic API routes](https://nextjs.org/docs/api-routes/dynamic-api-routes) to specify the article to work with).
+
+#### SWR
+
+The aforementioned endpoints' data is consumed on the frontend via custom React hooks. The view count has its corresponding `useViewCount` hook, and the same goes for the likes. Each of them using Vercel's [SWR](https://swr.vercel.app), an excellent React hooks library for data fetching.
+
+```js title="hooks/api/useViewCount.js"
+function useViewCount(slug) {
+  const { data, error } = useSWR(`/api/views/${slug}`)
+
+  return {
+    value: data.viewCount,
+    isLoading: !data && !error,
+  }
+}
+```
+
+Then, from any component:
+
+```jsx title="components/Views.jsx"
+function Views(slug) {
+  const viewCount = useViewCount(slug)
+
+  if (viewCount.isLoading) return <Spinner />
+  return <p>{viewCount.value}</p>
+}
+```
+
+### Design & Styling
+
+I'm no designer 👨🏻‍🎨, but _designing_ is something I thoroughly enjoy; from the early sketches on a notepad, to the closer-to-final mockups/prototypes on Figma (at least for UIs). When the time came to choose the tool to implement the site's designs, I happened to be going through [Josh Comeau](https://twitter.com/JoshWComeau)'s fantastic [CSS for JS developers course](https://css-for-js.dev), where he'd picked [styled-components](https://styled-components.com) as his CSS-in-JS library of choice.
+
+#### Styled-components
+
+Even though nowadays it's not the shiniest/coolest way of handling styles (i.e. [Tailwind](https://tailwindcss.com)), I fall on the (seems like) continuously shrinking group of people that actually ... _dramatic pause_ ... enjoy writing CSS (_audible gasps_), and styled-components let's you write your styles _very much_ as if using plain old CSS (thanks to its use of tagged template literals), with all of the benefits common among CSS-in-JS solutions sprinkled on top 🧁 (like scoping, automatic vendor prefixing, Sass-like syntax support, <kbd>cmd/ctrl</kbd> + <kbd>Click</kbd> to jump to a component's styles definition, etc). It's also an industry-standard that I'd somehow managed to not use yet 🤷🏻‍♂️
+
+#### Theming
+
+The site has (the nowadays kind of expected) support for light and dark appearances, and even though theming and all its little details (persisting it to local storage, matching the system, avoiding flashes on load, cross-tab syncing, etc) is worth its own article (and been neatly solved by [next-themes](https://github.com/pacocoursey/next-themes) 📦), I wanted to show the basis of how it works here.
+
+CSS-in-JS solutions usually come equipped with [theming support](https://styled-components.com/docs/advanced#theming) via `<ThemeProvider>`s, which rely on React's contexts to make the theme variables (colors, borders, font-sizes, etc) available to the entire app. Those are all great, but what if we could stick to things that the browser already gives us? Turns out that app-wide dynamic variables is one of those things. Enter: [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) (aka CSS Variables).
+
+Even though CSS variables are not app-wide _per se_, they _can_ be, if applied to a root-enough element. Then, any component can access them from anywhere, without the need for re-renders on theme changes, props, contexts, etc. It's all part of the vanilla CSS that comes with the browser. Here's how styling a (super ultra basic) `<Button>` component could look like:
+
+```jsx title="components/Button.jsx"
+const Button = styled.button`
+  color: var(--color-foreground);
+  background: var(--color-background);
+`
+```
+
+```css title="styles/global.css"
+/* Light/default theme color palette */
+
+:root {
+  --color-foreground: white;
+  --color-background: black:
+}
+
+/* Dark theme color palette */
+ 
+:root.dark { 
+  --color-foreground: black;
+  --color-background: white:
+}
+```
+
+Notice the `.dark` class on the second ruleset, which simply sets the colors to their dark variants. Changing the theme then, becomes a matter of toggling a class on the root element. If and when to apply that class is where the extra bits mentioned before come into play, like remembering the user choice via local storage.
+
+<Note title="Caveat" type="warning">
+If there is one caveat to stepping out of JavaScript/TypeScript land to define the theme, is the loss of types and code completions. Kent C. Dodds goes into great detail on the tradeoffs (never not there 😒) of each approach on his [Use CSS Variables instead of React Context]() article, and provides a possible solution.
+</Note>
+
+### Deployment
+
+The site's deployed via [Vercel](https://vercel.com/home), which's built by the same people that created Next.js, and shares the same excellent developer experience. Point Vercel to your site's repo, and in a few secs, you've got it globally available through a URL and kept up to date with any changes pushed to the `main` branch. Want to try some new feature and get feedback before merging it? Just create a PR, and Vercel will create a URL with a preview of the changes. Share it, get feedback, merge it. Big fan.
+
+## Closing thoughts
+
+🚧 WIP
