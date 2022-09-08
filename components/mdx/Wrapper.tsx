@@ -22,7 +22,8 @@ const Wrapper = styled.div`
   }
 
   em {
-    font-style: italic;
+    font-variation-settings: 'slnt' -10;
+    font-synthesis: none;
   }
 
   p {

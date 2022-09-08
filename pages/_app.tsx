@@ -1,4 +1,4 @@
-import '@fontsource/inter/variable.css'
+import '@fontsource/inter/variable-full.css'
 import 'normalize.css'
 import 'the-new-css-reset/css/reset.css'
 import '@wooorm/starry-night/style/core.css'
