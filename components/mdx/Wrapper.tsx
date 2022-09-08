@@ -7,8 +7,10 @@ const linkHoverStyles = css`
 `
 
 const Wrapper = styled.div`
+  --line-height: 1.7;
+
   color: var(--color-fg-prose);
-  line-height: 1.7;
+  line-height: var(--line-height);
 
   & > *:first-child {
     margin-top: 0;
@@ -79,6 +81,31 @@ const Wrapper = styled.div`
     --focus-radius: 4px;
 
     ${focusRing}
+  }
+
+  ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  li {
+    position: relative;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    padding-left: 28px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 3px;
+      border-radius: 2px;
+      left: 6px;
+      top: calc(var(--line-height) * 1em / 2);
+      transform: translateY(-50%);
+
+      background-color: var(--color-fg-muted);
+    }
   }
 `
 

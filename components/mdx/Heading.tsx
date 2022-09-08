@@ -66,6 +66,7 @@ const Link = styled.a`
   ${focusRing}
 `
 
+// TODO fix vertical alignment
 const Icon = styled(LinkIcon)`
   margin-left: 0.5ch;
   color: var(--color-fg-default);
