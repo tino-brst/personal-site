@@ -3,6 +3,8 @@ import clsx from 'clsx'
 import * as React from 'react'
 import styled from 'styled-components'
 
+// TODO Make it accessible (wrap in button, focus ring, etc)
+
 function Signature() {
   const ref = React.useRef<SVGSVGElement>(null)
   const isInView = useIsInView(ref, {

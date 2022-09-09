@@ -39,6 +39,7 @@
   --color-bg-toc-header: hsla(0 0% 100% / 0.7);
   --color-bg-code-highlight: hsla(0 0% 0% / 0.03);
   --color-shadow-border: hsla(0 0% 0% / 0.05);
+  --color-shadow-border-inset: hsla(0 0% 0% / 0.08);
   --color-shadow-border-subtle: hsla(0 0% 0% / 0.05);
   --color-shadow-border-contrast: hsla(0 0% 100% / 0.5);
   --color-border-code: hsla(0 0% 0% / 0.03);
@@ -107,6 +108,7 @@
   --color-bg-toc-header: hsla(0 0% 100% / 0.05);
   --color-bg-code-highlight: hsla(0 0% 100% / 0.1);
   --color-shadow-border: hsla(0 0% 0% / 0.3);
+  --color-shadow-border-inset: hsla(0 0% 100% / 0.08);
   --color-shadow-border-subtle: hsla(0 0% 0% / 0.1);
   --color-shadow-border-contrast: hsla(0 0% 100% / 0.08);
   --color-border-code: hsla(0 0% 100% / 0.08);
