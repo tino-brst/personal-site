@@ -63,7 +63,7 @@ const Wrapper = styled.div`
   *:not(h2, h3, h4) > a {
     position: relative;
     color: var(--color-fg-accent-muted);
-    font-weight: 500;
+    font-weight: 450;
     text-decoration-line: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 1px;
@@ -88,15 +88,18 @@ const Wrapper = styled.div`
     ${focusRing}
   }
 
-  ul {
+  ul,
+  ol {
     margin-top: 20px;
     margin-bottom: 20px;
   }
 
-  li {
-    position: relative;
-    margin-top: 14px;
+  li:not(:last-child) {
     margin-bottom: 14px;
+  }
+
+  ul > li {
+    position: relative;
     padding-left: 28px;
 
     &::before {
@@ -106,10 +109,39 @@ const Wrapper = styled.div`
       height: 3px;
       border-radius: 2px;
       left: 6px;
-      top: calc(var(--line-height) * 1em / 2);
+      top: calc(var(--line-height) * var(--font-size) / 2);
       transform: translateY(-50%);
 
       background-color: var(--color-fg-muted);
+    }
+  }
+
+  ol {
+    counter-reset: list;
+  }
+
+  ol > li {
+    position: relative;
+    padding-left: 30px;
+
+    &::before {
+      content: counter(list);
+      counter-increment: list;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 9999px;
+      left: 2px;
+      top: calc(var(--line-height) * var(--font-size) / 2);
+      transform: translateY(-50%);
+      font-size: 12px;
+      font-weight: 600;
+      background-color: var(--color-bg-muted);
+      color: var(--color-fg-default);
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      justify-content: center;
     }
   }
 `

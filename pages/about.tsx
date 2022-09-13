@@ -7,6 +7,7 @@ import aboutProfileImageSrc from '/public/images/tino.jpg'
 
 function AboutPage() {
   // BLKD SEO
+  // TODO Remove parallax
 
   return (
     <Root>
