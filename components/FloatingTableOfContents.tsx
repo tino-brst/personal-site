@@ -80,8 +80,6 @@ function ListItem(props: ListItemProps) {
   )
 }
 
-// TODO update shadows to match floating buttons
-
 const Root = styled.div`
   visibility: hidden;
   pointer-events: auto;
@@ -95,7 +93,7 @@ const Root = styled.div`
   border-radius: 14px;
   background: var(--color-bg-translucent);
   backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 10px 60px rgba(0, 0, 0, 0.1),
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 0px 60px rgba(0, 0, 0, 0.1),
     0 0 0 1px var(--color-shadow-border),
     inset 0 0 0 1px var(--color-shadow-border-contrast);
 

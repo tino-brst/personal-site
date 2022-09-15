@@ -23,7 +23,7 @@ function Parallax({
   children,
 }: React.PropsWithChildren<Props> = {}) {
   const ref = React.useRef<HTMLDivElement>(null)
-  // TODO add margins
+  // NTH add margins
   const isInView = useIsInView(ref)
 
   useIsomorphicLayoutEffect(() => {
