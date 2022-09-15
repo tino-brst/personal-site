@@ -45,7 +45,8 @@ const Wrapper = styled.div`
     color: var(--color-fg-accent);
   }
 
-  code {
+  code,
+  kbd {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
       'Liberation Mono', 'Courier New', monospace;
     font-size: 0.9em;
@@ -57,6 +58,15 @@ const Wrapper = styled.div`
     border-radius: 6px;
     padding: 2px 4px;
     border: 1px solid var(--color-border-code);
+  }
+
+  kbd {
+    font-size: 0.85em;
+    background-color: var(--color-bg-subtle);
+    border-radius: 8px;
+    padding: 2px 6px 5px 6px;
+    border: 1px solid var(--color-border-code);
+    box-shadow: inset 0 -2px var(--color-border-code);
   }
 
   /* All links that are not heading links */
@@ -137,7 +147,7 @@ const Wrapper = styled.div`
       font-size: 12px;
       font-weight: 600;
       background-color: var(--color-bg-muted);
-      color: var(--color-fg-default);
+      color: var(--color-fg-prose);
       display: flex;
       align-items: center;
       line-height: 1;

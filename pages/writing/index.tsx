@@ -144,6 +144,7 @@ function WritingPage(props: Props) {
           <ExpandIcon isReversed={isFiltersOpen} />
         </ShowFiltersToggle>
       </Search>
+      {/* TODO remove filters toggle, make always visible */}
       <FiltersWrapper
         className={clsx({
           ready: filtersSize.isReady,

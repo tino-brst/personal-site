@@ -80,6 +80,8 @@ function ListItem(props: ListItemProps) {
   )
 }
 
+// TODO update shadows to match floating buttons
+
 const Root = styled.div`
   visibility: hidden;
   pointer-events: auto;
