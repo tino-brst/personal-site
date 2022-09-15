@@ -8,7 +8,11 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { focusRing } from 'styles/focusRing'
 
-function CodeBlock(props: React.PropsWithChildren<{}>) {
+type Props = React.PropsWithChildren<{
+  title?: string
+}>
+
+function CodeBlock(props: Props) {
   const navBar = useNavBar()
   const preElementRef = React.useRef<HTMLPreElement>(null)
 
@@ -28,9 +32,8 @@ function CodeBlock(props: React.PropsWithChildren<{}>) {
 
   return (
     <Root>
-      <Pre {...props} ref={preElementRef}>
-        {props.children}
-      </Pre>
+      {props.title && <Title>{props.title}</Title>}
+      <Pre ref={preElementRef}>{props.children}</Pre>
       <CopyButton
         className={clsx({ copied: hasJustCopied })}
         onClick={handleCopyButtonClick}
@@ -47,18 +50,19 @@ function CodeBlock(props: React.PropsWithChildren<{}>) {
 }
 
 const Root = styled.div`
+  --padding-x: 24px;
   --copy-button-size: 32px;
   --copy-button-inset-x: 24px;
   --copy-button-inset-y: 20px;
+  --border-radius: 10px;
 
   position: relative;
   margin-left: -24px;
   margin-right: -24px;
   margin-top: 24px;
   margin-bottom: 24px;
+  background-color: var(--color-bg-subtlerer);
   overflow: hidden;
-  box-shadow: inset 0 -0.5px 0 var(--color-border-code),
-    inset 0 0.5px 0 var(--color-border-code);
 
   @media (min-width: 640px) {
     --copy-button-inset-x: 20px;
@@ -66,14 +70,42 @@ const Root = styled.div`
 
     margin-left: 0;
     margin-right: 0;
-    border-radius: 10px;
-    box-shadow: inset 0 0 0 0.5px var(--color-border-code);
+    border-radius: var(--border-radius);
+  }
+
+  ::after {
+    position: absolute;
+    content: '';
+    inset: 0;
+    pointer-events: none;
+
+    box-shadow: inset 0 -1px 0 var(--color-border-code),
+      inset 0 1px 0 var(--color-border-code);
+
+    @media (min-width: 640px) {
+      box-shadow: inset 0 0 0 1px var(--color-border-code);
+      border-radius: var(--border-radius);
+    }
   }
 `
 
+const Title = styled.div`
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 8px;
+  padding-left: var(--padding-x);
+  background-color: var(--color-bg-subtlerer);
+  color: var(--color-fg-default);
+  box-shadow: inset 0 -1px var(--color-border-code);
+`
+
 const Pre = styled.pre`
-  line-height: 1.5;
-  background-color: var(--color-bg-subtler);
+  line-height: 1.6;
   padding-top: 20px;
   padding-bottom: 20px;
   white-space: pre;
@@ -85,9 +117,9 @@ const Pre = styled.pre`
   }
 
   & .line {
-    padding-left: 24px;
+    padding-left: var(--padding-x);
     padding-right: calc(
-      2 * var(--copy-button-inset-x) + var(--copy-button-size)
+      var(--padding-x) + var(--copy-button-inset-x) + var(--copy-button-size)
     );
   }
 

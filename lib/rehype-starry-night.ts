@@ -58,8 +58,16 @@ const rehypeStarryNight: Plugin<[Options], Root> = (options) => {
 
       if (node.data && node.data.meta && typeof node.data.meta === 'string') {
         const meta = parseMeta(node.data.meta)
+
         const lineNumbers = parseNumericRange(meta.highlight ?? '')
         node.children = highlight(wrapperNodeGroups, lineNumbers)
+
+        const title = meta.title
+
+        parent.properties = {
+          ...parent.properties,
+          title,
+        }
 
         return
       }
