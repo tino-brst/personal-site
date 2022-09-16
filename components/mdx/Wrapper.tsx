@@ -156,6 +156,39 @@ const Wrapper = styled.div`
       justify-content: center;
     }
   }
+
+  blockquote {
+    padding-left: 24px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: var(--color-fg-quote);
+    font-variation-settings: 'slnt' -10;
+    font-synthesis: none;
+
+    & > p {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    &::before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      content: '';
+      width: 3px;
+      background: var(--color-fg-subtle);
+      border-radius: 9999px;
+    }
+
+    @media (min-width: 640px) {
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+  }
 `
 
 export { Wrapper as Wrapper }
