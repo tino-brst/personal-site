@@ -157,7 +157,7 @@ const Wrapper = styled.div`
     }
   }
 
-  blockquote {
+  blockquote:not(.fancy) {
     padding-left: 24px;
     padding-top: 4px;
     padding-bottom: 4px;
