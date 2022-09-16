@@ -49,19 +49,22 @@ const Wrapper = styled.div`
   kbd {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
       'Liberation Mono', 'Courier New', monospace;
-    font-size: 0.9em;
+    font-size: 0.85em;
   }
 
   /* All code that is not part of a codeblock (i.e. <pre><code>...</code></pre>) */
   *:not(pre) > code {
-    background-color: var(--color-bg-subtle);
+    background-color: var(--color-bg-subtler);
     border-radius: 6px;
     padding: 2px 4px;
     border: 1px solid var(--color-border-code);
   }
 
   kbd {
-    font-size: 0.85em;
+    white-space: nowrap;
+    font-family: var(--font-family);
+    font-weight: 450;
+    letter-spacing: 0.04em;
     background-color: var(--color-bg-subtle);
     border-radius: 8px;
     padding: 2px 6px 5px 6px;
@@ -121,7 +124,6 @@ const Wrapper = styled.div`
       left: 6px;
       top: calc(var(--line-height) * var(--font-size) / 2);
       transform: translateY(-50%);
-
       background-color: var(--color-fg-muted);
     }
   }
