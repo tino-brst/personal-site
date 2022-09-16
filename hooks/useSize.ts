@@ -4,14 +4,12 @@ import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 type ReturnValue = {
   width: number
   height: number
-  isReady: boolean
 }
 
 function useSize<T extends HTMLElement>(ref: React.RefObject<T>): ReturnValue {
   const [value, setValue] = React.useState<ReturnValue>({
     width: 0,
     height: 0,
-    isReady: false,
   })
 
   useIsomorphicLayoutEffect(() => {
@@ -23,7 +21,6 @@ function useSize<T extends HTMLElement>(ref: React.RefObject<T>): ReturnValue {
       setValue({
         width: target.offsetWidth,
         height: target.offsetHeight,
-        isReady: true,
       })
     })
 
@@ -32,7 +29,6 @@ function useSize<T extends HTMLElement>(ref: React.RefObject<T>): ReturnValue {
     setValue({
       width: ref.current.offsetWidth,
       height: ref.current.offsetHeight,
-      isReady: true,
     })
 
     return () => resizeObserver.disconnect()

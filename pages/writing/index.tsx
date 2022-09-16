@@ -1,10 +1,7 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
-import { ChevronCompactDownIcon } from '@components/icons/ChevronCompactDownIcon'
-import { FilterIcon } from '@components/icons/FilterIcon'
 import { HashIcon } from '@components/icons/HashIcon'
 import { SearchInputButton } from '@components/SearchInputButton'
 import { useQueryParam } from '@hooks/useQueryParam'
-import { useSize } from '@hooks/useSize'
 import { includesEvery, toggle } from '@lib/array'
 import { getArticles } from '@lib/articles'
 import { compareDatesDesc } from '@lib/dates'
@@ -56,13 +53,6 @@ function WritingPage(props: Props) {
     const newActiveTags = toggle(activeTags, value).join(',')
     setActiveTagsParam(newActiveTags === '' ? undefined : newActiveTags)
   }
-
-  const [isFiltersOpen, setIsFiltersOpen] = React.useState(
-    activeTags.length > 0
-  )
-
-  const filtersRef = React.useRef<HTMLDivElement>(null)
-  const filtersSize = useSize(filtersRef)
 
   // Articles filtering/sorting
 
@@ -139,45 +129,32 @@ function WritingPage(props: Props) {
           isOpen={isSearchOpen}
           onIsOpenChange={(value) => setIsSearchOpen(value)}
         />
-        <ShowFiltersToggle onClick={() => setIsFiltersOpen((value) => !value)}>
-          <StyledFilterIcon hasBadge={activeTags.length > 0} />
-          <ExpandIcon isReversed={isFiltersOpen} />
-        </ShowFiltersToggle>
       </Search>
-      {/* TODO remove filters toggle, make always visible */}
-      <FiltersWrapper
-        className={clsx({
-          ready: filtersSize.isReady,
-          open: isFiltersOpen,
-        })}
-        style={{ '--content-height': `${filtersSize.height}px` }}
-      >
-        <Filters ref={filtersRef}>
-          <FiltersTitle>Filter by tags</FiltersTitle>
-          <Tags>
-            {tags.map((tag) => (
-              <li key={tag.value}>
-                <Tag
-                  className={clsx({
-                    checked: tag.isActive,
-                    disabled: tag.isDisabled,
-                  })}
-                >
-                  <TagInput
-                    type="checkbox"
-                    checked={tag.isActive}
-                    disabled={tag.isDisabled}
-                    onChange={() => handleActiveTagsChange(tag.value)}
-                  />
-                  <TagIcon />
-                  {tag.value}
-                </Tag>
-              </li>
-            ))}
-          </Tags>
-        </Filters>
-      </FiltersWrapper>
-      <div {...getStaggerProps(3)}>
+      <Filters {...getStaggerProps(3)}>
+        <FiltersTitle>Filter by tags</FiltersTitle>
+        <Tags>
+          {tags.map((tag) => (
+            <li key={tag.value}>
+              <Tag
+                className={clsx({
+                  checked: tag.isActive,
+                  disabled: tag.isDisabled,
+                })}
+              >
+                <TagInput
+                  type="checkbox"
+                  checked={tag.isActive}
+                  disabled={tag.isDisabled}
+                  onChange={() => handleActiveTagsChange(tag.value)}
+                />
+                <TagIcon />
+                {tag.value}
+              </Tag>
+            </li>
+          ))}
+        </Tags>
+      </Filters>
+      <div {...getStaggerProps(4)}>
         {articles.length === 0 ? (
           <EmptyState>
             <EmptyStateTitle>No articles found</EmptyStateTitle>
@@ -229,122 +206,30 @@ const Search = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  max-width: 400px;
-`
 
-const showFiltersToggleHoverStyles = css`
-  background-color: var(--color-bg-subtle);
-`
-
-const ShowFiltersToggle = styled.button`
-  position: relative;
-  cursor: pointer;
-  padding: 12px 12px 12px 14px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  will-change: transform;
-
-  transition-property: transform, background-color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-
-  @media (hover: hover) {
-    &:hover {
-      ${showFiltersToggleHoverStyles}
-    }
-  }
-
-  &:focus-visible,
-  &:active {
-    ${showFiltersToggleHoverStyles}
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-
-  --focus-inset: -2px;
-  --focus-radius: 18px;
-
-  ${focusRing}
-`
-
-const StyledFilterIcon = styled(FilterIcon)`
-  color: var(--color-fg-accent);
-`
-
-const ExpandIcon = styled(ChevronCompactDownIcon)`
-  color: var(--color-fg-muted);
-`
-
-const FiltersWrapper = styled.div`
-  --transition-duration: 0.3s;
-  --transition-timing-func: cubic-bezier(0.32, 0.08, 0.24, 1);
-
-  margin-bottom: 32px;
-  visibility: hidden;
-  will-change: max-height;
-
-  transition-duration: var(--transition-duration);
-  transition-timing-function: var(--transition-timing-function);
-
-  &.ready {
-    transition-property: max-height, visibility;
-    max-height: 0;
-  }
-
-  &.ready.open {
-    visibility: visible;
-    max-height: var(--content-height);
+  @media (min-width: 640px) {
+    max-width: 320px;
   }
 `
 
 const Filters = styled.div`
-  padding-top: 24px;
+  margin-top: 24px;
+  margin-bottom: 32px;
 `
 
 const FiltersTitle = styled.h3`
+  margin-bottom: 16px;
   font-size: 12px;
-  width: fit-content;
   font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin-bottom: 16px;
   color: var(--color-fg-default);
-  opacity: 0;
-  transform: translateY(2px);
-  will-change: transform;
-
-  transition-property: opacity, transform;
-  transition-duration: var(--transition-duration);
-  transition-timing-function: var(--transition-timing-function);
-
-  ${FiltersWrapper}.open & {
-    opacity: 1;
-    transform: none;
-  }
 `
 
 const Tags = styled.ol`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  will-change: transform;
-
-  opacity: 0;
-  transform: translateY(6px);
-
-  transition-property: opacity, transform;
-  transition-duration: var(--transition-duration);
-  transition-timing-function: var(--transition-timing-function);
-
-  ${FiltersWrapper}.open & {
-    opacity: 1;
-    transform: none;
-  }
 `
 
 const Tag = styled.label`
