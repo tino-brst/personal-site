@@ -220,6 +220,14 @@
   -webkit-font-smoothing: antialiased;
 }
 
+:root ::selection {
+  background: hsla(0 0% 0% / 0.1);
+}
+
+:root[data-dark-theme] ::selection {
+  background: hsla(0 0% 100% / 0.2);
+}
+
 /* Misc */
 
 :root {
@@ -242,11 +250,6 @@
 
 :root[data-switching-theme] * {
   transition-duration: 0s;
-}
-
-/* TODO selection color in dark mode */
-::selection {
-  background: hsla(0 0% 0% / 0.1);
 }
 
 /* Entrance animations */
