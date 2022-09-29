@@ -4,6 +4,7 @@ import { focusRing } from 'styles/focusRing'
 const linkHoverStyles = css`
   color: var(--color-link-hover);
   text-decoration-color: var(--color-link-decoration-hover);
+  text-decoration-thickness: 2.5px;
 `
 
 const Wrapper = styled.div`
@@ -84,6 +85,8 @@ const Wrapper = styled.div`
 
     transition-property: text-decoration-color, color;
     transition-duration: 0.15s;
+
+    /* TODO Fix focus styles, broken on multi-line links */
 
     @media (hover: hover) {
       &:hover {
@@ -187,6 +190,25 @@ const Wrapper = styled.div`
     @media (min-width: 640px) {
       padding-top: 6px;
       padding-bottom: 6px;
+    }
+  }
+
+  .note.warning {
+    a {
+      color: var(--color-fg-note-link-warn);
+      text-decoration-color: var(--color-fg-note-link-decoration-warn);
+    }
+
+    @media (hover: hover) {
+      a:hover {
+        color: var(--color-fg-note-link-hover-warn);
+        text-decoration-color: var(--color-fg-note-link-decoration-hover-warn);
+      }
+    }
+
+    a:focus-visible {
+      color: var(--color-fg-note-link-hover-warn);
+      text-decoration-color: var(--color-fg-note-link-decoration-hover-warn);
     }
   }
 `

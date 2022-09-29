@@ -4,6 +4,7 @@ import { CodeBlock } from './CodeBlock'
 import { FancyQuote } from './FancyQuote'
 import { Heading } from './Heading'
 import { Image } from './Image'
+import { Note } from './Note'
 
 const components: ComponentMap = {
   wrapper: Wrapper,
@@ -13,6 +14,7 @@ const components: ComponentMap = {
   pre: CodeBlock,
   img: Image,
   FancyQuote,
+  Note,
 }
 
 export { components }
