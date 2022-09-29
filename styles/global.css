@@ -1,5 +1,7 @@
 /* Theme vars */
 
+/* TODO extract blurred backgrounds to variable? */
+
 :root {
   --color-bg-default: white;
   --color-bg-muted: hsla(0 0% 0% / 0.05);
