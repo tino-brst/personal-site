@@ -286,7 +286,7 @@ const Status = styled.div`
   border-radius: 8px;
   color: var(--color-fg-status);
   background-color: var(--color-bg-status);
-  backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: var(--backdrop-filter-vibrant);
   opacity: 0;
   transform: translateY(-4px) scale(0.95);
   transform-origin: center top;
@@ -307,7 +307,7 @@ const Background = styled.div`
   inset: 0;
   opacity: var(${CSSVar.scrollBasedOpacity});
   background: var(--color-bg-translucent);
-  backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: var(--backdrop-filter-vibrant);
   box-shadow: 0 1px var(--color-shadow-border),
     inset 0 -0.5px 0 var(--color-shadow-border-contrast),
     inset 0 0.5px 0 var(--color-border-top-navbar);

@@ -1,7 +1,5 @@
 /* Theme vars */
 
-/* TODO extract blurred backgrounds to variable? */
-
 :root {
   --color-bg-default: white;
   --color-bg-muted: hsla(0 0% 0% / 0.05);
@@ -255,6 +253,7 @@
   --font-family: 'InterVariable', -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
+  --backdrop-filter-vibrant: saturate(180%) blur(14px);
 
   background: var(--color-bg-default);
   color: var(--color-fg-default);

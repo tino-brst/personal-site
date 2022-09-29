@@ -456,7 +456,7 @@ const Tag = styled.a`
   color: var(--color-fg-tag);
   background-color: var(--color-bg-tag);
 
-  backdrop-filter: saturate(180%) blur(10px);
+  backdrop-filter: var(--backdrop-filter-vibrant);
   border-radius: 8px;
   padding: 8px 10px 8px 8px;
   scroll-snap-align: start;
@@ -536,7 +536,7 @@ const ButtonGroup = styled.div`
   justify-content: right;
   border-radius: 12px;
   background: var(--color-bg-translucent);
-  backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: var(--backdrop-filter-vibrant);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 0px 60px rgba(0, 0, 0, 0.1),
     0 0 0 1px var(--color-shadow-border),
     inset 0 0 0 1px var(--color-shadow-border-contrast);

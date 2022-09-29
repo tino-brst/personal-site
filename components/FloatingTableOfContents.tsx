@@ -92,7 +92,7 @@ const Root = styled.div`
   max-height: 304px;
   border-radius: 14px;
   background: var(--color-bg-translucent);
-  backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: var(--backdrop-filter-vibrant);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 0px 0px 60px rgba(0, 0, 0, 0.1),
     0 0 0 1px var(--color-shadow-border),
     inset 0 0 0 1px var(--color-shadow-border-contrast);
