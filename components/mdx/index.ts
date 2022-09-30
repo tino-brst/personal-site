@@ -1,3 +1,4 @@
+import { Spoilers } from '@components/articles/the-stack/Spoilers'
 import { Wrapper } from '@components/mdx/Wrapper'
 import type { ComponentMap } from 'mdx-bundler/client'
 import { CodeBlock } from './CodeBlock'
@@ -15,6 +16,7 @@ const components: ComponentMap = {
   img: Image,
   FancyQuote,
   Note,
+  Spoilers,
 }
 
 export { components }

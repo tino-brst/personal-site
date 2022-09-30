@@ -17,7 +17,6 @@ const Link = styled.a`
 
   transition-property: transform, background-color;
   transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
 
   @media (hover: hover) {
     &:hover {
