@@ -58,6 +58,8 @@
   --color-fg-note-link-hover-warn: hsl(30 60% 30%);
   --color-fg-note-link-decoration-hover-warn: hsl(30 30% 70%);
 
+  --color-shadow-floating: hsla(0 0% 0% / 0.1);
+
   --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 0% / 0.08);
   --shadow-border-inset-dark: inset 0 0 0 0 hsla(0 0% 0% / 0);
@@ -136,6 +138,8 @@
   --color-fg-note-link-decoration-warn: hsl(30 50% 15%);
   --color-fg-note-link-hover-warn: hsl(30 40% 65%);
   --color-fg-note-link-decoration-hover-warn: hsl(30 50% 25%);
+
+  --color-shadow-floating: hsla(0 0% 0% / 0.4);
 
   --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 100% / 0.08);
