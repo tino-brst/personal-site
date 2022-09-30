@@ -60,6 +60,7 @@
 
   --color-bg-spoiler: hsla(0 0% 0% / 0.02);
   --color-shadow-floating: hsla(0 0% 0% / 0.1);
+  --color-bg-toggle: hsla(0 0% 0% / 0.1);
 
   --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 0% / 0.08);
@@ -142,6 +143,7 @@
 
   --color-bg-spoiler: hsla(0 0% 100% / 0.05);
   --color-shadow-floating: hsla(0 0% 0% / 0.4);
+  --color-bg-toggle: hsla(0 0% 100% / 0.2);
 
   --shadow-border: 0 0 0 1px hsla(0 0% 0% / 0.05);
   --shadow-border-inset: inset 0 0 0 1px hsla(0 0% 100% / 0.08);

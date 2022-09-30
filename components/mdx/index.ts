@@ -1,4 +1,5 @@
 import { Spoilers } from '@components/articles/the-stack/Spoilers'
+import { Toggle } from '@components/articles/the-stack/Toggle'
 import { Wrapper } from '@components/mdx/Wrapper'
 import type { ComponentMap } from 'mdx-bundler/client'
 import { CodeBlock } from './CodeBlock'
@@ -17,6 +18,7 @@ const components: ComponentMap = {
   FancyQuote,
   Note,
   Spoilers,
+  Toggle,
 }
 
 export { components }
