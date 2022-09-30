@@ -22,7 +22,6 @@ const Root = styled.div`
   --border-radius: 10px;
 
   position: relative;
-  overflow: hidden;
   margin-left: -24px;
   margin-right: -24px;
   min-height: 100px;
@@ -71,6 +70,10 @@ const Curtain = styled.div`
   &.hidden {
     opacity: 0;
     visibility: hidden;
+  }
+
+  @media (min-width: 640px) {
+    border-radius: var(--border-radius);
   }
 `
 
