@@ -16,7 +16,7 @@ function Note(props: Props) {
   return (
     <Root className={clsx(['note', props.type])}>
       {props.title && <Title className="title">{props.title}</Title>}
-      {props.children}
+      <Content>{props.children}</Content>
     </Root>
   )
 }
@@ -26,21 +26,16 @@ const Root = styled.aside`
   margin-right: -24px;
   margin-top: 24px;
   margin-bottom: 24px;
-  padding: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 18px;
+  padding-bottom: 20px;
 
   &.warning {
     color: var(--color-fg-note-warn);
     background: var(--color-bg-note-warn);
     box-shadow: inset 0 1px var(--color-border-note-warn),
       inset 0 -1px var(--color-border-note-warn);
-  }
-
-  & > *:first-child:not(.title) {
-    margin-top: 0;
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
   }
 
   &.warning {
@@ -62,13 +57,22 @@ const Root = styled.aside`
 `
 
 const Title = styled.div`
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 500;
-  margin-top: -6px;
-  margin-bottom: -10px;
+  margin-bottom: 6px;
 
   ${Root}.warning & {
     color: var(--color-fg-note-title-warn);
+  }
+`
+
+const Content = styled.div`
+  & > *:first-child {
+    margin-top: 0;
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
   }
 `
 
