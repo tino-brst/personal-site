@@ -25,6 +25,7 @@ function ArticleGridItem(props: Props) {
                 src={props.imageSrc}
                 layout="fill"
                 objectFit="cover"
+                sizes="(max-width: 640px) 100vw, 55vw"
               />
             )}
             <ThumbnailImageOverlay />
