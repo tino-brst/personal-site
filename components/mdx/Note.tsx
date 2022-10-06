@@ -30,6 +30,7 @@ const Root = styled.aside`
   padding-right: 24px;
   padding-top: 18px;
   padding-bottom: 20px;
+  font-size: 15px;
 
   &.warning {
     color: var(--color-fg-note-warn);
