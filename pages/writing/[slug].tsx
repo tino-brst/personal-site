@@ -49,8 +49,10 @@ type ArticlePreview = {
 type Props = {
   slug: string
   title: string
+  description: string | null
   tags: Array<string>
   imageSrc: string | null
+  imageOG: string | null
   tableOfContents: Root
   readingTime: string
   publishedOn: number
@@ -137,9 +139,9 @@ function ArticlePage(props: Props) {
     openGraph: {
       type: 'article',
       title: props.title,
-      description: 'Lorem ipsum dolorem potates and all that stuff',
+      description: props.description ?? undefined,
       site_name: `Tino's Corner`,
-      images: [{ url: props.imageSrc ?? '' }],
+      images: [{ url: props.imageOG ?? '' }],
       // BLKD add description field to articles
       // BLKD once the domain is set, add url field
       article: {

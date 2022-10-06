@@ -10,8 +10,10 @@ import { getTableOfContents, Root } from './mdast-util-toc'
 type Article = {
   slug: string
   title: string
+  description: string | null
   tags: Array<string>
   imageSrc: string | null
+  imageOG: string | null
   tableOfContents: Root
   readingTime: string
   publishedOn: number
@@ -29,8 +31,10 @@ async function parseArticle(filePath: string): Promise<Article> {
   return {
     slug: path.basename(filePath, '.mdx'),
     title: frontmatter.title,
+    description: frontmatter.description ?? null,
     tags: parseTags(frontmatter.tags),
     imageSrc: frontmatter.image ?? null,
+    imageOG: frontmatter.imageOG ?? null,
     tableOfContents: getTableOfContents(document),
     readingTime: readingTime(articleContents).text,
     publishedOn: new Date(frontmatter.publishedOn).getTime(),
