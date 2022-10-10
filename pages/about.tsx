@@ -1,7 +1,8 @@
+import { EnvelopeIcon } from '@components/icons/EnvelopeIcon'
 import { Link } from '@components/Link'
 import { getStaggerProps } from '@lib/stagger'
 import NextImage from 'next/image'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import tinoPointingImageSrc from '/public/images/tino-pointing.jpg'
 import tinoImageSrc from '/public/images/tino.jpg'
 
@@ -31,22 +32,54 @@ function AboutPage() {
       </CardsContainer>
       <Description {...getStaggerProps(2)}>
         <p>
-          Dolor irure qui ex nisi sit eiusmod enim ipsum reprehenderit ex
-          consequat. Cupidatat duis dolor nulla ut. Eiusmod enim ad consectetur
-          labore dolor qui tempor officia eiusmod. Magna reprehenderit ullamco
-          nostrud sit consectetur est. Sit aliqua eu mollit laborum ut in
-          cupidatat in adipisicing pariatur elit irure sunt fugiat. Incididunt
-          tempor ad quis ipsum consequat cupidatat nisi occaecat nulla.
+          Hey! Me again, still Tino (short for Agustin). I{`'`}m a Software
+          Engineer (the actual degree is <em>Computer Engineer</em>, though I
+          {`'`}ve never heard anyone use that title) currently based in{' '}
+          <a href="https://goo.gl/maps/pFLEdaBLhE6UZbsr7">
+            Bahía Blanca, Argentina
+          </a>{' '}
+          🇦🇷 (<a href="https://time.is/Bah%C3%ADa_Blanca">UTC -3</a>). I{`'`}ve
+          specialized in web-technologies, and particularly enjoy working where
+          software and user meet. Where there is a chance to delight, and design
+          and attention to detail come into play.
         </p>
         <p>
-          Exercitation aute excepteur nulla nostrud. Tempor adipisicing tempor
-          sint laboris proident minim quis occaecat irure laborum duis laborum
-          laborum.
+          During <a href="https://www.uns.edu.ar/">uni</a>, I{`'`}ve worked as
+          teaching assistant in courses such as Calculus & Computer Graphics 👨🏻‍🏫,
+          where I thoroughly enjoyed trying to make both simple and complex
+          topics as accessible as possible (and itch that hopefully this blog
+          can scratch). After graduating, I{`'`}ve worked in companies such as{' '}
+          <a href="https://www.globant.com">Globant</a>,{' '}
+          <a href="https://www.binagora.com">Binagora</a> and{' '}
+          <a href="https://www.vectary.com">Vectary</a>, mostly on the front-end
+          side of things. Implementing/maintaining component libraries, dealing
+          with weird <a href="https://threejs.org/">Three.js</a>-based engines
+          {`'`} bugs, creating POCs for various clients, etc. Recently, some of
+          the dev things that I{`'`}ve been enjoying using are{' '}
+          <a href="https://reactjs.org/">React</a>,{' '}
+          <a href="https://www.typescriptlang.org/">TypeScript</a>,{' '}
+          <a href="https://www.prisma.io/">Prisma</a> &{' '}
+          <a href="https://nextjs.org/">Next.js</a>, to name a few.
+        </p>
+        <p>
+          Regarding non-work stuff, I{`'`}m a fan of the outdoors 🏕, be it going
+          for a run, biking (thought I think lately my bike would say otherwise,
+          sorry bike), hiking ⛰, et al. I{`'`}ve recently rediscovered my love
+          for reading 📚, and you may find me in cafés around the city, using{' '}
+          <em>{`"reading"`}</em> as an excuse to try out the coffee & bakery in
+          town (for research purposes, of course).
         </p>
       </Description>
-      <StyledLink {...getStaggerProps(3)} href="mailto:tinos.corner@icloud.com">
-        Contact me
-      </StyledLink>
+      <Contact>
+        Feel free to
+        <ContactLink
+          {...getStaggerProps(3)}
+          href="mailto:tinos.corner@icloud.com"
+        >
+          Contact me
+          <EnvelopeIcon />
+        </ContactLink>
+      </Contact>
     </Root>
   )
 }
@@ -57,6 +90,7 @@ const Root = styled.div`
   margin-right: auto;
   padding-left: 24px;
   padding-right: 24px;
+  padding-bottom: 4px;
 
   /* Prevents horizontal scroll due to translate transform on background pic */
   overflow: hidden;
@@ -124,23 +158,71 @@ const CardForeground = styled(Card)`
   box-shadow: 0 0 30px 0 hsla(0 0% 0% / 0.2);
 `
 
+const linkHoverStyles = css`
+  color: var(--color-link-hover);
+  text-decoration-color: var(--color-link-decoration-hover);
+  text-decoration-thickness: 2.5px;
+`
+
 const Description = styled.div`
+  margin-top: 28px;
+  color: var(--color-fg-prose);
+
   p {
-    font-size: 16px;
-    color: var(--color-fg-default);
     line-height: 1.5;
-    margin-top: 28px;
+    margin-top: 20px;
     margin-bottom: 20px;
+  }
+
+  em {
+    font-variation-settings: 'slnt' -10;
+    font-synthesis: none;
+  }
+
+  a {
+    color: var(--color-fg-accent-muted);
+    font-weight: 450;
+    border-radius: 4px;
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 1px;
+    text-decoration-color: var(--color-link-decoration);
+
+    transition-property: text-decoration-color, color;
+    transition-duration: 0.15s;
+
+    @media (hover: hover) {
+      &:hover {
+        ${linkHoverStyles}
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+      ${linkHoverStyles}
+    }
   }
 `
 
-const StyledLink = styled(Link)`
+const Contact = styled.div`
+  margin-top: 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  color: var(--color-fg-default);
+  font-size: 14px;
+  font-weight: 500;
+`
+
+const ContactLink = styled(Link)`
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
   display: flex;
   align-items: center;
-  margin-top: 32px;
+  gap: 10px;
 `
 
 export default AboutPage

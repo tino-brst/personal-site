@@ -32,9 +32,9 @@ function HomePage(props: Props) {
       <NextSeo {...seoProps} />
       <Title {...getStaggerProps(0)}>Hi! I&apos;m Tino</Title>
       <Description {...getStaggerProps(1)}>
-        And this is my little corner of the internet. I&apos;m a design-minded
-        developer specializing in web technologies. I like to lorem ipsum
-        dolorem potatoes. And some other stuff.
+        Welcome to my little corner of the internet. I&apos;m a design-minded
+        maker (crafter?) of things, mostly software, mostly UIs. With a passion
+        for stuff made with care.
       </Description>
       <NextLink href={Page.about} passHref>
         <GoToLink {...getStaggerProps(2)}>
@@ -81,7 +81,7 @@ const Title = styled.h1`
 
 const Description = styled.p`
   font-size: 16px;
-  color: var(--color-fg-default);
+  color: var(--color-fg-default-opaque);
   line-height: 1.5;
   margin-bottom: 32px;
 `

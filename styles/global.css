@@ -16,6 +16,7 @@
   --color-bg-status: hsla(0 0% 0% / 0.3);
 
   --color-fg-default: hsla(0 0% 0% / 0.4);
+  --color-fg-default-opaque: hsl(0 0% 60%);
   --color-fg-default-hover: hsla(0 0% 0% / 0.6);
   --color-fg-muted: hsla(0 0% 0% / 0.2);
   --color-fg-muted-hover: hsla(0 0% 0% / 0.3);
@@ -99,6 +100,7 @@
   --color-bg-status: hsla(0 0% 100% / 0.5);
 
   --color-fg-default: hsla(0 0% 100% / 0.5);
+  --color-fg-default-opaque: hsl(0 0% 50%);
   --color-fg-default-hover: hsla(0 0% 100% / 0.8);
   --color-fg-muted: hsla(0 0% 100% / 0.3);
   --color-fg-muted-hover: hsla(0 0% 100% / 0.4);

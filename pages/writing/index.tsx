@@ -119,7 +119,8 @@ function WritingPage(props: Props) {
       <NextSeo {...seoProps} />
       <Title {...getStaggerProps(0)}>Writing</Title>
       <Description {...getStaggerProps(1)}>
-        Thoughts on code, design, lorem ipsum, and more.
+        Thoughts on web development. Hopefully useful, and maybe even mildly
+        entertaining.
       </Description>
       <Search {...getStaggerProps(2)}>
         <SearchInputButton
@@ -197,7 +198,7 @@ const Title = styled.h1`
 
 const Description = styled.p`
   font-size: 16px;
-  color: var(--color-fg-default);
+  color: var(--color-fg-default-opaque);
   line-height: 1.5;
   margin-bottom: 24px;
 `
