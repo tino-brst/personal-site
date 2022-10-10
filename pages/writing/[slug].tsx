@@ -248,10 +248,10 @@ function ArticlePage(props: Props) {
           <Thanks>
             <ThanksTitle>Thanks for reading!</ThanksTitle>
             <ThanksDescription>
-              I would love to hear your thoughts, all feedback is very much
-              welcome. You can find me on{' '}
+              Feel free to reach out on{' '}
               <a href="https://twitter.com/bursetAgustin">Twitter</a> or via{' '}
-              <a href="mailto:tinos.corner@icloud.com">email</a>.
+              <a href="mailto:tinos.corner@icloud.com">email</a>, I would love
+              to hear your thoughts. All feedback is more than welcome.
             </ThanksDescription>
             <LikeButton
               className={clsx({ liked: likeCount.hasUserLike })}
