@@ -169,7 +169,7 @@ const Description = styled.div`
   color: var(--color-fg-prose);
 
   p {
-    line-height: 1.5;
+    line-height: 1.7;
     margin-top: 20px;
     margin-bottom: 20px;
   }

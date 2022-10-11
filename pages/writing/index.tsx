@@ -197,9 +197,9 @@ const Title = styled.h1`
 `
 
 const Description = styled.p`
-  font-size: 16px;
+  font-size: 1rem;
   color: var(--color-fg-default-opaque);
-  line-height: 1.5;
+  line-height: 1.7;
   margin-bottom: 24px;
 `
 
