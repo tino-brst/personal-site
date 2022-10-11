@@ -1,4 +1,5 @@
 import { ArticleGrid, ArticleGridItem } from '@components/ArticleGrid'
+import { Crafter } from '@components/Crafter'
 import { ArrowRightIcon } from '@components/icons/ArrowRightIcon'
 import { Link } from '@components/Link'
 import { getArticles } from '@lib/articles'
@@ -33,7 +34,7 @@ function HomePage(props: Props) {
       <Title {...getStaggerProps(0)}>Hi! I&apos;m Tino</Title>
       <Description {...getStaggerProps(1)}>
         Welcome to my little corner of the internet. I&apos;m a design-minded
-        maker (crafter?) of things, mostly software, mostly UIs. With a passion
+        maker <Crafter /> of things, mostly software, mostly UIs. With a passion
         for stuff made with care.
       </Description>
       <NextLink href={Page.about} passHref>

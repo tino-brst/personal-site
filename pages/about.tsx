@@ -40,8 +40,8 @@ function AboutPage() {
           </a>{' '}
           🇦🇷 (<a href="https://time.is/Bah%C3%ADa_Blanca">UTC -3</a>). I{`'`}ve
           specialized in web-technologies, and particularly enjoy working where
-          software and user meet. Where there is a chance to delight, and design
-          and attention to detail come into play.
+          software and user meet. Where there is a chance to delight ✨, and
+          design and attention to detail come into play.
         </p>
         <p>
           During <a href="https://www.uns.edu.ar/">uni</a>, I{`'`}ve worked as
