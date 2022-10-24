@@ -45,7 +45,6 @@ const Root = styled.footer`
   transition-duration: 0.6s;
 
   max-width: calc(768px + 2 * 16px);
-  margin-top: 48px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 24px;

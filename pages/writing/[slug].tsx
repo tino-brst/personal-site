@@ -275,10 +275,12 @@ function ArticlePage(props: Props) {
           </EditOnGitHub>
         </Main>
       </Root>
-      <UpNext
-        newerArticle={props.newerArticle}
-        olderArticle={props.olderArticle}
-      />
+      {(props.newerArticle || null) && (
+        <UpNext
+          newerArticle={props.newerArticle}
+          olderArticle={props.olderArticle}
+        />
+      )}
     </TableOfContentsProvider>
   )
 }
