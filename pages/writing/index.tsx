@@ -131,31 +131,33 @@ function WritingPage(props: Props) {
           onIsOpenChange={(value) => setIsSearchOpen(value)}
         />
       </Search>
-      <Filters {...getStaggerProps(3)}>
-        <FiltersTitle>Filter by tags</FiltersTitle>
-        <Tags>
-          {tags.map((tag) => (
-            <li key={tag.value}>
-              <Tag
-                className={clsx({
-                  checked: tag.isActive,
-                  disabled: tag.isDisabled,
-                })}
-              >
-                <TagInput
-                  type="checkbox"
-                  checked={tag.isActive}
-                  disabled={tag.isDisabled}
-                  onChange={() => handleActiveTagsChange(tag.value)}
-                />
-                <TagIcon />
-                {tag.value}
-              </Tag>
-            </li>
-          ))}
-        </Tags>
-      </Filters>
-      <div {...getStaggerProps(4)}>
+      {tags.length > 0 && (
+        <Filters {...getStaggerProps(3)}>
+          <FiltersTitle>Filter by tags</FiltersTitle>
+          <Tags>
+            {tags.map((tag) => (
+              <li key={tag.value}>
+                <Tag
+                  className={clsx({
+                    checked: tag.isActive,
+                    disabled: tag.isDisabled,
+                  })}
+                >
+                  <TagInput
+                    type="checkbox"
+                    checked={tag.isActive}
+                    disabled={tag.isDisabled}
+                    onChange={() => handleActiveTagsChange(tag.value)}
+                  />
+                  <TagIcon />
+                  {tag.value}
+                </Tag>
+              </li>
+            ))}
+          </Tags>
+        </Filters>
+      )}
+      <ResultsWrapper {...getStaggerProps(4)}>
         {articles.length === 0 ? (
           <EmptyState>
             <EmptyStateTitle>No articles found</EmptyStateTitle>
@@ -170,7 +172,7 @@ function WritingPage(props: Props) {
             ))}
           </ArticleGrid>
         )}
-      </div>
+      </ResultsWrapper>
     </Root>
   )
 }
@@ -215,7 +217,6 @@ const Search = styled.div`
 
 const Filters = styled.div`
   margin-top: 24px;
-  margin-bottom: 32px;
 `
 
 const FiltersTitle = styled.h3`
@@ -321,6 +322,10 @@ const TagIcon = styled(HashIcon)`
   ${Tag}.disabled & {
     stroke: var(--color-fg-subtle);
   }
+`
+
+const ResultsWrapper = styled.div`
+  margin-top: 32px;
 `
 
 const emptyStateFadeIn = keyframes`
