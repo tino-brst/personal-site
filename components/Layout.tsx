@@ -65,6 +65,7 @@ const Root = styled.div`
 const Content = styled.div`
   flex: 1;
   padding-top: ${NavBar.marginBottom}px;
+  padding-bottom: 48px;
 `
 
 const psLinkHoverStyles = css`

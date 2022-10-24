@@ -275,7 +275,7 @@ function ArticlePage(props: Props) {
           </EditOnGitHub>
         </Main>
       </Root>
-      {(props.newerArticle || null) && (
+      {(props.newerArticle || props.olderArticle) && (
         <UpNext
           newerArticle={props.newerArticle}
           olderArticle={props.olderArticle}
@@ -288,7 +288,6 @@ function ArticlePage(props: Props) {
 const Root = styled.div`
   --gap: 40px;
 
-  margin-bottom: 48px;
   margin-top: -${NavBar.height + NavBar.marginBottom}px;
   display: grid;
   grid-template-columns: 1fr min(100vw, calc(768px + 2 * 16px)) 1fr;

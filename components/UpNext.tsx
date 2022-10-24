@@ -80,7 +80,7 @@ const Root = styled.section`
   max-width: calc(768px + 2 * 16px);
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 48px;
+  margin-top: 48px;
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 48px;
