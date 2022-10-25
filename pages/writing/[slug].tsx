@@ -22,7 +22,7 @@ import { getStaggerProps } from '@lib/stagger'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon,
+  ListBulletIcon
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -140,15 +140,14 @@ function ArticlePage(props: Props) {
           title: props.title,
           description: props.description ?? undefined,
           url: `https://tinoburset.com/writing/${props.slug}`,
-          images: [
+          images: props.imageOG ? [
             {
-              url: props.imageOG
-                ? `https://tinoburset.com${props.imageOG}`
-                : '',
+              url: `https://tinoburset.com${props.imageOG}`,
+              alt: props.title,
               width: 2000,
               height: 1000,
             },
-          ],
+          ] : [],
           article: {
             publishedTime: new Date(props.publishedOn).toISOString(),
           },

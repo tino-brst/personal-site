@@ -11,6 +11,7 @@ const defaultSeoProps: DefaultSeoProps = {
     images: [
       {
         url: 'https://tinoburset.com/images/og.jpg',
+        alt: "Tino's Corner",
         width: 2000,
         height: 1000,
       },
