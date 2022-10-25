@@ -10,7 +10,7 @@ const defaultSeoProps: DefaultSeoProps = {
     site_name: "Tino's Corner",
     images: [
       {
-        url: '/images/og.jpg',
+        url: 'https://tinoburset.com/images/og.jpg',
         width: 2000,
         height: 1000,
       },
@@ -18,7 +18,6 @@ const defaultSeoProps: DefaultSeoProps = {
   },
   twitter: {
     handle: '@bursetAgustin',
-    site: '@bursetAgustin',
     cardType: 'summary_large_image',
   },
 }

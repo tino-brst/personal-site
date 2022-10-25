@@ -142,7 +142,9 @@ function ArticlePage(props: Props) {
           url: `https://tinoburset.com/writing/${props.slug}`,
           images: [
             {
-              url: props.imageOG ?? '',
+              url: props.imageOG
+                ? `https://tinoburset.com${props.imageOG}`
+                : '',
               width: 2000,
               height: 1000,
             },
