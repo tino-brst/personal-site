@@ -8,7 +8,6 @@ import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
 import { getStaggerProps } from '@lib/stagger'
 import { GetStaticProps } from 'next'
-import { NextSeo, NextSeoProps } from 'next-seo'
 import NextLink from 'next/link'
 import styled from 'styled-components'
 
@@ -24,13 +23,8 @@ type Props = {
 }
 
 function HomePage(props: Props) {
-  const seoProps: NextSeoProps = {
-    title: `Tino's Corner`,
-  }
-
   return (
     <Root>
-      <NextSeo {...seoProps} />
       <Title {...getStaggerProps(0)}>Hi! I&apos;m Tino</Title>
       <Description {...getStaggerProps(1)}>
         Welcome to my little corner of the internet. I&apos;m a design-minded

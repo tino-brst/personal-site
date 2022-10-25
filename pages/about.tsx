@@ -1,86 +1,89 @@
 import { EnvelopeIcon } from '@components/icons/EnvelopeIcon'
 import { Link } from '@components/Link'
 import { getStaggerProps } from '@lib/stagger'
+import { NextSeo } from 'next-seo'
 import NextImage from 'next/image'
 import styled, { css } from 'styled-components'
 import tinoPointingImageSrc from '/public/images/tino-pointing.jpg'
 import tinoImageSrc from '/public/images/tino.jpg'
 
 function AboutPage() {
-  // BLKD SEO
-
   return (
-    <Root>
-      <Title {...getStaggerProps(0)}>About me</Title>
-      <CardsContainer {...getStaggerProps(1)}>
-        <CardBackground>
-          <NextImage
-            src={tinoPointingImageSrc}
-            layout="fill"
-            objectFit="cover"
-            placeholder="blur"
-          />
-        </CardBackground>
-        <CardForeground>
-          <NextImage
-            src={tinoImageSrc}
-            layout="fill"
-            objectFit="cover"
-            placeholder="blur"
-          />
-        </CardForeground>
-      </CardsContainer>
-      <Description {...getStaggerProps(2)}>
-        <p>
-          Hey! Me again, still Tino (short for Agustin). I{`'`}m a Software
-          Engineer (the actual degree is <em>Computer Engineer</em>, though I
-          {`'`}ve never heard anyone use that title) currently based in{' '}
-          <a href="https://goo.gl/maps/pFLEdaBLhE6UZbsr7">
-            Bahía Blanca, Argentina
-          </a>{' '}
-          🇦🇷 (<a href="https://time.is/Bah%C3%ADa_Blanca">UTC -3</a>). I{`'`}ve
-          specialized in web-technologies, and particularly enjoy working where
-          software and user meet. Where there is a chance to delight ✨, and
-          design and attention to detail come into play.
-        </p>
-        <p>
-          During <a href="https://www.uns.edu.ar/">uni</a>, I{`'`}ve worked as
-          teaching assistant in courses such as Calculus & Computer Graphics 👨🏻‍🏫,
-          where I thoroughly enjoyed trying to make both simple and complex
-          topics as accessible as possible (and itch that hopefully this blog
-          can scratch). After graduating, I{`'`}ve worked in companies such as{' '}
-          <a href="https://www.globant.com">Globant</a>,{' '}
-          <a href="https://www.binagora.com">Binagora</a> and{' '}
-          <a href="https://www.vectary.com">Vectary</a>, mostly on the front-end
-          side of things. Implementing/maintaining component libraries, dealing
-          with weird <a href="https://threejs.org/">Three.js</a>-based engines
-          {`'`} bugs, creating POCs for various clients, etc. Recently, some of
-          the dev things that I{`'`}ve been enjoying using are{' '}
-          <a href="https://reactjs.org/">React</a>,{' '}
-          <a href="https://www.typescriptlang.org/">TypeScript</a>,{' '}
-          <a href="https://www.prisma.io/">Prisma</a> &{' '}
-          <a href="https://nextjs.org/">Next.js</a>, to name a few.
-        </p>
-        <p>
-          Regarding non-work stuff, I{`'`}m a fan of the outdoors 🏕, be it going
-          for a run, biking (thought I think lately my bike would say otherwise,
-          sorry bike), hiking ⛰, et al. I{`'`}ve recently rediscovered my love
-          for reading 📚, and you may find me in cafés around the city, using{' '}
-          <em>{`"reading"`}</em> as an excuse to try out the coffee & bakery in
-          town (for research purposes, of course).
-        </p>
-      </Description>
-      <Contact>
-        Feel free to
-        <ContactLink
-          {...getStaggerProps(3)}
-          href="mailto:tinos.corner@icloud.com"
-        >
-          Contact me
-          <EnvelopeIcon />
-        </ContactLink>
-      </Contact>
-    </Root>
+    <>
+      <NextSeo title="About" />
+      <Root>
+        <Title {...getStaggerProps(0)}>About me</Title>
+        <CardsContainer {...getStaggerProps(1)}>
+          <CardBackground>
+            <NextImage
+              src={tinoPointingImageSrc}
+              layout="fill"
+              objectFit="cover"
+              placeholder="blur"
+            />
+          </CardBackground>
+          <CardForeground>
+            <NextImage
+              src={tinoImageSrc}
+              layout="fill"
+              objectFit="cover"
+              placeholder="blur"
+            />
+          </CardForeground>
+        </CardsContainer>
+        <Description {...getStaggerProps(2)}>
+          <p>
+            Hey! Me again, still Tino (short for Agustin). I{`'`}m a Software
+            Engineer (the actual degree is <em>Computer Engineer</em>, though I
+            {`'`}ve never heard anyone use that title) currently based in{' '}
+            <a href="https://goo.gl/maps/pFLEdaBLhE6UZbsr7">
+              Bahía Blanca, Argentina
+            </a>{' '}
+            🇦🇷 (<a href="https://time.is/Bah%C3%ADa_Blanca">UTC -3</a>). I{`'`}
+            ve specialized in web-technologies, and particularly enjoy working
+            where software and user meet. Where there is a chance to delight ✨,
+            and design and attention to detail come into play.
+          </p>
+          <p>
+            During <a href="https://www.uns.edu.ar/">uni</a>, I{`'`}ve worked as
+            teaching assistant in courses such as Calculus & Computer Graphics
+            👨🏻‍🏫, where I thoroughly enjoyed trying to make both simple and
+            complex topics as accessible as possible (and itch that hopefully
+            this blog can scratch). After graduating, I{`'`}ve worked in
+            companies such as <a href="https://www.globant.com">Globant</a>,{' '}
+            <a href="https://www.binagora.com">Binagora</a> and{' '}
+            <a href="https://www.vectary.com">Vectary</a>, mostly on the
+            front-end side of things. Implementing/maintaining component
+            libraries, dealing with weird{' '}
+            <a href="https://threejs.org/">Three.js</a>-based engines
+            {`'`} bugs, creating POCs for various clients, etc. Recently, some
+            of the dev things that I{`'`}ve been enjoying using are{' '}
+            <a href="https://reactjs.org/">React</a>,{' '}
+            <a href="https://www.typescriptlang.org/">TypeScript</a>,{' '}
+            <a href="https://www.prisma.io/">Prisma</a> &{' '}
+            <a href="https://nextjs.org/">Next.js</a>, to name a few.
+          </p>
+          <p>
+            Regarding non-work stuff, I{`'`}m a fan of the outdoors 🏕, be it
+            going for a run, biking (thought I think lately my bike would say
+            otherwise, sorry bike), hiking ⛰, et al. I{`'`}ve recently
+            rediscovered my love for reading 📚, and you may find me in cafés
+            around the city, using <em>{`"reading"`}</em> as an excuse to try
+            out the coffee & bakery in town (for research purposes, of course).
+          </p>
+        </Description>
+        <Contact>
+          Feel free to
+          <ContactLink
+            {...getStaggerProps(3)}
+            href="mailto:tinos.corner@icloud.com"
+          >
+            Contact me
+            <EnvelopeIcon />
+          </ContactLink>
+        </Contact>
+      </Root>
+    </>
   )
 }
 
