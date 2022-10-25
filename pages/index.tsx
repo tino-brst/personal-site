@@ -8,6 +8,7 @@ import { compareDatesDesc } from '@lib/dates'
 import { pick } from '@lib/pick'
 import { getStaggerProps } from '@lib/stagger'
 import { GetStaticProps } from 'next'
+import { NextSeo } from 'next-seo'
 import NextLink from 'next/link'
 import styled from 'styled-components'
 
@@ -24,32 +25,35 @@ type Props = {
 
 function HomePage(props: Props) {
   return (
-    <Root>
-      <Title {...getStaggerProps(0)}>Hi! I&apos;m Tino</Title>
-      <Description {...getStaggerProps(1)}>
-        Welcome to my little corner of the internet. I&apos;m a design-minded
-        maker <Crafter /> of things, mostly software, mostly UIs. With a passion
-        for stuff made with care.
-      </Description>
-      <NextLink href={Page.about} passHref>
-        <GoToLink {...getStaggerProps(2)}>
-          About me
-          <GoToIcon />
-        </GoToLink>
-      </NextLink>
-      <Heading {...getStaggerProps(3)}>Latest Articles</Heading>
-      <StyledArticleGrid {...getStaggerProps(4)}>
-        {props.articles.map((article) => (
-          <ArticleGridItem key={article.slug} {...article} />
-        ))}
-      </StyledArticleGrid>
-      <NextLink href={Page.writing} passHref>
-        <GoToLink {...getStaggerProps(5)}>
-          All articles
-          <GoToIcon />
-        </GoToLink>
-      </NextLink>
-    </Root>
+    <>
+      <NextSeo />
+      <Root>
+        <Title {...getStaggerProps(0)}>Hi! I&apos;m Tino</Title>
+        <Description {...getStaggerProps(1)}>
+          Welcome to my little corner of the internet. I&apos;m a design-minded
+          maker <Crafter /> of things, mostly software, mostly UIs. With a
+          passion for stuff made with care.
+        </Description>
+        <NextLink href={Page.about} passHref>
+          <GoToLink {...getStaggerProps(2)}>
+            About me
+            <GoToIcon />
+          </GoToLink>
+        </NextLink>
+        <Heading {...getStaggerProps(3)}>Latest Articles</Heading>
+        <StyledArticleGrid {...getStaggerProps(4)}>
+          {props.articles.map((article) => (
+            <ArticleGridItem key={article.slug} {...article} />
+          ))}
+        </StyledArticleGrid>
+        <NextLink href={Page.writing} passHref>
+          <GoToLink {...getStaggerProps(5)}>
+            All articles
+            <GoToIcon />
+          </GoToLink>
+        </NextLink>
+      </Root>
+    </>
   )
 }
 
