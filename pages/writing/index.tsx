@@ -10,7 +10,7 @@ import { getStaggerProps } from '@lib/stagger'
 import clsx from 'clsx'
 import fuzzy from 'fuzzysort'
 import { GetStaticProps } from 'next'
-import { NextSeo, NextSeoProps } from 'next-seo'
+import { NextSeo } from 'next-seo'
 import * as React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { focusRing } from 'styles/focusRing'
@@ -108,72 +108,68 @@ function WritingPage(props: Props) {
     setActiveTagsParam(undefined)
   }
 
-  // SEO
-
-  const seoProps: NextSeoProps = {
-    title: `Writing • Tino's Corner`,
-  }
-
   return (
-    <Root>
-      <NextSeo {...seoProps} />
-      <Title {...getStaggerProps(0)}>Writing</Title>
-      <Description {...getStaggerProps(1)}>
-        Thoughts on web development. Hopefully useful, and maybe even mildly
-        entertaining.
-      </Description>
-      <Search {...getStaggerProps(2)}>
-        <SearchInputButton
-          placeholder="Search articles"
-          value={search}
-          onChange={handleSearchChange}
-          isOpen={isSearchOpen}
-          onIsOpenChange={(value) => setIsSearchOpen(value)}
-        />
-      </Search>
-      {tags.length > 0 && (
-        <Filters {...getStaggerProps(3)}>
-          <FiltersTitle>Filter by tags</FiltersTitle>
-          <Tags>
-            {tags.map((tag) => (
-              <li key={tag.value}>
-                <Tag
-                  className={clsx({
-                    checked: tag.isActive,
-                    disabled: tag.isDisabled,
-                  })}
-                >
-                  <TagInput
-                    type="checkbox"
-                    checked={tag.isActive}
-                    disabled={tag.isDisabled}
-                    onChange={() => handleActiveTagsChange(tag.value)}
-                  />
-                  <TagIcon />
-                  {tag.value}
-                </Tag>
-              </li>
-            ))}
-          </Tags>
-        </Filters>
-      )}
-      <ResultsWrapper {...getStaggerProps(4)}>
-        {articles.length === 0 ? (
-          <EmptyState>
-            <EmptyStateTitle>No articles found</EmptyStateTitle>
-            <ClearSearchButton onClick={handleClearSearchButtonClick}>
-              Clear search
-            </ClearSearchButton>
-          </EmptyState>
-        ) : (
-          <ArticleGrid>
-            {articles.map((article) => (
-              <ArticleGridItem key={article.slug} {...article} />
-            ))}
-          </ArticleGrid>
+    <>
+      <NextSeo title="Writing" />
+      <Root>
+        <Title {...getStaggerProps(0)}>Writing</Title>
+        <Description {...getStaggerProps(1)}>
+          Thoughts on web development. Hopefully useful, and maybe even mildly
+          entertaining.
+        </Description>
+        <Search {...getStaggerProps(2)}>
+          <SearchInputButton
+            placeholder="Search articles"
+            value={search}
+            onChange={handleSearchChange}
+            isOpen={isSearchOpen}
+            onIsOpenChange={(value) => setIsSearchOpen(value)}
+          />
+        </Search>
+        {tags.length > 0 && (
+          <Filters {...getStaggerProps(3)}>
+            <FiltersTitle>Filter by tags</FiltersTitle>
+            <Tags>
+              {tags.map((tag) => (
+                <li key={tag.value}>
+                  <Tag
+                    className={clsx({
+                      checked: tag.isActive,
+                      disabled: tag.isDisabled,
+                    })}
+                  >
+                    <TagInput
+                      type="checkbox"
+                      checked={tag.isActive}
+                      disabled={tag.isDisabled}
+                      onChange={() => handleActiveTagsChange(tag.value)}
+                    />
+                    <TagIcon />
+                    {tag.value}
+                  </Tag>
+                </li>
+              ))}
+            </Tags>
+          </Filters>
         )}
-      </ResultsWrapper>
-    </Root>
+        <ResultsWrapper {...getStaggerProps(4)}>
+          {articles.length === 0 ? (
+            <EmptyState>
+              <EmptyStateTitle>No articles found</EmptyStateTitle>
+              <ClearSearchButton onClick={handleClearSearchButtonClick}>
+                Clear search
+              </ClearSearchButton>
+            </EmptyState>
+          ) : (
+            <ArticleGrid>
+              {articles.map((article) => (
+                <ArticleGridItem key={article.slug} {...article} />
+              ))}
+            </ArticleGrid>
+          )}
+        </ResultsWrapper>
+      </Root>
+    </>
   )
 }
 

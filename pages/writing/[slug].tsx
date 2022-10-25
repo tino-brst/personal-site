@@ -29,7 +29,7 @@ import { useNavBar } from 'contexts/nav-bar'
 import { TableOfContentsProvider } from 'contexts/table-of-contents'
 import { getMDXComponent } from 'mdx-bundler/client'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { NextSeo, NextSeoProps } from 'next-seo'
+import { NextSeo } from 'next-seo'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -131,157 +131,152 @@ function ArticlePage(props: Props) {
     return () => resizeObserver.disconnect()
   }, [navBar])
 
-  // SEO
-  // BLKD once the domain is set, add the canonical field (update all occurrences)
-
-  const seoProps: NextSeoProps = {
-    title: `${props.title} • Tino's Corner`,
-    openGraph: {
-      type: 'article',
-      title: props.title,
-      description: props.description ?? undefined,
-      site_name: `Tino's Corner`,
-      images: [{ url: props.imageOG ?? '' }],
-      // BLKD add description field to articles
-      // BLKD once the domain is set, add url field
-      article: {
-        publishedTime: new Date(props.publishedOn).toISOString(),
-      },
-    },
-  }
-
   return (
-    <TableOfContentsProvider
-      tableOfContents={props.tableOfContents}
-      scrollOffsetTop={NavBar.height}
-    >
-      <NextSeo {...seoProps} />
-      <Root>
-        <HeaderImageWrapper>
-          <StyledParallax
-            multiplier={-0.2}
-            getOffset={getOffset}
-            // Rerender the component on path changes to avoid keeping its state
-            // (i.e. its parallax effect) when going back and forth between
-            // articles. Comment this line and, after scrolling to the bottom
-            // and select the previous/next article, pay close attention to the
-            // header image, it keeps the parallax accumulated from
-            // scrolling on the previous article.
-            key={router.asPath}
-          >
-            {props.imageSrc && (
-              <NextImage
-                src={props.imageSrc}
-                layout="fill"
-                objectFit="cover"
-                priority
-              />
-            )}
-          </StyledParallax>
-          <HeaderImageOverlay />
-        </HeaderImageWrapper>
-        {props.tableOfContents.children.length > 0 && (
-          <Aside {...getStaggerProps(mainContentStaggerIndex)}>
-            <AsideTableOfContents />
-          </Aside>
-        )}
-        <FloatingStuff>
-          <ButtonGroup className={clsx({ expanded: showBackToTop })}>
-            <ButtonBackground>
-              <BackToTopButton
-                onClick={backToTop}
-                tabIndex={showBackToTop ? undefined : -1}
-              >
-                <BackToTopIcon width={26} height={26} />
-              </BackToTopButton>
-            </ButtonBackground>
-            <ButtonGroupDivider />
-            <ButtonBackground>
-              <TableOfContentsButton
-                ref={tableOfContentsButtonRef}
-                onClick={toggleTableOfContents}
-              >
-                <TableOfContentsIcon width={26} height={26} />
-              </TableOfContentsButton>
-            </ButtonBackground>
-          </ButtonGroup>
-          <FloatingTableOfContents
-            ref={tableOfContentsRef}
-            onSelect={closeTableOfContents}
-            isOpen={isTableOfContentsOpen}
-          />
-        </FloatingStuff>
-        <Header>
-          <Info {...getStaggerProps(0)}>
-            <InfoItem>
-              <CalendarIcon />
-              <span>{formatDate(props.publishedOn)}</span>
-            </InfoItem>
-            <InfoItem>
-              <ClockIcon />
-              <span>{props.readingTime}</span>
-            </InfoItem>
-          </Info>
-          <Title {...getStaggerProps(1)}>{props.title}</Title>
-          {props.tags.length > 0 && (
-            <Tags {...getStaggerProps(2)}>
-              {props.tags.map((tag) => (
-                <NextLink
-                  key={tag}
-                  href={`${Page.writing}?tags=${tag}`}
-                  passHref
-                >
-                  <Tag>
-                    <TagIcon />
-                    {tag}
-                  </Tag>
-                </NextLink>
-              ))}
-            </Tags>
+    <>
+      <NextSeo
+        title={props.title}
+        openGraph={{
+          type: 'article',
+          title: props.title,
+          description: props.description ?? undefined,
+          url: `https://tinoburset.com/writing/${props.slug}`,
+          images: [{ url: props.imageOG ?? '' }],
+          article: {
+            publishedTime: new Date(props.publishedOn).toISOString(),
+          },
+        }}
+      />
+      <TableOfContentsProvider
+        tableOfContents={props.tableOfContents}
+        scrollOffsetTop={NavBar.height}
+      >
+        <Root>
+          <HeaderImageWrapper>
+            <StyledParallax
+              multiplier={-0.2}
+              getOffset={getOffset}
+              // Rerender the component on path changes to avoid keeping its state
+              // (i.e. its parallax effect) when going back and forth between
+              // articles. Comment this line and, after scrolling to the bottom
+              // and select the previous/next article, pay close attention to the
+              // header image, it keeps the parallax accumulated from
+              // scrolling on the previous article.
+              key={router.asPath}
+            >
+              {props.imageSrc && (
+                <NextImage
+                  src={props.imageSrc}
+                  layout="fill"
+                  objectFit="cover"
+                  priority
+                />
+              )}
+            </StyledParallax>
+            <HeaderImageOverlay />
+          </HeaderImageWrapper>
+          {props.tableOfContents.children.length > 0 && (
+            <Aside {...getStaggerProps(mainContentStaggerIndex)}>
+              <AsideTableOfContents />
+            </Aside>
           )}
-          <Divider {...getStaggerProps(3)} />
-        </Header>
-        <Main {...getStaggerProps(mainContentStaggerIndex)}>
-          <Content components={components} />
-          <ContentEndMarker ref={contentEndMarkerRef} />
-          <ViewCount>{viewCount.value} views</ViewCount>
-          <Thanks>
-            <ThanksTitle>Thanks for reading!</ThanksTitle>
-            <ThanksDescription>
-              Feel free to reach out on{' '}
-              <a href="https://twitter.com/bursetAgustin">Twitter</a> or via{' '}
-              <a href="mailto:tinos.corner@icloud.com">email</a>, I would love
-              to hear your thoughts. All feedback is more than welcome.
-            </ThanksDescription>
-            <LikeButton
-              className={clsx({ liked: likeCount.hasUserLike })}
-              onClick={likeCount.toggleUserLike}
-            >
-              <LikeIconWrapper>
-                <LikeIcon />
-              </LikeIconWrapper>
-              {likeCount.value}
-            </LikeButton>
-          </Thanks>
-          <EditOnGitHub>
-            Found a typo?
-            <EditOnGitHubLink
-              href={getArticleEditOnGitHubURL(props.slug)}
-              target="_blank"
-            >
-              <EditOnGitHubIcon />
-              Edit on GitHub
-            </EditOnGitHubLink>
-          </EditOnGitHub>
-        </Main>
-      </Root>
-      {(props.newerArticle || props.olderArticle) && (
-        <UpNext
-          newerArticle={props.newerArticle}
-          olderArticle={props.olderArticle}
-        />
-      )}
-    </TableOfContentsProvider>
+          <FloatingStuff>
+            <ButtonGroup className={clsx({ expanded: showBackToTop })}>
+              <ButtonBackground>
+                <BackToTopButton
+                  onClick={backToTop}
+                  tabIndex={showBackToTop ? undefined : -1}
+                >
+                  <BackToTopIcon width={26} height={26} />
+                </BackToTopButton>
+              </ButtonBackground>
+              <ButtonGroupDivider />
+              <ButtonBackground>
+                <TableOfContentsButton
+                  ref={tableOfContentsButtonRef}
+                  onClick={toggleTableOfContents}
+                >
+                  <TableOfContentsIcon width={26} height={26} />
+                </TableOfContentsButton>
+              </ButtonBackground>
+            </ButtonGroup>
+            <FloatingTableOfContents
+              ref={tableOfContentsRef}
+              onSelect={closeTableOfContents}
+              isOpen={isTableOfContentsOpen}
+            />
+          </FloatingStuff>
+          <Header>
+            <Info {...getStaggerProps(0)}>
+              <InfoItem>
+                <CalendarIcon />
+                <span>{formatDate(props.publishedOn)}</span>
+              </InfoItem>
+              <InfoItem>
+                <ClockIcon />
+                <span>{props.readingTime}</span>
+              </InfoItem>
+            </Info>
+            <Title {...getStaggerProps(1)}>{props.title}</Title>
+            {props.tags.length > 0 && (
+              <Tags {...getStaggerProps(2)}>
+                {props.tags.map((tag) => (
+                  <NextLink
+                    key={tag}
+                    href={`${Page.writing}?tags=${tag}`}
+                    passHref
+                  >
+                    <Tag>
+                      <TagIcon />
+                      {tag}
+                    </Tag>
+                  </NextLink>
+                ))}
+              </Tags>
+            )}
+            <Divider {...getStaggerProps(3)} />
+          </Header>
+          <Main {...getStaggerProps(mainContentStaggerIndex)}>
+            <Content components={components} />
+            <ContentEndMarker ref={contentEndMarkerRef} />
+            <ViewCount>{viewCount.value} views</ViewCount>
+            <Thanks>
+              <ThanksTitle>Thanks for reading!</ThanksTitle>
+              <ThanksDescription>
+                Feel free to reach out on{' '}
+                <a href="https://twitter.com/bursetAgustin">Twitter</a> or via{' '}
+                <a href="mailto:tinos.corner@icloud.com">email</a>, I would love
+                to hear your thoughts. All feedback is more than welcome.
+              </ThanksDescription>
+              <LikeButton
+                className={clsx({ liked: likeCount.hasUserLike })}
+                onClick={likeCount.toggleUserLike}
+              >
+                <LikeIconWrapper>
+                  <LikeIcon />
+                </LikeIconWrapper>
+                {likeCount.value}
+              </LikeButton>
+            </Thanks>
+            <EditOnGitHub>
+              Found a typo?
+              <EditOnGitHubLink
+                href={getArticleEditOnGitHubURL(props.slug)}
+                target="_blank"
+              >
+                <EditOnGitHubIcon />
+                Edit on GitHub
+              </EditOnGitHubLink>
+            </EditOnGitHub>
+          </Main>
+        </Root>
+        {(props.newerArticle || props.olderArticle) && (
+          <UpNext
+            newerArticle={props.newerArticle}
+            olderArticle={props.olderArticle}
+          />
+        )}
+      </TableOfContentsProvider>
+    </>
   )
 }
 
