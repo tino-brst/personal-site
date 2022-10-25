@@ -14,6 +14,11 @@ const defaultSeoProps: DefaultSeoProps = {
       },
     ],
   },
+  twitter: {
+    handle: '@bursetAgustin',
+    site: '@bursetAgustin',
+    cardType: 'summary_large_image',
+  },
 }
 
 export { defaultSeoProps }
