@@ -11,8 +11,8 @@ const defaultSeoProps: DefaultSeoProps = {
     images: [
       {
         url: '/images/og.jpg',
-        width: 1000,
-        height: 500,
+        width: 2000,
+        height: 1000,
       },
     ],
   },

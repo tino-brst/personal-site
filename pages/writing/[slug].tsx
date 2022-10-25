@@ -143,8 +143,8 @@ function ArticlePage(props: Props) {
           images: [
             {
               url: props.imageOG ?? '',
-              width: 1000,
-              height: 500,
+              width: 2000,
+              height: 1000,
             },
           ],
           article: {
