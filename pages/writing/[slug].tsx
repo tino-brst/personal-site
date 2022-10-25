@@ -7,7 +7,6 @@ import { LikeIcon as BaseLikeIcon } from '@components/icons/LikeIcon'
 import { Link } from '@components/Link'
 import { components } from '@components/mdx'
 import { NavBar } from '@components/NavBar'
-import { Parallax } from '@components/Parallax'
 import { UpNext } from '@components/UpNext'
 import { useLikeCount } from '@hooks/api/useLikeCount'
 import { useViewCount } from '@hooks/api/useViewCount'
@@ -22,7 +21,7 @@ import { getStaggerProps } from '@lib/stagger'
 import {
   ChevronUpIcon,
   GitHubLogoIcon,
-  ListBulletIcon
+  ListBulletIcon,
 } from '@radix-ui/react-icons'
 import clsx from 'clsx'
 import { useNavBar } from 'contexts/nav-bar'
@@ -140,14 +139,16 @@ function ArticlePage(props: Props) {
           title: props.title,
           description: props.description ?? undefined,
           url: `https://tinoburset.com/writing/${props.slug}`,
-          images: props.imageOG ? [
-            {
-              url: `https://tinoburset.com${props.imageOG}`,
-              alt: props.title,
-              width: 2000,
-              height: 1000,
-            },
-          ] : [],
+          images: props.imageOG
+            ? [
+                {
+                  url: `https://tinoburset.com${props.imageOG}`,
+                  alt: props.title,
+                  width: 2000,
+                  height: 1000,
+                },
+              ]
+            : [],
           article: {
             publishedTime: new Date(props.publishedOn).toISOString(),
           },
@@ -159,26 +160,14 @@ function ArticlePage(props: Props) {
       >
         <Root>
           <HeaderImageWrapper>
-            <StyledParallax
-              multiplier={-0.2}
-              getOffset={getOffset}
-              // Rerender the component on path changes to avoid keeping its state
-              // (i.e. its parallax effect) when going back and forth between
-              // articles. Comment this line and, after scrolling to the bottom
-              // and select the previous/next article, pay close attention to the
-              // header image, it keeps the parallax accumulated from
-              // scrolling on the previous article.
-              key={router.asPath}
-            >
-              {props.imageSrc && (
-                <NextImage
-                  src={props.imageSrc}
-                  layout="fill"
-                  objectFit="cover"
-                  priority
-                />
-              )}
-            </StyledParallax>
+            {props.imageSrc && (
+              <NextImage
+                src={props.imageSrc}
+                layout="fill"
+                objectFit="cover"
+                priority
+              />
+            )}
             <HeaderImageOverlay />
           </HeaderImageWrapper>
           {props.tableOfContents.children.length > 0 && (
@@ -292,11 +281,16 @@ const Root = styled.div`
 
   margin-top: -${NavBar.height + NavBar.marginBottom}px;
   display: grid;
+  grid-template-rows: 70vh;
   grid-template-columns: 1fr min(100vw, calc(768px + 2 * 16px)) 1fr;
   grid-template-areas:
     '... header ...'
     '... main aside';
   grid-row-gap: var(--gap);
+
+  @media (min-width: 640px) {
+    grid-template-rows: 60vh;
+  }
 `
 
 const HeaderImageWrapper = styled.div`
@@ -305,12 +299,6 @@ const HeaderImageWrapper = styled.div`
   grid-column: 1 / -1;
   margin-bottom: -20px;
   overflow: hidden;
-`
-
-const StyledParallax = styled(Parallax)`
-  position: absolute;
-  inset: 0;
-  z-index: -1;
 `
 
 const HeaderImageOverlay = styled.div`
