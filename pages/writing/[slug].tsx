@@ -140,7 +140,13 @@ function ArticlePage(props: Props) {
           title: props.title,
           description: props.description ?? undefined,
           url: `https://tinoburset.com/writing/${props.slug}`,
-          images: [{ url: props.imageOG ?? '' }],
+          images: [
+            {
+              url: props.imageOG ?? '',
+              width: 1000,
+              height: 500,
+            },
+          ],
           article: {
             publishedTime: new Date(props.publishedOn).toISOString(),
           },
